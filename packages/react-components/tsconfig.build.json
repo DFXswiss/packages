@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.build.json",
+  "include": ["./src/**/*", "./stories/**/*"],
+  "exclude": ["./stories/**/*.stories.tsx"],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": ".",
+    "jsx": "react-jsx"
+  }
+}
