@@ -1,7 +1,6 @@
 import StyledCoinListItem from './StyledCoinListItem';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Protocol } from '../hooks/blockchain.hook';
-import { Asset } from '../api/definitions/asset';
+import { Asset } from '../definitions/asset';
 
 export default {
   title: 'Building Blocks/StyledCoinListItem',
@@ -23,7 +22,7 @@ SingleCoinListItem.args = {
     explorerUrl: 'http://duckduckgo.com',
     comingSoon: false,
   } as Asset,
-  protocol: Protocol.ERC_20,
+  protocol: 'ERC-20',
   popupLabel:
     'Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec id elit non mi porta gravida at eget metus. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.',
 };

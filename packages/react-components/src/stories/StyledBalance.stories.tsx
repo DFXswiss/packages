@@ -1,6 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Asset } from '../api/definitions/asset';
-import { Protocol } from '../hooks/blockchain.hook';
+import { Asset } from '../definitions/asset';
 import BigNumber from 'bignumber.js';
 import StyledBalance from './StyledBalance';
 
@@ -21,7 +20,8 @@ Default.args = {
     explorerUrl: 'http://duckduckgo.com',
     comingSoon: false,
   } as Asset,
-  protocol: Protocol.ERC_20,
+  protocol: 'BEP-20',
+  isToken: true,
   balance: new BigNumber(111112345.67),
   balanceInUsd: new BigNumber(111112345.67),
   isSelected: false,

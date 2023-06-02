@@ -11,14 +11,14 @@ import StyledModal, { StyledModalWidth } from './StyledModal';
 import { useState } from 'react';
 import DfxVideoHelpModalContent from './DfxVideoHelpModalContent';
 import StyledIconButton from './StyledIconButton';
-import { Protocol } from '../hooks/blockchain.hook';
-import { Asset } from '../api/definitions/asset';
+import { Asset } from '../definitions/asset';
 
 const AddAssetToMetaMaskDesc =
   'Click on the MetaMask symbol in order to add this asset in your portfolio overview of your MetaMask or copy the address to add it manually.';
 
 const dummyAssets = {
   eth: {
+    id: 0,
     name: 'BUSD',
     description: 'Binance-wrapped USDC',
     comingSoon: false,
@@ -27,6 +27,7 @@ const dummyAssets = {
     explorerUrl: 'https://etherscan.io/token/0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
   },
   usdt: {
+    id: 1,
     name: 'USDT',
     description: 'Tether',
     comingSoon: false,
@@ -35,6 +36,7 @@ const dummyAssets = {
     explorerUrl: 'https://etherscan.io/token/0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
   },
   usdc: {
+    id: 2,
     name: 'USDC',
     description: 'USD Coin',
     comingSoon: false,
@@ -43,6 +45,7 @@ const dummyAssets = {
     explorerUrl: 'https://etherscan.io/token/0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
   },
   dfi: {
+    id: 3,
     name: 'DFI',
     description: 'DFI',
     comingSoon: false,
@@ -51,6 +54,7 @@ const dummyAssets = {
     explorerUrl: 'https://etherscan.io/token/0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
   },
   bnb: {
+    id: 4,
     name: 'BNB',
     description: 'BNB',
     comingSoon: false,
@@ -59,6 +63,7 @@ const dummyAssets = {
     explorerUrl: 'https://etherscan.io/token/0xB8c77482e45F1F44dE1745F52C74426C631bDD52',
   },
   busd: {
+    id: 5,
     name: 'BUSD',
     description: 'Binance USD',
     comingSoon: false,
@@ -158,7 +163,8 @@ export default function DfxPageLayout() {
                         onClick={() => {
                           console.log('clicked');
                         }}
-                        protocol={Protocol.ERC_20}
+                        protocol="ERC-20"
+                        isToken={false}
                         popupLabel={AddAssetToMetaMaskDesc}
                         onAdd={console.log}
                       />
@@ -167,7 +173,8 @@ export default function DfxPageLayout() {
                         onClick={() => {
                           console.log('clicked');
                         }}
-                        protocol={Protocol.ERC_20}
+                        protocol="ERC-20"
+                        isToken={false}
                         popupLabel={AddAssetToMetaMaskDesc}
                         onAdd={console.log}
                       />
@@ -176,7 +183,8 @@ export default function DfxPageLayout() {
                         onClick={() => {
                           console.log('clicked');
                         }}
-                        protocol={Protocol.ERC_20}
+                        protocol="ERC-20"
+                        isToken={false}
                         popupLabel={AddAssetToMetaMaskDesc}
                         onAdd={console.log}
                       />
@@ -185,7 +193,8 @@ export default function DfxPageLayout() {
                         onClick={() => {
                           console.log('clicked');
                         }}
-                        protocol={Protocol.ERC_20}
+                        protocol="ERC-20"
+                        isToken={true}
                         popupLabel={AddAssetToMetaMaskDesc}
                         onAdd={console.log}
                       />
@@ -194,7 +203,8 @@ export default function DfxPageLayout() {
                         onClick={() => {
                           console.log('clicked');
                         }}
-                        protocol={Protocol.ERC_20}
+                        protocol="ERC-20"
+                        isToken={true}
                         popupLabel={AddAssetToMetaMaskDesc}
                         onAdd={console.log}
                       />
@@ -203,7 +213,8 @@ export default function DfxPageLayout() {
                         onClick={() => {
                           console.log('clicked');
                         }}
-                        protocol={Protocol.ERC_20}
+                        protocol="ERC-20"
+                        isToken={true}
                         popupLabel={AddAssetToMetaMaskDesc}
                         onAdd={console.log}
                       />
@@ -214,7 +225,8 @@ export default function DfxPageLayout() {
                         onClick={() => {
                           console.log('clicked');
                         }}
-                        protocol={Protocol.BEP_20}
+                        protocol="BEP-20"
+                        isToken={true}
                         popupLabel={AddAssetToMetaMaskDesc}
                         onAdd={console.log}
                       />
@@ -223,7 +235,8 @@ export default function DfxPageLayout() {
                         onClick={() => {
                           console.log('clicked');
                         }}
-                        protocol={Protocol.BEP_20}
+                        protocol="BEP-20"
+                        isToken={false}
                         popupLabel={AddAssetToMetaMaskDesc}
                         onAdd={console.log}
                       />
@@ -232,7 +245,8 @@ export default function DfxPageLayout() {
                         onClick={() => {
                           console.log('clicked');
                         }}
-                        protocol={Protocol.BEP_20}
+                        protocol="BEP-20"
+                        isToken={true}
                         popupLabel={AddAssetToMetaMaskDesc}
                         onAdd={console.log}
                       />

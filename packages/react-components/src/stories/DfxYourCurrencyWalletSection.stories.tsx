@@ -1,8 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Asset, AssetType } from '../api/definitions/asset';
-import { Blockchain } from '../api/definitions/blockchain';
-import { Fiat } from '../api/definitions/fiat';
-import { Protocol } from '../hooks/blockchain.hook';
+import { Asset } from '../definitions/asset';
+import { Fiat } from '../definitions/fiat';
 import DfxYourCurrencyWalletSection from './DfxYourCurrencyWalletSection';
 
 export default {
@@ -10,21 +8,13 @@ export default {
   component: DfxYourCurrencyWalletSection,
 } as ComponentMeta<typeof DfxYourCurrencyWalletSection>;
 
-const dummyCurrencies: Fiat[] = [
-  { id: 1, name: 'EUR', buyable: true, sellable: true },
-  { id: 2, name: 'USD', buyable: true, sellable: true },
-];
+const dummyCurrencies: Fiat[] = [{ name: 'EUR' }, { name: 'USD' }];
 
 const dummyAsset: Asset = {
   id: 1001,
   name: 'ETH',
-  uniqueName: 'Ethereum/ETH',
   description: 'Ethereum',
-  buyable: false,
-  sellable: false,
-  blockchain: Blockchain.ETH,
   comingSoon: false,
-  type: AssetType.COIN,
 };
 
 export const Default: ComponentStory<typeof DfxYourCurrencyWalletSection> = () => {
@@ -34,7 +24,7 @@ export const Default: ComponentStory<typeof DfxYourCurrencyWalletSection> = () =
         currencies={dummyCurrencies}
         currencyElementName="currency"
         asset={dummyAsset}
-        assetProtocol={Protocol.ERC_20}
+        assetProtocol="ERC-20"
         onAssetClick={() => console.log('clicked on asset')}
       />
     </div>

@@ -1,3 +1,27 @@
 {
-    "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "git.ignoreLimitWarning": true,
+  "cSpell.words": [
+    "aave",
+    "arbitrum",
+    "bahnhofstrasse",
+    "bignumber",
+    "bscusd",
+    "btcb",
+    "iban",
+    "ibans",
+    "ibantools",
+    "multichain",
+    "noreferrer",
+    "olkilul",
+    "onlineid",
+    "palewhite",
+    "sepa",
+    "tailwindcss",
+    "testid",
+    "videoid"
+  ],
+  "files.exclude": {
+    "node_modules": true
+  }
 }

@@ -1,6 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Asset } from '../api/definitions/asset';
-import { Protocol } from '../hooks/blockchain.hook';
+import { Asset } from '../definitions/asset';
 import BigNumber from 'bignumber.js';
 import StyledBalanceSelection from './StyledBalanceSelection';
 
@@ -18,7 +17,8 @@ const balances = [
       explorerUrl: 'http://duckduckgo.com',
       comingSoon: false,
     } as Asset,
-    protocol: Protocol.ERC_20,
+    protocol: 'ERC-20',
+    isToken: true,
     balance: new BigNumber(111112345.67),
     balanceInUsd: new BigNumber(111112345.67),
     isSelected: false,
@@ -31,7 +31,8 @@ const balances = [
       explorerUrl: 'http://duckduckgo.com',
       comingSoon: false,
     } as Asset,
-    protocol: Protocol.BEP_20,
+    protocol: 'BEP-20',
+    isToken: false,
     balance: new BigNumber(2.678745),
     balanceInUsd: new BigNumber(3447.67),
     isSelected: false,
@@ -44,7 +45,8 @@ const balances = [
       explorerUrl: 'http://duckduckgo.com',
       comingSoon: false,
     } as Asset,
-    protocol: Protocol.BEP_20,
+    protocol: 'BEP-20',
+    isToken: true,
     balance: new BigNumber(5345.22),
     balanceInUsd: new BigNumber(5345.22),
     isSelected: false,
@@ -57,7 +59,8 @@ const balances = [
       explorerUrl: 'http://duckduckgo.com',
       comingSoon: false,
     } as Asset,
-    protocol: Protocol.ERC_20,
+    protocol: 'ERC-20',
+    isToken: true,
     balance: new BigNumber(1235.67),
     balanceInUsd: new BigNumber(670.98),
     isSelected: false,

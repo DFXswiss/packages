@@ -1,6 +1,3 @@
-import { Asset, AssetType } from '../api/definitions/asset';
-import { Protocol } from '../hooks/blockchain.hook';
-import { useClipboard } from '../hooks/clipboard.hook';
 import DfxAssetIcon, { AssetIconVariant } from './DfxAssetIcon';
 import DfxIcon, { IconColor, IconVariant } from './DfxIcon';
 import StyledHorizontalStack from './layout-helpers/StyledHorizontalStack';
@@ -9,28 +6,32 @@ import StyledIconButton from './StyledIconButton';
 import { useFloating, offset, flip, shift, useDismiss, useInteractions } from '@floating-ui/react';
 import { renderToString } from 'react-dom/server';
 import { useState } from 'react';
-import { CopyButton } from '../components/copy-button';
+import { CopyButton } from './CopyButton';
+import { Asset } from '../definitions/asset';
 
 export interface StyledCoinListItemProps {
   asset: Asset;
+  isToken: boolean;
   disabled?: boolean;
   onClick?: () => void;
-  protocol: Protocol;
+  protocol: string;
   popupLabel?: string;
   onAdd?: (svgData: string) => void;
   alwaysShowDots?: boolean;
+  copy?: (value: string) => void;
 }
 
 export default function StyledCoinListItem({
   asset,
+  isToken,
   onClick,
   protocol,
   disabled,
   popupLabel,
   onAdd,
   alwaysShowDots,
+  copy,
 }: StyledCoinListItemProps) {
-  const { copy } = useClipboard();
   const [open, setOpen] = useState(false);
   const { x, y, strategy, refs, context } = useFloating({
     open,
@@ -80,14 +81,12 @@ export default function StyledCoinListItem({
           <div className="flex-col text-dfxBlue-800 text-left">
             <div className="flex font-semibold gap-1 ">
               <h4 className="leading-none">{asset.name}</h4>
-              {asset.type !== AssetType.COIN && (
-                <span className="self-start leading-none text-2xs shrink-0">{protocol}</span>
-              )}
+              {isToken && <span className="self-start leading-none text-2xs shrink-0">{protocol}</span>}
             </div>
             <span className="text-dfxGray-800 text-xs leading-none relative -top-1">{name}</span>
           </div>
         </button>
-        {popupLabel && onAdd && asset.type !== AssetType.COIN && asset.chainId && (
+        {popupLabel && onAdd && isToken && asset.chainId && (
           <button className={threeDotsClasses} onClick={() => setOpen((o) => !o)}>
             <DfxIcon icon={IconVariant.THREE_DOTS_VERT} color={IconColor.BLUE} />
           </button>
@@ -114,7 +113,7 @@ export default function StyledCoinListItem({
                 <span className="font-bold">{`${asset.chainId?.substring(0, 5)}...${asset.chainId?.substring(
                   asset.chainId?.length - 5,
                 )}`}</span>
-                <CopyButton onCopy={() => copy(asset.chainId)} />
+                <CopyButton onCopy={() => copy?.(asset.chainId ?? '')} />
                 {asset.chainId && onAdd && (
                   <StyledIconButton
                     icon={IconVariant.METAMASK_LOGO}

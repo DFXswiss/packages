@@ -1,8 +1,7 @@
 import StyledCoinListItem from './StyledCoinListItem';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import StyledCoinList from './StyledCoinList';
-import { Protocol } from '../hooks/blockchain.hook';
-import { Asset } from '../api/definitions/asset';
+import { Asset } from '../definitions/asset';
 
 const dummyAssets = {
   eth: { name: 'ETH', description: 'Ethereum', comingSoon: false },
@@ -27,42 +26,48 @@ export const CoinListingRow: ComponentStory<typeof StyledCoinList> = (args) => {
           onClick={() => {
             console.log('clicked');
           }}
-          protocol={Protocol.ERC_20}
+          protocol="ERC-20"
+          isToken={false}
         />
         <StyledCoinListItem
           asset={dummyAssets.usdt as Asset}
           onClick={() => {
             console.log('clicked');
           }}
-          protocol={Protocol.ERC_20}
+          protocol="ERC-20"
+          isToken={true}
         />
         <StyledCoinListItem
           asset={dummyAssets.usdc as Asset}
           onClick={() => {
             console.log('clicked');
           }}
-          protocol={Protocol.ERC_20}
+          protocol="ERC-20"
+          isToken={true}
         />
         <StyledCoinListItem
           asset={dummyAssets.busd as Asset}
           onClick={() => {
             console.log('clicked');
           }}
-          protocol={Protocol.ERC_20}
+          protocol="ERC-20"
+          isToken={true}
         />{' '}
         <StyledCoinListItem
           asset={dummyAssets.usdt as Asset}
           onClick={() => {
             console.log('clicked');
           }}
-          protocol={Protocol.ERC_20}
+          protocol="ERC-20"
+          isToken={true}
         />
         <StyledCoinListItem
           asset={dummyAssets.usdc as Asset}
           onClick={() => {
             console.log('clicked');
           }}
-          protocol={Protocol.ERC_20}
+          protocol="ERC-20"
+          isToken={true}
         />
       </StyledCoinList>
     </div>

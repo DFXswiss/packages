@@ -1,4 +1,4 @@
-import { BankAccount } from '../../api/definitions/bank-account';
+import { BankAccount } from '../../definitions/bank-account';
 import { Utils } from '../../utils';
 import DfxIcon, { IconVariant, IconColor } from '../DfxIcon';
 

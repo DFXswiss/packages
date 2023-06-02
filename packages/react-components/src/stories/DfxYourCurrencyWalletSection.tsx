@@ -1,6 +1,5 @@
-import { Asset } from '../api/definitions/asset';
-import { Fiat } from '../api/definitions/fiat';
-import { Protocol } from '../hooks/blockchain.hook';
+import { Asset } from '../definitions/asset';
+import { Fiat } from '../definitions/fiat';
 import DfxIcon, { IconColor, IconSize, IconVariant } from './DfxIcon';
 import StyledDropdown from './form/StyledDropdown';
 import StyledCoinListItem from './StyledCoinListItem';
@@ -9,7 +8,7 @@ interface DfxYourCurrencyWalletSectionProps {
   currencies: Fiat[];
   currencyElementName: string;
   asset: Asset;
-  assetProtocol: Protocol;
+  assetProtocol: string;
   onAssetClick: () => void;
 }
 
@@ -44,7 +43,13 @@ export default function DfxYourCurrencyWalletSection({
           <label className="text-dfxBlue-800 text-base font-semibold pl-3.5">Your Wallet</label>
         </div>
         <div className="border border-dfxGray-400 rounded px-2 py-1.5 drop-shadow-sm">
-          <StyledCoinListItem asset={asset} protocol={assetProtocol} onClick={onAssetClick} disabled={true} />
+          <StyledCoinListItem
+            asset={asset}
+            isToken={false}
+            protocol={assetProtocol}
+            onClick={onAssetClick}
+            disabled={true}
+          />
         </div>
       </div>
     </div>

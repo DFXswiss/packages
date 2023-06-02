@@ -1,12 +1,18 @@
-import { Asset } from '../api/definitions/asset';
-import { Protocol } from '../hooks/blockchain.hook';
+import { Asset } from '../definitions/asset';
 import BigNumber from 'bignumber.js';
 import StyledBalance from './StyledBalance';
 import { useState } from 'react';
 import DfxIcon, { IconColor, IconSize, IconVariant } from './DfxIcon';
 
 interface StyledBalanceSelectionProps {
-  balances: { asset: Asset; protocol: Protocol; balance: BigNumber; balanceInUsd?: BigNumber; isSelected: boolean }[];
+  balances: {
+    asset: Asset;
+    isToken: boolean;
+    protocol: string;
+    balance: BigNumber;
+    balanceInUsd?: BigNumber;
+    isSelected: boolean;
+  }[];
   onSelectionChanged: (asset: Asset) => void;
 }
 

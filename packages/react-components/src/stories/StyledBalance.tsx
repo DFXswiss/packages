@@ -1,11 +1,11 @@
-import { Asset, AssetType } from '../api/definitions/asset';
-import { Protocol } from '../hooks/blockchain.hook';
+import { Asset } from '../definitions/asset';
 import BigNumber from 'bignumber.js';
 import DfxAssetIcon, { AssetIconVariant } from './DfxAssetIcon';
 
 interface StyledBalanceProps {
   asset: Asset;
-  protocol: Protocol;
+  protocol: string;
+  isToken: boolean;
   balance: BigNumber;
   balanceInUsd?: BigNumber;
   isSelected: boolean;
@@ -15,6 +15,7 @@ interface StyledBalanceProps {
 export default function StyledBalance({
   asset,
   protocol,
+  isToken,
   balance,
   balanceInUsd,
   isSelected,
@@ -39,7 +40,7 @@ export default function StyledBalance({
           <div className="text-left">
             <div className="flex font-semibold gap-1 text-dfxBlue-800">
               <h4 className="leading-snug">{asset.name}</h4>
-              {asset.type !== AssetType.COIN && (
+              {isToken && (
                 <span className="self-start mt-1 leading-none font-semibold text-2xs shrink-0">{protocol}</span>
               )}
             </div>
