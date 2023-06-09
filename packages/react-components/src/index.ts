@@ -1,1 +1,2 @@
-export { default as StyledButton, StyledButtonSize } from './stories/StyledButton';
+export { default as StyledButton } from './stories/StyledButton';
+export { StyledButtonSize, StyledButtonColor, StyledButtonWidth } from './stories/StyledButton';
