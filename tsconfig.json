@@ -3,7 +3,7 @@
     "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {
-      "@dfx/react-components/dist/*": ["packages/react-components/src/*"]
+      "@dfx.swiss/react-components/dist/*": ["packages/react-components/src/*"]
     },
     "experimentalDecorators": true,
     "incremental": true,

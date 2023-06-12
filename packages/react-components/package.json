@@ -1,8 +1,11 @@
 {
   "private": false,
-  "name": "@dfx/react-components",
+  "name": "@dfx.swiss/react-components",
   "version": "0.1.0",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
