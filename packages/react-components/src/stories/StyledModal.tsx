@@ -59,10 +59,11 @@ export default function StyledModal({
   let bodyClasses = 'relative px-14 pb-10 flex-auto overflow-auto';
 
   if (type !== StyledModalType.ALERT) {
-    color === StyledModalColor.DFX_GRADIENT
-      ? ((containerClasses += ' bg-dfxGradient text-white border border-white/20'),
-        (headingClasses += ' border-white/20'))
-      : ((containerClasses += ' bg-white text-dfxBlue-800'), (headingClasses += ' border-dfxGray-400'));
+    containerClasses +=
+      color === StyledModalColor.DFX_GRADIENT
+        ? ' bg-dfxGradient text-white border border-white/20'
+        : ' bg-white text-dfxBlue-800';
+    headingClasses += color === StyledModalColor.DFX_GRADIENT ? ' border-white/20' : ' border-dfxGray-400';
   } else {
     containerClasses +=
       color === StyledModalColor.WHITE ? ' bg-white text-dfxBlue-800' : ' bg-dfxGray-400 text-dfxBlue-800';
