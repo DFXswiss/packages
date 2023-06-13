@@ -30,23 +30,19 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Change to react components directory
-        run: |
-          cd packages/react-components
-
       - name: Install packages
         run: |
-          npm ci
+          cd packages/react-components && npm ci
 
       - name: Build code
         run: |
-          npm run build-storybook
+          cd packages/react-components && npm run build-storybook
 
       - name: Deploy to Azure Storage (DEV)
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            az storage blob upload-batch --account-name ${{ env.AZURE_ACCOUNT_NAME }} -d '$web' -s ./storybook-static --overwrite
+            az storage blob upload-batch --account-name ${{ env.AZURE_ACCOUNT_NAME }} -d '$web' -s ./packages/react-components/storybook-static --overwrite
 
       - name: Purge CDN endpoint (DEV)
         uses: azure/CLI@v1
