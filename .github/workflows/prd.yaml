@@ -26,7 +26,7 @@ jobs:
 
       - name: "Version and publish"
         run: |
-          git config user.name "DFXAdmin"
+          git config user.name "DFX"
           git config user.email "info@dfx.swiss"
 
           if [ ${{ github.ref_name }} = develop ]; then
