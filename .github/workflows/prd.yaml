@@ -22,8 +22,7 @@ jobs:
 
       - name: "Setup npm"
         run: |
-          npm set @dfx.swiss:registry=https://npm.pkg.github.com/dfx.swiss
-          npm set "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}"
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > .npmrc
 
       - name: "Version and publish"
         run: |
