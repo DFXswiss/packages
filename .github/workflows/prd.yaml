@@ -1,17 +1,15 @@
 name: Publish packages
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
-      - develop
       - main
+      - develop
 
 env:
   NODE_VERSION: "16.x"
 
 jobs:
   publish:
-    if: github.event.pull_request.merged == true # Condition
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,7 +26,10 @@ jobs:
 
       - name: "Version and publish"
         run: |
-          if [ ${{ github.base_ref }} = develop ]; then
+          git config user.name "DFX"
+          git config user.email "info@dfx.swiss"
+
+          if [ ${{ github.ref_name }} = develop ]; then
             npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
           else
             npx lerna version --conventional-commits --conventional-graduate --yes
