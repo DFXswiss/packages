@@ -1,0 +1,38 @@
+name: Publish packages
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+env:
+  NODE_VERSION: "16.x"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: "Setup npm"
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > .npmrc
+
+      - name: "Version and publish"
+        run: |
+          git config user.name "DFX"
+          git config user.email "info@dfx.swiss"
+
+          if [ ${{ github.ref_name }} = develop ]; then
+            npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
+          else
+            npx lerna version --conventional-commits --conventional-graduate --yes
+          fi
+
+          npx lerna publish from-git --yes

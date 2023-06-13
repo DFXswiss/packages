@@ -1,0 +1,14 @@
+{
+  "private": false,
+  "name": "dfx.swiss",
+  "version": "0.1.0",
+  "main": "dist/index.ts",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^7.0.0"
+  }
+}
