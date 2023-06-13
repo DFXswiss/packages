@@ -22,7 +22,7 @@ jobs:
 
       - name: "Setup npm"
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > .npmrc
+          npm set "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}"
 
       - name: "Version and publish"
         run: |
