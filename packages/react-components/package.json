@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@dfx.swiss/react-components",
-  "version": "1.0.1-beta.7",
+  "version": "1.0.1",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
