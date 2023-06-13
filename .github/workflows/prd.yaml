@@ -24,6 +24,14 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > .npmrc
 
+      - name: Install packages
+        run: |
+          npm install
+
+      - name: Build code
+        run: |
+          npx lerna run build
+
       - name: "Version and publish"
         run: |
           git config user.name "DFX"
