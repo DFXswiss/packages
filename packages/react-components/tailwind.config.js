@@ -76,6 +76,7 @@ module.exports = {
       },
       height: {
         2.5: '10px',
+        62.5: '250px',
       },
       width: {
         2.5: '10px',
@@ -85,6 +86,9 @@ module.exports = {
       },
       padding: {
         15: '60px',
+      },
+      minWidth: {
+        62.5: '250px',
       },
     },
   },

@@ -88,8 +88,8 @@ const COLOR_MAPS: Record<StyledButtonColor, ColorMapProps> = {
 
 const WIDTH_MAPS: Record<StyledButtonWidth, string> = {
   [StyledButtonWidth.MIN]: 'mx-4',
-  [StyledButtonWidth.SM]: 'w-[250px]',
-  [StyledButtonWidth.MD]: 'min-w-[250px]',
+  [StyledButtonWidth.SM]: 'w-62.5',
+  [StyledButtonWidth.MD]: 'min-w-62.5',
   [StyledButtonWidth.FULL]: 'w-full',
 };
 
