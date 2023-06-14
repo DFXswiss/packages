@@ -3,7 +3,6 @@ export { CopyButton } from './stories/CopyButton';
 export { default as DfxAssetIcon, AssetIconSize, AssetIconVariant } from './stories/DfxAssetIcon';
 export { default as DfxIcon, IconColor, IconSize, IconVariant } from './stories/DfxIcon';
 export { default as DfxLogo } from './stories/DfxLogo';
-export { default as DfxTitleSection } from './stories/DfxTitleSection';
 export { default as DfxVideoHelpModalContent } from './stories/DfxVideoHelpModalContent';
 export { default as StyledBalance } from './stories/StyledBalance';
 export { default as StyledBalanceSelection } from './stories/StyledBalanceSelection';
@@ -28,7 +27,7 @@ export { default as StyledModal, StyledModalColor, StyledModalType, StyledModalW
 export { default as StyledNetworkChip } from './stories/StyledNetworkChip';
 export { default as StyledNetworkSelection } from './stories/StyledNetworkSelection';
 export { default as StyledTab } from './stories/StyledTab';
-export { default as StyledTabContainer } from './stories/StyledTabContainer';
+export { default as StyledTabContainer, StyledTabProps } from './stories/StyledTabContainer';
 export { default as StyledTabContentWrapper } from './stories/StyledTabContentWrapper';
 export { default as StyledVideoGrid, VideoSourcesProps } from './stories/StyledVideoGrid';
 
