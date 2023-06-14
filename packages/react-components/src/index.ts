@@ -27,7 +27,7 @@ export { default as StyledModal, StyledModalColor, StyledModalType, StyledModalW
 export { default as StyledNetworkChip } from './stories/StyledNetworkChip';
 export { default as StyledNetworkSelection } from './stories/StyledNetworkSelection';
 export { default as StyledTab } from './stories/StyledTab';
-export { default as StyledTabContainer } from './stories/StyledTabContainer';
+export { default as StyledTabContainer, StyledTabProps } from './stories/StyledTabContainer';
 export { default as StyledTabContentWrapper } from './stories/StyledTabContentWrapper';
 export { default as StyledVideoGrid, VideoSourcesProps } from './stories/StyledVideoGrid';
 
