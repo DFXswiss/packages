@@ -16,9 +16,10 @@ export interface Buy {
   remittanceInfo: string;
   minFee: number;
   minVolume: number;
+  minFeeTarget: number;
+  minVolumeTarget: number;
   estimatedAmount: number;
   sepaInstant: boolean;
-  giroCode?: string;
 }
 
 export interface BuyPaymentInfo {
