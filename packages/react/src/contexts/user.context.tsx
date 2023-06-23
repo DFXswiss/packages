@@ -1,16 +1,9 @@
-import {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { Country } from "../definitions/country";
-import { User } from "../definitions/user";
-import { useCountry } from "../hooks/country.hook";
-import { useUser } from "../hooks/user.hook";
-import { useSessionContext } from "./session.context";
+import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
+import { Country } from '../definitions/country';
+import { User } from '../definitions/user';
+import { useCountry } from '../hooks/country.hook';
+import { useUser } from '../hooks/user.hook';
+import { useSessionContext } from './session.context';
 
 interface UserInterface {
   user?: User;
@@ -38,11 +31,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
   const [isUserUpdating, setIsUserUpdating] = useState<boolean>(false);
 
-  const refLink =
-    user?.ref &&
-    `${process.env.REACT_APP_REF_URL ?? "https://dfx.swiss/app?code="}${
-      user.ref
-    }`;
+  const refLink = user?.ref && `${process.env.REACT_APP_REF_URL ?? 'https://dfx.swiss/app?code='}${user.ref}`;
   let userLinkAction: () => void | undefined;
 
   useEffect(() => {
@@ -88,21 +77,8 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       register,
       reloadUser,
     }),
-    [
-      user,
-      refLink,
-      countries,
-      isUserLoading,
-      isUserUpdating,
-      changeMail,
-      register,
-      reloadUser,
-    ]
+    [user, refLink, countries, isUserLoading, isUserUpdating, changeMail, register, reloadUser],
   );
 
-  return (
-    <UserContext.Provider value={context}>
-      {props.children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
 }

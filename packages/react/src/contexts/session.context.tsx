@@ -1,16 +1,8 @@
-import {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Blockchain } from "../definitions/blockchain";
-import { ApiError } from "../definitions/error";
-import { useApiSession } from "../hooks/api-session.hook";
-import { useAuthContext } from "./auth.context";
+import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { Blockchain } from '../definitions/blockchain';
+import { ApiError } from '../definitions/error';
+import { useApiSession } from '../hooks/api-session.hook';
+import { useAuthContext } from './auth.context';
 
 export interface SessionInterface {
   address?: string;
@@ -42,14 +34,9 @@ export interface SessionContextProviderProps extends PropsWithChildren {
   };
 }
 
-export function SessionContextProvider({
-  api,
-  data,
-  children,
-}: SessionContextProviderProps): JSX.Element {
+export function SessionContextProvider({ api, data, children }: SessionContextProviderProps): JSX.Element {
   const { session } = useAuthContext();
-  const { isLoggedIn, getSignMessage, createSession, deleteSession } =
-    useApiSession();
+  const { isLoggedIn, getSignMessage, createSession, deleteSession } = useApiSession();
   const [needsSignUp, setNeedsSignUp] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [signature, setSignature] = useState<string>();
@@ -116,22 +103,8 @@ export function SessionContextProvider({
       signUp,
       logout,
     }),
-    [
-      data.address,
-      data.blockchain,
-      session,
-      isLoggedIn,
-      needsSignUp,
-      isProcessing,
-      login,
-      signUp,
-      logout,
-    ]
+    [data.address, data.blockchain, session, isLoggedIn, needsSignUp, isProcessing, login, signUp, logout],
   );
 
-  return (
-    <SessionContext.Provider value={context}>
-      {children}
-    </SessionContext.Provider>
-  );
+  return <SessionContext.Provider value={context}>{children}</SessionContext.Provider>;
 }
