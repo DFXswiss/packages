@@ -24,7 +24,7 @@ export { useSell } from "./hooks/sell.hook";
 export { useUser } from "./hooks/user.hook";
 
 // Definitions
-export { Asset } from "./definitions/asset";
+export { Asset, AssetType } from "./definitions/asset";
 export { BankAccount } from "./definitions/bank-account";
 export { Blockchain } from "./definitions/blockchain";
 export { Buy, BuyPaymentInfo } from "./definitions/buy";
