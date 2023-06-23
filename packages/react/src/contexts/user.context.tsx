@@ -67,7 +67,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   async function changeMail(mail: string): Promise<void> {
     if (!user) return; // TODO: (Krysh) add real error handling
     setIsUserUpdating(true);
-    return changeUser({ ...user, mail }, userLinkAction)
+    return changeUser({ mail }, userLinkAction)
       .then(setUser)
       .catch(console.error) // TODO: (Krysh) add real error handling
       .finally(() => setIsUserUpdating(false));
