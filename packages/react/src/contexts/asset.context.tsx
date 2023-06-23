@@ -45,7 +45,7 @@ export function AssetContextProvider(props: PropsWithChildren): JSX.Element {
     setAssets(
       Utils.groupBy(
         assets
-          .filter((a) => a.buyable || a.comingSoon)
+          .filter((a) => a.buyable || a.sellable || a.comingSoon)
           .sort((a, b) => (a.sortOrder ?? 1) - (b.sortOrder ?? 1)),
         "blockchain"
       )
