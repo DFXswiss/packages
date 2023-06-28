@@ -14,6 +14,7 @@ export interface Sell {
   minFeeTarget: number;
   minVolumeTarget: number;
   estimatedAmount: number;
+  paymentRequest?: string;
 }
 
 export interface SellPaymentInfo {
