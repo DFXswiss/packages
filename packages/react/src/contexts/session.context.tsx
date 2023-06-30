@@ -28,6 +28,7 @@ export interface SessionContextProviderProps extends PropsWithChildren {
     connect?: () => Promise<string>;
   };
   data: {
+    walletId?: number;
     isConnected?: boolean;
     address?: string;
     blockchain?: Blockchain;
@@ -80,7 +81,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
   async function signUp(): Promise<void> {
     if (!data.address || !signature) return; // TODO: (Krysh) add real error handling
     setIsProcessing(true);
-    return createSession(data.address, signature, true).finally(() => {
+    return createSession(data.address, signature, true, data.walletId).finally(() => {
       setSignature(undefined);
       setNeedsSignUp(false);
       setIsProcessing(false);
