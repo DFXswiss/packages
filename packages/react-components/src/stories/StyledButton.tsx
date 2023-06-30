@@ -18,10 +18,12 @@ export enum StyledButtonColor {
   GRAY = 'GRAY',
   GRAY_OUTLINE = 'GRAY_OUTLINE',
   PALE_WHITE = 'PALE_WHITE',
+  STURDY_WHITE = 'STURDY_WHITE',
   WHITE = 'WHITE',
 }
 
 export interface StyledButtonProps {
+  className?: string;
   label: string;
   onClick: () => void;
   size?: StyledButtonSize;
@@ -84,6 +86,11 @@ const COLOR_MAPS: Record<StyledButtonColor, ColorMapProps> = {
       'border border-white/20 text-white bg-white/10 hover:bg-white/20 focus:bg-white/20 active:bg-white/30',
     iconColor: IconColor.WHITE,
   },
+  [StyledButtonColor.STURDY_WHITE]: {
+    buttonColorClasses:
+      'border border-dfxGray-600 text-dfxBlue-800 bg-white/10 hover:bg-white/20 focus:bg-white/20 active:bg-white/30',
+    iconColor: IconColor.BLUE,
+  },
 };
 
 const WIDTH_MAPS: Record<StyledButtonWidth, string> = {
@@ -94,6 +101,7 @@ const WIDTH_MAPS: Record<StyledButtonWidth, string> = {
 };
 
 export default function StyledButton({
+  className,
   label,
   onClick,
   size = StyledButtonSize.BIG,
@@ -107,8 +115,9 @@ export default function StyledButton({
   icon,
   iconAfterLabel = false,
 }: StyledButtonProps) {
-  let buttonClasses =
-    'inline-block flex justify-center leading-tight shadow-md focus:outline-none focus:ring-0 transition duration-150 ease-in-out ';
+  let buttonClasses = `inline-block flex gap-4 justify-center leading-tight shadow-md focus:outline-none focus:ring-0 transition duration-150 ease-in-out ${
+    className ?? ''
+  } `;
 
   let renderedColor: string;
   const isDisabled = disabled || isLoading;
