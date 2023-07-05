@@ -9,7 +9,7 @@ interface StyledBalanceSelectionProps {
     asset: Asset;
     isToken: boolean;
     protocol: string;
-    balance: BigNumber;
+    balance?: BigNumber;
     balanceInUsd?: BigNumber;
     isSelected: boolean;
   }[];
