@@ -2,7 +2,7 @@
 export { DfxContextProvider } from './contexts/dfx.context';
 export { useAssetContext } from './contexts/asset.context';
 export { useAuthContext } from './contexts/auth.context';
-export { useBuyContext } from './contexts/buy.context';
+export { useBankAccountContext } from './contexts/bank-account.context';
 export { useSessionContext } from './contexts/session.context';
 export { useUserContext } from './contexts/user.context';
 
