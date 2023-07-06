@@ -58,27 +58,33 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     if (data.isConnected != null && !data.isConnected) {
       await api.connect?.();
     }
-    if (!data.address) return; // TODO: (Krysh) add real error handling
-    createApiSession(data.address);
+    if (!data.address) throw new Error('Address is not defined');
+
+    return createApiSession(data.address);
   }
 
   async function createApiSession(address: string): Promise<void> {
     if (isLoggedIn || !api.signMessage) return;
+
     const message = await getSignMessage(address);
     const signature = await api.signMessage(message, address);
+
     setIsProcessing(true);
     return createSession(address, signature, false)
       .catch((error: ApiError) => {
         if (error.statusCode === 404) {
           setSignature(signature);
           setNeedsSignUp(true);
+        } else {
+          throw error;
         }
       })
       .finally(() => setIsProcessing(false));
   }
 
   async function signUp(): Promise<void> {
-    if (!data.address || !signature) return; // TODO: (Krysh) add real error handling
+    if (!data.address || !signature) throw new Error('Address or signature not defined');
+
     setIsProcessing(true);
     return createSession(data.address, signature, true, data.walletId).finally(() => {
       setSignature(undefined);
