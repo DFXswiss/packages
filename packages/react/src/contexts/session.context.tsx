@@ -48,9 +48,8 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       firstRender.current = false;
       return;
     }
-    if (data.address) {
-      createApiSession(data.address);
-    } else {
+
+    if (!data.address || data.address !== session?.address) {
       deleteSession();
     }
   }, [data.address]);
