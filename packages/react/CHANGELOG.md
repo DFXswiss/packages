@@ -7,17 +7,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @dfx.swiss/react
 
-
-
-
-
 # 1.1.0-beta.6 (2023-07-07)
 
 **Note:** Version bump only for package @dfx.swiss/react
-
-
-
-
 
 # 1.1.0-beta.5 (2023-07-06)
 
