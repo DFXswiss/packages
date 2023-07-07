@@ -13,6 +13,7 @@ export enum StyledModalType {
 }
 
 export enum StyledModalWidth {
+  NONE = 'NONE',
   SMALL = 'SMALL',
   REGULAR = 'REGULAR',
   LARGE = 'LARGE',
@@ -20,6 +21,7 @@ export enum StyledModalWidth {
 }
 
 const WIDTH_MAPS: Record<StyledModalWidth, string> = {
+  [StyledModalWidth.NONE]: 'w-[90%]',
   [StyledModalWidth.SMALL]: 'min-w-[25rem] max-w-lg',
   [StyledModalWidth.REGULAR]: 'min-w-[37.5rem] max-w-2xl',
   [StyledModalWidth.LARGE]: 'w-[90%] max-w-4xl',
@@ -56,7 +58,8 @@ export default function StyledModal({
   let containerClasses =
     'rounded-lg shadow-lg max-h-[80vh] relative flex flex-col w-full outline-none focus:outline-none overflow-auto';
   let headingClasses = 'p-3 border-b rounded-t';
-  let bodyClasses = 'relative px-14 pb-10 flex-auto overflow-auto';
+  let bodyClasses =
+    `relative pb-10 ${width === StyledModalWidth.NONE ? 'px-4' : 'px-14'} flex-auto overflow-auto` + WIDTH_MAPS[width];
 
   if (type !== StyledModalType.ALERT) {
     containerClasses +=
@@ -97,7 +100,11 @@ export default function StyledModal({
                 {/*header*/}
                 {showHeader && (
                   <div className={headingClasses}>
-                    <h3 className="text-lg font-bold text-center">{heading}</h3>
+                    <h3
+                      className={`text-lg font-bold ${width === StyledModalWidth.NONE ? 'text-start' : 'text-center'}`}
+                    >
+                      {heading}
+                    </h3>
                   </div>
                 )}
                 {/*body*/}

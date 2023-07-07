@@ -1,44 +1,30 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
-import { Fiat } from '../definitions/fiat';
-import { useFiat } from '../hooks/fiat.hook';
 import { useAuthContext } from './auth.context';
 import { CreateBankAccount, UpdateBankAccount, useBankAccount } from '../hooks/bank-account.hook';
 import { BankAccount } from '../definitions/bank-account';
-import { useBuy } from '../hooks/buy.hook';
-import { Buy, BuyPaymentInfo } from '../definitions/buy';
 
-interface BuyInterface {
-  currencies?: Fiat[];
+interface BankAccountInterface {
   bankAccounts?: BankAccount[];
   isAccountLoading: boolean;
   createAccount: (newAccount: CreateBankAccount) => Promise<BankAccount>;
   updateAccount: (id: number, changedAccount: UpdateBankAccount) => Promise<BankAccount>;
-  receiveFor: (info: BuyPaymentInfo) => Promise<Buy>;
 }
 
-const BuyContext = createContext<BuyInterface>(undefined as any);
+const BankAccountContext = createContext<BankAccountInterface>(undefined as any);
 
-export function useBuyContext(): BuyInterface {
-  return useContext(BuyContext);
+export function useBankAccountContext(): BankAccountInterface {
+  return useContext(BankAccountContext);
 }
 
-export function BuyContextProvider(props: PropsWithChildren): JSX.Element {
+export function BankAccountContextProvider(props: PropsWithChildren): JSX.Element {
   const { isLoggedIn } = useAuthContext();
-  const [currencies, setCurrencies] = useState<Fiat[]>();
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>();
   const [isAccountLoading, setIsAccountLoading] = useState(false);
-  const { getCurrencies } = useFiat();
   const { getAccounts, createAccount, updateAccount } = useBankAccount();
-  const { receiveFor } = useBuy();
 
   useEffect(() => {
     if (isLoggedIn) {
-      Promise.all([getCurrencies(), getAccounts()])
-        .then(([currencies, bankAccounts]) => {
-          setCurrencies(currencies.filter((c) => c.sellable));
-          setBankAccounts(bankAccounts);
-        })
-        .catch(console.error); // TODO: (Krysh) add real error handling
+      getAccounts().then(setBankAccounts).catch(console.error); // TODO: (Krysh) add real error handling
     }
   }, [isLoggedIn]);
 
@@ -65,17 +51,15 @@ export function BuyContextProvider(props: PropsWithChildren): JSX.Element {
     return accounts;
   }
 
-  const context: BuyInterface = useMemo(
+  const context: BankAccountInterface = useMemo(
     () => ({
-      currencies,
       bankAccounts,
       isAccountLoading,
       createAccount: addNewAccount,
       updateAccount: updateExistingAccount,
-      receiveFor,
     }),
-    [currencies, bankAccounts, isAccountLoading, addNewAccount, updateExistingAccount, receiveFor],
+    [bankAccounts, isAccountLoading, addNewAccount, updateExistingAccount],
   );
 
-  return <BuyContext.Provider value={context}>{props.children}</BuyContext.Provider>;
+  return <BankAccountContext.Provider value={context}>{props.children}</BankAccountContext.Provider>;
 }

@@ -1,4 +1,5 @@
 import { IconContext, IconType } from 'react-icons';
+import { FaCircle, FaRegCircle } from 'react-icons/fa';
 import {
   MdContentCopy,
   MdArrowBackIos,
@@ -27,6 +28,7 @@ import {
   MdOpenInNew,
   MdSearch,
 } from 'react-icons/md';
+import { VscArrowSwap } from 'react-icons/vsc';
 import { ReactElement, useContext } from 'react';
 
 interface DfxIconProps {
@@ -69,6 +71,9 @@ export enum IconVariant {
   METAMASK_LOGO = 'METAMASK_LOGO',
   SELL = 'SELL',
   SEARCH = 'SEARCH',
+  SWAP = 'SWAP',
+  CIRCLE = 'CIRCLE',
+  CIRCLE_OUTLINE = 'CIRCLE_OUTLINE',
   USER_DATA = 'USER_DATA',
 }
 
@@ -106,6 +111,9 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.METAMASK_LOGO]: <MetamaskLogo />,
   [IconVariant.SELL]: <SellToFiat />,
   [IconVariant.SEARCH]: <MdSearch />,
+  [IconVariant.SWAP]: <VscArrowSwap />,
+  [IconVariant.CIRCLE]: <FaCircle />,
+  [IconVariant.CIRCLE_OUTLINE]: <FaRegCircle />,
   [IconVariant.USER_DATA]: <DfxUserData />,
 };
 

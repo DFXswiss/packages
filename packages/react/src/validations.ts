@@ -32,7 +32,7 @@ class ValidationsClass {
         if (number) {
           const util = PhoneNumberUtil.getInstance();
 
-          if (!number.match(/^\+\d{5}/)) return 'Please fill in area code and number';
+          if (!number.match(/^\+\d/)) return 'Please fill in area code and number';
           if (!util.isValidNumber(util.parseAndKeepRawInput(number))) return 'Invalid pattern';
         }
 

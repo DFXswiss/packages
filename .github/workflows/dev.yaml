@@ -2,7 +2,7 @@ name: Publish packages
 on:
   push:
     branches:
-      - main
+      - develop
 
 env:
   NODE_VERSION: "16.x"
@@ -36,5 +36,5 @@ jobs:
           git config user.name "DFX"
           git config user.email "info@dfx.swiss"
 
-          npx lerna version --conventional-commits --conventional-graduate --yes
-          npx lerna publish from-git --yes
+          npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
+          npx lerna publish from-git --yes --dist-tag beta

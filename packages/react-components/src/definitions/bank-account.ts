@@ -1,4 +1,4 @@
 export interface BankAccount {
-  label: string;
+  label?: string;
   iban: string;
 }
