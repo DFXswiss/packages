@@ -18,19 +18,17 @@ export function useAssetContext(): AssetInterface {
 }
 
 export function AssetContextProvider(props: PropsWithChildren): JSX.Element {
-  const { isLoggedIn, session } = useApiSession();
+  const { session } = useApiSession();
   const { getAssets } = useAsset();
   const [assets, setAssets] = useState<Map<Blockchain, Asset[]>>(new Map());
   const [assetsLoading, setAssetsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      setAssetsLoading(true);
-      getAssets()
-        .then(updateAssets)
-        .finally(() => setAssetsLoading(false));
-    }
-  }, [isLoggedIn, session]);
+    setAssetsLoading(true);
+    getAssets()
+      .then(updateAssets)
+      .finally(() => setAssetsLoading(false));
+  }, [session]);
 
   function updateAssets(assets: Asset[]) {
     setAssets(
