@@ -10,8 +10,8 @@ export interface SessionInterface {
   isLoggedIn: boolean;
   needsSignUp: boolean;
   isProcessing: boolean;
-  login: () => Promise<void>;
-  signUp: () => Promise<void>;
+  login: () => Promise<string | undefined>;
+  signUp: () => Promise<string | undefined>;
   logout: () => Promise<void>;
 }
 
@@ -50,14 +50,14 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     }
   }, [data.address]);
 
-  async function login(): Promise<void> {
+  async function login(): Promise<string | undefined> {
     if (!data.address) throw new Error('Address is not defined');
 
     return createApiSession(data.address);
   }
 
-  async function createApiSession(address: string): Promise<void> {
-    if (isLoggedIn || !api.signMessage) return;
+  async function createApiSession(address: string): Promise<string | undefined> {
+    if (isLoggedIn || !api.signMessage) return undefined;
 
     const message = await getSignMessage(address);
     const signature = await api.signMessage(message, address);
@@ -71,11 +71,13 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
         } else {
           throw error;
         }
+
+        return undefined;
       })
       .finally(() => setIsProcessing(false));
   }
 
-  async function signUp(): Promise<void> {
+  async function signUp(): Promise<string | undefined> {
     if (!data.address || !signature) throw new Error('Address or signature not defined');
 
     setIsProcessing(true);
@@ -87,6 +89,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
   }
 
   async function logout(): Promise<void> {
+    setNeedsSignUp(false);
     await deleteSession();
   }
 
