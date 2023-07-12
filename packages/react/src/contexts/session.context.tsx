@@ -24,11 +24,9 @@ export function useSessionContext(): SessionInterface {
 export interface SessionContextProviderProps extends PropsWithChildren {
   api: {
     signMessage?: (message: string, address: string) => Promise<string>;
-    connect?: () => Promise<string>;
   };
   data: {
     walletId?: number;
-    isConnected?: boolean;
     address?: string;
     blockchain?: Blockchain;
   };
@@ -53,9 +51,6 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
   }, [data.address]);
 
   async function login(): Promise<void> {
-    if (data.isConnected != null && !data.isConnected) {
-      await api.connect?.();
-    }
     if (!data.address) throw new Error('Address is not defined');
 
     return createApiSession(data.address);
