@@ -1,7 +1,7 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
-import { useAuthContext } from './auth.context';
 import { CreateBankAccount, UpdateBankAccount, useBankAccount } from '../hooks/bank-account.hook';
 import { BankAccount } from '../definitions/bank-account';
+import { useApiSession } from '../hooks/api-session.hook';
 
 interface BankAccountInterface {
   bankAccounts?: BankAccount[];
@@ -17,7 +17,7 @@ export function useBankAccountContext(): BankAccountInterface {
 }
 
 export function BankAccountContextProvider(props: PropsWithChildren): JSX.Element {
-  const { isLoggedIn } = useAuthContext();
+  const { isLoggedIn, session } = useApiSession();
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>();
   const [isAccountLoading, setIsAccountLoading] = useState(false);
   const { getAccounts, createAccount, updateAccount } = useBankAccount();
@@ -26,7 +26,7 @@ export function BankAccountContextProvider(props: PropsWithChildren): JSX.Elemen
     if (isLoggedIn) {
       getAccounts().then(setBankAccounts).catch(console.error); // TODO: (Krysh) add real error handling
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, session]);
 
   async function addNewAccount(newAccount: CreateBankAccount): Promise<BankAccount> {
     setIsAccountLoading(true);

@@ -1,25 +1,14 @@
-import {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { Asset } from "../definitions/asset";
-import { Blockchain } from "../definitions/blockchain";
-import { useAsset } from "../hooks/asset.hook";
-
-import { useAuthContext } from "./auth.context";
-import { Utils } from "../utils";
+import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
+import { Asset } from '../definitions/asset';
+import { Blockchain } from '../definitions/blockchain';
+import { useAsset } from '../hooks/asset.hook';
+import { Utils } from '../utils';
+import { useApiSession } from '../hooks/api-session.hook';
 
 interface AssetInterface {
   assets: Map<Blockchain, Asset[]>;
   assetsLoading: boolean;
-  getAsset: (
-    id: number,
-    filter?: { buyable?: boolean; sellable?: boolean }
-  ) => Asset | undefined;
+  getAsset: (id: number, filter?: { buyable?: boolean; sellable?: boolean }) => Asset | undefined;
 }
 
 const AssetContext = createContext<AssetInterface>(undefined as any);
@@ -29,17 +18,19 @@ export function useAssetContext(): AssetInterface {
 }
 
 export function AssetContextProvider(props: PropsWithChildren): JSX.Element {
-  const { isLoggedIn } = useAuthContext();
+  const { isLoggedIn, session } = useApiSession();
   const { getAssets } = useAsset();
   const [assets, setAssets] = useState<Map<Blockchain, Asset[]>>(new Map());
   const [assetsLoading, setAssetsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    setAssetsLoading(true);
-    getAssets()
-      .then(updateAssets)
-      .finally(() => setAssetsLoading(false));
-  }, [isLoggedIn]);
+    if (isLoggedIn) {
+      setAssetsLoading(true);
+      getAssets()
+        .then(updateAssets)
+        .finally(() => setAssetsLoading(false));
+    }
+  }, [isLoggedIn, session]);
 
   function updateAssets(assets: Asset[]) {
     setAssets(
@@ -47,34 +38,27 @@ export function AssetContextProvider(props: PropsWithChildren): JSX.Element {
         assets
           .filter((a) => a.buyable || a.sellable || a.comingSoon)
           .sort((a, b) => (a.sortOrder ?? 1) - (b.sortOrder ?? 1)),
-        "blockchain"
-      )
+        'blockchain',
+      ),
     );
   }
 
-  function getAsset(
-    id: number,
-    filter?: { buyable?: boolean; sellable?: boolean }
-  ): Asset | undefined {
+  function getAsset(id: number, filter?: { buyable?: boolean; sellable?: boolean }): Asset | undefined {
     return Array.from(assets.values())
       .reduce((prev, curr) => prev.concat(curr), [])
       .filter(
         (asset) =>
           filter === undefined ||
           (filter?.buyable !== undefined && filter.buyable === asset.buyable) ||
-          (filter?.sellable !== undefined && filter.sellable === asset.sellable)
+          (filter?.sellable !== undefined && filter.sellable === asset.sellable),
       )
       .find((asset) => asset.id === id);
   }
 
   const context: AssetInterface = useMemo(
     () => ({ assets, assetsLoading, getAsset }),
-    [assets, assetsLoading, getAsset]
+    [assets, assetsLoading, getAsset],
   );
 
-  return (
-    <AssetContext.Provider value={context}>
-      {props.children}
-    </AssetContext.Provider>
-  );
+  return <AssetContext.Provider value={context}>{props.children}</AssetContext.Provider>;
 }
