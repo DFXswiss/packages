@@ -1,7 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
 import { Fiat } from '../definitions/fiat';
 import { useFiat } from '../hooks/fiat.hook';
-import { useAuthContext } from './auth.context';
 
 interface FiatInterface {
   currencies?: Fiat[];
@@ -14,15 +13,12 @@ export function useFiatContext(): FiatInterface {
 }
 
 export function FiatContextProvider(props: PropsWithChildren): JSX.Element {
-  const { isLoggedIn } = useAuthContext();
   const [currencies, setCurrencies] = useState<Fiat[]>();
   const { getCurrencies } = useFiat();
 
   useEffect(() => {
-    if (isLoggedIn) {
-      getCurrencies().then(setCurrencies).catch(console.error); // TODO: (Krysh) add real error handling
-    }
-  }, [isLoggedIn]);
+    getCurrencies().then(setCurrencies).catch(console.error); // TODO: (Krysh) add real error handling
+  }, []);
 
   const context: FiatInterface = useMemo(
     () => ({

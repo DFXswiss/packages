@@ -3,7 +3,7 @@ import { Country } from '../definitions/country';
 import { User } from '../definitions/user';
 import { useCountry } from '../hooks/country.hook';
 import { useUser } from '../hooks/user.hook';
-import { useSessionContext } from './session.context';
+import { useApiSession } from '../hooks/api-session.hook';
 
 interface UserInterface {
   user?: User;
@@ -23,7 +23,7 @@ export function useUserContext(): UserInterface {
 }
 
 export function UserContextProvider(props: PropsWithChildren): JSX.Element {
-  const { isLoggedIn } = useSessionContext();
+  const { isLoggedIn, session } = useApiSession();
   const { getUser, changeUser } = useUser();
   const { getCountries } = useCountry();
   const [user, setUser] = useState<User>();
@@ -43,7 +43,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       setUser(undefined);
       setCountries([]);
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, session]);
 
   async function reloadUser(): Promise<void> {
     setIsUserLoading(true);

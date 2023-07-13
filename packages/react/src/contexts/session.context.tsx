@@ -2,7 +2,6 @@ import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useRe
 import { Blockchain } from '../definitions/blockchain';
 import { ApiError } from '../definitions/error';
 import { useApiSession } from '../hooks/api-session.hook';
-import { useAuthContext } from './auth.context';
 
 export interface SessionInterface {
   address?: string;
@@ -11,8 +10,8 @@ export interface SessionInterface {
   isLoggedIn: boolean;
   needsSignUp: boolean;
   isProcessing: boolean;
-  login: () => Promise<void>;
-  signUp: () => Promise<void>;
+  login: () => Promise<string | undefined>;
+  signUp: () => Promise<string | undefined>;
   logout: () => Promise<void>;
 }
 
@@ -25,19 +24,16 @@ export function useSessionContext(): SessionInterface {
 export interface SessionContextProviderProps extends PropsWithChildren {
   api: {
     signMessage?: (message: string, address: string) => Promise<string>;
-    connect?: () => Promise<string>;
   };
   data: {
     walletId?: number;
-    isConnected?: boolean;
     address?: string;
     blockchain?: Blockchain;
   };
 }
 
 export function SessionContextProvider({ api, data, children }: SessionContextProviderProps): JSX.Element {
-  const { session } = useAuthContext();
-  const { isLoggedIn, getSignMessage, createSession, deleteSession } = useApiSession();
+  const { isLoggedIn, session, getSignMessage, createSession, deleteSession } = useApiSession();
   const [needsSignUp, setNeedsSignUp] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [signature, setSignature] = useState<string>();
@@ -54,17 +50,14 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     }
   }, [data.address]);
 
-  async function login(): Promise<void> {
-    if (data.isConnected != null && !data.isConnected) {
-      await api.connect?.();
-    }
+  async function login(): Promise<string | undefined> {
     if (!data.address) throw new Error('Address is not defined');
 
     return createApiSession(data.address);
   }
 
-  async function createApiSession(address: string): Promise<void> {
-    if (isLoggedIn || !api.signMessage) return;
+  async function createApiSession(address: string): Promise<string | undefined> {
+    if (isLoggedIn || !api.signMessage) return undefined;
 
     const message = await getSignMessage(address);
     const signature = await api.signMessage(message, address);
@@ -78,11 +71,13 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
         } else {
           throw error;
         }
+
+        return undefined;
       })
       .finally(() => setIsProcessing(false));
   }
 
-  async function signUp(): Promise<void> {
+  async function signUp(): Promise<string | undefined> {
     if (!data.address || !signature) throw new Error('Address or signature not defined');
 
     setIsProcessing(true);
@@ -94,6 +89,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
   }
 
   async function logout(): Promise<void> {
+    setNeedsSignUp(false);
     await deleteSession();
   }
 
