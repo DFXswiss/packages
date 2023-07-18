@@ -1,5 +1,5 @@
 import { IconContext, IconType } from 'react-icons';
-import { FaCircle, FaRegCircle } from 'react-icons/fa';
+import { FaCircle, FaRegCircle, FaUserCog, FaFileAlt } from 'react-icons/fa';
 import {
   MdContentCopy,
   MdArrowBackIos,
@@ -27,6 +27,7 @@ import {
   MdMoreVert,
   MdOpenInNew,
   MdSearch,
+  MdHome,
 } from 'react-icons/md';
 import { VscArrowSwap } from 'react-icons/vsc';
 import { ReactElement, useContext } from 'react';
@@ -38,6 +39,7 @@ interface DfxIconProps {
 }
 
 export enum IconVariant {
+  ACCOUNT = 'ACCOUNT',
   ARROW_RIGHT = 'ARROW_RIGHT',
   ARROW_LEFT = 'ARROW_LEFT',
   BACK = 'BACK',
@@ -53,8 +55,10 @@ export enum IconVariant {
   EDIT = 'EDIT',
   EXPAND_LESS = 'EXPAND_LESS',
   EXPAND_MORE = 'EXPAND_MORE',
+  FILE = 'FILE',
   FORWARD = 'FORWARD',
   HELP = 'HELP',
+  HOME = 'HOME',
   INFO = 'INFO',
   INFO_OUTLINE = 'INFO_OUTLINE',
   PROCESS_DONE = 'PROCESS_DONE',
@@ -78,6 +82,7 @@ export enum IconVariant {
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
+  [IconVariant.ACCOUNT]: <FaUserCog />,
   [IconVariant.COPY]: <MdContentCopy />,
   [IconVariant.BACK]: <MdArrowBackIos />,
   [IconVariant.FORWARD]: <MdArrowForwardIos />,
@@ -85,6 +90,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.UNFOLD_MORE]: <MdUnfoldMore />,
   [IconVariant.EXPAND_LESS]: <MdExpandLess />,
   [IconVariant.EXPAND_MORE]: <MdExpandMore />,
+  [IconVariant.FILE]: <FaFileAlt />,
   [IconVariant.CHECK]: <MdCheck />,
   [IconVariant.CHECKBOX_EMPTY]: <MdOutlineCheckBoxOutlineBlank />,
   [IconVariant.CHECKBOX_CHECKED]: <MdOutlineCheckBox />,
@@ -99,6 +105,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.SETTINGS]: <MdSettings />,
   [IconVariant.WALLET]: <DfxWalletIcon />,
   [IconVariant.BANK]: <DfxBankIcon />,
+  [IconVariant.HOME]: <MdHome />,
   [IconVariant.SEPA_INSTANT]: <DfxSepaInstantAvailable />,
   [IconVariant.PROCESS_DONE]: <DfxProcessDoneIcon />,
   [IconVariant.EDIT]: <MdEdit />,
