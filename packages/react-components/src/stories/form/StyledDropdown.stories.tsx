@@ -17,6 +17,7 @@ export const CurrencySelector: ComponentStory<typeof StyledDropdown> = (args) =>
   } = useForm<{ test: string }>();
 
   const onSubmit = handleSubmit((data) => console.log(data));
+
   return (
     <div className="bg-white p-10 max-w-xs">
       <Form control={control} errors={errors} onSubmit={onSubmit}>
@@ -37,7 +38,7 @@ interface TestItem {
   description: string;
 }
 
-export const dummyCurrencies: TestItem[] = [
+const dummyCurrencies: TestItem[] = [
   { title: 'EUR', description: 'EURO' },
   { title: 'USD', description: 'US Dollar' },
   { title: 'CHF', description: 'Swiss Franc' },
