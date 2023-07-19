@@ -10,8 +10,8 @@ export interface SessionInterface {
   isLoggedIn: boolean;
   needsSignUp: boolean;
   isProcessing: boolean;
-  login: () => Promise<string | undefined>;
-  signUp: () => Promise<string | undefined>;
+  login: (address?: string, signature?: string) => Promise<string | undefined>;
+  signUp: (address?: string, signature?: string, walletId?: number) => Promise<string | undefined>;
   logout: () => Promise<void>;
 }
 
@@ -33,10 +33,10 @@ export interface SessionContextProviderProps extends PropsWithChildren {
 }
 
 export function SessionContextProvider({ api, data, children }: SessionContextProviderProps): JSX.Element {
-  const { isLoggedIn, session, getSignMessage, createSession, deleteSession } = useApiSession();
+  const { isLoggedIn, session, getSignMessage, createSession: createApiSession, deleteSession } = useApiSession();
   const [needsSignUp, setNeedsSignUp] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [signature, setSignature] = useState<string>();
+  const [storedSignature, setStoredSignature] = useState<string>();
 
   const firstRender = useRef(true);
   useEffect(() => {
@@ -50,23 +50,21 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     }
   }, [data.address]);
 
-  async function login(): Promise<string | undefined> {
-    if (!data.address) throw new Error('Address is not defined');
+  async function login(address = data.address, signature = storedSignature): Promise<string | undefined> {
+    if (!address) throw new Error('Address is not defined');
+    if (isLoggedIn && session?.address === address) return undefined;
 
-    return createApiSession(data.address);
+    signature ??= await getSignature(address);
+
+    return createSession(address, signature);
   }
 
-  async function createApiSession(address: string): Promise<string | undefined> {
-    if (isLoggedIn || !api.signMessage) return undefined;
-
-    const message = await getSignMessage(address);
-    const signature = await api.signMessage(message, address);
-
+  async function createSession(address: string, signature: string): Promise<string | undefined> {
     setIsProcessing(true);
-    return createSession(address, signature, false)
+    return createApiSession(address, signature, false)
       .catch((error: ApiError) => {
         if (error.statusCode === 404) {
-          setSignature(signature);
+          setStoredSignature(signature);
           setNeedsSignUp(true);
         } else {
           throw error;
@@ -77,12 +75,16 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       .finally(() => setIsProcessing(false));
   }
 
-  async function signUp(): Promise<string | undefined> {
-    if (!data.address || !signature) throw new Error('Address or signature not defined');
+  async function signUp(
+    address = data.address,
+    signature = storedSignature,
+    walletId = data.walletId,
+  ): Promise<string | undefined> {
+    if (!address || !signature) throw new Error('Address or signature not defined');
 
     setIsProcessing(true);
-    return createSession(data.address, signature, true, data.walletId).finally(() => {
-      setSignature(undefined);
+    return createApiSession(address, signature, true, walletId).finally(() => {
+      setStoredSignature(undefined);
       setNeedsSignUp(false);
       setIsProcessing(false);
     });
@@ -91,6 +93,13 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
   async function logout(): Promise<void> {
     setNeedsSignUp(false);
     await deleteSession();
+  }
+
+  async function getSignature(address: string): Promise<string> {
+    if (!api.signMessage) throw new Error('No sign message API provided');
+
+    const message = await getSignMessage(address);
+    return await api.signMessage(message, address);
   }
 
   const context = useMemo(
