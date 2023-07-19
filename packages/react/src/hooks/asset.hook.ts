@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Asset, AssetUrl } from '../definitions/asset';
 import { useApi } from './api.hook';
 
@@ -12,5 +13,5 @@ export function useAsset(): AssetInterface {
     return call<Asset[]>({ url: AssetUrl.get, method: 'GET' });
   }
 
-  return { getAssets };
+  return useMemo(() => ({ getAssets }), [call]);
 }

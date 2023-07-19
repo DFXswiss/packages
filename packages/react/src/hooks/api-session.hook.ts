@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useAuthContext } from '../contexts/auth.context';
 import { Session } from '../definitions/session';
 import { useAuth } from './auth.hook';
@@ -35,5 +36,8 @@ export function useApiSession(): ApiSessionInterface {
     setAuthenticationToken(undefined);
   }
 
-  return { isLoggedIn, session, getSignMessage, createSession, updateSession, deleteSession };
+  return useMemo(
+    () => ({ isLoggedIn, session, getSignMessage, createSession, updateSession, deleteSession }),
+    [isLoggedIn, session, setAuthenticationToken, getSignMessage, signIn, signUp],
+  );
 }

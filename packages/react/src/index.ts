@@ -1,6 +1,7 @@
 // Contexts
 export { DfxContextProvider } from './contexts/dfx.context';
 export { useAssetContext } from './contexts/asset.context';
+export { useFiatContext } from './contexts/fiat.context';
 export { useAuthContext } from './contexts/auth.context';
 export { useBankAccountContext } from './contexts/bank-account.context';
 export { useSessionContext } from './contexts/session.context';

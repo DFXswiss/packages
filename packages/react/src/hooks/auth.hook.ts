@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { AuthUrl, SignIn, SignMessage } from '../definitions/auth';
 import { useApi } from './api.hook';
 
@@ -24,5 +25,5 @@ export function useAuth(): AuthInterface {
     return call({ url: AuthUrl.signUp, method: 'POST', data: { address, signature, walletId } });
   }
 
-  return { getSignMessage, signIn, signUp };
+  return useMemo(() => ({ getSignMessage, signIn, signUp }), [call]);
 }

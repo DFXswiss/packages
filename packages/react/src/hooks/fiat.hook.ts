@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Fiat, FiatUrl } from '../definitions/fiat';
 import { useApi } from './api.hook';
 
@@ -30,10 +31,13 @@ export function useFiat(): FiatInterface {
     } as Record<string, string>,
   };
 
-  return {
-    getCurrencies,
-    toDescription: (currency: Fiat) => definitions.description[currency.name],
-    toSymbol: (currency: Fiat) => definitions.symbol[currency.name],
-    getDefaultCurrency: (currencies: Fiat[]) => currencies.find((f) => f.name === 'EUR'),
-  };
+  return useMemo(
+    () => ({
+      getCurrencies,
+      toDescription: (currency: Fiat) => definitions.description[currency.name],
+      toSymbol: (currency: Fiat) => definitions.symbol[currency.name],
+      getDefaultCurrency: (currencies: Fiat[]) => currencies.find((f) => f.name === 'EUR'),
+    }),
+    [call],
+  );
 }

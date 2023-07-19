@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { BankAccount, BankAccountUrl } from '../definitions/bank-account';
 import { Fiat } from '../definitions/fiat';
 import { useApi } from './api.hook';
@@ -34,5 +35,5 @@ export function useBankAccount(): BankAccountInterface {
     return call<BankAccount>({ url: BankAccountUrl.update(id), method: 'PUT', data: changedAccount });
   }
 
-  return { getAccounts, createAccount, updateAccount };
+  return useMemo(() => ({ getAccounts, createAccount, updateAccount }), [call]);
 }
