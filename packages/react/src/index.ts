@@ -2,6 +2,7 @@
 export { DfxContextProvider } from './contexts/dfx.context';
 export { useAssetContext } from './contexts/asset.context';
 export { useFiatContext } from './contexts/fiat.context';
+export { useLanguageContext } from './contexts/language.context';
 export { useAuthContext } from './contexts/auth.context';
 export { useBankAccountContext } from './contexts/bank-account.context';
 export { useSessionContext } from './contexts/session.context';
@@ -16,6 +17,7 @@ export { useBankAccount, CreateBankAccount, UpdateBankAccount } from './hooks/ba
 export { useBuy } from './hooks/buy.hook';
 export { useCountry } from './hooks/country.hook';
 export { useFiat } from './hooks/fiat.hook';
+export { useLanguage } from './hooks/language.hook';
 export { useKyc } from './hooks/kyc.hook';
 export { useSell } from './hooks/sell.hook';
 export { useUser } from './hooks/user.hook';
@@ -28,6 +30,7 @@ export { Buy, BuyPaymentInfo } from './definitions/buy';
 export { Country } from './definitions/country';
 export { ApiError } from './definitions/error';
 export { Fiat } from './definitions/fiat';
+export { Language } from './definitions/language';
 export { Jwt } from './definitions/jwt';
 export { AccountType, KycStatus, KycState, KycData } from './definitions/kyc';
 export { Sell, SellPaymentInfo } from './definitions/sell';
