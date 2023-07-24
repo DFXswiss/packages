@@ -4,8 +4,8 @@ import { useApi } from './api.hook';
 
 export interface FiatInterface {
   getCurrencies: () => Promise<Fiat[]>;
-  getCurrency: (currencies: Fiat[], identifier: string) => Fiat | undefined;
-  getDefaultCurrency: (currencies: Fiat[]) => Fiat | undefined;
+  getCurrency: (currencies?: Fiat[], identifier?: string) => Fiat | undefined;
+  getDefaultCurrency: (currencies?: Fiat[]) => Fiat | undefined;
 
   toDescription: (currency: Fiat) => string;
   toSymbol: (currency: Fiat) => string;
@@ -18,8 +18,13 @@ export function useFiat(): FiatInterface {
     return call<Fiat[]>({ url: FiatUrl.get, method: 'GET' });
   }
 
-  function getCurrency(currencies: Fiat[], identifier: string): Fiat | undefined {
-    return currencies.find((a) => a.id === +identifier) ?? currencies.find((a) => a.name === identifier);
+  function getCurrency(currencies: Fiat[] = [], identifier?: string): Fiat | undefined {
+    if (!identifier) return undefined;
+
+    return (
+      currencies.find((a) => a.id === +identifier) ??
+      currencies.find((a) => a.name.toLowerCase() === identifier.toLowerCase())
+    );
   }
 
   const definitions = {
@@ -41,7 +46,7 @@ export function useFiat(): FiatInterface {
     () => ({
       getCurrencies,
       getCurrency,
-      getDefaultCurrency: (currencies: Fiat[]) => currencies.find((f) => f.name === 'EUR'),
+      getDefaultCurrency: (currencies: Fiat[] = []) => currencies.find((f) => f.name === 'EUR'),
       toDescription: (currency: Fiat) => definitions.description[currency.name],
       toSymbol: (currency: Fiat) => definitions.symbol[currency.name],
     }),

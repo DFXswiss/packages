@@ -4,7 +4,7 @@ import { Language, LanguageUrl } from '../definitions/language';
 
 export interface LanguageInterface {
   getLanguages: () => Promise<Language[]>;
-  getDefaultLanguage: (languages: Language[]) => Language | undefined;
+  getDefaultLanguage: (languages?: Language[]) => Language | undefined;
 }
 
 export function useLanguage(): LanguageInterface {
@@ -17,7 +17,7 @@ export function useLanguage(): LanguageInterface {
   return useMemo(
     () => ({
       getLanguages,
-      getDefaultLanguage: (languages: Language[]) => languages.find((f) => f.symbol === 'EN'),
+      getDefaultLanguage: (languages: Language[] = []) => languages.find((f) => f.symbol === 'EN'),
     }),
     [call],
   );
