@@ -4,9 +4,11 @@ import { useApi } from './api.hook';
 
 export interface FiatInterface {
   getCurrencies: () => Promise<Fiat[]>;
+  getCurrency: (currencies: Fiat[], identifier: string) => Fiat | undefined;
+  getDefaultCurrency: (currencies: Fiat[]) => Fiat | undefined;
+
   toDescription: (currency: Fiat) => string;
   toSymbol: (currency: Fiat) => string;
-  getDefaultCurrency: (currencies: Fiat[]) => Fiat | undefined;
 }
 
 export function useFiat(): FiatInterface {
@@ -14,6 +16,10 @@ export function useFiat(): FiatInterface {
 
   async function getCurrencies(): Promise<Fiat[]> {
     return call<Fiat[]>({ url: FiatUrl.get, method: 'GET' });
+  }
+
+  function getCurrency(currencies: Fiat[], identifier: string): Fiat | undefined {
+    return currencies.find((a) => a.id === +identifier) ?? currencies.find((a) => a.name === identifier);
   }
 
   const definitions = {
@@ -34,9 +40,10 @@ export function useFiat(): FiatInterface {
   return useMemo(
     () => ({
       getCurrencies,
+      getCurrency,
+      getDefaultCurrency: (currencies: Fiat[]) => currencies.find((f) => f.name === 'EUR'),
       toDescription: (currency: Fiat) => definitions.description[currency.name],
       toSymbol: (currency: Fiat) => definitions.symbol[currency.name],
-      getDefaultCurrency: (currencies: Fiat[]) => currencies.find((f) => f.name === 'EUR'),
     }),
     [call],
   );

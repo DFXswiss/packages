@@ -4,6 +4,7 @@ import { useApi } from './api.hook';
 
 export interface AssetInterface {
   getAssets: () => Promise<Asset[]>;
+  getAsset: (assets: Asset[], identifier: string) => Asset | undefined;
 }
 
 export function useAsset(): AssetInterface {
@@ -13,5 +14,13 @@ export function useAsset(): AssetInterface {
     return call<Asset[]>({ url: AssetUrl.get, method: 'GET' });
   }
 
-  return useMemo(() => ({ getAssets }), [call]);
+  function getAsset(assets: Asset[], identifier: string): Asset | undefined {
+    return (
+      assets.find((a) => a.id === +identifier) ??
+      assets.find((a) => a.uniqueName === identifier) ??
+      assets.find((a) => a.name === identifier)
+    );
+  }
+
+  return useMemo(() => ({ getAssets, getAsset }), [call]);
 }
