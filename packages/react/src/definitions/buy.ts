@@ -20,12 +20,14 @@ export interface Buy {
   minVolume: number;
   minFeeTarget: number;
   minVolumeTarget: number;
+  amount: number;
   estimatedAmount: number;
   asset: Asset;
 }
 
 export interface BuyPaymentInfo {
   currency: Fiat;
-  amount: number;
+  amount?: number;
   asset: Asset;
+  targetAmount?: number;
 }
