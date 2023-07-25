@@ -4,6 +4,7 @@ import { Session } from '../definitions/session';
 import { useAuth } from './auth.hook';
 
 export interface ApiSessionInterface {
+  isInitialized: boolean;
   isLoggedIn: boolean;
   session?: Session;
   getSignMessage: (address: string) => Promise<string>;
@@ -13,7 +14,7 @@ export interface ApiSessionInterface {
 }
 
 export function useApiSession(): ApiSessionInterface {
-  const { isLoggedIn, session, setAuthenticationToken } = useAuthContext();
+  const { isInitialized, isLoggedIn, session, setAuthenticationToken } = useAuthContext();
   const { getSignMessage, signIn, signUp } = useAuth();
 
   async function createSession(
@@ -37,7 +38,7 @@ export function useApiSession(): ApiSessionInterface {
   }
 
   return useMemo(
-    () => ({ isLoggedIn, session, getSignMessage, createSession, updateSession, deleteSession }),
-    [isLoggedIn, session, setAuthenticationToken, getSignMessage, signIn, signUp],
+    () => ({ isInitialized, isLoggedIn, session, getSignMessage, createSession, updateSession, deleteSession }),
+    [isInitialized, isLoggedIn, session, setAuthenticationToken, getSignMessage, signIn, signUp],
   );
 }

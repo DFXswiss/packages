@@ -7,6 +7,7 @@ export interface SessionInterface {
   address?: string;
   blockchain?: Blockchain;
   availableBlockchains?: Blockchain[];
+  isInitialized: boolean;
   isLoggedIn: boolean;
   needsSignUp: boolean;
   isProcessing: boolean;
@@ -33,7 +34,14 @@ export interface SessionContextProviderProps extends PropsWithChildren {
 }
 
 export function SessionContextProvider({ api, data, children }: SessionContextProviderProps): JSX.Element {
-  const { isLoggedIn, session, getSignMessage, createSession: createApiSession, deleteSession } = useApiSession();
+  const {
+    isInitialized,
+    isLoggedIn,
+    session,
+    getSignMessage,
+    createSession: createApiSession,
+    deleteSession,
+  } = useApiSession();
   const [needsSignUp, setNeedsSignUp] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [storedSignature, setStoredSignature] = useState<string>();
@@ -107,6 +115,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       address: data.address,
       blockchain: data.blockchain,
       availableBlockchains: session?.blockchains,
+      isInitialized,
       isLoggedIn,
       needsSignUp,
       isProcessing,
@@ -114,7 +123,18 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       signUp,
       logout,
     }),
-    [data.address, data.blockchain, session, isLoggedIn, needsSignUp, isProcessing, login, signUp, logout],
+    [
+      data.address,
+      data.blockchain,
+      session,
+      isInitialized,
+      isLoggedIn,
+      needsSignUp,
+      isProcessing,
+      login,
+      signUp,
+      logout,
+    ],
   );
 
   return <SessionContext.Provider value={context}>{children}</SessionContext.Provider>;
