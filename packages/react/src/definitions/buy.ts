@@ -21,6 +21,7 @@ export interface Buy {
   minFeeTarget: number;
   minVolumeTarget: number;
   amount: number;
+  currency: Fiat;
   estimatedAmount: number;
   asset: Asset;
 }

@@ -14,6 +14,7 @@ export interface Sell {
   minFeeTarget: number;
   minVolumeTarget: number;
   amount: number;
+  asset: Asset;
   estimatedAmount: number;
   currency: Fiat;
   paymentRequest?: string;
