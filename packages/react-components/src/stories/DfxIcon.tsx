@@ -28,6 +28,7 @@ import {
   MdOpenInNew,
   MdSearch,
   MdHome,
+  MdMenu,
 } from 'react-icons/md';
 import { VscArrowSwap } from 'react-icons/vsc';
 import { ReactElement, useContext } from 'react';
@@ -61,6 +62,7 @@ export enum IconVariant {
   HOME = 'HOME',
   INFO = 'INFO',
   INFO_OUTLINE = 'INFO_OUTLINE',
+  MENU = 'MENU',
   PROCESS_DONE = 'PROCESS_DONE',
   SEPA_INSTANT = 'SEPA_INSTANT',
   SETTINGS = 'SETTINGS',
@@ -82,6 +84,7 @@ export enum IconVariant {
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
+  [IconVariant.MENU]: <MdMenu />,
   [IconVariant.ACCOUNT]: <FaUserCog />,
   [IconVariant.COPY]: <MdContentCopy />,
   [IconVariant.BACK]: <MdArrowBackIos />,
