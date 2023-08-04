@@ -1,5 +1,5 @@
 import { IconContext, IconType } from 'react-icons';
-import { FaCircle, FaRegCircle, FaUserCog, FaFileAlt } from 'react-icons/fa';
+import { FaCircle, FaRegCircle, FaUserCog, FaFileAlt, FaTelegramPlane } from 'react-icons/fa';
 import {
   MdContentCopy,
   MdArrowBackIos,
@@ -72,6 +72,7 @@ export enum IconVariant {
   CHECKBOX_EMPTY = 'CHECKBOX_EMPTY',
   CHECKBOX_CHECKED = 'CHECKBOX_CHECKED',
   SIGNATURE_POPUP = 'SIGNATURE_POPUP',
+  TELEGRAM = 'TELEGRAM',
   THREE_DOTS_VERT = 'THREE_DOTS_VERT',
   OPEN_IN_NEW = 'OPEN_IN_NEW',
   METAMASK_LOGO = 'METAMASK_LOGO',
@@ -125,6 +126,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.CIRCLE]: <FaCircle />,
   [IconVariant.CIRCLE_OUTLINE]: <FaRegCircle />,
   [IconVariant.USER_DATA]: <DfxUserData />,
+  [IconVariant.TELEGRAM]: <FaTelegramPlane />,
 };
 
 export enum IconSize {
