@@ -16,6 +16,7 @@ interface StyledInputProps extends ControlProps {
   loading?: boolean;
   small?: boolean;
   smallLabel?: boolean;
+  autocomplete?: string;
 }
 
 function getLeftMargin(prefix: string): string {
@@ -40,6 +41,7 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
     {
       control,
       name,
+      autocomplete,
       label,
       rules,
       disabled = false,
@@ -102,6 +104,7 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
                   [textOrErrorColor, backgroundColor, placeholderColor, borderColor, outlineColor, leftMargin].join(' ')
                 }
                 type={type}
+                name={autocomplete ?? name}
                 inputMode={type === 'number' ? 'decimal' : undefined}
                 onBlur={onBlur}
                 onChange={(value) => onChange(value.target.value)}
