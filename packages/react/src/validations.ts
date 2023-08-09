@@ -1,6 +1,6 @@
 import * as IbanTools from 'ibantools';
 import BlockedIbans from './definitions/blocked-iban.json';
-import { PhoneNumberUtil } from 'google-libphonenumber';
+import PhoneNumber from 'libphonenumber-js';
 import { Country } from './definitions/country';
 
 const regex = {
@@ -30,10 +30,8 @@ class ValidationsClass {
     return this.Custom((number: string) => {
       try {
         if (number) {
-          const util = PhoneNumberUtil.getInstance();
-
           if (!number.match(/^\+\d/)) return 'Please fill in area code and number';
-          if (!util.isValidNumber(util.parseAndKeepRawInput(number))) return 'Invalid pattern';
+          if (!PhoneNumber(number)?.isValid()) return 'Invalid pattern';
         }
 
         return true;
