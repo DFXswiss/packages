@@ -9,7 +9,7 @@ export interface StoreInterface {
 }
 
 enum StoreKey {
-  AUTH_TOKEN = 'authenticationToken',
+  AUTH_TOKEN = 'dfx.authenticationToken',
 }
 
 export function useStore(): StoreInterface {
