@@ -1,27 +1,29 @@
+import { useMemo } from 'react';
 import { useAuthContext } from '../contexts/auth.context';
 import { Session } from '../definitions/session';
 import { useAuth } from './auth.hook';
 
 export interface ApiSessionInterface {
+  isInitialized: boolean;
   isLoggedIn: boolean;
   session?: Session;
   getSignMessage: (address: string) => Promise<string>;
-  createSession: (address: string, signature: string, isSignUp: boolean, walletId?: number) => Promise<string>;
+  createSession: (address: string, signature: string, isSignUp: boolean, wallet?: string) => Promise<string>;
   updateSession: (token: string) => void;
   deleteSession: () => Promise<void>;
 }
 
 export function useApiSession(): ApiSessionInterface {
-  const { isLoggedIn, session, setAuthenticationToken } = useAuthContext();
+  const { isInitialized, isLoggedIn, session, setAuthenticationToken } = useAuthContext();
   const { getSignMessage, signIn, signUp } = useAuth();
 
   async function createSession(
     address: string,
     signature: string,
     isSignUp: boolean,
-    walletId?: number,
+    wallet?: string,
   ): Promise<string> {
-    return (isSignUp ? signUp(address, signature, walletId) : signIn(address, signature)).then(({ accessToken }) => {
+    return (isSignUp ? signUp(address, signature, wallet) : signIn(address, signature)).then(({ accessToken }) => {
       setAuthenticationToken(accessToken);
       return accessToken;
     });
@@ -35,5 +37,8 @@ export function useApiSession(): ApiSessionInterface {
     setAuthenticationToken(undefined);
   }
 
-  return { isLoggedIn, session, getSignMessage, createSession, updateSession, deleteSession };
+  return useMemo(
+    () => ({ isInitialized, isLoggedIn, session, getSignMessage, createSession, updateSession, deleteSession }),
+    [isInitialized, isLoggedIn, session, setAuthenticationToken, getSignMessage, signIn, signUp],
+  );
 }

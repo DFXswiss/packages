@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 export interface StoreInterface {
   authenticationToken: {
     get: () => string | undefined;
@@ -7,7 +9,7 @@ export interface StoreInterface {
 }
 
 enum StoreKey {
-  AUTH_TOKEN = "authenticationToken",
+  AUTH_TOKEN = 'dfx.authenticationToken',
 }
 
 export function useStore(): StoreInterface {
@@ -25,11 +27,14 @@ export function useStore(): StoreInterface {
     localStorage.removeItem(key);
   }
 
-  return {
-    authenticationToken: {
-      get: () => get(StoreKey.AUTH_TOKEN),
-      set: (value: string) => set(StoreKey.AUTH_TOKEN, value),
-      remove: () => remove(StoreKey.AUTH_TOKEN),
-    },
-  };
+  return useMemo(
+    () => ({
+      authenticationToken: {
+        get: () => get(StoreKey.AUTH_TOKEN),
+        set: (value: string) => set(StoreKey.AUTH_TOKEN, value),
+        remove: () => remove(StoreKey.AUTH_TOKEN),
+      },
+    }),
+    [],
+  );
 }

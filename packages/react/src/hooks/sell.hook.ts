@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useFiatContext } from '../contexts/fiat.context';
 import { Fiat } from '../definitions/fiat';
 import { Sell, SellPaymentInfo, SellUrl } from '../definitions/sell';
@@ -16,5 +17,5 @@ export function useSell(): SellInterface {
     return call<Sell>({ url: SellUrl.receive, method: 'PUT', data: info });
   }
 
-  return { receiveFor, currencies: currencies?.filter((c) => c.buyable) };
+  return useMemo(() => ({ receiveFor, currencies: currencies?.filter((c) => c.buyable) }), [call, currencies]);
 }

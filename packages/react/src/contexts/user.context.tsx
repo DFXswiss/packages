@@ -4,6 +4,7 @@ import { User } from '../definitions/user';
 import { useCountry } from '../hooks/country.hook';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
+import { Language } from '../definitions/language';
 
 interface UserInterface {
   user?: User;
@@ -12,6 +13,7 @@ interface UserInterface {
   isUserLoading: boolean;
   isUserUpdating: boolean;
   changeMail: (mail: string) => Promise<void>;
+  changeLanguage: (language: Language) => Promise<void>;
   register: (userLink: () => void) => void;
   reloadUser: () => Promise<void>;
 }
@@ -53,13 +55,22 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       .finally(() => setIsUserLoading(false));
   }
 
-  async function changeMail(mail: string): Promise<void> {
+  async function updateUser(update: Partial<User>, linkAction?: () => void): Promise<void> {
     if (!user) return; // TODO: (Krysh) add real error handling
+
     setIsUserUpdating(true);
-    return changeUser({ mail }, userLinkAction)
+    return changeUser(update, linkAction)
       .then(setUser)
       .catch(console.error) // TODO: (Krysh) add real error handling
       .finally(() => setIsUserUpdating(false));
+  }
+
+  async function changeMail(mail: string): Promise<void> {
+    return updateUser({ mail }, userLinkAction);
+  }
+
+  async function changeLanguage(language: Language): Promise<void> {
+    return updateUser({ language });
   }
 
   function register(userLink: () => void) {
@@ -74,6 +85,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       isUserLoading,
       isUserUpdating,
       changeMail,
+      changeLanguage,
       register,
       reloadUser,
     }),

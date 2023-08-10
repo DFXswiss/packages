@@ -9,6 +9,7 @@ interface AuthInterface {
   authenticationToken?: string;
   session?: Session;
   setAuthenticationToken: (authenticationToken?: string) => void;
+  isInitialized: boolean;
   isLoggedIn: boolean;
 }
 
@@ -19,6 +20,7 @@ export function useAuthContext(): AuthInterface {
 }
 
 export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
+  const [isInitialized, setIsInitialized] = useState(false);
   const [token, setToken] = useState<string>();
   const [jwt, setJwt] = useState<Jwt>();
   const { authenticationToken } = useStore();
@@ -31,7 +33,11 @@ export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
   );
 
   useEffect(() => {
-    if (!token) setAuthenticationToken(authenticationToken.get());
+    if (!token) {
+      setAuthenticationToken(authenticationToken.get());
+    }
+
+    setIsInitialized(true);
   }, []);
 
   function isExpired(): boolean {
@@ -63,9 +69,10 @@ export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
       authenticationToken: token,
       session,
       setAuthenticationToken,
+      isInitialized,
       isLoggedIn,
     }),
-    [token, session, jwt, setAuthenticationToken, authenticationToken, isLoggedIn],
+    [token, session, jwt, setAuthenticationToken, authenticationToken, isInitialized, isLoggedIn],
   );
 
   return <AuthContext.Provider value={context}>{props.children}</AuthContext.Provider>;

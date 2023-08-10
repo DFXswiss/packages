@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Country, CountryUrl } from '../definitions/country';
 import { useApi } from './api.hook';
 
@@ -12,5 +13,5 @@ export function useCountry(): CountryInterface {
     return call<Country[]>({ url: CountryUrl.get, method: 'GET' });
   }
 
-  return { getCountries };
+  return useMemo(() => ({ getCountries }), [call]);
 }

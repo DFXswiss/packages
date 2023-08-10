@@ -8,7 +8,10 @@ import { useApiSession } from '../hooks/api-session.hook';
 interface AssetInterface {
   assets: Map<Blockchain, Asset[]>;
   assetsLoading: boolean;
-  getAsset: (id: number, filter?: { buyable?: boolean; sellable?: boolean }) => Asset | undefined;
+  getAssets: (
+    blockchains: Blockchain[],
+    filter?: { buyable?: boolean; sellable?: boolean; comingSoon?: boolean },
+  ) => Asset[];
 }
 
 const AssetContext = createContext<AssetInterface>(undefined as any);
@@ -19,43 +22,47 @@ export function useAssetContext(): AssetInterface {
 
 export function AssetContextProvider(props: PropsWithChildren): JSX.Element {
   const { session } = useApiSession();
-  const { getAssets } = useAsset();
-  const [assets, setAssets] = useState<Map<Blockchain, Asset[]>>(new Map());
+  const { getAssets: getApiAssets } = useAsset();
+  const [assets, setAssets] = useState<Asset[]>([]);
   const [assetsLoading, setAssetsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setAssetsLoading(true);
-    getAssets()
+    getApiAssets()
       .then(updateAssets)
       .finally(() => setAssetsLoading(false));
   }, [session]);
 
   function updateAssets(assets: Asset[]) {
     setAssets(
-      Utils.groupBy(
-        assets
-          .filter((a) => a.buyable || a.sellable || a.comingSoon)
-          .sort((a, b) => (a.sortOrder ?? 1) - (b.sortOrder ?? 1)),
-        'blockchain',
-      ),
+      assets
+        .filter((a) => a.buyable || a.sellable || a.comingSoon)
+        .sort((a, b) => (a.sortOrder ?? 1) - (b.sortOrder ?? 1)),
     );
   }
 
-  function getAsset(id: number, filter?: { buyable?: boolean; sellable?: boolean }): Asset | undefined {
-    return Array.from(assets.values())
-      .reduce((prev, curr) => prev.concat(curr), [])
+  function getAssets(
+    blockchains: Blockchain[],
+    filter?: { buyable?: boolean; sellable?: boolean; comingSoon?: boolean },
+  ) {
+    return assets
+      .filter((a) => blockchains.includes(a.blockchain))
       .filter(
-        (asset) =>
-          filter === undefined ||
-          (filter?.buyable !== undefined && filter.buyable === asset.buyable) ||
-          (filter?.sellable !== undefined && filter.sellable === asset.sellable),
-      )
-      .find((asset) => asset.id === id);
+        (a) =>
+          filter == null ||
+          ((filter.buyable == null || filter.buyable === a.buyable) &&
+            (filter.sellable == null || filter.sellable === a.sellable) &&
+            (filter.comingSoon == null || filter.comingSoon === a.comingSoon)),
+      );
   }
 
   const context: AssetInterface = useMemo(
-    () => ({ assets, assetsLoading, getAsset }),
-    [assets, assetsLoading, getAsset],
+    () => ({
+      assets: Utils.groupBy(assets, 'blockchain'),
+      assetsLoading,
+      getAssets,
+    }),
+    [assets, assetsLoading, getApiAssets],
   );
 
   return <AssetContext.Provider value={context}>{props.children}</AssetContext.Provider>;

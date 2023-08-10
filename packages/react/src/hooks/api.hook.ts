@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useAuthContext } from '../contexts/auth.context';
 import { ApiError } from '../definitions/error';
 
@@ -64,5 +65,5 @@ export function useApi(): ApiInterface {
     };
   }
 
-  return { call };
+  return useMemo(() => ({ call }), [authenticationToken]);
 }

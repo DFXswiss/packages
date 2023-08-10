@@ -13,13 +13,17 @@ export interface Sell {
   minVolume: number;
   minFeeTarget: number;
   minVolumeTarget: number;
+  amount: number;
+  asset: Asset;
   estimatedAmount: number;
+  currency: Fiat;
   paymentRequest?: string;
 }
 
 export interface SellPaymentInfo {
   iban: string;
-  currency: Fiat;
   asset: Asset;
-  amount: number;
+  amount?: number;
+  currency: Fiat;
+  targetAmount?: number;
 }

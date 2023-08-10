@@ -1,10 +1,11 @@
 import { Asset } from '../definitions/asset';
 import { Fiat } from '../definitions/fiat';
 import DfxIcon, { IconColor, IconSize, IconVariant } from './DfxIcon';
+import { ControlProps } from './form/Form';
 import StyledDropdown from './form/StyledDropdown';
 import StyledCoinListItem from './StyledCoinListItem';
 
-interface DfxYourCurrencyWalletSectionProps {
+interface DfxYourCurrencyWalletSectionProps extends ControlProps {
   currencies: Fiat[];
   currencyElementName: string;
   asset: Asset;
@@ -13,6 +14,7 @@ interface DfxYourCurrencyWalletSectionProps {
 }
 
 export default function DfxYourCurrencyWalletSection({
+  control,
   currencies,
   currencyElementName,
   asset,
@@ -23,6 +25,7 @@ export default function DfxYourCurrencyWalletSection({
     <div className="flex justify-between  items-center">
       <div className="basis-5/12 shrink-1">
         <StyledDropdown<Fiat>
+          control={control}
           name={currencyElementName}
           label="Your Currency"
           labelIcon={IconVariant.BANK}

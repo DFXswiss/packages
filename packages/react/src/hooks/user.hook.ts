@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { User, UserUrl } from '../definitions/user';
 import { useApi } from './api.hook';
 
@@ -26,5 +27,5 @@ export function useUser(): UserInterface {
     });
   }
 
-  return { getUser, changeUser };
+  return useMemo(() => ({ getUser, changeUser }), [call]);
 }

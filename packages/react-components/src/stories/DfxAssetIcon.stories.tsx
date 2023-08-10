@@ -6,11 +6,21 @@ export default {
   component: DfxAssetIcon,
 } as ComponentMeta<typeof DfxAssetIcon>;
 
-export const Default: ComponentStory<typeof DfxAssetIcon> = (args) => {
+export const SingleIcon: ComponentStory<typeof DfxAssetIcon> = (args) => {
   return <DfxAssetIcon {...args} />;
 };
 
-Default.args = {
+export const AllIcons: ComponentStory<typeof DfxAssetIcon> = (args) => {
+  return (
+    <div className="grid gap-6 grid-cols-6">
+      {Object.values(AssetIconVariant).map((icon) => (
+        <DfxAssetIcon {...args} key={icon} asset={icon} />
+      ))}
+    </div>
+  );
+};
+
+SingleIcon.args = {
   size: AssetIconSize.LG,
   asset: AssetIconVariant.USDT,
 };

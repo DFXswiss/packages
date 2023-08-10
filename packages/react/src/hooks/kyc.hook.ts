@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { KycData, KycUrl } from '../definitions/kyc';
 import { useApi } from './api.hook';
 
@@ -16,5 +17,5 @@ export function useKyc(): KycInterface {
     });
   }
 
-  return { setKycData };
+  return useMemo(() => ({ setKycData }), [call]);
 }

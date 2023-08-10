@@ -21,9 +21,7 @@ export function FiatContextProvider(props: PropsWithChildren): JSX.Element {
   }, []);
 
   const context: FiatInterface = useMemo(
-    () => ({
-      currencies,
-    }),
+    () => ({ currencies: currencies?.filter((c) => c.buyable || c.sellable) }),
     [currencies],
   );
 
