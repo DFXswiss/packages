@@ -12,7 +12,7 @@ export interface SessionInterface {
   needsSignUp: boolean;
   isProcessing: boolean;
   login: (address?: string, signature?: string) => Promise<string | undefined>;
-  signUp: (address?: string, signature?: string, wallet?: string) => Promise<string | undefined>;
+  signUp: (address?: string, signature?: string, wallet?: string, ref?: string) => Promise<string | undefined>;
   logout: () => Promise<void>;
 }
 
@@ -30,6 +30,7 @@ export interface SessionContextProviderProps extends PropsWithChildren {
     wallet?: string;
     address?: string;
     blockchain?: Blockchain;
+    ref?: string;
   };
 }
 
@@ -87,11 +88,12 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     address = data.address,
     signature = storedSignature,
     wallet = data.wallet,
+    ref = data.ref,
   ): Promise<string | undefined> {
     if (!address || !signature) throw new Error('Address or signature not defined');
 
     setIsProcessing(true);
-    return createApiSession(address, signature, true, wallet).finally(() => {
+    return createApiSession(address, signature, true, wallet, ref).finally(() => {
       setStoredSignature(undefined);
       setNeedsSignUp(false);
       setIsProcessing(false);

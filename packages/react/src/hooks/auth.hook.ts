@@ -5,7 +5,7 @@ import { useApi } from './api.hook';
 export interface AuthInterface {
   getSignMessage: (address: string) => Promise<string>;
   signIn: (address: string, signature: string) => Promise<SignIn>;
-  signUp: (address: string, signature: string, wallet?: string) => Promise<SignIn>;
+  signUp: (address: string, signature: string, wallet?: string, ref?: string) => Promise<SignIn>;
 }
 
 interface SignUpParams {
@@ -13,6 +13,7 @@ interface SignUpParams {
   signature: string;
   walletId?: number;
   wallet?: string;
+  usedRef?: string;
 }
 
 export function useAuth(): AuthInterface {
@@ -28,8 +29,8 @@ export function useAuth(): AuthInterface {
     return call({ url: AuthUrl.signIn, method: 'POST', data: { address, signature } });
   }
 
-  async function signUp(address: string, signature: string, wallet?: string): Promise<SignIn> {
-    const data: SignUpParams = { address, signature };
+  async function signUp(address: string, signature: string, wallet?: string, usedRef?: string): Promise<SignIn> {
+    const data: SignUpParams = { address, signature, usedRef };
 
     if (wallet) {
       const walletId = parseInt(wallet);
