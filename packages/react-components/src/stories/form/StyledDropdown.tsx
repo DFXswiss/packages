@@ -1,8 +1,9 @@
 import { ControlProps } from './Form';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import DfxIcon, { IconColor, IconSize, IconVariant } from '../DfxIcon';
 import { Controller } from 'react-hook-form';
 import DfxAssetIcon, { AssetIconVariant } from '../DfxAssetIcon';
+import { Utils } from '../../utils';
 
 export interface StyledDropdownProps<T> extends ControlProps {
   labelIcon?: IconVariant;
@@ -35,6 +36,9 @@ export default function StyledDropdown<T>({
   assetIconFunc,
   ...props
 }: StyledDropdownProps<T>) {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const [isOpen, setIsOpen] = useState(false);
 
   let buttonClasses = 'flex justify-between border border-dfxGray-500 px-4 py-3 shadow-sm w-full';
@@ -42,6 +46,21 @@ export default function StyledDropdown<T>({
   isOpen ? (buttonClasses += ' rounded-x rounded-t bg-dfxGray-400/50') : (buttonClasses += ' rounded');
 
   const isDisabled = disabled || items.length <= 1;
+
+  function closeDropdown(e: MouseEvent) {
+    if (
+      isOpen &&
+      Utils.isNode(e.target) &&
+      dropdownRef.current &&
+      !dropdownRef.current.contains(e.target) &&
+      buttonRef.current &&
+      !buttonRef.current.contains(e.target)
+    ) {
+      setIsOpen(false);
+    }
+  }
+
+  document.addEventListener('mousedown', closeDropdown);
 
   return (
     <Controller
@@ -60,6 +79,7 @@ export default function StyledDropdown<T>({
             </label>
           </div>
           <button
+            ref={buttonRef}
             id="dropDownButton"
             type="button"
             onClick={() => setIsOpen(!isOpen)}
@@ -101,7 +121,7 @@ export default function StyledDropdown<T>({
             )}
           </button>
           {isOpen && (
-            <div className="absolute bg-white rounded-b w-full z-10">
+            <div ref={dropdownRef} className="absolute bg-white rounded-b w-full z-10 max-h-40 overflow-y-auto">
               {items.map((item, index) => (
                 <button
                   key={index}
