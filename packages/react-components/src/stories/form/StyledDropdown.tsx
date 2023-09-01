@@ -49,7 +49,13 @@ export default function StyledDropdown<T>({
 
   const isDisabled = disabled || items.length <= 1;
 
-  useEffect(() => rootRef?.current?.addEventListener('mousedown', closeDropdown), [rootRef, rootRef?.current, isOpen]);
+  useEffect(() => {
+    const element = rootRef?.current;
+    if (element) {
+      element.addEventListener('mousedown', closeDropdown);
+      return () => element.removeEventListener('mousedown', closeDropdown);
+    }
+  }, [rootRef, isOpen]);
 
   function closeDropdown(e: MouseEvent) {
     if (
@@ -126,7 +132,7 @@ export default function StyledDropdown<T>({
             <div
               ref={dropdownRef}
               className="absolute bg-white rounded-b border-x border-b border-dfxGray-500 w-full z-10 overflow-y-auto"
-              style={{ maxHeight: '10rem' }}
+              style={{ maxHeight: '15rem' }}
             >
               {items.map((item, index) => (
                 <button
