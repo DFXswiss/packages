@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
-import DfxIcon, { IconSize, IconVariant } from '../DfxIcon';
 import StyledVerticalStack from '../layout-helpers/StyledVerticalStack';
 import StyledModal, { StyledModalColor, StyledModalWidth } from '../StyledModal';
 import { ControlProps } from './Form';
@@ -25,6 +24,8 @@ export default function StyledModalDropdown<T>({
   label,
   rules,
   modal,
+  labelFunc,
+  descriptionFunc,
   ...props
 }: StyledModalDropdownProps<T>): JSX.Element {
   const [showModal, setShowModal] = useState(false);
@@ -76,7 +77,8 @@ export default function StyledModalDropdown<T>({
             label={label}
             onClick={() => setShowModal(true)}
             onBlur={onBlur}
-            value={value}
+            value={value && labelFunc(value)}
+            description={value && descriptionFunc?.(value)}
             {...props}
           />
         </>
