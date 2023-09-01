@@ -4,6 +4,7 @@ import DfxIcon, { IconSize, IconVariant } from '../DfxIcon';
 import StyledVerticalStack from '../layout-helpers/StyledVerticalStack';
 import StyledModal, { StyledModalColor, StyledModalWidth } from '../StyledModal';
 import { ControlProps } from './Form';
+import StyledModalButton from './StyledModalButton';
 
 interface StyledModalDropdownProps<T> extends ControlProps {
   placeholder: string;
@@ -24,9 +25,6 @@ export default function StyledModalDropdown<T>({
   label,
   rules,
   modal,
-  placeholder,
-  labelFunc,
-  descriptionFunc,
   ...props
 }: StyledModalDropdownProps<T>): JSX.Element {
   const [showModal, setShowModal] = useState(false);
@@ -74,37 +72,13 @@ export default function StyledModalDropdown<T>({
               </>
             )}
           </StyledModal>
-          <StyledVerticalStack gap={1} marginY={4}>
-            <label className="text-dfxBlue-800 text-base font-semibold pl-4 text-start">{label}</label>
-            <button
-              className="flex justify-between border border-dfxGray-400 text-base font-normal rounded-md px-4 py-2 shadow-sm w-full"
-              onClick={() => setShowModal(true)}
-              onBlur={onBlur}
-              {...props}
-            >
-              <div className="flex flex-col justify-between text-left gap-1">
-                {value ? (
-                  <>
-                    {descriptionFunc?.(value) && (
-                      <span className="text-dfxGray-800 text-xs h-min leading-none">{descriptionFunc(value)}</span>
-                    )}
-                    <span
-                      className={'text-dfxBlue-800 leading-none font-base'.concat(
-                        descriptionFunc?.(value) ? '' : ' py-2',
-                      )}
-                    >
-                      {labelFunc(value)}
-                    </span>
-                  </>
-                ) : (
-                  <span className="text-dfxGray-600 py-1">{placeholder}</span>
-                )}
-              </div>
-              <div className="place-self-center">
-                <DfxIcon icon={IconVariant.UNFOLD_MORE} size={IconSize.LG} />
-              </div>
-            </button>
-          </StyledVerticalStack>
+          <StyledModalButton
+            label={label}
+            onClick={() => setShowModal(true)}
+            onBlur={onBlur}
+            value={value}
+            {...props}
+          />
         </>
       )}
       name={name}
