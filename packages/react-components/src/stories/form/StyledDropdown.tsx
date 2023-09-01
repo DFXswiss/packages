@@ -123,7 +123,11 @@ export default function StyledDropdown<T>({
             )}
           </button>
           {isOpen && (
-            <div ref={dropdownRef} className="absolute bg-white rounded-b w-full z-10 max-h-40 overflow-y-auto">
+            <div
+              ref={dropdownRef}
+              className="absolute bg-white rounded-b w-full z-10 overflow-y-auto"
+              style={{ maxHeight: '10rem' }}
+            >
               {items.map((item, index) => (
                 <button
                   key={index}
