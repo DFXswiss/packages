@@ -125,7 +125,7 @@ export default function StyledDropdown<T>({
           {isOpen && (
             <div
               ref={dropdownRef}
-              className="absolute bg-white rounded-b w-full z-10 overflow-y-auto"
+              className="absolute bg-white rounded-b border-x border-b border-dfxGray-500 w-full z-10 overflow-y-auto"
               style={{ maxHeight: '10rem' }}
             >
               {items.map((item, index) => (
@@ -135,7 +135,7 @@ export default function StyledDropdown<T>({
                     onChange(item);
                     setIsOpen(false);
                   }}
-                  className="flex flex-col gap-2 justify-between text-left border-x border-dfxGray-500 w-full hover:bg-dfxGray-400/50 last:border-b last:rounded-b px-3.5 py-2.5"
+                  className="flex flex-col gap-2 justify-between text-left w-full hover:bg-dfxGray-400/50 px-3.5 py-2.5"
                 >
                   <div className="flex flex-row gap-2 items-center w-full">
                     {assetIconFunc && <DfxAssetIcon asset={assetIconFunc(item)} />}
