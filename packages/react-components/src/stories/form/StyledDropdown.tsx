@@ -1,5 +1,5 @@
 import { ControlProps } from './Form';
-import { useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import DfxIcon, { IconColor, IconSize, IconVariant } from '../DfxIcon';
 import { Controller } from 'react-hook-form';
 import DfxAssetIcon, { AssetIconVariant } from '../DfxAssetIcon';
@@ -16,6 +16,7 @@ export interface StyledDropdownProps<T> extends ControlProps {
   descriptionFunc?: (item: T) => string;
   priceFunc?: (item: T) => string;
   assetIconFunc?: (item: T) => AssetIconVariant;
+  rootRef?: RefObject<HTMLElement>;
 }
 
 export default function StyledDropdown<T>({
@@ -34,6 +35,7 @@ export default function StyledDropdown<T>({
   descriptionFunc,
   priceFunc,
   assetIconFunc,
+  rootRef,
   ...props
 }: StyledDropdownProps<T>) {
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -47,6 +49,8 @@ export default function StyledDropdown<T>({
 
   const isDisabled = disabled || items.length <= 1;
 
+  useEffect(() => rootRef?.current?.addEventListener('mousedown', closeDropdown), [rootRef, rootRef?.current, isOpen]);
+
   function closeDropdown(e: MouseEvent) {
     if (
       isOpen &&
@@ -59,8 +63,6 @@ export default function StyledDropdown<T>({
       setIsOpen(false);
     }
   }
-
-  document.addEventListener('mousedown', closeDropdown);
 
   return (
     <Controller
