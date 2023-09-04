@@ -2,6 +2,7 @@ import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useRe
 import { Blockchain } from '../definitions/blockchain';
 import { ApiError } from '../definitions/error';
 import { useApiSession } from '../hooks/api-session.hook';
+import { useAuthContext } from './auth.context';
 
 export interface SessionInterface {
   address?: string;
@@ -43,6 +44,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     createSession: createApiSession,
     deleteSession,
   } = useApiSession();
+  const { authenticationToken } = useAuthContext();
   const [needsSignUp, setNeedsSignUp] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [storedSignature, setStoredSignature] = useState<string>();
@@ -61,7 +63,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
 
   async function login(address = data.address, signature = storedSignature): Promise<string | undefined> {
     if (!address) throw new Error('Address is not defined');
-    if (isLoggedIn && session?.address === address) return undefined;
+    if (isLoggedIn && session?.address === address) authenticationToken;
 
     signature ??= await getSignature(address);
 
