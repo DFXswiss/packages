@@ -24,6 +24,7 @@ export interface Buy {
   currency: Fiat;
   estimatedAmount: number;
   asset: Asset;
+  paymentRequest: string;
 }
 
 export interface BuyPaymentInfo {
