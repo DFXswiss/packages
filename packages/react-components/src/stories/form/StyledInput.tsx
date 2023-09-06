@@ -68,7 +68,7 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
     const outlineColor = darkTheme ? 'outline-none' : 'outline-2 outline-dfxBlue-400';
     const leftMargin = prefix ? getLeftMargin(prefix) : '';
 
-    const textOrErrorColor = forceError ? 'text-dfxRed-100' : textColor;
+    const textOrErrorColor = error || forceError ? 'text-dfxRed-100' : textColor;
 
     return (
       <Controller
