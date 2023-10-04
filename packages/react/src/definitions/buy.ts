@@ -1,7 +1,13 @@
 import { Asset } from './asset';
 import { Fiat } from './fiat';
+import { TransactionError } from './transaction';
 
 export const BuyUrl = { receive: 'buy/paymentInfos' };
+
+export enum BuyPaymentMethod {
+  BANK = 'Bank',
+  CARD = 'Card',
+}
 
 export interface Buy {
   name: string;
@@ -18,13 +24,18 @@ export interface Buy {
   fee: number;
   minFee: number;
   minVolume: number;
+  maxVolume: number;
   minFeeTarget: number;
   minVolumeTarget: number;
+  maxVolumeTarget: number;
   amount: number;
   currency: Fiat;
   estimatedAmount: number;
   asset: Asset;
-  paymentRequest: string;
+  paymentRequest?: string;
+  paymentLink?: string;
+  isValid: boolean;
+  error?: TransactionError;
 }
 
 export interface BuyPaymentInfo {
@@ -32,4 +43,5 @@ export interface BuyPaymentInfo {
   amount?: number;
   asset: Asset;
   targetAmount?: number;
+  paymentMethod?: BuyPaymentMethod;
 }
