@@ -21,21 +21,8 @@ interface StyledInputProps extends ControlProps {
   autocomplete?: string;
 }
 
-function getMargin(affix: string, position: 'l' | 'r'): string {
-  switch (affix.length) {
-    case 1:
-      return `p${position}-7`;
-    case 2:
-      return `p${position}-9`;
-    case 3:
-      return `p${position}-12`;
-    case 4:
-      return `p${position}-15`;
-    case 5:
-      return `p${position}-16`;
-    default:
-      return '';
-  }
+function getMargin(affix?: string): number {
+  return 12 + (affix?.length ?? 0) * 14;
 }
 
 const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
@@ -70,8 +57,8 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
     const placeholderColor = darkTheme ? 'placeholder:text-dfxGray-800' : 'placeholder:text-dfxGray-600';
     const borderColor = darkTheme ? 'border-none' : 'border border-dfxGray-500';
     const outlineColor = darkTheme ? 'outline-none' : 'outline-2 outline-dfxBlue-400';
-    const leftMargin = prefix ? getMargin(prefix, 'l') : '';
-    const rightMargin = buttonLabel ? getMargin(buttonLabel, 'r') : '';
+    const paddingLeft = getMargin(prefix);
+    const paddingRight = getMargin(buttonLabel);
 
     const textOrErrorColor = error || forceError ? 'text-dfxRed-100' : textColor;
 
@@ -118,16 +105,9 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
               <input
                 className={
                   `text-base font-normal rounded-md p-3 ${small ? 'w-24' : 'w-full'} ` +
-                  [
-                    textOrErrorColor,
-                    backgroundColor,
-                    placeholderColor,
-                    borderColor,
-                    outlineColor,
-                    leftMargin,
-                    rightMargin,
-                  ].join(' ')
+                  [textOrErrorColor, backgroundColor, placeholderColor, borderColor, outlineColor].join(' ')
                 }
+                style={{ paddingLeft, paddingRight }}
                 type={type}
                 name={autocomplete ?? name}
                 inputMode={type === 'number' ? 'decimal' : undefined}
