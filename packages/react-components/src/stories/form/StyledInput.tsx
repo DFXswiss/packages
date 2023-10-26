@@ -8,6 +8,8 @@ interface StyledInputProps extends ControlProps {
   type?: HTMLInputTypeAttribute;
   placeholder?: string;
   prefix?: string;
+  buttonLabel?: string;
+  buttonClick?: () => void;
   forceError?: boolean;
   forceErrorMessage?: string;
   hideLabel?: boolean;
@@ -19,18 +21,18 @@ interface StyledInputProps extends ControlProps {
   autocomplete?: string;
 }
 
-function getLeftMargin(prefix: string): string {
-  switch (prefix.length) {
+function getMargin(affix: string, position: 'l' | 'r'): string {
+  switch (affix.length) {
     case 1:
-      return 'pl-7';
+      return `p${position}-7`;
     case 2:
-      return 'pl-9';
+      return `p${position}-9`;
     case 3:
-      return 'pl-12';
+      return `p${position}-12`;
     case 4:
-      return 'pl-15';
+      return `p${position}-15`;
     case 5:
-      return 'pl-16';
+      return `p${position}-16`;
     default:
       return '';
   }
@@ -49,6 +51,8 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
       type = 'text',
       placeholder,
       prefix,
+      buttonLabel,
+      buttonClick,
       forceError = false,
       forceErrorMessage,
       hideLabel = false,
@@ -66,7 +70,8 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
     const placeholderColor = darkTheme ? 'placeholder:text-dfxGray-800' : 'placeholder:text-dfxGray-600';
     const borderColor = darkTheme ? 'border-none' : 'border border-dfxGray-500';
     const outlineColor = darkTheme ? 'outline-none' : 'outline-2 outline-dfxBlue-400';
-    const leftMargin = prefix ? getLeftMargin(prefix) : '';
+    const leftMargin = prefix ? getMargin(prefix, 'l') : '';
+    const rightMargin = buttonLabel ? getMargin(buttonLabel, 'r') : '';
 
     const textOrErrorColor = error || forceError ? 'text-dfxRed-100' : textColor;
 
@@ -93,15 +98,35 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
                   <p>{prefix}</p>
                 </div>
               )}
+
               {loading && (
                 <div className="absolute right-3 h-[50px] w-8 flex justify-center items-center pl-">
                   <StyledLoadingSpinner />
                 </div>
               )}
+
+              {buttonLabel && !loading && (
+                <div
+                  className={`text-dfxRed-100 absolute h-[50px] ${
+                    buttonLabel.length > 0 ? 'right-3' : ''
+                  } flex justify-center items-center`}
+                >
+                  <button onClick={buttonClick}>{buttonLabel}</button>
+                </div>
+              )}
+
               <input
                 className={
                   `text-base font-normal rounded-md p-3 ${small ? 'w-24' : 'w-full'} ` +
-                  [textOrErrorColor, backgroundColor, placeholderColor, borderColor, outlineColor, leftMargin].join(' ')
+                  [
+                    textOrErrorColor,
+                    backgroundColor,
+                    placeholderColor,
+                    borderColor,
+                    outlineColor,
+                    leftMargin,
+                    rightMargin,
+                  ].join(' ')
                 }
                 type={type}
                 name={autocomplete ?? name}
