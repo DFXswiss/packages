@@ -19,6 +19,8 @@ export interface Sell {
   amount: number;
   asset: Asset;
   estimatedAmount: number;
+  rate: number;
+  exchangeRate: number;
   currency: Fiat;
   paymentRequest?: string;
   isValid: boolean;

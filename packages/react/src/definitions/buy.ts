@@ -31,6 +31,8 @@ export interface Buy {
   amount: number;
   currency: Fiat;
   estimatedAmount: number;
+  rate: number;
+  exchangeRate: number;
   asset: Asset;
   paymentRequest?: string;
   paymentLink?: string;

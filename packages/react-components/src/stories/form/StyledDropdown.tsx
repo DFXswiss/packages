@@ -75,17 +75,19 @@ export default function StyledDropdown<T>({
       control={control}
       render={({ field: { onChange, onBlur, value } }) => (
         <div className={`relative ${full ? 'w-full' : ''}`}>
-          <div className="flex items-center ml-3.5 mb-2.5">
-            {labelIcon !== undefined && <DfxIcon icon={labelIcon} size={IconSize.SM} color={IconColor.BLUE} />}
+          {label && (
+            <div className="flex items-center ml-3.5 mb-2.5">
+              {labelIcon !== undefined && <DfxIcon icon={labelIcon} size={IconSize.SM} color={IconColor.BLUE} />}
 
-            <label
-              className={`text-dfxBlue-800 ${smallLabel ? 'text-sm' : 'text-base'} font-semibold ${
-                labelIcon ? 'pl-3.5' : ''
-              }`}
-            >
-              {label}
-            </label>
-          </div>
+              <label
+                className={`text-dfxBlue-800 ${smallLabel ? 'text-sm' : 'text-base'} font-semibold ${
+                  labelIcon ? 'pl-3.5' : ''
+                }`}
+              >
+                {label}
+              </label>
+            </div>
+          )}
           <button
             ref={buttonRef}
             id="dropDownButton"

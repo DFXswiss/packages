@@ -67,36 +67,40 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
           <StyledVerticalStack gap={1} full={full}>
-            <label
-              hidden={hideLabel}
-              className={
-                `text-start ${smallLabel ? 'text-sm' : 'text-base'} font-semibold pl-3 pl- ` + [textColor].join(' ')
-              }
-            >
-              {label}
-            </label>
+            {label && (
+              <label
+                hidden={hideLabel}
+                className={
+                  `text-start ${smallLabel ? 'text-sm' : 'text-base'} font-semibold pl-3 pl- ` + [textColor].join(' ')
+                }
+              >
+                {label}
+              </label>
+            )}
             <div className="relative">
               {prefix && (
                 <div
-                  className={`text-dfxGray-800 absolute h-[50px] ${
+                  className={`text-dfxGray-800 absolute ${
                     prefix.length > 0 ? 'left-3' : ''
                   } flex justify-center items-center`}
+                  style={{ height: '3.5rem' }}
                 >
                   <p>{prefix}</p>
                 </div>
               )}
 
               {loading && (
-                <div className="absolute right-3 h-[50px] w-8 flex justify-center items-center pl-">
+                <div className="absolute right-3 h-w-8 flex justify-center items-center" style={{ height: '3.5rem' }}>
                   <StyledLoadingSpinner />
                 </div>
               )}
 
               {buttonLabel && !loading && (
                 <div
-                  className={`text-dfxRed-100 absolute h-[50px] ${
+                  className={`text-dfxRed-100 absolute ${
                     buttonLabel.length > 0 ? 'right-3' : ''
                   } flex justify-center items-center`}
+                  style={{ height: '3.5rem' }}
                 >
                   <button onClick={buttonClick}>{buttonLabel}</button>
                 </div>
@@ -104,7 +108,7 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
 
               <input
                 className={
-                  `text-base font-normal rounded-md p-3 ${small ? 'w-24' : 'w-full'} ` +
+                  `text-base font-normal rounded-md p-4 ${small ? 'w-24' : 'w-full'} ` +
                   [textOrErrorColor, backgroundColor, placeholderColor, borderColor, outlineColor].join(' ')
                 }
                 style={{ paddingLeft, paddingRight }}
