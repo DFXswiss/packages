@@ -12,8 +12,14 @@ export interface SessionInterface {
   isLoggedIn: boolean;
   needsSignUp: boolean;
   isProcessing: boolean;
-  login: (address?: string, signature?: string) => Promise<string | undefined>;
-  signUp: (address?: string, signature?: string, wallet?: string, ref?: string) => Promise<string | undefined>;
+  login: (address?: string, signature?: string, discount?: string) => Promise<string | undefined>;
+  signUp: (
+    address?: string,
+    signature?: string,
+    wallet?: string,
+    ref?: string,
+    discount?: string,
+  ) => Promise<string | undefined>;
   logout: () => Promise<void>;
 }
 
