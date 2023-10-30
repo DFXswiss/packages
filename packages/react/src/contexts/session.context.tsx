@@ -32,6 +32,7 @@ export interface SessionContextProviderProps extends PropsWithChildren {
     address?: string;
     blockchain?: Blockchain;
     ref?: string;
+    discount?: string;
   };
 }
 
@@ -61,18 +62,22 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     }
   }, [data.address]);
 
-  async function login(address = data.address, signature = storedSignature): Promise<string | undefined> {
+  async function login(
+    address = data.address,
+    signature = storedSignature,
+    discount = data.discount,
+  ): Promise<string | undefined> {
     if (!address) throw new Error('Address is not defined');
     if (isLoggedIn && session?.address === address) authenticationToken;
 
     signature ??= await getSignature(address);
 
-    return createSession(address, signature);
+    return createSession(address, signature, discount);
   }
 
-  async function createSession(address: string, signature: string): Promise<string | undefined> {
+  async function createSession(address: string, signature: string, discount?: string): Promise<string | undefined> {
     setIsProcessing(true);
-    return createApiSession(address, signature, false)
+    return createApiSession(address, signature, false, undefined, undefined, discount)
       .catch((error: ApiError) => {
         if (error.statusCode === 404) {
           setStoredSignature(signature);
@@ -91,11 +96,12 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     signature = storedSignature,
     wallet = data.wallet,
     ref = data.ref,
+    discount = data.discount,
   ): Promise<string | undefined> {
     if (!address || !signature) throw new Error('Address or signature not defined');
 
     setIsProcessing(true);
-    return createApiSession(address, signature, true, wallet, ref).finally(() => {
+    return createApiSession(address, signature, true, wallet, ref, discount).finally(() => {
       setStoredSignature(undefined);
       setNeedsSignUp(false);
       setIsProcessing(false);

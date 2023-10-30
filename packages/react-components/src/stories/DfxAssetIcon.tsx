@@ -41,6 +41,8 @@ export enum AssetIconVariant {
   UNI = 'UNI',
   QNT = 'QNT',
   XCHF = 'XCHF',
+  FOX = 'FOX',
+
   EUR = 'EUR',
   USD = 'USD',
   CHF = 'CHF',
@@ -96,6 +98,8 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.UNI]: ({ forceColor }) => <DfxAssetIconUNI forceColor={forceColor} />,
   [AssetIconVariant.QNT]: ({ forceColor }) => <DfxAssetIconQNT forceColor={forceColor} />,
   [AssetIconVariant.XCHF]: ({ forceColor }) => <DfxAssetIconXCHF forceColor={forceColor} />,
+  [AssetIconVariant.FOX]: ({ forceColor }) => <DfxAssetIconFOX forceColor={forceColor} />,
+
   [AssetIconVariant.EUR]: ({ forceColor }) => <DfxAssetIconEUR forceColor={forceColor} />,
   [AssetIconVariant.USD]: ({ forceColor }) => <DfxAssetIconUSD forceColor={forceColor} />,
   [AssetIconVariant.CHF]: ({ forceColor }) => <DfxAssetIconCHF forceColor={forceColor} />,
@@ -3361,6 +3365,7 @@ function DfxAssetIconQNT({ forceColor }: BaseAssetIconProps) {
     </svg>
   );
 }
+
 function DfxAssetIconXCHF({ forceColor }: BaseAssetIconProps) {
   const sizeContext = useContext(SizeContext);
   return (
@@ -3375,6 +3380,29 @@ function DfxAssetIconXCHF({ forceColor }: BaseAssetIconProps) {
         fill={forceColor ?? '#ce0e2d'}
         fillRule="evenodd"
         d="m80.168 147.035-6.86-16.808-36.277 89.125h21.992L148.027.422 249.25 249.293H121.71l-21.241-52.258 12.031-29.664 21.148 51.98h79.32l-64.94-159.746-77.165 189.688H.848l72.46-178.246L92.2 117.516zm0 0"
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconFOX({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 55.7 61"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="m51.2 4.2-2.7 16.2-9.6-11.3 12.3-4.9zm-2.7 23.1 2.4 8.9-18.4 5.1 16-14zm-40-4.4L18.4 10h17.1l10.9 12.9H8.5zM45.2 26 27.4 41.6 9.2 26h36zM15.1 9.1 6.3 20.6 3.6 4.2l11.5 4.9zm7 32.2L3.5 36.2 6 27.5l16.1 13.8zm3.4 4.2L22 49.3c-3-2.8-6.2-5.3-9.7-7.5l13.2 3.7zm17-3.7c-3.5 2.2-6.7 4.7-9.7 7.5l-3.6-3.9 13.3-3.6zM55.2-.9 35.9 6.8h-18L-.5-.9l4.2 25.3-4 13.7 10.5 6.3c5 3 9.4 6.7 13.2 11l4.1 4.7 4.3-4.9c3.7-4.2 8-7.8 12.7-10.8L54.7 38 51 24.4 55.2-.9z"
+        style={{
+          fillRule: 'evenodd',
+          clipRule: 'evenodd',
+          fill: forceColor ?? '#131d27',
+        }}
+        transform="translate(.491 .938)"
       />
     </svg>
   );
