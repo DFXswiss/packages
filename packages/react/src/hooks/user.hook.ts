@@ -5,6 +5,7 @@ import { useApi } from './api.hook';
 export interface UserInterface {
   getUser: () => Promise<User | undefined>;
   changeUser: (user?: Partial<User>, userLinkAction?: () => void) => Promise<User | undefined>;
+  addDiscountCode: (code: string) => Promise<void>;
 }
 
 export function useUser(): UserInterface {
@@ -27,5 +28,12 @@ export function useUser(): UserInterface {
     });
   }
 
-  return useMemo(() => ({ getUser, changeUser }), [call]);
+  async function addDiscountCode(code: string): Promise<void> {
+    return call({
+      url: `${UserUrl.discountCodes}?code=${code}`,
+      method: 'PUT',
+    });
+  }
+
+  return useMemo(() => ({ getUser, changeUser, addDiscountCode }), [call]);
 }

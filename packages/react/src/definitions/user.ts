@@ -1,7 +1,7 @@
 import { KycState, KycStatus } from './kyc';
 import { Language } from './language';
 
-export const UserUrl = { get: 'user/detail', change: 'user' };
+export const UserUrl = { get: 'user/detail', change: 'user', discountCodes: 'user/discountCodes' };
 
 export interface User {
   language: Language;

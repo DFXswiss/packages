@@ -14,6 +14,7 @@ interface UserInterface {
   isUserUpdating: boolean;
   changeMail: (mail: string) => Promise<void>;
   changeLanguage: (language: Language) => Promise<void>;
+  addDiscountCode: (code: string) => Promise<void>;
   register: (userLink: () => void) => void;
   reloadUser: () => Promise<void>;
 }
@@ -26,7 +27,7 @@ export function useUserContext(): UserInterface {
 
 export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const { isLoggedIn, session } = useApiSession();
-  const { getUser, changeUser } = useUser();
+  const { getUser, changeUser, addDiscountCode } = useUser();
   const { getCountries } = useCountry();
   const [user, setUser] = useState<User>();
   const [countries, setCountries] = useState<Country[]>([]);
@@ -86,6 +87,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       isUserUpdating,
       changeMail,
       changeLanguage,
+      addDiscountCode,
       register,
       reloadUser,
     }),
