@@ -17,6 +17,7 @@ export interface StyledDropdownProps<T> extends ControlProps {
   priceFunc?: (item: T) => string;
   assetIconFunc?: (item: T) => AssetIconVariant;
   rootRef?: RefObject<HTMLElement>;
+  forceEnable?: boolean;
 }
 
 export default function StyledDropdown<T>({
@@ -36,6 +37,7 @@ export default function StyledDropdown<T>({
   priceFunc,
   assetIconFunc,
   rootRef,
+  forceEnable,
   ...props
 }: StyledDropdownProps<T>) {
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -47,7 +49,7 @@ export default function StyledDropdown<T>({
 
   isOpen ? (buttonClasses += ' rounded-x rounded-t bg-dfxGray-400/50') : (buttonClasses += ' rounded');
 
-  const isDisabled = disabled || items.length <= 1;
+  const isDisabled = disabled || (items.length <= 1 && !forceEnable);
 
   useEffect(() => {
     const element = rootRef?.current;

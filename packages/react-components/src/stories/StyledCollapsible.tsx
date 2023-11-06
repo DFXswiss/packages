@@ -1,5 +1,6 @@
 import { PropsWithChildren, useState } from 'react';
 import StyledVerticalStack from './layout-helpers/StyledVerticalStack';
+import DfxIcon, { IconSize, IconVariant } from './DfxIcon';
 
 interface StyledCollapsibleProps extends PropsWithChildren {
   darkTheme?: boolean;
@@ -48,7 +49,7 @@ const StyledCollapsible = ({
           onClick={() => setIsExpanded((e) => !e)}
         >
           <div className="flex-1">{title}</div>
-          <div className="text-lg leading-none">{isExpanded ? '-' : '+'}</div>
+          <DfxIcon icon={isExpanded ? IconVariant.EXPAND_LESS : IconVariant.EXPAND_MORE} size={IconSize.LG} />
         </div>
 
         {isExpanded && (
