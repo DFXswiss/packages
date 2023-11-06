@@ -45,7 +45,7 @@ const StyledCollapsible = ({
         }
       >
         <div
-          className={`px-4 pt-4 ${isExpanded ? '' : 'pb-4'} w-full cursor-pointer flex flex-row ${textColor}`}
+          className={`p-4 w-full cursor-pointer flex flex-row ${textColor}`}
           onClick={() => setIsExpanded((e) => !e)}
         >
           <div className="flex-1">{title}</div>
@@ -54,7 +54,7 @@ const StyledCollapsible = ({
 
         {isExpanded && (
           <div className="px-4 pb-4">
-            <div className="border-b border-dfxGray-400 my-4"></div>
+            <div className="border-b border-dfxGray-400 mb-4"></div>
             {props.children}
           </div>
         )}
