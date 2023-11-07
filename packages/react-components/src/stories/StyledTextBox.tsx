@@ -8,7 +8,7 @@ interface StyledTextBoxProps {
   smallLabel?: boolean;
 }
 
-const StyledTextBox = ({ darkTheme = false, full = false, text, label, smallLabel, ...props }: StyledTextBoxProps) => {
+const StyledTextBox = ({ darkTheme = false, full = false, text, label, smallLabel }: StyledTextBoxProps) => {
   const textColor = darkTheme ? 'text-white' : 'text-dfxBlue-800';
   const backgroundColor = darkTheme ? 'bg-white bg-opacity-5' : 'bg-white';
   const placeholderColor = darkTheme ? 'placeholder:text-dfxGray-800' : 'placeholder:text-dfxGray-600';
@@ -34,7 +34,7 @@ const StyledTextBox = ({ darkTheme = false, full = false, text, label, smallLabe
         }
       >
         <div className={`p-4 w-full ${textColor}`}>
-          <div className="flex-1">{text}</div>
+          <div className="flex-1 whitespace-pre">{text}</div>
         </div>
       </div>
     </StyledVerticalStack>
