@@ -3,7 +3,6 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useForm } from 'react-hook-form';
 import Form from './Form';
 import StyledDropdown from './StyledDropdown';
-import { useRef } from 'react';
 
 export default {
   title: 'Forms/StyledDropdown',
@@ -11,7 +10,6 @@ export default {
 } as ComponentMeta<typeof StyledDropdown>;
 
 export const CurrencySelector: ComponentStory<typeof StyledDropdown> = (args) => {
-  const ref = useRef<HTMLElement>(document.body);
   const {
     control,
     handleSubmit,
@@ -29,7 +27,6 @@ export const CurrencySelector: ComponentStory<typeof StyledDropdown> = (args) =>
           items={dummyCurrencies}
           labelFunc={(item) => item.title}
           descriptionFunc={(item) => item.description}
-          rootRef={ref}
         />
       </Form>
     </div>

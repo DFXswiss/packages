@@ -52,14 +52,14 @@ export default function StyledDropdown<T>({
   const isDisabled = disabled || (items.length <= 1 && !forceEnable);
 
   useEffect(() => {
-    const element = rootRef?.current;
+    const element = rootRef?.current ?? document;
     if (element) {
       element.addEventListener('mousedown', closeDropdown);
       return () => element.removeEventListener('mousedown', closeDropdown);
     }
   }, [rootRef, isOpen]);
 
-  function closeDropdown(e: MouseEvent) {
+  function closeDropdown(e: Event) {
     if (
       isOpen &&
       Utils.isNode(e.target) &&
