@@ -9,6 +9,7 @@ interface StyledDataTableRowProps extends PropsWithChildren {
   discreet?: boolean;
   isLoading?: boolean;
   infoText?: string;
+  noPadding?: boolean;
 }
 
 const ALIGN_MAPS: Record<AlignContent, string> = {
@@ -23,6 +24,7 @@ export default function StyledDataTableRow({
   discreet,
   isLoading,
   infoText,
+  noPadding,
 }: StyledDataTableRowProps) {
   const theme = useContext(ThemeContext);
 
@@ -34,7 +36,7 @@ export default function StyledDataTableRow({
 
   theme.showBorder
     ? (wrapperClasses += ' px-3.5 py-2.5 border-t border-x last:border-y first:rounded-t last:rounded-b')
-    : (wrapperClasses += ' py-2');
+    : !noPadding && (wrapperClasses += ' py-2');
 
   !theme.showBorder && theme.narrow && (wrapperClasses += ' px-3.5');
 

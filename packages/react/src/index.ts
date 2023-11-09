@@ -26,7 +26,7 @@ export { useUser } from './hooks/user.hook';
 export { Asset, AssetType } from './definitions/asset';
 export { BankAccount } from './definitions/bank-account';
 export { Blockchain } from './definitions/blockchain';
-export { Buy, BuyPaymentInfo } from './definitions/buy';
+export { Buy, BuyPaymentInfo, BuyPaymentMethod } from './definitions/buy';
 export { Country } from './definitions/country';
 export { ApiError } from './definitions/error';
 export { Fiat } from './definitions/fiat';
@@ -35,7 +35,9 @@ export { Jwt } from './definitions/jwt';
 export { AccountType, KycStatus, KycState, KycData } from './definitions/kyc';
 export { Sell, SellPaymentInfo } from './definitions/sell';
 export { Session } from './definitions/session';
-export { User, UserTradingLimit } from './definitions/user';
+export { User, UserTradingLimit, UserStatus } from './definitions/user';
+export { LnurlAuth, LnurlAuthStatus } from './definitions/auth';
+export { TransactionError } from './definitions/transaction';
 
 // Utils & Validations
 export { Utils } from './utils';

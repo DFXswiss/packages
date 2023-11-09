@@ -43,10 +43,11 @@ export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
   function isExpired(): boolean {
     if (!token) return true;
 
-    try {
-      const decoded = jwt ?? jwtDecode<Jwt>(token);
-      return decoded?.exp != null && Date.now() > new Date(decoded?.exp * 1000).getTime();
-    } catch {
+    const decoded = jwt ?? decodeJwt(token);
+
+    if (decoded) {
+      return decoded.exp != null && Date.now() > new Date(decoded.exp * 1000).getTime();
+    } else {
       authenticationToken.remove();
       setToken(undefined);
       setJwt(undefined);
@@ -57,10 +58,16 @@ export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
   function setAuthenticationToken(newToken?: string) {
     newToken ? authenticationToken.set(newToken) : authenticationToken.remove();
     setToken(newToken);
-    if (newToken && Utils.isJwt(newToken)) {
-      setJwt(jwtDecode<Jwt>(newToken));
-    } else {
-      setJwt(undefined);
+    setJwt(decodeJwt(newToken));
+  }
+
+  function decodeJwt(token: string | undefined): Jwt | undefined {
+    if (!token) return undefined;
+
+    try {
+      return jwtDecode<Jwt>(token);
+    } catch {
+      return undefined;
     }
   }
 

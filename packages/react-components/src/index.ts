@@ -16,6 +16,8 @@ export { default as StyledCheckboxRow, StyledCheckboxRowTextSize } from './stori
 export { default as StyledCoinList } from './stories/StyledCoinList';
 export { default as StyledCoinListItem } from './stories/StyledCoinListItem';
 export { default as StyledDataBox } from './stories/StyledDataBox';
+export { default as StyledCollapsible } from './stories/StyledCollapsible';
+export { default as StyledTextBox } from './stories/StyledTextBox';
 export { default as StyledDataTable, AlignContent } from './stories/StyledDataTable';
 export { default as StyledDataTableRow } from './stories/StyledDataTableRow';
 export { default as StyledDataTextRow } from './stories/StyledDataTextRow';
@@ -42,3 +44,4 @@ export { default as StyledBankAccountListItem } from './stories/form/StyledBankA
 export { default as StyledDropdown } from './stories/form/StyledDropdown';
 export { default as StyledInput } from './stories/form/StyledInput';
 export { default as StyledModalDropdown } from './stories/form/StyledModalDropdown';
+export { default as StyledModalButton } from './stories/form/StyledModalButton';

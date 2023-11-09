@@ -1,11 +1,13 @@
 import { useMemo } from 'react';
-import { AuthUrl, SignIn, SignMessage } from '../definitions/auth';
+import { AuthUrl, LnurlAuth, LnurlAuthStatus, SignIn, SignMessage } from '../definitions/auth';
 import { useApi } from './api.hook';
 
 export interface AuthInterface {
   getSignMessage: (address: string) => Promise<string>;
-  signIn: (address: string, signature: string) => Promise<SignIn>;
-  signUp: (address: string, signature: string, wallet?: string) => Promise<SignIn>;
+  signIn: (address: string, signature: string, discountCode?: string) => Promise<SignIn>;
+  signUp: (address: string, signature: string, wallet?: string, ref?: string, discountCode?: string) => Promise<SignIn>;
+  createLnurlAuth: () => Promise<LnurlAuth>;
+  getLnurlAuth: (k1: string) => Promise<LnurlAuthStatus>;
 }
 
 interface SignUpParams {
@@ -13,6 +15,8 @@ interface SignUpParams {
   signature: string;
   walletId?: number;
   wallet?: string;
+  usedRef?: string;
+  discountCode?: string;
 }
 
 export function useAuth(): AuthInterface {
@@ -24,12 +28,18 @@ export function useAuth(): AuthInterface {
     );
   }
 
-  async function signIn(address: string, signature: string): Promise<SignIn> {
-    return call({ url: AuthUrl.signIn, method: 'POST', data: { address, signature } });
+  async function signIn(address: string, signature: string, discountCode?: string): Promise<SignIn> {
+    return call({ url: AuthUrl.signIn, method: 'POST', data: { address, signature, discountCode } });
   }
 
-  async function signUp(address: string, signature: string, wallet?: string): Promise<SignIn> {
-    const data: SignUpParams = { address, signature };
+  async function signUp(
+    address: string,
+    signature: string,
+    wallet?: string,
+    usedRef?: string,
+    discountCode?: string,
+  ): Promise<SignIn> {
+    const data: SignUpParams = { address, signature, usedRef, discountCode };
 
     if (wallet) {
       const walletId = parseInt(wallet);
@@ -43,5 +53,12 @@ export function useAuth(): AuthInterface {
     return call({ url: AuthUrl.signUp, method: 'POST', data });
   }
 
-  return useMemo(() => ({ getSignMessage, signIn, signUp }), [call]);
+  async function createLnurlAuth(): Promise<LnurlAuth> {
+    return call({ url: AuthUrl.lnurl, method: 'POST' });
+  }
+  async function getLnurlAuth(k1: string): Promise<LnurlAuthStatus> {
+    return call({ url: `${AuthUrl.lnurlStatus}?k1=${k1}`, method: 'GET' });
+  }
+
+  return useMemo(() => ({ getSignMessage, signIn, signUp, createLnurlAuth, getLnurlAuth }), [call]);
 }

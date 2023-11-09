@@ -1,8 +1,9 @@
 import { ControlProps } from './Form';
-import { useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import DfxIcon, { IconColor, IconSize, IconVariant } from '../DfxIcon';
 import { Controller } from 'react-hook-form';
 import DfxAssetIcon, { AssetIconVariant } from '../DfxAssetIcon';
+import { Utils } from '../../utils';
 
 export interface StyledDropdownProps<T> extends ControlProps {
   labelIcon?: IconVariant;
@@ -15,6 +16,8 @@ export interface StyledDropdownProps<T> extends ControlProps {
   descriptionFunc?: (item: T) => string;
   priceFunc?: (item: T) => string;
   assetIconFunc?: (item: T) => AssetIconVariant;
+  rootRef?: RefObject<HTMLElement>;
+  forceEnable?: boolean;
 }
 
 export default function StyledDropdown<T>({
@@ -33,33 +36,62 @@ export default function StyledDropdown<T>({
   descriptionFunc,
   priceFunc,
   assetIconFunc,
+  rootRef,
+  forceEnable,
   ...props
 }: StyledDropdownProps<T>) {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const [isOpen, setIsOpen] = useState(false);
 
   let buttonClasses = 'flex justify-between border border-dfxGray-500 px-4 py-3 shadow-sm w-full';
 
   isOpen ? (buttonClasses += ' rounded-x rounded-t bg-dfxGray-400/50') : (buttonClasses += ' rounded');
 
-  const isDisabled = disabled || items.length <= 1;
+  const isDisabled = disabled || (items.length <= 1 && !forceEnable);
+
+  useEffect(() => {
+    const element = rootRef?.current ?? document;
+    if (element) {
+      element.addEventListener('mousedown', closeDropdown);
+      return () => element.removeEventListener('mousedown', closeDropdown);
+    }
+  }, [rootRef, isOpen]);
+
+  function closeDropdown(e: Event) {
+    if (
+      isOpen &&
+      Utils.isNode(e.target) &&
+      dropdownRef.current &&
+      !dropdownRef.current.contains(e.target) &&
+      buttonRef.current &&
+      !buttonRef.current.contains(e.target)
+    ) {
+      setIsOpen(false);
+    }
+  }
 
   return (
     <Controller
       control={control}
       render={({ field: { onChange, onBlur, value } }) => (
         <div className={`relative ${full ? 'w-full' : ''}`}>
-          <div className="flex items-center ml-3.5 mb-2.5">
-            {labelIcon !== undefined && <DfxIcon icon={labelIcon} size={IconSize.SM} color={IconColor.BLUE} />}
+          {label && (
+            <div className="flex items-center ml-3.5 mb-2.5">
+              {labelIcon !== undefined && <DfxIcon icon={labelIcon} size={IconSize.SM} color={IconColor.BLUE} />}
 
-            <label
-              className={`text-dfxBlue-800 ${smallLabel ? 'text-sm' : 'text-base'} font-semibold ${
-                labelIcon ? 'pl-3.5' : ''
-              }`}
-            >
-              {label}
-            </label>
-          </div>
+              <label
+                className={`text-dfxBlue-800 ${smallLabel ? 'text-sm' : 'text-base'} font-semibold ${
+                  labelIcon ? 'pl-3.5' : ''
+                }`}
+              >
+                {label}
+              </label>
+            </div>
+          )}
           <button
+            ref={buttonRef}
             id="dropDownButton"
             type="button"
             onClick={() => setIsOpen(!isOpen)}
@@ -101,7 +133,11 @@ export default function StyledDropdown<T>({
             )}
           </button>
           {isOpen && (
-            <div className="absolute bg-white rounded-b w-full z-10">
+            <div
+              ref={dropdownRef}
+              className="absolute bg-white rounded-b border-x border-b border-dfxGray-500 w-full z-10 overflow-y-auto"
+              style={{ maxHeight: '15rem' }}
+            >
               {items.map((item, index) => (
                 <button
                   key={index}
@@ -109,7 +145,7 @@ export default function StyledDropdown<T>({
                     onChange(item);
                     setIsOpen(false);
                   }}
-                  className="flex flex-col gap-2 justify-between text-left border-x border-dfxGray-500 w-full hover:bg-dfxGray-400/50 last:border-b last:rounded-b px-3.5 py-2.5"
+                  className="flex flex-col gap-2 justify-between text-left w-full hover:bg-dfxGray-400/50 px-3.5 py-2.5"
                 >
                   <div className="flex flex-row gap-2 items-center w-full">
                     {assetIconFunc && <DfxAssetIcon asset={assetIconFunc(item)} />}

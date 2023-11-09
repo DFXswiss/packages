@@ -8,7 +8,14 @@ export interface ApiSessionInterface {
   isLoggedIn: boolean;
   session?: Session;
   getSignMessage: (address: string) => Promise<string>;
-  createSession: (address: string, signature: string, isSignUp: boolean, wallet?: string) => Promise<string>;
+  createSession: (
+    address: string,
+    signature: string,
+    isSignUp: boolean,
+    wallet?: string,
+    ref?: string,
+    discount?: string,
+  ) => Promise<string>;
   updateSession: (token: string) => void;
   deleteSession: () => Promise<void>;
 }
@@ -22,11 +29,15 @@ export function useApiSession(): ApiSessionInterface {
     signature: string,
     isSignUp: boolean,
     wallet?: string,
+    ref?: string,
+    discount?: string,
   ): Promise<string> {
-    return (isSignUp ? signUp(address, signature, wallet) : signIn(address, signature)).then(({ accessToken }) => {
-      setAuthenticationToken(accessToken);
-      return accessToken;
-    });
+    return (isSignUp ? signUp(address, signature, wallet, ref, discount) : signIn(address, signature, discount)).then(
+      ({ accessToken }) => {
+        setAuthenticationToken(accessToken);
+        return accessToken;
+      },
+    );
   }
 
   async function updateSession(token: string) {

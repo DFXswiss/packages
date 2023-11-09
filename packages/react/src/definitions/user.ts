@@ -1,7 +1,13 @@
 import { KycState, KycStatus } from './kyc';
 import { Language } from './language';
 
-export const UserUrl = { get: 'user/detail', change: 'user' };
+export const UserUrl = { get: 'user/detail', change: 'user', discountCodes: 'user/discountCodes' };
+
+export enum UserStatus {
+  NA = 'NA',
+  ACTIVE = 'Active',
+  BLOCKED = 'Blocked',
+}
 
 export interface User {
   language: Language;
@@ -11,6 +17,7 @@ export interface User {
   kycStatus: KycStatus;
   tradingLimit: UserTradingLimit;
   kycHash: string;
+  status: UserStatus;
 
   ref?: string;
   refFeePercent: number;
