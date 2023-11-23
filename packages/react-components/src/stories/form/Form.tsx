@@ -53,7 +53,7 @@ const Form = ({ children, control, rules, errors, disabled = false, onSubmit }: 
     return createElement(element.type, props);
   };
 
-  return <>{enrichElements(children)}</>;
+  return <form>{enrichElements(children)}</form>;
 };
 
 export default Form;

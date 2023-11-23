@@ -23,6 +23,7 @@ export enum StyledButtonColor {
 }
 
 export interface StyledButtonProps {
+  type?: 'submit' | 'reset' | 'button';
   className?: string;
   label: string;
   onClick: () => void;
@@ -101,6 +102,7 @@ const WIDTH_MAPS: Record<StyledButtonWidth, string> = {
 };
 
 export default function StyledButton({
+  type,
   className,
   label,
   onClick,
@@ -144,7 +146,7 @@ export default function StyledButton({
 
   return (
     <>
-      <button type="button" className={buttonClasses} onClick={onClick} disabled={isDisabled}>
+      <button type={type} className={buttonClasses} onClick={onClick} disabled={isDisabled}>
         {iconAfterLabel && label}
         {icon && (
           <DfxIcon
