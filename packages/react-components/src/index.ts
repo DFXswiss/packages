@@ -32,6 +32,7 @@ export { default as StyledTab } from './stories/StyledTab';
 export { default as StyledTabContainer, StyledTabProps } from './stories/StyledTabContainer';
 export { default as StyledTabContentWrapper } from './stories/StyledTabContentWrapper';
 export { default as StyledVideoGrid, VideoSourcesProps } from './stories/StyledVideoGrid';
+export { default as StyledSearchInput, StyledSearchInputProps } from './stories/StyledSearchInput';
 
 // Layout helpers
 export { default as StyledHorizontalStack } from './stories/layout-helpers/StyledHorizontalStack';
