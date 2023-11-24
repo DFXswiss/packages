@@ -41,7 +41,7 @@ export default function StyledCheckboxRow({
   let textClasses = CHECKBOX_SIZE_MAPS[textSize].textClasses;
   textClasses += darkTheme ? ' text-white' : ' text-dfxBlue-800';
 
-  let wrapperClasses = 'flex gap-4 rounded';
+  let wrapperClasses = 'flex gap-4 rounded cursor-pointer';
   wrapperClasses += centered ? ' justify-center ' : ' justify-start ';
 
   if (withBackground) wrapperClasses += darkTheme ? ' bg-dfxRed-100/10 p-3' : ' bg-dfxGray-400 p-3';

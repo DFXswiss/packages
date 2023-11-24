@@ -33,8 +33,10 @@ export function useApi(): ApiInterface {
   }
 
   async function fetchFrom<T>(config: CallConfig): Promise<T> {
+    const url = process.env.REACT_APP_API_URL ?? 'https://api.dfx.swiss';
+    const version = process.env.REACT_APP_API_VERSION ?? 'v1';
     return fetch(
-      `${process.env.REACT_APP_API_URL ?? 'https://api.dfx.swiss/v1'}/${config.url}`,
+      `${url}/${version}/${config.url}`,
       buildInit(config.method, authenticationToken, config.data, config.noJson),
     ).then((response) => {
       if (response.status === config.specialHandling?.statusCode) {
