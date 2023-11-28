@@ -43,6 +43,7 @@ export enum AssetIconVariant {
   XCHF = 'XCHF',
   FOX = 'FOX',
   BGB = 'BGB',
+  XMR = 'XMR',
 
   EUR = 'EUR',
   USD = 'USD',
@@ -101,6 +102,7 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.XCHF]: ({ forceColor }) => <DfxAssetIconXCHF forceColor={forceColor} />,
   [AssetIconVariant.FOX]: ({ forceColor }) => <DfxAssetIconFOX forceColor={forceColor} />,
   [AssetIconVariant.BGB]: ({ forceColor }) => <DfxAssetIconBGB forceColor={forceColor} />,
+  [AssetIconVariant.XMR]: ({ forceColor }) => <DfxAssetIconXMR forceColor={forceColor} />,
 
   [AssetIconVariant.EUR]: ({ forceColor }) => <DfxAssetIconEUR forceColor={forceColor} />,
   [AssetIconVariant.USD]: ({ forceColor }) => <DfxAssetIconUSD forceColor={forceColor} />,
@@ -3431,6 +3433,38 @@ function DfxAssetIconBGB({ forceColor }: BaseAssetIconProps) {
       <path
         fill={forceColor ? '#ffffff' : '#000202'}
         d="M30.5 26.5c3.476-1.143 7.142-1.31 11-.5a93.004 93.004 0 0 1 11 12 169.04 169.04 0 0 1-15 16c-4 .667-8 .667-12 0a264.885 264.885 0 0 0 16-16 70.6 70.6 0 0 0-11-11.5Z"
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconXMR({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 3756.09 3756.49"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title>{'monero'}</title>
+      <path
+        d="M4128 2249.81c0 1037.19-840.74 1878.05-1878 1878.05S372 3287 372 2249.81 1212.76 371.75 2250 371.75s1878 840.79 1878 1878.06Z"
+        style={{ fill: '#fff' }}
+        transform="translate(-371.96 -371.75)"
+      />
+      <path
+        d="M2250 371.75c-1036.89 0-1879.12 842.06-1877.8 1878 .26 207.26 33.31 406.63 95.34 593.12h561.88V1263L2250 2483.57 3470.52 1263v1579.9h562c62.12-186.48 95-385.85 95.37-593.12C4129.66 1212.76 3287 372 2250 372Z"
+        data-name={149931032}
+        style={{ fill: forceColor ?? '#f26822' }}
+        transform="translate(-371.96 -371.75)"
+      />
+      <path
+        d="m1969.3 2764.17-532.67-532.7v994.14h-407.25l-384.29.07c329.63 540.8 925.35 902.56 1604.91 902.56s1275.31-361.84 1605-902.64h-791.75v-994.13l-532.7 532.7-280.61 280.61-280.62-280.61Z"
+        data-name={149931160}
+        style={{ fill: forceColor ?? '#4d4d4d' }}
+        transform="translate(-371.96 -371.75)"
       />
     </svg>
   );
