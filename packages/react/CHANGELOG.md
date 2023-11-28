@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.2.0-beta.1 (2023-11-28)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
 ## 1.1.4-beta.8 (2023-11-28)
 
 **Note:** Version bump only for package @dfx.swiss/react
