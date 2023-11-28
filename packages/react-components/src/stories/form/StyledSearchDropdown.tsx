@@ -1,0 +1,174 @@
+import { RefObject, useEffect, useRef, useState } from 'react';
+import { Controller } from 'react-hook-form';
+import StyledVerticalStack from '../layout-helpers/StyledVerticalStack';
+import { ControlProps } from './Form';
+import DfxIcon, { IconSize, IconVariant } from '../DfxIcon';
+import { Utils } from '../../utils';
+import DfxAssetIcon, { AssetIconVariant } from '../DfxAssetIcon';
+
+interface StyledSearchDropdownProps<T> extends ControlProps {
+  placeholder?: string;
+  full?: boolean;
+  smallLabel?: boolean;
+  items: T[];
+  labelFunc: (item: T) => string;
+  balanceFunc?: (item: T) => string;
+  descriptionFunc?: (item: T) => string;
+  filterFunc: (item: T, search?: string) => boolean;
+  priceFunc?: (item: T) => string;
+  assetIconFunc?: (item: T) => AssetIconVariant;
+  rootRef?: RefObject<HTMLElement>;
+  forceEnable?: boolean;
+  autocomplete?: string;
+}
+
+function StyledSearchDropdown<T>({
+  control,
+  name,
+  label,
+  rules,
+  disabled = false,
+  error,
+  placeholder,
+  full = false,
+  smallLabel = false,
+  items,
+  labelFunc,
+  balanceFunc,
+  descriptionFunc,
+  filterFunc,
+  priceFunc,
+  assetIconFunc,
+  rootRef,
+  forceEnable,
+  autocomplete,
+  ...props
+}: StyledSearchDropdownProps<T>) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState<string | undefined>();
+
+  const visibleItems = items.filter((i) => filterFunc(i, search));
+
+  const textColor = 'text-dfxBlue-800';
+  const textOrErrorColor = error ? 'text-dfxRed-100' : textColor;
+
+  let inputClasses = `cursor-pointer text-base font-normal p-4 pr-[2.5rem] w-full bg-white placeholder:text-dfxGray-600 border border-dfxGray-500 outline-2 outline-dfxBlue-400 ${textOrErrorColor}`;
+  isOpen && visibleItems.length
+    ? (inputClasses += ' rounded-x rounded-t bg-dfxGray-400/50')
+    : (inputClasses += ' rounded');
+
+  const isDisabled = disabled || (items.length <= 1 && !forceEnable);
+
+  useEffect(() => {
+    !isOpen && setSearch(undefined);
+  }, [isOpen]);
+
+  useEffect(() => {
+    const element = rootRef?.current ?? document;
+    if (element) {
+      element.addEventListener('mousedown', closeDropdown);
+      return () => element.removeEventListener('mousedown', closeDropdown);
+    }
+  }, [rootRef, isOpen]);
+
+  function closeDropdown(e: Event) {
+    if (
+      isOpen &&
+      Utils.isNode(e.target) &&
+      dropdownRef.current &&
+      !dropdownRef.current.contains(e.target) &&
+      inputRef.current &&
+      !inputRef.current.contains(e.target)
+    ) {
+      setIsOpen(false);
+    }
+  }
+
+  return (
+    <Controller
+      control={control}
+      render={({ field: { onChange, onBlur, value } }) => (
+        <div className={`relative ${full ? 'w-full' : ''}`}>
+          <StyledVerticalStack gap={1} full={full}>
+            {label && (
+              <label
+                className={
+                  `text-start ${smallLabel ? 'text-sm' : 'text-base'} font-semibold pl-3 pl- ` + [textColor].join(' ')
+                }
+              >
+                {label}
+              </label>
+            )}
+            <div className="relative cursor-pointer" onClick={() => setIsOpen((o) => !o)}>
+              {!isDisabled && (
+                <div className="absolute right-3 flex justify-center items-center" style={{ height: '3.6rem' }}>
+                  <DfxIcon icon={isOpen ? IconVariant.EXPAND_LESS : IconVariant.EXPAND_MORE} size={IconSize.LG} />
+                </div>
+              )}
+
+              <input
+                ref={inputRef}
+                className={inputClasses}
+                type="text"
+                name={autocomplete ?? name}
+                onBlur={onBlur}
+                onChange={(value) => setSearch(value.target.value)}
+                placeholder={placeholder}
+                value={search ?? (value ? labelFunc(value) : '')}
+                disabled={isDisabled}
+                {...props}
+              />
+            </div>
+            {error && <p className="text-start text-sm text-dfxRed-100 pl-3">{error?.message}</p>}
+          </StyledVerticalStack>
+
+          {isOpen && visibleItems.length > 0 && (
+            <div
+              ref={dropdownRef}
+              className="absolute bg-white rounded-b border-x border-b border-dfxGray-500 w-full z-10 overflow-y-auto"
+              style={{ maxHeight: '15rem' }}
+            >
+              {visibleItems.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    onChange(item);
+                    setIsOpen(false);
+                  }}
+                  className="flex flex-col gap-2 justify-between text-left w-full hover:bg-dfxGray-400/50 px-3.5 py-2.5"
+                >
+                  <div className="flex flex-row gap-2 items-center w-full">
+                    {assetIconFunc && <DfxAssetIcon asset={assetIconFunc(item)} />}
+                    <div className="flex flex-col gap-1 justify-between text-left w-full">
+                      <span
+                        className={`text-dfxBlue-800 leading-none font-semibold flex justify-between ${
+                          !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
+                        }`}
+                      >
+                        {labelFunc(item)}
+                        {balanceFunc && <p>{balanceFunc(item)}</p>}
+                      </span>
+                      {descriptionFunc && (
+                        <span className="text-dfxGray-800 text-xs h-min leading-none flex justify-between">
+                          {descriptionFunc(item)}
+                          {priceFunc && <p>{priceFunc(item)}</p>}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      name={name}
+      rules={rules}
+    />
+  );
+}
+
+export default StyledSearchDropdown;

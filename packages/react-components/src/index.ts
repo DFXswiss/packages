@@ -43,6 +43,7 @@ export { default as StyledSpacer } from './stories/layout-helpers/StyledSpacer';
 export { default as Form } from './stories/form/Form';
 export { default as StyledBankAccountListItem } from './stories/form/StyledBankAccountListItem';
 export { default as StyledDropdown } from './stories/form/StyledDropdown';
+export { default as StyledSearchDropdown } from './stories/form/StyledSearchDropdown';
 export { default as StyledInput } from './stories/form/StyledInput';
 export { default as StyledModalDropdown } from './stories/form/StyledModalDropdown';
 export { default as StyledModalButton } from './stories/form/StyledModalButton';
