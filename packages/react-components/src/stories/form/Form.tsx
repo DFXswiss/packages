@@ -44,7 +44,7 @@ const Form = ({ children, control, rules, errors, disabled = false, onSubmit }: 
         ref: element.ref,
         control: control,
         rules: rules ? rules[element.props.name] : undefined,
-        error: errors[element.props.name],
+        error: element.props.name.split('.').reduce((prev: any, curr: string) => prev?.[curr], errors),
         disabled: element.props.disabled || disabled,
         onSubmit: onSubmit,
       };
