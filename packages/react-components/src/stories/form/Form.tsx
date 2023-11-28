@@ -47,7 +47,7 @@ const Form = ({ children, control, rules, errors, translate, disabled = false, o
         ref: element.ref,
         control: control,
         rules: rules ? rules[element.props.name] : undefined,
-        error: translate ? { ...error, message: translate(error.message) } : error,
+        error: error && translate ? { ...error, message: translate(error.message) } : error,
         disabled: element.props.disabled || disabled,
         onSubmit: onSubmit,
       };
