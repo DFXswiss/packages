@@ -15,6 +15,7 @@ interface StyledSearchDropdownProps<T> extends ControlProps {
   balanceFunc?: (item: T) => string;
   descriptionFunc?: (item: T) => string;
   filterFunc: (item: T, search?: string) => boolean;
+  matchFunc?: (item: T, search?: string) => boolean;
   priceFunc?: (item: T) => string;
   assetIconFunc?: (item: T) => AssetIconVariant;
   rootRef?: RefObject<HTMLElement>;
@@ -37,6 +38,7 @@ function StyledSearchDropdown<T>({
   balanceFunc,
   descriptionFunc,
   filterFunc,
+  matchFunc,
   priceFunc,
   assetIconFunc,
   rootRef,
@@ -115,7 +117,13 @@ function StyledSearchDropdown<T>({
                 type="text"
                 name={autocomplete ?? name}
                 onBlur={onBlur}
-                onChange={(value) => setSearch(value.target.value)}
+                onChange={(value) => {
+                  const val = value.target.value;
+                  setSearch(val);
+
+                  const matches = items.filter((i) => matchFunc?.(i, val));
+                  if (matches.length === 1) onChange(matches[0]);
+                }}
                 placeholder={placeholder}
                 value={search ?? (value ? labelFunc(value) : '')}
                 disabled={isDisabled}
