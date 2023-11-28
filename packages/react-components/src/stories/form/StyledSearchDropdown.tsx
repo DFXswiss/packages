@@ -104,9 +104,12 @@ function StyledSearchDropdown<T>({
                 {label}
               </label>
             )}
-            <div className="relative cursor-pointer" onClick={() => setIsOpen((o) => !o)}>
+            <div className="relative cursor-pointer">
               {!isDisabled && (
-                <div className="absolute right-3 flex justify-center items-center" style={{ height: '3.6rem' }}>
+                <div
+                  className="absolute right-3 flex justify-center items-center h-[3.6rem]"
+                  onClick={() => setIsOpen((o) => !o)}
+                >
                   <DfxIcon icon={isOpen ? IconVariant.EXPAND_LESS : IconVariant.EXPAND_MORE} size={IconSize.LG} />
                 </div>
               )}
@@ -116,6 +119,7 @@ function StyledSearchDropdown<T>({
                 className={inputClasses}
                 type="text"
                 name={autocomplete ?? name}
+                onFocus={() => setIsOpen(true)}
                 onBlur={onBlur}
                 onChange={(value) => {
                   const val = value.target.value;
@@ -136,8 +140,7 @@ function StyledSearchDropdown<T>({
           {isOpen && visibleItems.length > 0 && (
             <div
               ref={dropdownRef}
-              className="absolute bg-white rounded-b border-x border-b border-dfxGray-500 w-full z-10 overflow-y-auto"
-              style={{ maxHeight: '15rem' }}
+              className="absolute bg-white rounded-b border-x border-b border-dfxGray-500 w-full z-10 overflow-y-auto max-h-[15rem]"
             >
               {visibleItems.map((item, index) => (
                 <button

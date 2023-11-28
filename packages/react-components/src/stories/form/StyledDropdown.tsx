@@ -135,8 +135,7 @@ export default function StyledDropdown<T>({
           {isOpen && (
             <div
               ref={dropdownRef}
-              className="absolute bg-white rounded-b border-x border-b border-dfxGray-500 w-full z-10 overflow-y-auto"
-              style={{ maxHeight: '15rem' }}
+              className="absolute bg-white rounded-b border-x border-b border-dfxGray-500 w-full z-10 overflow-y-auto max-h-[15rem]"
             >
               {items.map((item, index) => (
                 <button
