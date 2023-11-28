@@ -12,7 +12,7 @@ class ValidationsClass {
     return {
       required: {
         value: true,
-        message: 'Mandatory field',
+        message: 'required',
       },
     };
   }
@@ -21,7 +21,7 @@ class ValidationsClass {
     return {
       pattern: {
         value: regex.Mail,
-        message: 'Invalid E-mail address',
+        message: 'pattern',
       },
     };
   }
@@ -30,13 +30,13 @@ class ValidationsClass {
     return this.Custom((number: string) => {
       try {
         if (number) {
-          if (!number.match(/^\+\d/)) return 'Please fill in area code and number';
-          if (!PhoneNumber(number)?.isValid()) return 'Invalid pattern';
+          if (!number.match(/^\+\d/)) return 'code_and_number';
+          if (!PhoneNumber(number)?.isValid()) return 'pattern';
         }
 
         return true;
       } catch {
-        return 'Invalid pattern';
+        return 'pattern';
       }
     });
   }
@@ -48,16 +48,16 @@ class ValidationsClass {
       // check country
       const allowedCountries = countries.map((c) => c.symbol.toLowerCase());
       if (iban.length >= 2 && !allowedCountries.find((c) => iban.toLowerCase().startsWith(c))) {
-        return 'IBAN country code not allowed';
+        return 'iban_country_blocked';
       }
 
       // check blocked IBANs
       const blockedIbans = BlockedIbans.map((i) => i.split(' ').join('').toLowerCase());
       if (blockedIbans.some((i) => iban.toLowerCase().match(i) != null)) {
-        return 'IBAN not allowed';
+        return 'iban_blocked';
       }
 
-      return IbanTools.validateIBAN(iban).valid ? true : 'Invalid IBAN';
+      return IbanTools.validateIBAN(iban).valid ? true : 'pattern';
     });
   }
 

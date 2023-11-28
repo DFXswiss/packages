@@ -15,12 +15,13 @@ interface Props {
   control: Control<any>;
   rules?: any;
   errors: any;
+  translate?: (val: string) => string;
   disabled?: boolean;
   onSubmit?: () => void;
 }
 
 // TODO: auto focus on next input field?
-const Form = ({ children, control, rules, errors, disabled = false, onSubmit }: Props) => {
+const Form = ({ children, control, rules, errors, translate, disabled = false, onSubmit }: Props) => {
   const enrichElements = (elements: ReactNode): ReactElement[] | undefined => {
     if (!elements) return undefined;
 
@@ -39,12 +40,14 @@ const Form = ({ children, control, rules, errors, disabled = false, onSubmit }: 
     };
 
     if (element.props.name) {
+      const error = element.props.name.split('.').reduce((prev: any, curr: string) => prev?.[curr], errors);
+
       props = {
         ...props,
         ref: element.ref,
         control: control,
         rules: rules ? rules[element.props.name] : undefined,
-        error: element.props.name.split('.').reduce((prev: any, curr: string) => prev?.[curr], errors),
+        error: translate ? translate(error) : error,
         disabled: element.props.disabled || disabled,
         onSubmit: onSubmit,
       };
