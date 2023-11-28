@@ -18,10 +18,20 @@ interface Props {
   translate?: (val: string) => string;
   disabled?: boolean;
   onSubmit?: () => void;
+  hasFormElement?: boolean;
 }
 
 // TODO: auto focus on next input field?
-const Form = ({ children, control, rules, errors, translate, disabled = false, onSubmit }: Props) => {
+const Form = ({
+  children,
+  control,
+  rules,
+  errors,
+  translate,
+  disabled = false,
+  onSubmit,
+  hasFormElement = true,
+}: Props) => {
   const enrichElements = (elements: ReactNode): ReactElement[] | undefined => {
     if (!elements) return undefined;
 
@@ -56,7 +66,7 @@ const Form = ({ children, control, rules, errors, translate, disabled = false, o
     return createElement(element.type, props);
   };
 
-  return <form className="w-full">{enrichElements(children)}</form>;
+  return hasFormElement ? <form className="w-full">{enrichElements(children)}</form> : <>{enrichElements(children)}</>;
 };
 
 export default Form;
