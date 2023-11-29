@@ -32,7 +32,35 @@ export { ApiError } from './definitions/error';
 export { Fiat } from './definitions/fiat';
 export { Language } from './definitions/language';
 export { Jwt } from './definitions/jwt';
-export { AccountType, KycStatus, KycState, KycData } from './definitions/kyc';
+export {
+  AccountType,
+  KycStatus,
+  KycState,
+  KycData,
+  LimitPeriod,
+  TradingLimit,
+  KycInfo,
+  KycSession,
+  KycStepName,
+  KycStepType,
+  KycStepStatus,
+  UrlType,
+  KycSessionInfo,
+  KycStepBase,
+  KycStep,
+  KycStepSession,
+  KycContactData,
+  KycAddress,
+  KycPersonalData,
+  QuestionType,
+  KycFinancialResponse,
+  KycFinancialResponses,
+  KycFinancialOption,
+  KycFinancialQuestion,
+  KycFinancialQuestions,
+  KycResult,
+  isStepDone,
+} from './definitions/kyc';
 export { Sell, SellPaymentInfo } from './definitions/sell';
 export { Session } from './definitions/session';
 export { User, UserTradingLimit, UserStatus } from './definitions/user';
