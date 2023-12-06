@@ -29,7 +29,7 @@ export interface KycInterface {
 
   // process
   getKycInfo: (code: string) => Promise<KycInfo>;
-  continueKyc: (code: string, autoStep: boolean) => Promise<KycSession>;
+  continueKyc: (code: string, autoStep?: boolean) => Promise<KycSession>;
   startStep: (code: string, name: KycStepName, type?: KycStepType) => Promise<KycSession>;
   getCountries: (code: string) => Promise<Country[]>;
 

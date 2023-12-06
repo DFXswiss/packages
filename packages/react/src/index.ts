@@ -36,6 +36,7 @@ export {
   AccountType,
   KycStatus,
   KycState,
+  KycLevel,
   KycData,
   LimitPeriod,
   TradingLimit,
