@@ -15,6 +15,7 @@ export interface User {
   kycDataComplete: boolean;
   kycState: KycState;
   kycStatus: KycStatus;
+  kycLevel: number;
   tradingLimit: UserTradingLimit;
   kycHash: string;
   status: UserStatus;

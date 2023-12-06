@@ -29,7 +29,7 @@ export interface KycInterface {
 
   // process
   getKycInfo: (code: string) => Promise<KycInfo>;
-  continueKyc: (code: string) => Promise<KycSession>;
+  continueKyc: (code: string, autoStep: boolean) => Promise<KycSession>;
   startStep: (code: string, name: KycStepName, type?: KycStepType) => Promise<KycSession>;
   getCountries: (code: string) => Promise<Country[]>;
 
@@ -54,8 +54,9 @@ export function useKyc(): KycInterface {
     return call({ url: KycUrl.base, code, method: 'GET' });
   }
 
-  async function continueKyc(code: string): Promise<KycSession> {
-    return call({ url: KycUrl.base, code, method: 'PUT' });
+  async function continueKyc(code: string, autoStep = true): Promise<KycSession> {
+    const url = `${KycUrl.base}?autoStep=${autoStep.toString()}`;
+    return call({ url, code, method: 'PUT' });
   }
 
   async function startStep(code: string, name: KycStepName, type?: KycStepType): Promise<KycSession> {

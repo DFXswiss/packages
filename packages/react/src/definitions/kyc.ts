@@ -1,6 +1,10 @@
 import { Country } from './country';
 
 export const KycUrl = { setData: 'kyc/data', base: `${process.env.REACT_APP_API_URL}/v2/kyc` };
+export const KycLevel = {
+  Link: 10,
+  Sell: 20,
+};
 
 export enum AccountType {
   PERSONAL = 'Personal',
