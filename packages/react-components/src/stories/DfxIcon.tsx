@@ -1,5 +1,13 @@
 import { IconContext, IconType } from 'react-icons';
-import { FaCircle, FaRegCircle, FaUserCog, FaFileAlt, FaTelegramPlane, FaHourglassHalf } from 'react-icons/fa';
+import {
+  FaCircle,
+  FaRegCircle,
+  FaUserCog,
+  FaFileAlt,
+  FaTelegramPlane,
+  FaHourglassHalf,
+  FaUserCheck,
+} from 'react-icons/fa';
 import {
   MdContentCopy,
   MdArrowBackIos,
@@ -83,6 +91,7 @@ export enum IconVariant {
   CIRCLE_OUTLINE = 'CIRCLE_OUTLINE',
   USER_DATA = 'USER_DATA',
   LOADING = 'LOADING',
+  KYC = 'KYC',
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
@@ -129,6 +138,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.USER_DATA]: <DfxUserData />,
   [IconVariant.TELEGRAM]: <FaTelegramPlane />,
   [IconVariant.LOADING]: <FaHourglassHalf />,
+  [IconVariant.KYC]: <FaUserCheck />,
 };
 
 export enum IconSize {

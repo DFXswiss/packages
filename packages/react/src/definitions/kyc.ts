@@ -1,4 +1,5 @@
 import { Country } from './country';
+import { Language } from './language';
 
 export const KycUrl = { setData: 'kyc/data', base: `${process.env.REACT_APP_API_URL}/v2/kyc` };
 export const KycLevel = {
@@ -69,6 +70,7 @@ export interface KycInfo {
   kycLevel: number;
   tradingLimit: TradingLimit;
   twoFactorEnabled: boolean;
+  language: Language;
   kycSteps: KycStep[];
 }
 
