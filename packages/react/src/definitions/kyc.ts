@@ -1,7 +1,11 @@
 import { Country } from './country';
 import { Language } from './language';
 
-export const KycUrl = { setData: 'kyc/data', base: `${process.env.REACT_APP_API_URL}/v2/kyc` };
+export const KycUrl = {
+  setData: 'kyc/data',
+  base: `${process.env.REACT_APP_API_URL}/v2/kyc`,
+  tfa: `${process.env.REACT_APP_API_URL}/v2/kyc/2fa`,
+};
 export const KycLevel = {
   Link: 10,
   Sell: 20,
@@ -127,6 +131,10 @@ export interface KycStepSession extends KycStepBase {
   session?: KycSessionInfo;
 }
 
+export interface KycResult {
+  status: KycStepStatus;
+}
+
 // personal data
 export interface KycContactData {
   mail: string;
@@ -184,8 +192,10 @@ export interface KycFinancialQuestions extends KycFinancialResponses {
   questions: KycFinancialQuestion[];
 }
 
-export interface KycResult {
-  status: KycStepStatus;
+// 2FA
+export interface TfaSetup {
+  secret: string;
+  uri: string;
 }
 
 // helpers

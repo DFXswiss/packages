@@ -50,6 +50,7 @@ export {
   KycStepBase,
   KycStep,
   KycStepSession,
+  KycResult,
   KycContactData,
   KycAddress,
   KycPersonalData,
@@ -59,7 +60,7 @@ export {
   KycFinancialOption,
   KycFinancialQuestion,
   KycFinancialQuestions,
-  KycResult,
+  TfaSetup,
   isStepDone,
 } from './definitions/kyc';
 export { Sell, SellPaymentInfo } from './definitions/sell';

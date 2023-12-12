@@ -11,6 +11,7 @@ import {
   KycStepName,
   KycStepType,
   KycUrl,
+  TfaSetup,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 import { Country } from '../definitions/country';
@@ -38,6 +39,11 @@ export interface KycInterface {
   setPersonalData: (code: string, url: string, data: KycPersonalData) => Promise<KycResult>;
   getFinancialData: (code: string, url: string, lang?: string) => Promise<KycFinancialQuestions>;
   setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycResult>;
+
+  // 2fa
+  setup2fa: (code: string) => Promise<TfaSetup>;
+  delete2fa: (code: string) => Promise<void>;
+  verify2fa: (code: string, token: string) => Promise<void>;
 }
 
 export function useKyc(): KycInterface {
@@ -87,6 +93,18 @@ export function useKyc(): KycInterface {
     return call({ url, code, method: 'PUT', data });
   }
 
+  async function setup2fa(code: string): Promise<TfaSetup> {
+    return call({ url: KycUrl.tfa, code, method: 'POST' });
+  }
+
+  async function delete2fa(code: string): Promise<void> {
+    return call({ url: KycUrl.tfa, code, method: 'DELETE' });
+  }
+
+  async function verify2fa(code: string, token: string): Promise<void> {
+    return call({ url: `${KycUrl.tfa}/verify`, code, method: 'POST', data: { token } });
+  }
+
   // --- HELPER METHODS --- //
   async function call<T>(config: CallConfig): Promise<T> {
     return fetch(config.url, buildInit(config)).then((response) => {
@@ -121,6 +139,9 @@ export function useKyc(): KycInterface {
       setPersonalData,
       getFinancialData,
       setFinancialData,
+      setup2fa,
+      delete2fa,
+      verify2fa,
     }),
     [callApi],
   );
