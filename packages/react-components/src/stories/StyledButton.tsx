@@ -102,7 +102,7 @@ const WIDTH_MAPS: Record<StyledButtonWidth, string> = {
 };
 
 export default function StyledButton({
-  type,
+  type = 'button',
   className,
   label,
   onClick,
