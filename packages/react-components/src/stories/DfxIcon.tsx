@@ -7,6 +7,8 @@ import {
   FaTelegramPlane,
   FaHourglassHalf,
   FaUserCheck,
+  FaApple,
+  FaGooglePlay,
 } from 'react-icons/fa';
 import {
   MdContentCopy,
@@ -92,6 +94,8 @@ export enum IconVariant {
   USER_DATA = 'USER_DATA',
   LOADING = 'LOADING',
   KYC = 'KYC',
+  APPLE = 'APPLE',
+  GOOGLE_PLAY = 'GOOGLE_PLAY',
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
@@ -139,6 +143,8 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.TELEGRAM]: <FaTelegramPlane />,
   [IconVariant.LOADING]: <FaHourglassHalf />,
   [IconVariant.KYC]: <FaUserCheck />,
+  [IconVariant.APPLE]: <FaApple />,
+  [IconVariant.GOOGLE_PLAY]: <FaGooglePlay />,
 };
 
 export enum IconSize {
