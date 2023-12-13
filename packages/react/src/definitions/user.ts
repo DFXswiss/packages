@@ -1,4 +1,4 @@
-import { KycState, KycStatus } from './kyc';
+import { KycState, KycStatus, TradingLimit } from './kyc';
 import { Language } from './language';
 
 export const UserUrl = { get: 'user/detail', change: 'user', discountCodes: 'user/discountCodes' };
@@ -16,7 +16,7 @@ export interface User {
   kycState: KycState;
   kycStatus: KycStatus;
   kycLevel: number;
-  tradingLimit: UserTradingLimit;
+  tradingLimit: TradingLimit;
   kycHash: string;
   status: UserStatus;
 
@@ -26,9 +26,4 @@ export interface User {
   refVolume: number;
   refCredit: number;
   paidRefCredit: number;
-}
-
-export interface UserTradingLimit {
-  limit: number;
-  period: 'Day' | 'Year';
 }

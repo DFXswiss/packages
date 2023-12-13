@@ -9,6 +9,7 @@ export const KycUrl = {
 export const KycLevel = {
   Link: 10,
   Sell: 20,
+  Completed: 50,
 };
 
 export enum AccountType {

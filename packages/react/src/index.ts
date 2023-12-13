@@ -65,7 +65,7 @@ export {
 } from './definitions/kyc';
 export { Sell, SellPaymentInfo } from './definitions/sell';
 export { Session } from './definitions/session';
-export { User, UserTradingLimit, UserStatus } from './definitions/user';
+export { User, UserStatus } from './definitions/user';
 export { LnurlAuth, LnurlAuthStatus } from './definitions/auth';
 export { TransactionError } from './definitions/transaction';
 
