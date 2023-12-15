@@ -17,5 +17,8 @@ export function useBuy(): BuyInterface {
     return call<Buy>({ url: BuyUrl.receive, method: 'PUT', data: info });
   }
 
-  return useMemo(() => ({ receiveFor, currencies: currencies?.filter((c) => c.sellable) }), [call, currencies]);
+  return useMemo(
+    () => ({ receiveFor, currencies: currencies?.filter((c) => c.sellable || c.cardSellable) }),
+    [call, currencies],
+  );
 }
