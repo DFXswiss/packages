@@ -6,6 +6,7 @@ export interface AuthInterface {
   getSignMessage: (address: string) => Promise<string>;
   signIn: (address: string, signature: string, discountCode?: string) => Promise<SignIn>;
   signUp: (address: string, signature: string, wallet?: string, ref?: string, discountCode?: string) => Promise<SignIn>;
+  signInWithMail: (mail: string) => Promise<void>;
   createLnurlAuth: () => Promise<LnurlAuth>;
   getLnurlAuth: (k1: string) => Promise<LnurlAuthStatus>;
 }
@@ -53,6 +54,10 @@ export function useAuth(): AuthInterface {
     return call({ url: AuthUrl.signUp, method: 'POST', data });
   }
 
+  async function signInWithMail(mail: string): Promise<void> {
+    return call({ url: AuthUrl.signInWithMail, method: 'POST', data: { mail } });
+  }
+
   async function createLnurlAuth(): Promise<LnurlAuth> {
     return call({ url: AuthUrl.lnurl, method: 'POST' });
   }
@@ -60,5 +65,5 @@ export function useAuth(): AuthInterface {
     return call({ url: `${AuthUrl.lnurlStatus}?k1=${k1}`, method: 'GET' });
   }
 
-  return useMemo(() => ({ getSignMessage, signIn, signUp, createLnurlAuth, getLnurlAuth }), [call]);
+  return useMemo(() => ({ getSignMessage, signIn, signUp, signInWithMail, createLnurlAuth, getLnurlAuth }), [call]);
 }

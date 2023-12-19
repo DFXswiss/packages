@@ -15,6 +15,7 @@ import {
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 import { Country } from '../definitions/country';
+import { Utils } from '../utils';
 
 export interface CallConfig {
   url: string;
@@ -31,7 +32,7 @@ export interface KycInterface {
   // process
   getKycInfo: (code: string) => Promise<KycInfo>;
   continueKyc: (code: string, autoStep?: boolean) => Promise<KycSession>;
-  startStep: (code: string, name: KycStepName, type?: KycStepType) => Promise<KycSession>;
+  startStep: (code: string, name: KycStepName, type?: KycStepType, sequence?: number) => Promise<KycSession>;
   getCountries: (code: string) => Promise<Country[]>;
 
   // updates
@@ -65,9 +66,17 @@ export function useKyc(): KycInterface {
     return call({ url, code, method: 'PUT' });
   }
 
-  async function startStep(code: string, name: KycStepName, type?: KycStepType): Promise<KycSession> {
-    let url = `${KycUrl.base}/${name}`;
-    type && (url += `?type=${type}`);
+  async function startStep(
+    code: string,
+    name: KycStepName,
+    type?: KycStepType,
+    sequence?: number,
+  ): Promise<KycSession> {
+    const params = new URLSearchParams();
+    type && params.set('type', type);
+    sequence && params.set('sequence', `${sequence}`);
+
+    const url = `${KycUrl.base}/${name}?${params.toString()}`;
 
     return call({ url, code, method: 'GET' });
   }
