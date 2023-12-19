@@ -74,7 +74,7 @@ export function useKyc(): KycInterface {
   ): Promise<KycSession> {
     const params = new URLSearchParams();
     type && params.set('type', type);
-    sequence && params.set('sequence', `${sequence}`);
+    sequence != null && params.set('sequence', `${sequence}`);
 
     const url = `${KycUrl.base}/${name}?${params.toString()}`;
 
