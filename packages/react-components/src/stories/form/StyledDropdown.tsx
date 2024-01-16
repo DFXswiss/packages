@@ -45,7 +45,7 @@ export default function StyledDropdown<T>({
 
   const [isOpen, setIsOpen] = useState(false);
 
-  let buttonClasses = 'flex justify-between border border-dfxGray-500 px-4 py-3 shadow-sm w-full';
+  let buttonClasses = 'flex justify-between border border-dfxGray-500 px-4 py-2 shadow-sm w-full h-[58px]';
 
   isOpen ? (buttonClasses += ' rounded-x rounded-t bg-dfxGray-400/50') : (buttonClasses += ' rounded');
 
@@ -100,7 +100,7 @@ export default function StyledDropdown<T>({
             disabled={isDisabled}
             {...props}
           >
-            <div className="flex flex-row gap-2 items-center w-full">
+            <div className="flex flex-row gap-2 items-center w-full h-full">
               {value && assetIconFunc && <DfxAssetIcon asset={assetIconFunc(value)} />}
               <div className="flex flex-col gap-1 justify-between text-left w-full">
                 {value === undefined ? (

@@ -24,12 +24,12 @@ export default function StyledModalButton({
     <StyledVerticalStack gap={1} marginY={4}>
       <label className="text-dfxBlue-800 text-base font-semibold pl-4 text-start">{label}</label>
       <button
-        className="flex justify-between border border-dfxGray-400 text-base font-normal rounded-md px-4 py-2 shadow-sm w-full"
+        className="flex justify-between border border-dfxGray-400 text-base font-normal rounded-md px-4 py-2 shadow-sm w-full h-[58px]"
         onClick={onClick}
         onBlur={onBlur}
         {...props}
       >
-        <div className="flex flex-col justify-between text-left gap-1">
+        <div className="h-full flex flex-col justify-center text-left gap-1">
           {value ? (
             <>
               {description && <span className="text-dfxGray-800 text-xs h-min leading-none">{description}</span>}
@@ -38,7 +38,7 @@ export default function StyledModalButton({
               </span>
             </>
           ) : (
-            <span className="text-dfxGray-600 py-1">{placeholder}</span>
+            <span className="text-dfxGray-600">{placeholder}</span>
           )}
         </div>
         <div className="place-self-center">
