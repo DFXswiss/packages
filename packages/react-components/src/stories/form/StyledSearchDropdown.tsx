@@ -112,7 +112,7 @@ function StyledSearchDropdown<T>({
               <div className="relative cursor-pointer h-[58px]">
                 {!isDisabled && (
                   <div
-                    className="absolute right-3 flex justify-center items-center h-full"
+                    className="absolute right-[17px] flex justify-center items-center h-full"
                     onClick={() => setIsOpen((o) => !o)}
                   >
                     <DfxIcon icon={isOpen ? IconVariant.EXPAND_LESS : IconVariant.EXPAND_MORE} size={IconSize.LG} />
@@ -126,11 +126,7 @@ function StyledSearchDropdown<T>({
                   {!largeInput && assetIconFunc && <DfxAssetIcon asset={assetIconFunc(value)} />}
                   <div className="flex flex-col gap-1 justify-between text-left w-full h-full">
                     <>
-                      <span
-                        className={`text-dfxBlue-800 leading-none font-semibold flex justify-between h-full ${
-                          !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
-                        }`}
-                      >
+                      <span className={`text-dfxBlue-800 leading-none font-semibold flex justify-between h-full`}>
                         <input
                           ref={inputRef}
                           className={largeInput ? inputClasses : ''}
@@ -180,7 +176,11 @@ function StyledSearchDropdown<T>({
                     className="flex flex-col gap-2 justify-between text-left w-full hover:bg-dfxGray-400/50 px-3.5 py-2.5"
                   >
                     <div className="flex flex-row gap-2 items-center w-full">
-                      {assetIconFunc && <DfxAssetIcon asset={assetIconFunc(item)} />}
+                      {assetIconFunc && (
+                        <div>
+                          <DfxAssetIcon asset={assetIconFunc(item)} />
+                        </div>
+                      )}
                       <div className="flex flex-col gap-1 justify-between text-left w-full">
                         <span
                           className={`text-dfxBlue-800 leading-none font-semibold flex justify-between ${
