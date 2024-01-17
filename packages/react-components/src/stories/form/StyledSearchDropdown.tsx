@@ -94,7 +94,8 @@ function StyledSearchDropdown<T>({
     <Controller
       control={control}
       render={({ field: { onChange, onBlur, value } }) => {
-        const largeInput = (inputRef.current === document.activeElement && isOpen) || !value;
+        const isFocused = inputRef.current === document.activeElement && isOpen;
+        const largeInput = isFocused || !value;
         !largeInput && (inputClasses += ' ');
 
         return (
@@ -123,13 +124,17 @@ function StyledSearchDropdown<T>({
                   className={`flex flex-row gap-2 items-center w-full h-full ${largeInput ? '' : inputClasses}`}
                   onClick={() => inputRef.current?.focus()}
                 >
-                  {!largeInput && assetIconFunc && <DfxAssetIcon asset={assetIconFunc(value)} />}
-                  <div className="flex flex-col gap-1 justify-between text-left w-full h-full">
-                    <>
+                  {!largeInput && assetIconFunc && (
+                    <div>
+                      <DfxAssetIcon asset={assetIconFunc(value)} />
+                    </div>
+                  )}
+                  <div className="flex flex-row justify-between items-center w-full h-full">
+                    <div className="flex-1 flex flex-col gap-1 justify-between text-left h-full">
                       <span className={`text-dfxBlue-800 leading-none font-semibold flex justify-between h-full`}>
                         <input
                           ref={inputRef}
-                          className={largeInput ? inputClasses : ''}
+                          className={largeInput ? inputClasses : 'w-full'}
                           type="text"
                           name={autocomplete ?? name}
                           onFocus={() => setIsOpen(true)}
@@ -146,7 +151,6 @@ function StyledSearchDropdown<T>({
                           disabled={isDisabled}
                           {...props}
                         />
-                        {!largeInput && balanceFunc && <p>{balanceFunc(value)}</p>}
                       </span>
                       {!largeInput && descriptionFunc && (
                         <span className="text-dfxGray-800 text-xs h-min leading-none flex justify-between">
@@ -154,7 +158,8 @@ function StyledSearchDropdown<T>({
                           {priceFunc && <p>{priceFunc(value)}</p>}
                         </span>
                       )}
-                    </>
+                    </div>
+                    {!largeInput && balanceFunc && <div className="font-semibold">{balanceFunc(value)}</div>}
                   </div>
                 </div>
               </div>
@@ -181,21 +186,23 @@ function StyledSearchDropdown<T>({
                           <DfxAssetIcon asset={assetIconFunc(item)} />
                         </div>
                       )}
-                      <div className="flex flex-col gap-1 justify-between text-left w-full">
-                        <span
-                          className={`text-dfxBlue-800 leading-none font-semibold flex justify-between ${
-                            !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
-                          }`}
-                        >
-                          {labelFunc(item)}
-                          {balanceFunc && <p>{balanceFunc(item)}</p>}
-                        </span>
-                        {descriptionFunc && (
-                          <span className="text-dfxGray-800 text-xs h-min leading-none flex justify-between">
-                            {descriptionFunc(item)}
-                            {priceFunc && <p>{priceFunc(item)}</p>}
+                      <div className="flex flex-row justify-between items-center w-full h-full text-dfxBlue-800">
+                        <div className="flex flex-col gap-1 justify-between text-left w-full">
+                          <span
+                            className={`leading-none font-semibold flex justify-between ${
+                              !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
+                            }`}
+                          >
+                            {labelFunc(item)}
                           </span>
-                        )}
+                          {descriptionFunc && (
+                            <span className="text-dfxGray-800 text-xs h-min leading-none flex justify-between">
+                              {descriptionFunc(item)}
+                              {priceFunc && <p>{priceFunc(item)}</p>}
+                            </span>
+                          )}
+                        </div>
+                        {balanceFunc && <div className="font-semibold">{balanceFunc(item)}</div>}
                       </div>
                     </div>
                   </button>
