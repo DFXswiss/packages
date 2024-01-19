@@ -174,6 +174,7 @@ function StyledSearchDropdown<T>({
                 {visibleItems.map((item, index) => (
                   <button
                     key={index}
+                    type="button"
                     onClick={() => {
                       onChange(item);
                       setIsOpen(false);

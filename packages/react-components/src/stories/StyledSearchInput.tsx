@@ -9,7 +9,7 @@ export interface StyledSearchInputProps {
 
 const StyledSearchInput = forwardRef<HTMLInputElement, StyledSearchInputProps>(
   ({ placeholder, onChange: emit, noClearButton }: StyledSearchInputProps, ref) => {
-    const [value, setValue] = useState<string>();
+    const [value, setValue] = useState<string>('');
 
     function onChange(search: string) {
       setValue(search);
@@ -24,7 +24,7 @@ const StyledSearchInput = forwardRef<HTMLInputElement, StyledSearchInputProps>(
 
         {!noClearButton && (
           <div className="absolute right-2 top-[9px]">
-            <button onClick={() => onChange('')}>
+            <button type="button" onClick={() => onChange('')}>
               <DfxIcon icon={IconVariant.CLOSE} color={IconColor.DARK_GRAY} size={IconSize.LG} />
             </button>
           </div>

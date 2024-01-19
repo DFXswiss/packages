@@ -24,7 +24,7 @@ function AddTest({ onSubmit }: { onSubmit: (test: TestElement) => void }): JSX.E
   return (
     <Form control={control} errors={errors} onSubmit={handleSubmit(onSubmit)} hasFormElement={false}>
       <StyledInput label="Test" placeholder="put something in" name="test" />
-      <StyledButton label="complete" onClick={handleSubmit(onSubmit)} caps />
+      <StyledButton type="submit" label="complete" onClick={handleSubmit(onSubmit)} caps />
     </Form>
   );
 }

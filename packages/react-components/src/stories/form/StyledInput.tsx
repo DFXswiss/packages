@@ -100,7 +100,9 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
                     buttonLabel.length > 0 ? 'right-3' : ''
                   } flex justify-center items-center h-[3.6rem]`}
                 >
-                  <button onClick={buttonClick}>{buttonLabel}</button>
+                  <button type="button" onClick={buttonClick}>
+                    {buttonLabel}
+                  </button>
                 </div>
               )}
 
