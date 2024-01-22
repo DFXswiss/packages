@@ -9,6 +9,7 @@ import {
   FaUserCheck,
   FaApple,
   FaGooglePlay,
+  FaFileUpload,
 } from 'react-icons/fa';
 import {
   MdContentCopy,
@@ -67,6 +68,7 @@ export enum IconVariant {
   EXPAND_LESS = 'EXPAND_LESS',
   EXPAND_MORE = 'EXPAND_MORE',
   FILE = 'FILE',
+  FILE_UPLOAD = 'FILE_UPLOAD',
   FORWARD = 'FORWARD',
   HELP = 'HELP',
   HOME = 'HOME',
@@ -109,6 +111,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.EXPAND_LESS]: <MdExpandLess />,
   [IconVariant.EXPAND_MORE]: <MdExpandMore />,
   [IconVariant.FILE]: <FaFileAlt />,
+  [IconVariant.FILE_UPLOAD]: <FaFileUpload />,
   [IconVariant.CHECK]: <MdCheck />,
   [IconVariant.CHECKBOX_EMPTY]: <MdOutlineCheckBoxOutlineBlank />,
   [IconVariant.CHECKBOX_CHECKED]: <MdOutlineCheckBox />,

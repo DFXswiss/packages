@@ -45,5 +45,6 @@ export { default as StyledBankAccountListItem } from './stories/form/StyledBankA
 export { default as StyledDropdown } from './stories/form/StyledDropdown';
 export { default as StyledSearchDropdown } from './stories/form/StyledSearchDropdown';
 export { default as StyledInput } from './stories/form/StyledInput';
+export { default as StyledFileUpload } from './stories/form/StyledFileUpload';
 export { default as StyledModalDropdown } from './stories/form/StyledModalDropdown';
 export { default as StyledModalButton } from './stories/form/StyledModalButton';
