@@ -57,13 +57,12 @@ function StyledSearchDropdown<T>({
   const textColor = 'text-dfxBlue-800';
   const textOrErrorColor = error ? 'text-dfxRed-100' : textColor;
 
-  let inputClasses = `cursor-pointer text-base font-normal pl-4 pr-[2.5rem] py-2 w-full bg-white placeholder:text-dfxGray-600 border border-dfxGray-500 outline-2 outline-dfxBlue-400 ${textOrErrorColor}`;
-
-  isOpen && visibleItems.length
-    ? (inputClasses += ' rounded-x rounded-t bg-dfxGray-400/50')
-    : (inputClasses += ' rounded');
+  let inputClasses = `text-base font-normal pl-4 pr-[2.5rem] py-2 w-full placeholder:text-dfxGray-600 border border-dfxGray-500 outline-2 outline-dfxBlue-400 ${textOrErrorColor}`;
+  isOpen && visibleItems.length ? (inputClasses += ' rounded-x rounded-t') : (inputClasses += ' rounded');
 
   const isDisabled = disabled || (items.length <= 1 && !forceEnable);
+
+  !isDisabled && (inputClasses += ' cursor-pointer');
 
   useEffect(() => {
     !isOpen && setSearch(undefined);
@@ -96,7 +95,9 @@ function StyledSearchDropdown<T>({
       render={({ field: { onChange, onBlur, value } }) => {
         const isFocused = inputRef.current === document.activeElement && isOpen;
         const largeInput = isFocused || !value;
-        !largeInput && (inputClasses += ' ');
+
+        const backgroundColor = isDisabled || (isOpen && !isFocused) ? ' bg-dfxGray-400/50' : ' bg-white';
+        inputClasses += backgroundColor;
 
         return (
           <div className={`relative ${full ? 'w-full' : ''}`}>
@@ -110,7 +111,7 @@ function StyledSearchDropdown<T>({
                   {label}
                 </label>
               )}
-              <div className="relative cursor-pointer h-[58px]">
+              <div className={`relative h-[58px] ${isDisabled ? '' : 'cursor-pointer'}`}>
                 {!isDisabled && (
                   <div
                     className="absolute right-[17px] flex justify-center items-center h-full"
@@ -131,10 +132,11 @@ function StyledSearchDropdown<T>({
                   )}
                   <div className="flex flex-row justify-between items-center w-full h-full">
                     <div className="flex-1 flex flex-col gap-1 justify-between text-left h-full">
-                      <span className={`text-dfxBlue-800 leading-none font-semibold flex justify-between h-full`}>
+                      <span className={`${textOrErrorColor} leading-none font-semibold flex justify-between h-full`}>
                         <input
                           ref={inputRef}
-                          className={largeInput ? inputClasses : 'w-full'}
+                          className={largeInput ? inputClasses : `w-full`}
+                          style={{ backgroundColor: largeInput ? '' : 'transparent' }}
                           type="text"
                           name={autocomplete ?? name}
                           onFocus={() => setIsOpen(true)}
@@ -163,7 +165,6 @@ function StyledSearchDropdown<T>({
                   </div>
                 </div>
               </div>
-              {error && <p className="text-start text-sm text-dfxRed-100 pl-3">{error?.message}</p>}
             </StyledVerticalStack>
 
             {isOpen && visibleItems.length > 0 && (
@@ -210,6 +211,8 @@ function StyledSearchDropdown<T>({
                 ))}
               </div>
             )}
+
+            {error && <p className="text-start text-sm text-dfxRed-100 pl-3">{error?.message}</p>}
           </div>
         );
       }}

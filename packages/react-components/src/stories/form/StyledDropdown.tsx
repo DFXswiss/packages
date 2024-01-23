@@ -38,6 +38,7 @@ export default function StyledDropdown<T>({
   assetIconFunc,
   rootRef,
   forceEnable,
+  error,
   ...props
 }: StyledDropdownProps<T>) {
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -108,7 +109,9 @@ export default function StyledDropdown<T>({
                 ) : (
                   <>
                     <span
-                      className={`text-dfxBlue-800 leading-none font-semibold flex justify-between ${
+                      className={`${
+                        error ? 'text-dfxRed-100' : 'text-dfxBlue-800'
+                      } leading-none font-semibold flex justify-between ${
                         !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
                       }`}
                     >
@@ -132,6 +135,7 @@ export default function StyledDropdown<T>({
               </div>
             )}
           </button>
+
           {isOpen && (
             <div
               ref={dropdownRef}
@@ -170,6 +174,8 @@ export default function StyledDropdown<T>({
               ))}
             </div>
           )}
+
+          {error && <p className="text-start text-sm text-dfxRed-100 pl-3">{error?.message}</p>}
         </div>
       )}
       name={name}
