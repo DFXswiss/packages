@@ -61,6 +61,10 @@ export {
   KycFinancialQuestion,
   KycFinancialQuestions,
   TfaSetup,
+  Limit,
+  InvestmentDate,
+  FundOrigin,
+  LimitRequest,
   isStepDone,
 } from './definitions/kyc';
 export { Sell, SellPaymentInfo } from './definitions/sell';

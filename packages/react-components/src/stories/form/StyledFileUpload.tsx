@@ -65,7 +65,7 @@ const Content = forwardRef<HTMLInputElement, StyledFileUploadContentProps>(
 
     const textColor = darkTheme ? 'text-white' : 'text-dfxBlue-800';
     const backgroundColor = darkTheme ? 'bg-white bg-opacity-5' : 'bg-white';
-    const placeholderColor = darkTheme ? 'placeholder:text-dfxGray-800' : 'placeholder:text-dfxGray-600';
+    const placeholderColor = darkTheme ? 'text-dfxGray-800' : 'text-dfxGray-600';
     const borderColor = darkTheme ? 'border-none' : 'border border-dfxGray-500';
     const outlineColor = darkTheme ? 'outline-none' : 'outline-2 outline-dfxBlue-400';
 
@@ -89,13 +89,13 @@ const Content = forwardRef<HTMLInputElement, StyledFileUploadContentProps>(
           className={
             `text-base font-normal rounded-md p-4 ${small ? 'w-24' : 'w-full'} ${
               value ? 'border-solid' : 'border-dashed'
-            } ` + [textOrErrorColor, backgroundColor, placeholderColor, borderColor, outlineColor].join(' ')
+            } ` + [textOrErrorColor, backgroundColor, borderColor, outlineColor].join(' ')
           }
         >
           <input ref={ref} {...getInputProps()} />
           <div className="flex flex-row gap-2 items-center">
             <DfxIcon icon={IconVariant.FILE_UPLOAD} color={darkTheme ? IconColor.WHITE : IconColor.BLUE} />
-            <div>{value?.name ?? placeholder}</div>
+            <div className={value?.name ? undefined : placeholderColor}>{value?.name ?? placeholder}</div>
             {buttonLabel && (
               <StyledButton
                 className="rounded-sm ml-auto mr-0"

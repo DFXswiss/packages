@@ -11,6 +11,7 @@ import {
   KycStepName,
   KycStepType,
   KycUrl,
+  LimitRequest,
   TfaSetup,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
@@ -45,6 +46,9 @@ export interface KycInterface {
   setup2fa: (code: string) => Promise<TfaSetup>;
   delete2fa: (code: string) => Promise<void>;
   verify2fa: (code: string, token: string) => Promise<void>;
+
+  // limit
+  increaseLimit: (code: string, request: LimitRequest) => Promise<void>;
 }
 
 export function useKyc(): KycInterface {
@@ -114,6 +118,10 @@ export function useKyc(): KycInterface {
     return call({ url: `${KycUrl.tfa}/verify`, code, method: 'POST', data: { token } });
   }
 
+  async function increaseLimit(code: string, request: LimitRequest): Promise<void> {
+    return call({ url: KycUrl.limit, code, method: 'POST', data: request });
+  }
+
   // --- HELPER METHODS --- //
   async function call<T>(config: CallConfig): Promise<T> {
     return fetch(config.url, buildInit(config)).then((response) => {
@@ -151,6 +159,7 @@ export function useKyc(): KycInterface {
       setup2fa,
       delete2fa,
       verify2fa,
+      increaseLimit,
     }),
     [callApi],
   );

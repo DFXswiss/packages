@@ -40,6 +40,8 @@ import {
   MdSearch,
   MdHome,
   MdMenu,
+  MdNorth,
+  MdSouth,
 } from 'react-icons/md';
 import { VscArrowSwap } from 'react-icons/vsc';
 import { ReactElement, useContext } from 'react';
@@ -54,6 +56,8 @@ export enum IconVariant {
   ACCOUNT = 'ACCOUNT',
   ARROW_RIGHT = 'ARROW_RIGHT',
   ARROW_LEFT = 'ARROW_LEFT',
+  ARROW_UP = 'ARROW_UP',
+  ARROW_DOWN = 'ARROW_DOWN',
   BACK = 'BACK',
   BANK = 'BANK',
   CANCEL = 'CANCEL',
@@ -121,6 +125,8 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.INFO]: <MdInfo />,
   [IconVariant.ARROW_LEFT]: <MdWest />,
   [IconVariant.ARROW_RIGHT]: <MdEast />,
+  [IconVariant.ARROW_UP]: <MdNorth />,
+  [IconVariant.ARROW_DOWN]: <MdSouth />,
   [IconVariant.CLOSE]: <MdClose />,
   [IconVariant.CANCEL]: <MdOutlineCancel />,
   [IconVariant.SETTINGS]: <MdSettings />,
