@@ -16,7 +16,6 @@ import {
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 import { Country } from '../definitions/country';
-import { Utils } from '../utils';
 
 export interface CallConfig {
   url: string;
@@ -44,7 +43,6 @@ export interface KycInterface {
 
   // 2fa
   setup2fa: (code: string) => Promise<TfaSetup>;
-  delete2fa: (code: string) => Promise<void>;
   verify2fa: (code: string, token: string) => Promise<void>;
 
   // limit
@@ -110,10 +108,6 @@ export function useKyc(): KycInterface {
     return call({ url: KycUrl.tfa, code, method: 'POST' });
   }
 
-  async function delete2fa(code: string): Promise<void> {
-    return call({ url: KycUrl.tfa, code, method: 'DELETE' });
-  }
-
   async function verify2fa(code: string, token: string): Promise<void> {
     return call({ url: `${KycUrl.tfa}/verify`, code, method: 'POST', data: { token } });
   }
@@ -157,7 +151,6 @@ export function useKyc(): KycInterface {
       getFinancialData,
       setFinancialData,
       setup2fa,
-      delete2fa,
       verify2fa,
       increaseLimit,
     }),

@@ -42,6 +42,7 @@ import {
   MdMenu,
   MdNorth,
   MdSouth,
+  MdRepeat,
 } from 'react-icons/md';
 import { VscArrowSwap } from 'react-icons/vsc';
 import { ReactElement, useContext } from 'react';
@@ -102,6 +103,7 @@ export enum IconVariant {
   KYC = 'KYC',
   APPLE = 'APPLE',
   GOOGLE_PLAY = 'GOOGLE_PLAY',
+  REPEAT = 'REPEAT',
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
@@ -154,6 +156,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.KYC]: <FaUserCheck />,
   [IconVariant.APPLE]: <FaApple />,
   [IconVariant.GOOGLE_PLAY]: <FaGooglePlay />,
+  [IconVariant.REPEAT]: <MdRepeat />,
 };
 
 export enum IconSize {
