@@ -6,6 +6,7 @@ export const BuyUrl = { receive: 'buy/paymentInfos' };
 
 export enum BuyPaymentMethod {
   BANK = 'Bank',
+  INSTANT = 'Instant',
   CARD = 'Card',
 }
 
