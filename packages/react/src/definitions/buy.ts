@@ -47,4 +47,5 @@ export interface BuyPaymentInfo {
   asset: Asset;
   targetAmount?: number;
   paymentMethod?: BuyPaymentMethod;
+  externalTransactionId?: string;
 }

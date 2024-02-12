@@ -33,4 +33,5 @@ export interface SellPaymentInfo {
   amount?: number;
   currency: Fiat;
   targetAmount?: number;
+  externalTransactionId?: string;
 }
