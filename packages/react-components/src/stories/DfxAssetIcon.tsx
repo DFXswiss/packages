@@ -3478,6 +3478,7 @@ function DfxAssetIconXMR({ forceColor }: BaseAssetIconProps) {
 
 export function DfxAssetIconZCHF({ forceColor }: BaseAssetIconProps) {
   const sizeContext = useContext(SizeContext);
+  const cls = `cls-${forceColor?.replace('#', '')}`;
   return (
     <svg
       width={SIZE_MAPS[sizeContext]}
@@ -3488,51 +3489,51 @@ export function DfxAssetIconZCHF({ forceColor }: BaseAssetIconProps) {
     >
       <defs>
         <style>
-          {`.cls-2{fill:${forceColor ?? '#f6f8f9'};}.cls-3{fill:${forceColor ?? '#6a7979'};}.cls-4{fill:${
+          {`.${cls}-2{fill:${forceColor ?? '#f6f8f9'};}.${cls}-3{fill:${forceColor ?? '#6a7979'};}.${cls}-4{fill:${
             forceColor ?? '#040404'
-          };}.cls-6{fill:${forceColor ?? '#e3e2ea'};}.cls-7{fill:${forceColor ?? '#e8e9ea'};}.cls-8{fill:${
+          };}.${cls}-6{fill:${forceColor ?? '#e3e2ea'};}.${cls}-7{fill:${forceColor ?? '#e8e9ea'};}.${cls}-8{fill:${
             forceColor ?? '#fff'
-          };}.cls-9{fill:${forceColor ?? '#f1f1f4'};}.cls-11{fill:${forceColor ?? '#fbfbfc'};}.cls-12{fill:${
+          };}.${cls}-9{fill:${forceColor ?? '#f1f1f4'};}.${cls}-11{fill:${forceColor ?? '#fbfbfc'};}.${cls}-12{fill:${
             forceColor ?? '#e5e6f0'
-          };}.cls-13{fill:${forceColor ? '#ffffff' : '#993c4d'};}.cls-15{fill:${
+          };}.${cls}-13{fill:${forceColor ? '#ffffff' : '#993c4d'};}.${cls}-15{fill:${
             forceColor ? '#ffffff' : '#b75868'
-          };}.cls-16{fill:${forceColor ?? '#b8b8d2'};}.cls-18{fill:${forceColor ?? '#c2c5c9'};}.cls-19{fill:${
+          };}.${cls}-16{fill:${forceColor ?? '#b8b8d2'};}.${cls}-18{fill:${forceColor ?? '#c2c5c9'};}.${cls}-19{fill:${
             forceColor ? '#ffffff' : '#913648'
-          };}.cls-20{fill:${forceColor ?? '#babad4'};}.cls-23{fill:${forceColor ?? '#8d8f92'};}.cls-25{fill:${
+          };}.${cls}-20{fill:${forceColor ?? '#babad4'};}.${cls}-23{fill:${forceColor ?? '#8d8f92'};}.${cls}-25{fill:${
             forceColor ?? '#313c3d'
-          };}.cls-26{fill:${forceColor ? '#ffffff' : '#8d3748'};}.cls-27{fill:${
+          };}.${cls}-26{fill:${forceColor ? '#ffffff' : '#8d3748'};}.${cls}-27{fill:${
             forceColor ?? '#cdced1'
-          };}.cls-28{fill:${forceColor ?? '#b1b5b8'};}.cls-32{fill:${forceColor ?? '#d8d8db'};}.cls-33{fill:${
+          };}.${cls}-28{fill:${forceColor ?? '#b1b5b8'};}.${cls}-32{fill:${forceColor ?? '#d8d8db'};}.${cls}-33{fill:${
             forceColor ?? '#bbbbc2'
-          };}.cls-35{fill:${forceColor ?? '#c7c8cb'};}.cls-36{fill:${forceColor ?? '#dcdbe0'};}.cls-37{fill:${
+          };}.${cls}-35{fill:${forceColor ?? '#c7c8cb'};}.${cls}-36{fill:${forceColor ?? '#dcdbe0'};}.${cls}-37{fill:${
             forceColor ?? '#dbdadf'
-          };}.cls-38{fill:${forceColor ?? '#d3d3d6'};}.cls-39{fill:${forceColor ?? '#c8cacf'};}.cls-40{fill:${
+          };}.${cls}-38{fill:${forceColor ?? '#d3d3d6'};}.${cls}-39{fill:${forceColor ?? '#c8cacf'};}.${cls}-40{fill:${
             forceColor ?? '#d5d7d9'
-          };}.cls-41{fill:${forceColor ?? '#172222'};}.cls-44{fill:${forceColor ?? '#1e292a'};}.cls-45{fill:${
+          };}.${cls}-41{fill:${forceColor ?? '#172222'};}.${cls}-44{fill:${forceColor ?? '#1e292a'};}.${cls}-45{fill:${
             forceColor ?? '#131919'
-          };}.cls-47{fill:${forceColor ?? '#43524e'};}.cls-48{fill:${forceColor ?? '#434f52'};}.cls-49{fill:${
+          };}.${cls}-47{fill:${forceColor ?? '#43524e'};}.${cls}-48{fill:${forceColor ?? '#434f52'};}.${cls}-49{fill:${
             forceColor ?? '#090a0a'
-          };}.cls-50{fill:${forceColor ?? '#080808'};}.cls-52{fill:${forceColor ?? '#1c252e'};}.cls-54{fill:${
+          };}.${cls}-50{fill:${forceColor ?? '#080808'};}.${cls}-52{fill:${forceColor ?? '#1c252e'};}.${cls}-54{fill:${
             forceColor ?? '#374543'
-          };}.cls-56{fill:${forceColor ?? '#445150'};}.cls-57{fill:${forceColor ?? '#0a0a0a'};}.cls-58{fill:${
+          };}.${cls}-56{fill:${forceColor ?? '#445150'};}.${cls}-57{fill:${forceColor ?? '#0a0a0a'};}.${cls}-58{fill:${
             forceColor ?? '#707980'
-          };}.cls-60{fill:${forceColor ?? '#565f62'};}.cls-61{fill:${forceColor ?? '#293334'};}.cls-62{fill:${
+          };}.${cls}-60{fill:${forceColor ?? '#565f62'};}.${cls}-61{fill:${forceColor ?? '#293334'};}.${cls}-62{fill:${
             forceColor ?? '#263234'
-          };}.cls-63{fill:${forceColor ?? '#2e403b'};}.cls-65{fill:${forceColor ?? '#591e29'};}.cls-66{fill:${
+          };}.${cls}-63{fill:${forceColor ?? '#2e403b'};}.${cls}-65{fill:${forceColor ?? '#591e29'};}.${cls}-66{fill:${
             forceColor ?? '#828990'
-          };}.cls-67{fill:${forceColor ?? '#4d5856'};}.cls-68{fill:${forceColor ?? '#757b83'};}.cls-69{fill:${
+          };}.${cls}-67{fill:${forceColor ?? '#4d5856'};}.${cls}-68{fill:${forceColor ?? '#757b83'};}.${cls}-69{fill:${
             forceColor ?? '#4e6360'
           };}`}
         </style>
       </defs>
-      <path d="M100.5 0h-6.28v7.54h6.28V0Zm7.54 0h-7.54v7.54h7.54V0Z" className="cls-50" />
-      <path d="M115.57 0h-7.54v7.54h7.54V0Zm7.54 0h-7.54v7.54h7.54V0Z" className="cls-50" />
-      <path d="M129.39 0h-6.28v7.54h7.54V0h-1.26Z" className="cls-50" />
-      <path d="M136.93 0h-7.54v7.54h7.54V0Zm7.54 0h-7.54v7.54h7.54V0Z" className="cls-50" />
-      <path d="M152 0h-7.54v7.54H152V0Z" className="cls-50" />
+      <path d="M100.5 0h-6.28v7.54h6.28V0Zm7.54 0h-7.54v7.54h7.54V0Z" className={`${cls}-50`} />
+      <path d="M115.57 0h-7.54v7.54h7.54V0Zm7.54 0h-7.54v7.54h7.54V0Z" className={`${cls}-50`} />
+      <path d="M129.39 0h-6.28v7.54h7.54V0h-1.26Z" className={`${cls}-50`} />
+      <path d="M136.93 0h-7.54v7.54h7.54V0Zm7.54 0h-7.54v7.54h7.54V0Z" className={`${cls}-50`} />
+      <path d="M152 0h-7.54v7.54H152V0Z" className={`${cls}-50`} />
       <path
         d="M158.28 0h-7.54v7.54h7.54V0ZM79.14 7.54H71.6v7.54h7.54V7.54Zm7.54 0h-7.54v7.54h7.54V7.54Z"
-        className="cls-50"
+        className={`${cls}-50`}
       />
       <path
         d="M94.22 7.54h-7.54v7.54h7.54V7.54Z"
@@ -3540,489 +3541,489 @@ export function DfxAssetIconZCHF({ forceColor }: BaseAssetIconProps) {
           fill: forceColor ?? '#1c2525',
         }}
       />
-      <path d="M100.5 7.54h-6.28v7.54h6.28V7.54Zm7.54 0h-7.54v7.54h7.54V7.54Z" className="cls-60" />
-      <path d="M115.57 7.54h-7.54v7.54h7.54V7.54Z" className="cls-3" />
-      <path d="M123.11 7.54h-7.54v7.54h7.54V7.54Z" className="cls-66" />
-      <path d="M129.39 7.54h-6.28v7.54h7.54V7.54h-1.26Z" className="cls-66" />
-      <path d="M136.93 7.54h-7.54v7.54h7.54V7.54Zm7.54 0h-7.54v7.54h7.54V7.54Z" className="cls-66" />
-      <path d="M152 7.54h-7.54v7.54H152V7.54Z" className="cls-66" />
-      <path d="M158.28 7.54h-7.54v7.54h7.54V7.54Z" className="cls-66" />
-      <path d="M165.82 7.54h-7.54v7.54h7.54V7.54Z" className="cls-50" />
-      <path d="M173.36 7.54h-7.54v7.54h7.54V7.54Z" className="cls-4" />
-      <path d="M65.32 15.07h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-50" />
-      <path d="M79.14 15.07H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-60" />
-      <path d="M94.22 15.07h-7.54v7.54h7.54v-7.54Z" className="cls-48" />
-      <path d="M100.5 15.07h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-28" />
-      <path d="M115.57 15.07h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-39" />
-      <path d="M129.39 15.07h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-39" />
-      <path d="M136.93 15.07h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-39" />
-      <path d="M152 15.07h-7.54v7.54H152v-7.54Z" className="cls-39" />
-      <path d="M158.28 15.07h-7.54v7.54h7.54v-7.54Z" className="cls-39" />
-      <path d="M165.82 15.07h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-3" />
-      <path d="M180.9 15.07h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M187.18 15.07h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M65.32 21.36h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-58" />
-      <path d="M79.14 21.36H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-56" />
+      <path d="M100.5 7.54h-6.28v7.54h6.28V7.54Zm7.54 0h-7.54v7.54h7.54V7.54Z" className={`${cls}-60`} />
+      <path d="M115.57 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-3`} />
+      <path d="M123.11 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-66`} />
+      <path d="M129.39 7.54h-6.28v7.54h7.54V7.54h-1.26Z" className={`${cls}-66`} />
+      <path d="M136.93 7.54h-7.54v7.54h7.54V7.54Zm7.54 0h-7.54v7.54h7.54V7.54Z" className={`${cls}-66`} />
+      <path d="M152 7.54h-7.54v7.54H152V7.54Z" className={`${cls}-66`} />
+      <path d="M158.28 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-66`} />
+      <path d="M165.82 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-50`} />
+      <path d="M173.36 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-4`} />
+      <path d="M65.32 15.07h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-50`} />
+      <path d="M79.14 15.07H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-60`} />
+      <path d="M94.22 15.07h-7.54v7.54h7.54v-7.54Z" className={`${cls}-48`} />
+      <path d="M100.5 15.07h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-28`} />
+      <path d="M115.57 15.07h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M129.39 15.07h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-39`} />
+      <path d="M136.93 15.07h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M152 15.07h-7.54v7.54H152v-7.54Z" className={`${cls}-39`} />
+      <path d="M158.28 15.07h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M165.82 15.07h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-3`} />
+      <path d="M180.9 15.07h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M187.18 15.07h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M65.32 21.36h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-58`} />
+      <path d="M79.14 21.36H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-56`} />
       <path
         d="M94.22 21.36h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-39"
+        className={`${cls}-39`}
       />
-      <path d="M115.57 21.36h-7.54v7.54h7.54v-7.54Z" className="cls-50" />
-      <path d="M123.11 21.36h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M129.39 21.36h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-4" />
-      <path d="M136.93 21.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M152 21.36h-7.54v7.54H152v-7.54Z" className="cls-4" />
-      <path d="M158.28 21.36h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
+      <path d="M115.57 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M123.11 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M129.39 21.36h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M136.93 21.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M152 21.36h-7.54v7.54H152v-7.54Z" className={`${cls}-4`} />
+      <path d="M158.28 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
       <path
         d="M165.82 21.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-39"
+        className={`${cls}-39`}
       />
-      <path d="M187.18 21.36h-7.54v7.54h7.54v-7.54Z" className="cls-39" />
-      <path d="M194.72 21.36h-7.54v7.54h7.54v-7.54Z" className="cls-50" />
-      <path d="M202.25 21.36h-7.54v7.54h7.54v-7.54ZM42.71 28.89h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-50" />
-      <path d="M50.25 28.89h-7.54v7.54h7.54v-7.54Z" className="cls-44" />
-      <path d="M65.32 28.89h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-67" />
-      <path d="M79.14 28.89H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-11" />
+      <path d="M187.18 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M194.72 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M202.25 21.36h-7.54v7.54h7.54v-7.54ZM42.71 28.89h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-50`} />
+      <path d="M50.25 28.89h-7.54v7.54h7.54v-7.54Z" className={`${cls}-44`} />
+      <path d="M65.32 28.89h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-67`} />
+      <path d="M79.14 28.89H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-11`} />
       <path
         d="M94.22 28.89h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-57"
+        className={`${cls}-57`}
       />
-      <path d="M115.57 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M129.39 28.89h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-19" />
-      <path d="M136.93 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M152 28.89h-7.54v7.54H152v-7.54Z" className="cls-19" />
-      <path d="M158.28 28.89h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
+      <path d="M115.57 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M129.39 28.89h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-19`} />
+      <path d="M136.93 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M152 28.89h-7.54v7.54H152v-7.54Z" className={`${cls}-19`} />
+      <path d="M158.28 28.89h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
       <path
         d="M165.82 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-4"
+        className={`${cls}-4`}
       />
-      <path d="M187.18 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-39" />
-      <path d="M202.25 28.89h-7.54v7.54h7.54v-7.54Z" className="cls-39" />
-      <path d="M209.79 28.89h-7.54v7.54h7.54v-7.54ZM36.43 36.43h-7.54v7.54h7.54v-7.54Z" className="cls-50" />
-      <path d="M42.71 36.43h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-66" />
-      <path d="M50.25 36.43h-7.54v7.54h7.54v-7.54Z" className="cls-35" />
-      <path d="M65.32 36.43h-7.54v7.54h7.54v-7.54Z" className="cls-38" />
-      <path d="M71.6 36.43h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-11" />
-      <path d="M79.14 36.43H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-57" />
+      <path d="M187.18 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M202.25 28.89h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M209.79 28.89h-7.54v7.54h7.54v-7.54ZM36.43 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M42.71 36.43h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-66`} />
+      <path d="M50.25 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
+      <path d="M65.32 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-38`} />
+      <path d="M71.6 36.43h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-11`} />
+      <path d="M79.14 36.43H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-57`} />
       <path
         d="M94.22 36.43h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-19"
+        className={`${cls}-19`}
       />
-      <path d="M115.57 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M129.39 36.43h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-15" />
-      <path d="M136.93 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M152 36.43h-7.54v7.54H152v-7.54Z" className="cls-15" />
-      <path d="M158.28 36.43h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M165.82 36.43h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M173.36 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M187.18 36.43h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M194.72 36.43h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M202.25 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-39" />
-      <path d="M216.07 36.43h-7.54v7.54h7.54v-7.54ZM28.89 43.97h-7.54v6.28h7.54v-6.28Z" className="cls-50" />
-      <path d="M36.43 43.97h-7.54v6.28h7.54v-6.28Zm6.28 0h-6.28v6.28h7.54v-6.28h-1.26Z" className="cls-35" />
-      <path d="M50.25 43.97h-7.54v6.28h7.54v-6.28Z" className="cls-56" />
-      <path d="M65.32 43.97h-7.54v6.28h7.54v-6.28Z" className="cls-27" />
-      <path d="M71.6 43.97h-6.28v6.28h7.54v-6.28H71.6Z" className="cls-57" />
-      <path d="M79.14 43.97H71.6v6.28h7.54v-6.28Z" className="cls-19" />
-      <path d="M86.68 43.97h-7.54v6.28h7.54v-6.28Z" className="cls-15" />
+      <path d="M115.57 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M129.39 36.43h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-15`} />
+      <path d="M136.93 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M152 36.43h-7.54v7.54H152v-7.54Z" className={`${cls}-15`} />
+      <path d="M158.28 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M165.82 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M173.36 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M187.18 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M194.72 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M202.25 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M216.07 36.43h-7.54v7.54h7.54v-7.54ZM28.89 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-50`} />
+      <path d="M36.43 43.97h-7.54v6.28h7.54v-6.28Zm6.28 0h-6.28v6.28h7.54v-6.28h-1.26Z" className={`${cls}-35`} />
+      <path d="M50.25 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-56`} />
+      <path d="M65.32 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-27`} />
+      <path d="M71.6 43.97h-6.28v6.28h7.54v-6.28H71.6Z" className={`${cls}-57`} />
+      <path d="M79.14 43.97H71.6v6.28h7.54v-6.28Z" className={`${cls}-19`} />
+      <path d="M86.68 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-15`} />
       <path
         d="M94.22 43.97h-7.54v6.28h7.54v-6.28Zm6.28 0h-6.28v6.28h6.28v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 43.97h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z" className="cls-15" />
-      <path d="M129.39 43.97h-6.28v6.28h7.54v-6.28h-1.26Z" className="cls-15" />
-      <path d="M136.93 43.97h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z" className="cls-15" />
-      <path d="M152 43.97h-7.54v6.28H152v-6.28Z" className="cls-15" />
+      <path d="M115.57 43.97h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z" className={`${cls}-15`} />
+      <path d="M129.39 43.97h-6.28v6.28h7.54v-6.28h-1.26Z" className={`${cls}-15`} />
+      <path d="M136.93 43.97h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z" className={`${cls}-15`} />
+      <path d="M152 43.97h-7.54v6.28H152v-6.28Z" className={`${cls}-15`} />
       <path
         d="M158.28 43.97h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M187.18 43.97h-7.54v6.28h7.54v-6.28Z" className="cls-15" />
-      <path d="M194.72 43.97h-7.54v6.28h7.54v-6.28Z" className="cls-19" />
-      <path d="M202.25 43.97h-7.54v6.28h7.54v-6.28Z" className="cls-4" />
-      <path d="M209.79 43.97h-7.54v6.28h7.54v-6.28Z" className="cls-39" />
-      <path d="M216.07 43.97h-7.54v6.28h7.54v-6.28Z" className="cls-39" />
-      <path d="M223.61 43.97h-7.54v6.28h7.54v-6.28ZM28.89 50.25h-7.54v7.54h7.54v-7.54Z" className="cls-50" />
-      <path d="M36.43 50.25h-7.54v7.54h7.54v-7.54Z" className="cls-35" />
+      <path d="M187.18 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-15`} />
+      <path d="M194.72 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-19`} />
+      <path d="M202.25 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-4`} />
+      <path d="M209.79 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-39`} />
+      <path d="M216.07 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-39`} />
+      <path d="M223.61 43.97h-7.54v6.28h7.54v-6.28ZM28.89 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M36.43 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
       <path
         d="M42.71 50.25h-6.28v7.54h7.54v-7.54h-1.26Z"
         style={{
           fill: forceColor ?? '#384544',
         }}
       />
-      <path d="M50.25 50.25h-7.54v7.54h7.54v-7.54Z" className="cls-38" />
-      <path d="M65.32 50.25h-7.54v7.54h7.54v-7.54Z" className="cls-50" />
-      <path d="M71.6 50.25h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-19" />
-      <path d="M79.14 50.25H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M50.25 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-38`} />
+      <path d="M65.32 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M71.6 50.25h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-19`} />
+      <path d="M79.14 50.25H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M94.22 50.25h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 50.25h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 50.25h-7.54v7.54H152v-7.54Z" className="cls-12" />
-      <path d="M158.28 50.25h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
+      <path d="M115.57 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 50.25h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 50.25h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
       <path
         d="M165.82 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M187.18 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M202.25 50.25h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M209.79 50.25h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M216.07 50.25h-7.54v7.54h7.54v-7.54Z" className="cls-39" />
+      <path d="M187.18 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M209.79 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M216.07 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
       <path
         d="M223.61 50.25h-7.54v7.54h7.54v-7.54Z"
         style={{
           fill: forceColor ?? '#313b3c',
         }}
       />
-      <path d="M21.36 57.79h-7.54v7.54h7.54v-7.54Z" className="cls-50" />
-      <path d="M28.89 57.79h-7.54v7.54h7.54v-7.54Z" className="cls-35" />
-      <path d="M36.43 57.79h-7.54v7.54h7.54v-7.54Z" className="cls-69" />
-      <path d="M42.71 57.79h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-37" />
-      <path d="M50.25 57.79h-7.54v7.54h7.54v-7.54Z" className="cls-37" />
-      <path d="M65.32 57.79h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M71.6 57.79h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-15" />
-      <path d="M79.14 57.79H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M21.36 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M28.89 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
+      <path d="M36.43 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-69`} />
+      <path d="M42.71 57.79h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
+      <path d="M50.25 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-37`} />
+      <path d="M65.32 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M71.6 57.79h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 57.79H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M94.22 57.79h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 57.79h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 57.79h-7.54v7.54H152v-7.54Z" className="cls-12" />
-      <path d="M158.28 57.79h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
+      <path d="M115.57 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 57.79h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 57.79h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
       <path
         d="M165.82 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M187.18 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M202.25 57.79h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M209.79 57.79h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M216.07 57.79h-7.54v7.54h7.54v-7.54Z" className="cls-47" />
-      <path d="M223.61 57.79h-7.54v7.54h7.54v-7.54Z" className="cls-6" />
-      <path d="M231.15 57.79h-7.54v7.54h7.54v-7.54Z" className="cls-50" />
-      <path d="M21.36 65.32h-7.54v7.54h7.54v-7.54Z" className="cls-45" />
-      <path d="M28.89 65.32h-7.54v7.54h7.54v-7.54Z" className="cls-35" />
-      <path d="M36.43 65.32h-7.54v7.54h7.54v-7.54Z" className="cls-69" />
-      <path d="M42.71 65.32h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-37" />
-      <path d="M50.25 65.32h-7.54v7.54h7.54v-7.54Z" className="cls-37" />
-      <path d="M65.32 65.32h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-15" />
-      <path d="M79.14 65.32H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M187.18 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M209.79 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M216.07 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-47`} />
+      <path d="M223.61 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-6`} />
+      <path d="M231.15 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M21.36 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-45`} />
+      <path d="M28.89 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
+      <path d="M36.43 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-69`} />
+      <path d="M42.71 65.32h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
+      <path d="M50.25 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-37`} />
+      <path d="M65.32 65.32h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 65.32H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M94.22 65.32h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 65.32h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 65.32h-7.54v7.54H152v-7.54Z" className="cls-12" />
-      <path d="M158.28 65.32h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
+      <path d="M115.57 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 65.32h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 65.32h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
       <path
         d="M165.82 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M187.18 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M202.25 65.32h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M209.79 65.32h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M216.07 65.32h-7.54v7.54h7.54v-7.54Z" className="cls-47" />
-      <path d="M223.61 65.32h-7.54v7.54h7.54v-7.54Z" className="cls-6" />
-      <path d="M231.15 65.32h-7.54v7.54h7.54v-7.54Z" className="cls-49" />
-      <path d="M21.36 72.86h-7.54v7.54h7.54v-7.54Z" className="cls-45" />
-      <path d="M28.89 72.86h-7.54v7.54h7.54v-7.54Z" className="cls-35" />
+      <path d="M187.18 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M209.79 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M216.07 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-47`} />
+      <path d="M223.61 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-6`} />
+      <path d="M231.15 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-49`} />
+      <path d="M21.36 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-45`} />
+      <path d="M28.89 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
       <path
         d="M36.43 72.86h-7.54v7.54h7.54v-7.54Z"
         style={{
           fill: forceColor ?? '#364b47',
         }}
       />
-      <path d="M42.71 72.86h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-37" />
-      <path d="M50.25 72.86h-7.54v7.54h7.54v-7.54Z" className="cls-57" />
-      <path d="M65.32 72.86h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-15" />
-      <path d="M79.14 72.86H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M42.71 72.86h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
+      <path d="M50.25 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-57`} />
+      <path d="M65.32 72.86h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 72.86H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M94.22 72.86h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 72.86h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 72.86h-7.54v7.54H152v-7.54Z" className="cls-12" />
-      <path d="M158.28 72.86h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
+      <path d="M115.57 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 72.86h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 72.86h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
       <path
         d="M165.82 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M187.18 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M202.25 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M216.07 72.86h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M223.61 72.86h-7.54v7.54h7.54v-7.54Z" className="cls-48" />
-      <path d="M231.15 72.86h-7.54v7.54h7.54v-7.54Z" className="cls-27" />
-      <path d="M238.68 72.86h-7.54v7.54h7.54v-7.54ZM13.82 79.14H7.54v7.54h7.54v-7.54h-1.26Z" className="cls-50" />
-      <path d="M21.36 79.14h-7.54v7.54h7.54v-7.54Z" className="cls-35" />
-      <path d="M28.89 79.14h-7.54v7.54h7.54v-7.54Z" className="cls-69" />
+      <path d="M187.18 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M223.61 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-48`} />
+      <path d="M231.15 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-27`} />
+      <path d="M238.68 72.86h-7.54v7.54h7.54v-7.54ZM13.82 79.14H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-50`} />
+      <path d="M21.36 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
+      <path d="M28.89 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-69`} />
       <path
         d="M36.43 79.14h-7.54v7.54h7.54v-7.54Z"
         style={{
           fill: forceColor ?? '#f3f3f5',
         }}
       />
-      <path d="M42.71 79.14h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-37" />
-      <path d="M50.25 79.14h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M65.32 79.14h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-15" />
-      <path d="M79.14 79.14H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M42.71 79.14h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
+      <path d="M50.25 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M65.32 79.14h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 79.14H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M94.22 79.14h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 79.14h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 79.14h-7.54v7.54H152v-7.54Z" className="cls-12" />
-      <path d="M158.28 79.14h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
+      <path d="M115.57 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 79.14h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 79.14h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
       <path
         d="M165.82 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M187.18 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M202.25 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M216.07 79.14h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M223.61 79.14h-7.54v7.54h7.54v-7.54Z" className="cls-48" />
-      <path d="M231.15 79.14h-7.54v7.54h7.54v-7.54Z" className="cls-27" />
-      <path d="M238.68 79.14h-7.54v7.54h7.54v-7.54Z" className="cls-44" />
-      <path d="M13.82 86.68H7.54v7.54h7.54v-7.54h-1.26Z" className="cls-50" />
-      <path d="M21.36 86.68h-7.54v7.54h7.54v-7.54Z" className="cls-28" />
+      <path d="M187.18 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M223.61 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-48`} />
+      <path d="M231.15 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-27`} />
+      <path d="M238.68 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-44`} />
+      <path d="M13.82 86.68H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-50`} />
+      <path d="M21.36 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-28`} />
       <path
         d="M28.89 86.68h-7.54v7.54h7.54v-7.54Z"
         style={{
           fill: forceColor ?? '#374c4a',
         }}
       />
-      <path d="M36.43 86.68h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-37" />
-      <path d="M50.25 86.68h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M65.32 86.68h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-15" />
-      <path d="M79.14 86.68H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M36.43 86.68h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
+      <path d="M50.25 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M65.32 86.68h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 86.68H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M94.22 86.68h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 86.68h-7.54v7.54h7.54v-7.54Z" className="cls-8" />
-      <path d="M123.11 86.68h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 86.68h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 86.68h-7.54v7.54H152v-7.54Z" className="cls-12" />
-      <path d="M158.28 86.68h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
+      <path d="M115.57 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
+      <path d="M123.11 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 86.68h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 86.68h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
       <path
         d="M165.82 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M187.18 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M202.25 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M216.07 86.68h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M187.18 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M223.61 86.68h-7.54v7.54h7.54v-7.54Z"
         style={{
           fill: forceColor ?? '#323e40',
         }}
       />
-      <path d="M231.15 86.68h-7.54v7.54h7.54v-7.54Z" className="cls-27" />
-      <path d="M238.68 86.68h-7.54v7.54h7.54v-7.54Z" className="cls-44" />
-      <path d="M7.54 94.22H0v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M13.82 94.22H7.54v7.54h7.54v-7.54h-1.26Z" className="cls-68" />
-      <path d="M21.36 94.22h-7.54v7.54h7.54v-7.54Z" className="cls-63" />
-      <path d="M28.89 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-9" />
-      <path d="M42.71 94.22h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-4" />
-      <path d="M50.25 94.22h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M71.6 94.22h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-8" />
-      <path d="M79.14 94.22H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-8" />
+      <path d="M231.15 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-27`} />
+      <path d="M238.68 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-44`} />
+      <path d="M7.54 94.22H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 94.22H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-68`} />
+      <path d="M21.36 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-63`} />
+      <path d="M28.89 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 94.22h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 94.22h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 94.22h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
+      <path d="M79.14 94.22H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
       <path
         d="M94.22 94.22h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-8"
+        className={`${cls}-8`}
       />
-      <path d="M115.57 94.22h-7.54v7.54h7.54v-7.54Z" className="cls-8" />
-      <path d="M123.11 94.22h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 94.22h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 94.22h-7.54v7.54H152v-7.54Z" className="cls-12" />
-      <path d="M158.28 94.22h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
+      <path d="M115.57 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
+      <path d="M123.11 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 94.22h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 94.22h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
       <path
         d="M165.82 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-8"
+        className={`${cls}-8`}
       />
-      <path d="M187.18 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-8" />
-      <path d="M202.25 94.22h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M209.79 94.22h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M216.07 94.22h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M223.61 94.22h-7.54v7.54h7.54v-7.54Z" className="cls-26" />
-      <path d="M231.15 94.22h-7.54v7.54h7.54v-7.54Z" className="cls-52" />
-      <path d="M238.68 94.22h-7.54v7.54h7.54v-7.54Z" className="cls-36" />
-      <path d="M244.96 94.22h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 101.75H0v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M13.82 101.75H7.54v7.54h7.54v-7.54h-1.26Z" className="cls-18" />
-      <path d="M21.36 101.75h-7.54v7.54h7.54v-7.54Z" className="cls-54" />
-      <path d="M28.89 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-9" />
-      <path d="M42.71 101.75h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-4" />
-      <path d="M50.25 101.75h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M71.6 101.75h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-8" />
-      <path d="M79.14 101.75H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
+      <path d="M187.18 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
+      <path d="M202.25 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M209.79 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M223.61 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-26`} />
+      <path d="M231.15 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
+      <path d="M238.68 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
+      <path d="M244.96 94.22h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 101.75H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 101.75H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
+      <path d="M21.36 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-54`} />
+      <path d="M28.89 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 101.75h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 101.75h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 101.75h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
+      <path d="M79.14 101.75H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
       <path
         d="M94.22 101.75h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-12"
+        className={`${cls}-12`}
       />
-      <path d="M115.57 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 101.75h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 101.75h-7.54v7.54H152v-7.54Z" className="cls-12" />
+      <path d="M115.57 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 101.75h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 101.75h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
       <path
         d="M158.28 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-12"
+        className={`${cls}-12`}
       />
-      <path d="M187.18 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M202.25 101.75h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M209.79 101.75h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M216.07 101.75h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M223.61 101.75h-7.54v7.54h7.54v-7.54Z" className="cls-26" />
-      <path d="M231.15 101.75h-7.54v7.54h7.54v-7.54Z" className="cls-52" />
-      <path d="M238.68 101.75h-7.54v7.54h7.54v-7.54Z" className="cls-36" />
-      <path d="M244.96 101.75h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 108.04H0v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M13.82 108.04H7.54v7.54h7.54v-7.54h-1.26Z" className="cls-18" />
-      <path d="M21.36 108.04h-7.54v7.54h7.54v-7.54Z" className="cls-54" />
-      <path d="M28.89 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-9" />
-      <path d="M42.71 108.04h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-4" />
-      <path d="M50.25 108.04h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M71.6 108.04h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-8" />
-      <path d="M79.14 108.04H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
+      <path d="M187.18 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M202.25 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M209.79 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M223.61 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-26`} />
+      <path d="M231.15 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
+      <path d="M238.68 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
+      <path d="M244.96 101.75h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 108.04H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 108.04H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
+      <path d="M21.36 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-54`} />
+      <path d="M28.89 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 108.04h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 108.04h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 108.04h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
+      <path d="M79.14 108.04H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
       <path
         d="M94.22 108.04h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-12"
+        className={`${cls}-12`}
       />
-      <path d="M115.57 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 108.04h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 108.04h-7.54v7.54H152v-7.54Z" className="cls-12" />
+      <path d="M115.57 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 108.04h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 108.04h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
       <path
         d="M158.28 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-12"
+        className={`${cls}-12`}
       />
-      <path d="M187.18 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M202.25 108.04h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M209.79 108.04h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M216.07 108.04h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M223.61 108.04h-7.54v7.54h7.54v-7.54Z" className="cls-26" />
-      <path d="M231.15 108.04h-7.54v7.54h7.54v-7.54Z" className="cls-52" />
-      <path d="M238.68 108.04h-7.54v7.54h7.54v-7.54Z" className="cls-36" />
-      <path d="M244.96 108.04h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 115.57H0v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M13.82 115.57H7.54v7.54h7.54v-7.54h-1.26Z" className="cls-18" />
-      <path d="M21.36 115.57h-7.54v7.54h7.54v-7.54Z" className="cls-54" />
-      <path d="M28.89 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-9" />
-      <path d="M42.71 115.57h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-4" />
-      <path d="M50.25 115.57h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M71.6 115.57h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-8" />
-      <path d="M79.14 115.57H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
+      <path d="M187.18 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M202.25 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M209.79 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M223.61 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-26`} />
+      <path d="M231.15 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
+      <path d="M238.68 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
+      <path d="M244.96 108.04h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 115.57H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 115.57H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
+      <path d="M21.36 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-54`} />
+      <path d="M28.89 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 115.57h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 115.57h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 115.57h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
+      <path d="M79.14 115.57H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
       <path
         d="M94.22 115.57h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-12"
+        className={`${cls}-12`}
       />
-      <path d="M115.57 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 115.57h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 115.57h-7.54v7.54H152v-7.54Z" className="cls-12" />
+      <path d="M115.57 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 115.57h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 115.57h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
       <path
         d="M158.28 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-12"
+        className={`${cls}-12`}
       />
-      <path d="M187.18 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M202.25 115.57h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M209.79 115.57h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M216.07 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M231.15 115.57h-7.54v7.54h7.54v-7.54Z" className="cls-52" />
-      <path d="M238.68 115.57h-7.54v7.54h7.54v-7.54Z" className="cls-36" />
-      <path d="M244.96 115.57h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 123.11H0v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M13.82 123.11H7.54v7.54h7.54v-7.54h-1.26Z" className="cls-18" />
-      <path d="M21.36 123.11h-7.54v7.54h7.54v-7.54Z" className="cls-54" />
-      <path d="M28.89 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-9" />
-      <path d="M42.71 123.11h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-4" />
-      <path d="M50.25 123.11h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M71.6 123.11h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-8" />
-      <path d="M79.14 123.11H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
+      <path d="M187.18 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M202.25 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M209.79 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M231.15 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
+      <path d="M238.68 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
+      <path d="M244.96 115.57h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 123.11H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 123.11H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
+      <path d="M21.36 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-54`} />
+      <path d="M28.89 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 123.11h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 123.11h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 123.11h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
+      <path d="M79.14 123.11H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
       <path
         d="M94.22 123.11h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-12"
+        className={`${cls}-12`}
       />
-      <path d="M115.57 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 123.11h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 123.11h-7.54v7.54H152v-7.54Z" className="cls-12" />
+      <path d="M115.57 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 123.11h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 123.11h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
       <path
         d="M158.28 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-12"
+        className={`${cls}-12`}
       />
-      <path d="M187.18 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M202.25 123.11h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M209.79 123.11h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M216.07 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M231.15 123.11h-7.54v7.54h7.54v-7.54Z" className="cls-52" />
-      <path d="M238.68 123.11h-7.54v7.54h7.54v-7.54Z" className="cls-36" />
-      <path d="M244.96 123.11h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 130.65H0v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M13.82 130.65H7.54v7.54h7.54v-7.54h-1.26Z" className="cls-18" />
-      <path d="M21.36 130.65h-7.54v7.54h7.54v-7.54Z" className="cls-63" />
-      <path d="M28.89 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-9" />
-      <path d="M42.71 130.65h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-4" />
-      <path d="M50.25 130.65h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M71.6 130.65h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-8" />
-      <path d="M79.14 130.65H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
+      <path d="M187.18 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M202.25 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M209.79 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M231.15 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
+      <path d="M238.68 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
+      <path d="M244.96 123.11h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 130.65H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 130.65H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
+      <path d="M21.36 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-63`} />
+      <path d="M28.89 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 130.65h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 130.65h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 130.65h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
+      <path d="M79.14 130.65H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
       <path
         d="M94.22 130.65h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-12"
+        className={`${cls}-12`}
       />
-      <path d="M115.57 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 130.65h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 130.65h-7.54v7.54H152v-7.54Z" className="cls-12" />
-      <path d="M158.28 130.65h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
+      <path d="M115.57 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 130.65h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 130.65h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
       <path
         d="M165.82 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-16"
+        className={`${cls}-16`}
       />
-      <path d="M187.18 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
-      <path d="M202.25 130.65h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
-      <path d="M209.79 130.65h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M216.07 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M231.15 130.65h-7.54v7.54h7.54v-7.54Z" className="cls-52" />
-      <path d="M238.68 130.65h-7.54v7.54h7.54v-7.54Z" className="cls-36" />
-      <path d="M244.96 130.65h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 136.93H0v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M13.82 136.93H7.54v7.54h7.54v-7.54h-1.26Z" className="cls-68" />
-      <path d="M21.36 136.93h-7.54v7.54h7.54v-7.54Z" className="cls-63" />
+      <path d="M187.18 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M202.25 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M209.79 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M216.07 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M231.15 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
+      <path d="M238.68 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
+      <path d="M244.96 130.65h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 136.93H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 136.93H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-68`} />
+      <path d="M21.36 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-63`} />
       <path
         d="M28.89 136.93h-7.54v7.54h7.54v-7.54Z"
         style={{
           fill: forceColor ?? '#bdbad5',
         }}
       />
-      <path d="M36.43 136.93h-7.54v7.54h7.54v-7.54Z" className="cls-9" />
-      <path d="M42.71 136.93h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-4" />
-      <path d="M50.25 136.93h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M71.6 136.93h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-20" />
-      <path d="M79.14 136.93H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-20" />
+      <path d="M36.43 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 136.93h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 136.93h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 136.93h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-20`} />
+      <path d="M79.14 136.93H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-20`} />
       <path
         d="M94.22 136.93h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-20"
+        className={`${cls}-20`}
       />
-      <path d="M115.57 136.93h-7.54v7.54h7.54v-7.54Z" className="cls-20" />
-      <path d="M123.11 136.93h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 136.93h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 136.93h-7.54v7.54H152v-7.54Z" className="cls-12" />
+      <path d="M115.57 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-20`} />
+      <path d="M123.11 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 136.93h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 136.93h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
       <path
         d="M158.28 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-16"
+        className={`${cls}-16`}
       />
-      <path d="M187.18 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
-      <path d="M202.25 136.93h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
-      <path d="M209.79 136.93h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M216.07 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M231.15 136.93h-7.54v7.54h7.54v-7.54Z" className="cls-52" />
+      <path d="M187.18 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M202.25 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M209.79 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M231.15 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
       <path
         d="M238.68 136.93h-7.54v7.54h7.54v-7.54Z"
         style={{
@@ -4031,7 +4032,7 @@ export function DfxAssetIconZCHF({ forceColor }: BaseAssetIconProps) {
       />
       <path
         d="M244.96 136.93h-6.28v7.54h7.54v-7.54h-1.26Zm-231.14 7.54H7.54v7.54h7.54v-7.54h-1.26Z"
-        className="cls-4"
+        className={`${cls}-4`}
       />
       <path
         d="M21.36 144.47h-7.54v7.54h7.54v-7.54Z"
@@ -4039,345 +4040,345 @@ export function DfxAssetIconZCHF({ forceColor }: BaseAssetIconProps) {
           fill: forceColor ?? '#6c747c',
         }}
       />
-      <path d="M28.89 144.47h-7.54v7.54h7.54v-7.54Z" className="cls-49" />
-      <path d="M36.43 144.47h-7.54v7.54h7.54v-7.54Z" className="cls-9" />
-      <path d="M42.71 144.47h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-8" />
-      <path d="M50.25 144.47h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M65.32 144.47h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M71.6 144.47h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-19" />
-      <path d="M79.14 144.47H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
+      <path d="M28.89 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-49`} />
+      <path d="M36.43 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 144.47h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-8`} />
+      <path d="M50.25 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M65.32 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 144.47h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-19`} />
+      <path d="M79.14 144.47H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
       <path
         d="M94.22 144.47h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-19"
+        className={`${cls}-19`}
       />
-      <path d="M115.57 144.47h-7.54v7.54h7.54v-7.54Z" className="cls-20" />
-      <path d="M123.11 144.47h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 144.47h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 144.47h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 144.47h-7.54v7.54H152v-7.54Z" className="cls-12" />
-      <path d="M158.28 144.47h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
+      <path d="M115.57 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-20`} />
+      <path d="M123.11 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 144.47h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 144.47h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 144.47h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
       <path
         d="M165.82 144.47h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-19"
+        className={`${cls}-19`}
       />
-      <path d="M187.18 144.47h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M202.25 144.47h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M209.79 144.47h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M216.07 144.47h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M223.61 144.47h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M231.15 144.47h-7.54v7.54h7.54v-7.54Z" className="cls-8" />
+      <path d="M187.18 144.47h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M202.25 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M209.79 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M223.61 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M231.15 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
       <path
         d="M238.68 144.47h-7.54v7.54h7.54v-7.54Z"
         style={{
           fill: forceColor ?? '#303c3d',
         }}
       />
-      <path d="M13.82 152H7.54v7.54h7.54V152h-1.26Z" className="cls-4" />
-      <path d="M21.36 152h-7.54v7.54h7.54V152Z" className="cls-66" />
-      <path d="M28.89 152h-7.54v7.54h7.54V152Z" className="cls-25" />
-      <path d="M36.43 152h-7.54v7.54h7.54V152Z" className="cls-9" />
-      <path d="M42.71 152h-6.28v7.54h7.54V152h-1.26Z" className="cls-8" />
-      <path d="M50.25 152h-7.54v7.54h7.54V152Z" className="cls-4" />
-      <path d="M65.32 152h-7.54v7.54h7.54V152Zm6.28 0h-6.28v7.54h7.54V152H71.6Z" className="cls-15" />
-      <path d="M79.14 152H71.6v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className="cls-15" />
+      <path d="M13.82 152H7.54v7.54h7.54V152h-1.26Z" className={`${cls}-4`} />
+      <path d="M21.36 152h-7.54v7.54h7.54V152Z" className={`${cls}-66`} />
+      <path d="M28.89 152h-7.54v7.54h7.54V152Z" className={`${cls}-25`} />
+      <path d="M36.43 152h-7.54v7.54h7.54V152Z" className={`${cls}-9`} />
+      <path d="M42.71 152h-6.28v7.54h7.54V152h-1.26Z" className={`${cls}-8`} />
+      <path d="M50.25 152h-7.54v7.54h7.54V152Z" className={`${cls}-4`} />
+      <path d="M65.32 152h-7.54v7.54h7.54V152Zm6.28 0h-6.28v7.54h7.54V152H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 152H71.6v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
       <path
         d="M94.22 152h-7.54v7.54h7.54V152Zm6.28 0h-6.28v7.54h6.28V152Zm7.54 0h-7.54v7.54h7.54V152Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 152h-7.54v7.54h7.54V152Z" className="cls-8" />
-      <path d="M123.11 152h-7.54v7.54h7.54V152Z" className="cls-12" />
-      <path d="M129.39 152h-6.28v7.54h7.54V152h-1.26Z" className="cls-12" />
-      <path d="M136.93 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className="cls-12" />
-      <path d="M152 152h-7.54v7.54H152V152Z" className="cls-12" />
-      <path d="M158.28 152h-7.54v7.54h7.54V152Z" className="cls-16" />
-      <path d="M165.82 152h-7.54v7.54h7.54V152Z" className="cls-19" />
-      <path d="M173.36 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className="cls-15" />
-      <path d="M187.18 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className="cls-15" />
-      <path d="M202.25 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className="cls-15" />
-      <path d="M216.07 152h-7.54v7.54h7.54V152Z" className="cls-15" />
-      <path d="M223.61 152h-7.54v7.54h7.54V152Z" className="cls-19" />
-      <path d="M231.15 152h-7.54v7.54h7.54V152Z" className="cls-8" />
+      <path d="M115.57 152h-7.54v7.54h7.54V152Z" className={`${cls}-8`} />
+      <path d="M123.11 152h-7.54v7.54h7.54V152Z" className={`${cls}-12`} />
+      <path d="M129.39 152h-6.28v7.54h7.54V152h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-12`} />
+      <path d="M152 152h-7.54v7.54H152V152Z" className={`${cls}-12`} />
+      <path d="M158.28 152h-7.54v7.54h7.54V152Z" className={`${cls}-16`} />
+      <path d="M165.82 152h-7.54v7.54h7.54V152Z" className={`${cls}-19`} />
+      <path d="M173.36 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
+      <path d="M187.18 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
+      <path d="M202.25 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
+      <path d="M216.07 152h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
+      <path d="M223.61 152h-7.54v7.54h7.54V152Z" className={`${cls}-19`} />
+      <path d="M231.15 152h-7.54v7.54h7.54V152Z" className={`${cls}-8`} />
       <path
         d="M238.68 152h-7.54v7.54h7.54V152Z"
         style={{
           fill: forceColor ?? '#2b3739',
         }}
       />
-      <path d="M13.82 159.54H7.54v7.54h7.54v-7.54h-1.26Z" className="cls-4" />
+      <path d="M13.82 159.54H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
       <path
         d="M21.36 159.54h-7.54v7.54h7.54v-7.54Z"
         style={{
           fill: forceColor ?? '#b2b6bd',
         }}
       />
-      <path d="M28.89 159.54h-7.54v7.54h7.54v-7.54Z" className="cls-25" />
-      <path d="M36.43 159.54h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-8" />
-      <path d="M50.25 159.54h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M65.32 159.54h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-15" />
-      <path d="M79.14 159.54H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M28.89 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M36.43 159.54h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-8`} />
+      <path d="M50.25 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M65.32 159.54h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 159.54H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M94.22 159.54h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 159.54h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M152 159.54h-7.54v7.54H152v-7.54Z" className="cls-12" />
-      <path d="M158.28 159.54h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
-      <path d="M165.82 159.54h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M173.36 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M187.18 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M202.25 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M216.07 159.54h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M223.61 159.54h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M231.15 159.54h-7.54v7.54h7.54v-7.54Z" className="cls-8" />
+      <path d="M115.57 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 159.54h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 159.54h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M165.82 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M173.36 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M187.18 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M223.61 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M231.15 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
       <path
         d="M238.68 159.54h-7.54v7.54h7.54v-7.54Z"
         style={{
           fill: forceColor ?? '#1f2c2c',
         }}
       />
-      <path d="M21.36 165.82h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M28.89 165.82h-7.54v7.54h7.54v-7.54Z" className="cls-23" />
-      <path d="M36.43 165.82h-7.54v7.54h7.54v-7.54Z" className="cls-25" />
-      <path d="M42.71 165.82h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-32" />
-      <path d="M50.25 165.82h-7.54v7.54h7.54v-7.54Z" className="cls-9" />
-      <path d="M65.32 165.82h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-15" />
-      <path d="M79.14 165.82H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M21.36 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M28.89 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-23`} />
+      <path d="M36.43 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M42.71 165.82h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-32`} />
+      <path d="M50.25 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M65.32 165.82h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 165.82H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M94.22 165.82h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M129.39 165.82h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-12" />
-      <path d="M136.93 165.82h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M144.47 165.82h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
-      <path d="M152 165.82h-7.54v7.54H152v-7.54Z" className="cls-16" />
-      <path d="M158.28 165.82h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
-      <path d="M165.82 165.82h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M173.36 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M187.18 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M202.25 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M216.07 165.82h-7.54v7.54h7.54v-7.54Z" className="cls-65" />
-      <path d="M223.61 165.82h-7.54v7.54h7.54v-7.54Z" className="cls-7" />
+      <path d="M115.57 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 165.82h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M144.47 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M152 165.82h-7.54v7.54H152v-7.54Z" className={`${cls}-16`} />
+      <path d="M158.28 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M165.82 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M173.36 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M187.18 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-65`} />
+      <path d="M223.61 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
       <path
         d="M231.15 165.82h-7.54v7.54h7.54v-7.54Z"
         style={{
           fill: forceColor ?? '#252e2f',
         }}
       />
-      <path d="M21.36 173.36h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M28.89 173.36h-7.54v7.54h7.54v-7.54Z" className="cls-58" />
-      <path d="M36.43 173.36h-7.54v7.54h7.54v-7.54Z" className="cls-25" />
-      <path d="M42.71 173.36h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-32" />
-      <path d="M50.25 173.36h-7.54v7.54h7.54v-7.54Z" className="cls-8" />
-      <path d="M65.32 173.36h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M71.6 173.36h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-15" />
-      <path d="M79.14 173.36H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M21.36 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M28.89 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-58`} />
+      <path d="M36.43 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M42.71 173.36h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-32`} />
+      <path d="M50.25 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
+      <path d="M65.32 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M71.6 173.36h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 173.36H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M94.22 173.36h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 173.36h-7.54v7.54h7.54v-7.54Z" className="cls-12" />
-      <path d="M123.11 173.36h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
-      <path d="M129.39 173.36h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-16" />
-      <path d="M136.93 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
-      <path d="M152 173.36h-7.54v7.54H152v-7.54Z" className="cls-16" />
-      <path d="M158.28 173.36h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
-      <path d="M165.82 173.36h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M173.36 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M187.18 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M202.25 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M216.07 173.36h-7.54v7.54h7.54v-7.54Z" className="cls-65" />
-      <path d="M223.61 173.36h-7.54v7.54h7.54v-7.54Z" className="cls-7" />
-      <path d="M231.15 173.36h-7.54v7.54h7.54v-7.54Z" className="cls-50" />
-      <path d="M28.89 180.9h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M36.43 180.9h-7.54v7.54h7.54v-7.54Z" className="cls-23" />
-      <path d="M42.71 180.9h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-25" />
-      <path d="M50.25 180.9h-7.54v7.54h7.54v-7.54Z" className="cls-32" />
-      <path d="M65.32 180.9h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M71.6 180.9h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-15" />
-      <path d="M79.14 180.9H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M115.57 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M123.11 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M129.39 173.36h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-16`} />
+      <path d="M136.93 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M152 173.36h-7.54v7.54H152v-7.54Z" className={`${cls}-16`} />
+      <path d="M158.28 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M165.82 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M173.36 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M187.18 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-65`} />
+      <path d="M223.61 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M231.15 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M28.89 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M36.43 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-23`} />
+      <path d="M42.71 180.9h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-25`} />
+      <path d="M50.25 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-32`} />
+      <path d="M65.32 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M71.6 180.9h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 180.9H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M94.22 180.9h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
-      <path d="M129.39 180.9h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-16" />
-      <path d="M136.93 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
-      <path d="M152 180.9h-7.54v7.54H152v-7.54Z" className="cls-16" />
-      <path d="M158.28 180.9h-7.54v7.54h7.54v-7.54Z" className="cls-16" />
-      <path d="M165.82 180.9h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M173.36 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M187.18 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M202.25 180.9h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M209.79 180.9h-7.54v7.54h7.54v-7.54Z" className="cls-13" />
-      <path d="M216.07 180.9h-7.54v7.54h7.54v-7.54Z" className="cls-7" />
-      <path d="M223.61 180.9h-7.54v7.54h7.54v-7.54Z" className="cls-62" />
-      <path d="M28.89 188.43h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M36.43 188.43h-7.54v7.54h7.54v-7.54Z" className="cls-58" />
-      <path d="M42.71 188.43h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-23" />
-      <path d="M50.25 188.43h-7.54v7.54h7.54v-7.54Z" className="cls-25" />
-      <path d="M65.32 188.43h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M71.6 188.43h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-19" />
-      <path d="M79.14 188.43H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M115.57 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M129.39 180.9h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-16`} />
+      <path d="M136.93 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M152 180.9h-7.54v7.54H152v-7.54Z" className={`${cls}-16`} />
+      <path d="M158.28 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M165.82 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M173.36 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M187.18 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M209.79 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-13`} />
+      <path d="M216.07 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M223.61 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-62`} />
+      <path d="M28.89 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M36.43 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-58`} />
+      <path d="M42.71 188.43h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-23`} />
+      <path d="M50.25 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M65.32 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M71.6 188.43h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-19`} />
+      <path d="M79.14 188.43H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M94.22 188.43h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M129.39 188.43h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-19" />
-      <path d="M136.93 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M152 188.43h-7.54v7.54H152v-7.54Z" className="cls-19" />
-      <path d="M158.28 188.43h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
+      <path d="M115.57 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M129.39 188.43h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-19`} />
+      <path d="M136.93 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M152 188.43h-7.54v7.54H152v-7.54Z" className={`${cls}-19`} />
+      <path d="M158.28 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
       <path
         d="M165.82 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M187.18 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M202.25 188.43h-7.54v7.54h7.54v-7.54Z" className="cls-13" />
-      <path d="M209.79 188.43h-7.54v7.54h7.54v-7.54Z" className="cls-7" />
-      <path d="M216.07 188.43h-7.54v7.54h7.54v-7.54Z" className="cls-40" />
-      <path d="M223.61 188.43h-7.54v7.54h7.54v-7.54Z" className="cls-62" />
-      <path d="M36.43 194.72h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M42.71 194.72h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-58" />
-      <path d="M50.25 194.72h-7.54v7.54h7.54v-7.54Z" className="cls-23" />
-      <path d="M65.32 194.72h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-38" />
-      <path d="M79.14 194.72H71.6v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M86.68 194.72h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
+      <path d="M187.18 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-13`} />
+      <path d="M209.79 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M216.07 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-40`} />
+      <path d="M223.61 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-62`} />
+      <path d="M36.43 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M42.71 194.72h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-58`} />
+      <path d="M50.25 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-23`} />
+      <path d="M65.32 194.72h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-38`} />
+      <path d="M79.14 194.72H71.6v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M86.68 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
       <path
         d="M94.22 194.72h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M115.57 194.72h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M129.39 194.72h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-15" />
-      <path d="M136.93 194.72h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M152 194.72h-7.54v7.54H152v-7.54Z" className="cls-15" />
+      <path d="M115.57 194.72h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M129.39 194.72h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-15`} />
+      <path d="M136.93 194.72h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M152 194.72h-7.54v7.54H152v-7.54Z" className={`${cls}-15`} />
       <path
         d="M158.28 194.72h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M187.18 194.72h-7.54v7.54h7.54v-7.54Z" className="cls-13" />
+      <path d="M187.18 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-13`} />
       <path
         d="M194.72 194.72h-7.54v7.54h7.54v-7.54Z"
         style={{
           fill: forceColor ?? '#aa495a',
         }}
       />
-      <path d="M202.25 194.72h-7.54v7.54h7.54v-7.54Z" className="cls-7" />
-      <path d="M209.79 194.72h-7.54v7.54h7.54v-7.54Z" className="cls-40" />
-      <path d="M216.07 194.72h-7.54v7.54h7.54v-7.54Z" className="cls-62" />
-      <path d="M42.71 202.25h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-41" />
-      <path d="M50.25 202.25h-7.54v7.54h7.54v-7.54Z" className="cls-58" />
-      <path d="M65.32 202.25h-7.54v7.54h7.54v-7.54Z" className="cls-25" />
-      <path d="M71.6 202.25h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-38" />
-      <path d="M79.14 202.25H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-38" />
+      <path d="M202.25 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M209.79 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-40`} />
+      <path d="M216.07 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-62`} />
+      <path d="M42.71 202.25h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-41`} />
+      <path d="M50.25 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-58`} />
+      <path d="M65.32 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M71.6 202.25h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-38`} />
+      <path d="M79.14 202.25H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-38`} />
       <path
         d="M94.22 202.25h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-19"
+        className={`${cls}-19`}
       />
-      <path d="M115.57 202.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M129.39 202.25h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-15" />
-      <path d="M136.93 202.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M152 202.25h-7.54v7.54H152v-7.54Z" className="cls-15" />
-      <path d="M158.28 202.25h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M115.57 202.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M129.39 202.25h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-15`} />
+      <path d="M136.93 202.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M152 202.25h-7.54v7.54H152v-7.54Z" className={`${cls}-15`} />
+      <path d="M158.28 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M165.82 202.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-13"
+        className={`${cls}-13`}
       />
-      <path d="M187.18 202.25h-7.54v7.54h7.54v-7.54Z" className="cls-2" />
-      <path d="M194.72 202.25h-7.54v7.54h7.54v-7.54Z" className="cls-7" />
-      <path d="M202.25 202.25h-7.54v7.54h7.54v-7.54Z" className="cls-7" />
-      <path d="M209.79 202.25h-7.54v7.54h7.54v-7.54Z" className="cls-62" />
-      <path d="M50.25 209.79h-7.54v7.54h7.54v-7.54Zm15.07 7.54h-7.54v7.54h7.54v-7.54Z" className="cls-41" />
-      <path d="M57.79 217.33h-7.54v7.54h7.54v-7.54Z" className="cls-41" />
-      <path d="M65.32 217.33v-7.54h-7.54v7.54h7.54Z" className="cls-23" />
-      <path d="M71.6 209.79h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-25" />
-      <path d="M79.14 209.79H71.6v7.54h7.54v-7.54Z" className="cls-25" />
-      <path d="M86.68 209.79h-7.54v7.54h7.54v-7.54Z" className="cls-32" />
+      <path d="M187.18 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-2`} />
+      <path d="M194.72 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M202.25 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M209.79 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-62`} />
+      <path d="M50.25 209.79h-7.54v7.54h7.54v-7.54Zm15.07 7.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-41`} />
+      <path d="M57.79 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-41`} />
+      <path d="M65.32 217.33v-7.54h-7.54v7.54h7.54Z" className={`${cls}-23`} />
+      <path d="M71.6 209.79h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-25`} />
+      <path d="M79.14 209.79H71.6v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M86.68 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-32`} />
       <path
         d="M94.22 209.79h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-38"
+        className={`${cls}-38`}
       />
-      <path d="M115.57 209.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M129.39 209.79h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-19" />
-      <path d="M136.93 209.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
-      <path d="M152 209.79h-7.54v7.54H152v-7.54Z" className="cls-19" />
-      <path d="M158.28 209.79h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
+      <path d="M115.57 209.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M129.39 209.79h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-19`} />
+      <path d="M136.93 209.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M152 209.79h-7.54v7.54H152v-7.54Z" className={`${cls}-19`} />
+      <path d="M158.28 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
       <path
         d="M165.82 209.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-2"
+        className={`${cls}-2`}
       />
-      <path d="M187.18 209.79h-7.54v7.54h7.54v-7.54Z" className="cls-40" />
-      <path d="M194.72 209.79h-7.54v7.54h7.54v-7.54Z" className="cls-61" />
-      <path d="M202.25 209.79h-7.54v7.54h7.54v-7.54Z" className="cls-50" />
-      <path d="M71.6 217.33h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-58" />
-      <path d="M79.14 217.33H71.6v7.54h7.54v-7.54Z" className="cls-58" />
-      <path d="M86.68 217.33h-7.54v7.54h7.54v-7.54Z" className="cls-25" />
+      <path d="M187.18 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-40`} />
+      <path d="M194.72 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-61`} />
+      <path d="M202.25 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M71.6 217.33h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-58`} />
+      <path d="M79.14 217.33H71.6v7.54h7.54v-7.54Z" className={`${cls}-58`} />
+      <path d="M86.68 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
       <path
         d="M94.22 217.33h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-38"
+        className={`${cls}-38`}
       />
-      <path d="M115.57 217.33h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-7" />
-      <path d="M129.39 217.33h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-7" />
-      <path d="M136.93 217.33h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-7" />
-      <path d="M152 217.33h-7.54v7.54H152v-7.54Z" className="cls-7" />
-      <path d="M158.28 217.33h-7.54v7.54h7.54v-7.54Z" className="cls-7" />
-      <path d="M165.82 217.33h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-40" />
-      <path d="M180.9 217.33h-7.54v7.54h7.54v-7.54Z" className="cls-50" />
-      <path d="M187.18 217.33h-7.54v7.54h7.54v-7.54Z" className="cls-50" />
-      <path d="M71.6 223.61h-6.28v7.54h7.54v-7.54H71.6Z" className="cls-41" />
-      <path d="M79.14 223.61H71.6v7.54h7.54v-7.54Z" className="cls-41" />
-      <path d="M86.68 223.61h-7.54v7.54h7.54v-7.54Z" className="cls-60" />
-      <path d="M94.22 223.61h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Z" className="cls-60" />
-      <path d="M108.04 223.61h-7.54v7.54h7.54v-7.54Z" className="cls-66" />
+      <path d="M115.57 217.33h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M129.39 217.33h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-7`} />
+      <path d="M136.93 217.33h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M152 217.33h-7.54v7.54H152v-7.54Z" className={`${cls}-7`} />
+      <path d="M158.28 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M165.82 217.33h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-40`} />
+      <path d="M180.9 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M187.18 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M71.6 223.61h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-41`} />
+      <path d="M79.14 223.61H71.6v7.54h7.54v-7.54Z" className={`${cls}-41`} />
+      <path d="M86.68 223.61h-7.54v7.54h7.54v-7.54Z" className={`${cls}-60`} />
+      <path d="M94.22 223.61h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Z" className={`${cls}-60`} />
+      <path d="M108.04 223.61h-7.54v7.54h7.54v-7.54Z" className={`${cls}-66`} />
       <path
         d="M115.57 223.61h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
         style={{
           fill: forceColor ?? '#a4a5a9',
         }}
       />
-      <path d="M129.39 223.61h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-33" />
-      <path d="M136.93 223.61h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-33" />
-      <path d="M152 223.61h-7.54v7.54H152v-7.54Z" className="cls-33" />
-      <path d="M158.28 223.61h-7.54v7.54h7.54v-7.54Z" className="cls-33" />
-      <path d="M165.82 223.61h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-61" />
-      <path d="M86.68 231.15h-7.54v7.54h7.54v-7.54Z" className="cls-41" />
+      <path d="M129.39 223.61h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-33`} />
+      <path d="M136.93 223.61h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-33`} />
+      <path d="M152 223.61h-7.54v7.54H152v-7.54Z" className={`${cls}-33`} />
+      <path d="M158.28 223.61h-7.54v7.54h7.54v-7.54Z" className={`${cls}-33`} />
+      <path d="M165.82 223.61h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-61`} />
+      <path d="M86.68 231.15h-7.54v7.54h7.54v-7.54Z" className={`${cls}-41`} />
       <path
         d="M94.22 231.15h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className="cls-41"
+        className={`${cls}-41`}
       />
-      <path d="M115.57 231.15h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M129.39 231.15h-6.28v7.54h7.54v-7.54h-1.26Z" className="cls-4" />
-      <path d="M136.93 231.15h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M152 231.15h-7.54v7.54H152v-7.54Z" className="cls-4" />
-      <path d="M158.28 231.15h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
-      <path d="M57.79 21.36h-7.54v7.54h7.54v-7.54Z" className="cls-50" />
-      <path d="M57.79 28.89h-7.54v7.54h7.54v-7.54Z" className="cls-35" />
-      <path d="M57.79 36.43h-7.54v7.54h7.54v-7.54Z" className="cls-67" />
-      <path d="M57.79 43.97h-7.54v6.28h7.54v-6.28Z" className="cls-11" />
-      <path d="M57.79 50.25h-7.54v7.54h7.54v-7.54Z" className="cls-27" />
-      <path d="M57.79 57.79h-7.54v7.54h7.54v-7.54Z" className="cls-57" />
-      <path d="M57.79 65.32h-7.54v7.54h7.54v-7.54Z" className="cls-57" />
-      <path d="M57.79 72.86h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M57.79 79.14h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M57.79 94.22h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M57.79 101.75h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M57.79 108.04h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
+      <path d="M115.57 231.15h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M129.39 231.15h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M136.93 231.15h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M152 231.15h-7.54v7.54H152v-7.54Z" className={`${cls}-4`} />
+      <path d="M158.28 231.15h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M57.79 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M57.79 28.89h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
+      <path d="M57.79 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-67`} />
+      <path d="M57.79 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-11`} />
+      <path d="M57.79 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-27`} />
+      <path d="M57.79 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-57`} />
+      <path d="M57.79 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-57`} />
+      <path d="M57.79 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M57.79 79.14h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M57.79 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M57.79 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M57.79 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
       <path
         d="M57.79 115.57h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Z"
-        className="cls-15"
+        className={`${cls}-15`}
       />
-      <path d="M57.79 136.93h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Z" className="cls-15" />
-      <path d="M57.79 152h-7.54v7.54h7.54V152Z" className="cls-15" />
-      <path d="M57.79 159.54h-7.54v7.54h7.54v-7.54Z" className="cls-19" />
+      <path d="M57.79 136.93h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M57.79 152h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
+      <path d="M57.79 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
       <path
         d="M57.79 165.82h-7.54v7.54h7.54v-7.54Z"
         style={{
           fill: forceColor ?? '#212a29',
         }}
       />
-      <path d="M57.79 173.36h-7.54v7.54h7.54v-7.54Z" className="cls-4" />
+      <path d="M57.79 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
       <path
         d="M57.79 180.9h-7.54v7.54h7.54v-7.54Z"
         style={{
@@ -4390,9 +4391,9 @@ export function DfxAssetIconZCHF({ forceColor }: BaseAssetIconProps) {
           fill: forceColor ?? '#e6e7e9',
         }}
       />
-      <path d="M57.79 194.72h-7.54v7.54h7.54v-7.54Z" className="cls-25" />
-      <path d="M57.79 202.25h-7.54v7.54h7.54v-7.54Z" className="cls-23" />
-      <path d="M57.79 209.79h-7.54v7.54h7.54v-7.54Z" className="cls-58" />
+      <path d="M57.79 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M57.79 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-23`} />
+      <path d="M57.79 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-58`} />
     </svg>
   );
 }
