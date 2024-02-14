@@ -2,7 +2,8 @@ import { Country } from './country';
 import { Language } from './language';
 
 export const KycUrl = {
-  setData: 'kyc/data',
+  setName: 'user/name',
+  setData: 'user/data',
   base: `${process.env.REACT_APP_API_URL}/v2/kyc`,
   tfa: `${process.env.REACT_APP_API_URL}/v2/kyc/2fa`,
   limit: `${process.env.REACT_APP_API_URL}/v2/kyc/limit`,
@@ -38,26 +39,12 @@ export enum KycState {
   REVIEW = 'Review',
 }
 
-export interface KycData {
-  accountType: AccountType;
-  firstname: string;
-  surname: string;
-  street: string;
-  houseNumber: string;
-  zip: string;
-  location: string;
-  country: Country;
-
-  mail: string;
-  phone: string;
-
-  organizationName: string;
-  organizationStreet: string;
-  organizationHouseNumber: string;
-  organizationLocation: string;
-  organizationZip: string;
-  organizationCountry: Country;
+export interface UserName {
+  firstName: string;
+  lastName: string;
 }
+
+export type UserData = KycContactData & KycPersonalData;
 
 // --- NEW --- //
 

@@ -37,6 +37,7 @@ export interface Buy {
   asset: Asset;
   paymentRequest?: string;
   paymentLink?: string;
+  nameRequired?: boolean;
   isValid: boolean;
   error?: TransactionError;
 }

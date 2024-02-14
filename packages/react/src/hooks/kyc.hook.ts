@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import {
   KycContactData,
-  KycData,
   KycFinancialQuestions,
   KycFinancialResponses,
   KycInfo,
@@ -13,6 +12,8 @@ import {
   KycUrl,
   LimitRequest,
   TfaSetup,
+  UserData,
+  UserName,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 import { Country } from '../definitions/country';
@@ -26,8 +27,9 @@ export interface CallConfig {
 }
 
 export interface KycInterface {
-  // legacy
-  setKycData: (data: KycData) => Promise<void>;
+  // KYC data
+  setName: (name: UserName) => Promise<void>;
+  setData: (data: UserData) => Promise<void>;
 
   // process
   getKycInfo: (code: string) => Promise<KycInfo>;
@@ -52,13 +54,22 @@ export interface KycInterface {
 export function useKyc(): KycInterface {
   const { call: callApi } = useApi();
 
-  async function setKycData(data: KycData): Promise<void> {
+  async function setName(data: UserName): Promise<void> {
+    return callApi({
+      url: KycUrl.setName,
+      method: 'PUT',
+      data,
+    });
+  }
+
+  async function setData(data: UserData): Promise<void> {
     return callApi({
       url: KycUrl.setData,
       method: 'POST',
       data,
     });
   }
+
   async function getKycInfo(code: string): Promise<KycInfo> {
     return call({ url: KycUrl.base, code, method: 'GET' });
   }
@@ -141,7 +152,8 @@ export function useKyc(): KycInterface {
 
   return useMemo(
     () => ({
-      setKycData,
+      setName,
+      setData,
       getKycInfo,
       continueKyc,
       startStep,
