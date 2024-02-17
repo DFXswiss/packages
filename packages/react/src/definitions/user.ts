@@ -10,6 +10,7 @@ export enum UserStatus {
 }
 
 export interface User {
+  wallet: string;
   language: Language;
   mail: string;
   kycDataComplete: boolean;
