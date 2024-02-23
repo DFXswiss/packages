@@ -15,6 +15,7 @@ export enum StyledButtonWidth {
 
 export enum StyledButtonColor {
   RED = 'RED',
+  BLUE = 'BLUE',
   GRAY = 'GRAY',
   GRAY_OUTLINE = 'GRAY_OUTLINE',
   PALE_WHITE = 'PALE_WHITE',
@@ -67,6 +68,11 @@ const COLOR_MAPS: Record<StyledButtonColor, ColorMapProps> = {
   [StyledButtonColor.RED]: {
     buttonColorClasses:
       'bg-primary-red text-white hover:bg-dfxRed-150 focus:bg-dfxRed-150 active:bg-dfxRed-100 hover:shadow-lg',
+    iconColor: IconColor.WHITE,
+  },
+  [StyledButtonColor.BLUE]: {
+    buttonColorClasses:
+      'bg-primary-blue text-white hover:bg-dfxBlue-600 focus:bg-dfxBlue-600 active:bg-dfxBlue-800 hover:shadow-lg',
     iconColor: IconColor.WHITE,
   },
   [StyledButtonColor.GRAY]: {
