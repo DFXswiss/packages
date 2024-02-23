@@ -34,6 +34,7 @@ export interface Buy {
   estimatedAmount: number;
   rate: number;
   exchangeRate: number;
+  exactPrice: boolean;
   asset: Asset;
   paymentRequest?: string;
   paymentLink?: string;
@@ -49,4 +50,5 @@ export interface BuyPaymentInfo {
   targetAmount?: number;
   paymentMethod?: BuyPaymentMethod;
   externalTransactionId?: string;
+  exactPrice?: boolean;
 }

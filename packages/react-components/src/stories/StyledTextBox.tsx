@@ -1,3 +1,4 @@
+import StyledLoadingSpinner from './StyledLoadingSpinner';
 import StyledVerticalStack from './layout-helpers/StyledVerticalStack';
 
 interface StyledTextBoxProps {
@@ -6,9 +7,17 @@ interface StyledTextBoxProps {
   text: string;
   label?: string;
   smallLabel?: boolean;
+  loading?: boolean;
 }
 
-const StyledTextBox = ({ darkTheme = false, full = false, text, label, smallLabel }: StyledTextBoxProps) => {
+const StyledTextBox = ({
+  darkTheme = false,
+  full = false,
+  text,
+  label,
+  smallLabel,
+  loading = false,
+}: StyledTextBoxProps) => {
   const textColor = darkTheme ? 'text-white' : 'text-dfxBlue-800';
   const backgroundColor = darkTheme ? 'bg-white bg-opacity-5' : 'bg-white';
   const placeholderColor = darkTheme ? 'placeholder:text-dfxGray-800' : 'placeholder:text-dfxGray-600';
@@ -29,10 +38,16 @@ const StyledTextBox = ({ darkTheme = false, full = false, text, label, smallLabe
 
       <div
         className={
-          `text-base font-normal rounded-md w-full ` +
+          ` relative text-base font-normal rounded-md w-full ` +
           [textColor, backgroundColor, placeholderColor, borderColor, outlineColor].join(' ')
         }
       >
+        {loading && (
+          <div className="absolute right-3 h-w-8 flex justify-center items-center h-[3.6rem]">
+            <StyledLoadingSpinner />
+          </div>
+        )}
+
         <div className={`p-4 w-full ${textColor}`}>
           <div className="flex-1 whitespace-pre">{text}</div>
         </div>
