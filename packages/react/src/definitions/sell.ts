@@ -21,6 +21,7 @@ export interface Sell {
   estimatedAmount: number;
   rate: number;
   exchangeRate: number;
+  exactPrice: boolean;
   currency: Fiat;
   paymentRequest?: string;
   isValid: boolean;
@@ -34,4 +35,5 @@ export interface SellPaymentInfo {
   currency: Fiat;
   targetAmount?: number;
   externalTransactionId?: string;
+  exactPrice?: boolean;
 }
