@@ -12,8 +12,14 @@ export interface Asset {
   name: string;
   uniqueName: string;
   description: string;
+
   buyable: boolean;
   sellable: boolean;
+  cardBuyable: boolean;
+  cardSellable: boolean;
+  instantBuyable: boolean;
+  instantSellable: boolean;
+
   blockchain: Blockchain;
   comingSoon: boolean;
   sortOrder?: number;
