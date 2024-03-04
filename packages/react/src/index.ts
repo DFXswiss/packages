@@ -17,6 +17,7 @@ export { useBankAccount, CreateBankAccount, UpdateBankAccount } from './hooks/ba
 export { useBuy } from './hooks/buy.hook';
 export { useCountry } from './hooks/country.hook';
 export { useFiat } from './hooks/fiat.hook';
+export { useTransaction } from './hooks/transaction.hook';
 export { useLanguage } from './hooks/language.hook';
 export { useKyc } from './hooks/kyc.hook';
 export { useSell } from './hooks/sell.hook';
@@ -26,7 +27,7 @@ export { useUser } from './hooks/user.hook';
 export { Asset, AssetType } from './definitions/asset';
 export { BankAccount } from './definitions/bank-account';
 export { Blockchain } from './definitions/blockchain';
-export { Buy, BuyPaymentInfo, BuyPaymentMethod } from './definitions/buy';
+export { Buy, BuyPaymentInfo } from './definitions/buy';
 export { Country } from './definitions/country';
 export { ApiError } from './definitions/error';
 export { Fiat } from './definitions/fiat';
@@ -72,7 +73,15 @@ export { Sell, SellPaymentInfo } from './definitions/sell';
 export { Session } from './definitions/session';
 export { User, UserStatus } from './definitions/user';
 export { LnurlAuth, LnurlAuthStatus } from './definitions/auth';
-export { TransactionError } from './definitions/transaction';
+export {
+  FiatPaymentMethod,
+  CryptoPaymentMethod,
+  PaymentMethod,
+  TransactionError,
+  TransactionType,
+  TransactionState,
+  Transaction,
+} from './definitions/transaction';
 
 // Utils & Validations
 export { Utils } from './utils';
