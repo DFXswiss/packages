@@ -47,6 +47,7 @@ export enum AssetIconVariant {
   XMR = 'XMR',
   ZCHF = 'ZCHF',
   FPS = 'FPS',
+  YLD = 'YLD',
 
   EUR = 'EUR',
   USD = 'USD',
@@ -109,6 +110,7 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.XMR]: ({ forceColor }) => <DfxAssetIconXMR forceColor={forceColor} />,
   [AssetIconVariant.ZCHF]: ({ forceColor }) => <DfxAssetIconZCHF forceColor={forceColor} />,
   [AssetIconVariant.FPS]: ({ forceColor }) => <DfxAssetIconFPS forceColor={forceColor} />,
+  [AssetIconVariant.YLD]: ({ forceColor }) => <DfxAssetIconYLD forceColor={forceColor} />,
 
   [AssetIconVariant.EUR]: ({ forceColor }) => <DfxAssetIconEUR forceColor={forceColor} />,
   [AssetIconVariant.USD]: ({ forceColor }) => <DfxAssetIconUSD forceColor={forceColor} />,
@@ -4425,6 +4427,42 @@ function DfxAssetIconFPS({ forceColor }: BaseAssetIconProps) {
         fill={forceColor ?? '#fff'}
         d="M47 202h11v45H47zM58 202h22v11H58zM58 219h12v9H58zM80 219h19v9H80zM108 219h13v9h-13zM132 219h13v9h-13zM131 238h13v9h-13zM142 228h12v10h-12zM166 228h8v10h-8zM183 228h10v9h-10zM216 228h10v19h-10zM235 228h10v19h-10zM254 228h10v19h-10zM202 228h12v9h-12zM174 219h9v9h-9zM193 219h14v9h-14zM216 219h48v9h-48zM193 237h14v10h-14zM174 237h9v10h-9zM108 238h13v9h-13zM80 238h19v9H80zM80 228h8v10h-8zM154 202h12v45h-12zM99 228h9v10h-9zM120 228h11v10h-11z"
       />
+    </svg>
+  );
+}
+
+function DfxAssetIconYLD({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#yld-a)">
+        <g clipPath="url(#yld-b)">
+          <path
+            fill={forceColor ?? '#104499'}
+            d="M32 16c0 8.838-7.163 16-16 16S0 24.836 0 16 7.163 0 16 0s16 7.164 16 16"
+          />
+          <path
+            fill="#fff"
+            fillRule="evenodd"
+            d="m20.716 10.531-6.74 5.99a4.6 4.6 0 0 1-2.717.875 4.642 4.642 0 0 1 0-9.284c2.31 0 3.486 1.307 4.064 2.386l-1.85 1.52c-.467-1.088-1.135-1.584-2.214-1.584a2.322 2.322 0 0 0 0 4.644c.541 0 1.176-.305 1.57-.617l6.144-5.518c1.88-1.483 3.626-1.247 4.695-.843l-2.255 1.86c-.222.17-.452.355-.697.571M11.192 21.47l6.74-5.99a4.6 4.6 0 0 1 2.716-.875 4.642 4.642 0 0 1 0 9.284c-2.311 0-3.487-1.307-4.064-2.385l1.85-1.521c.466 1.088 1.135 1.584 2.214 1.584a2.322 2.322 0 0 0 0-4.644c-.542 0-1.176.305-1.57.617l-6.142 5.518c-1.881 1.483-3.626 1.247-4.695.843l2.255-1.86c.222-.17.452-.355.696-.571"
+            clipRule="evenodd"
+          />
+        </g>
+      </g>
+      <defs>
+        <clipPath id="yld-a">
+          <path fill="#fff" d="M0 0h137v32H0z" />
+        </clipPath>
+        <clipPath id="yld-b">
+          <path fill="#fff" d="M0 0h32v32H0z" />
+        </clipPath>
+      </defs>
     </svg>
   );
 }
