@@ -48,6 +48,7 @@ export enum AssetIconVariant {
   ZCHF = 'ZCHF',
   FPS = 'FPS',
   YLD = 'YLD',
+  ISLM = 'ISLM',
 
   EUR = 'EUR',
   USD = 'USD',
@@ -111,6 +112,7 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.ZCHF]: ({ forceColor }) => <DfxAssetIconZCHF forceColor={forceColor} />,
   [AssetIconVariant.FPS]: ({ forceColor }) => <DfxAssetIconFPS forceColor={forceColor} />,
   [AssetIconVariant.YLD]: ({ forceColor }) => <DfxAssetIconYLD forceColor={forceColor} />,
+  [AssetIconVariant.ISLM]: ({ forceColor }) => <DfxAssetIconISLM forceColor={forceColor} />,
 
   [AssetIconVariant.EUR]: ({ forceColor }) => <DfxAssetIconEUR forceColor={forceColor} />,
   [AssetIconVariant.USD]: ({ forceColor }) => <DfxAssetIconUSD forceColor={forceColor} />,
@@ -4461,6 +4463,33 @@ function DfxAssetIconYLD({ forceColor }: BaseAssetIconProps) {
         </clipPath>
         <clipPath id="yld-b">
           <path fill="#fff" d="M0 0h32v32H0z" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconISLM({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 256 256"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#islm-a)">
+        <path
+          fill={forceColor ?? '#04D484'}
+          fillRule="evenodd"
+          d="M127.999 0c35.346 0 67.348 14.328 90.511 37.49 22.888 22.889 37.147 54.407 37.482 89.251v.073l.004.475.004.705-.008 1.179v.078c-.335 34.843-14.594 66.358-37.482 89.247-23.163 23.162-55.162 37.489-90.511 37.489-35.344 0-67.345-14.327-90.508-37.489C14.328 195.335 0 163.333 0 127.989c0-35.343 14.328-67.34 37.49-90.503C60.655 14.324 92.656 0 128 0Zm73.569 73.563c4.852 0 9.56.64 14.042 1.828-13.201-12.81-31.201-20.698-51.049-20.698-20.244 0-38.571 8.203-51.831 21.467-13.265 13.264-21.468 31.591-21.468 51.834 0 20.243 8.203 38.569 21.468 51.829 13.265 13.265 31.591 21.468 51.831 21.468 19.848 0 37.852-7.889 51.049-20.699a54.517 54.517 0 0 1-14.039 1.829c-15.028 0-28.638-6.093-38.485-15.943-9.85-9.85-15.942-23.46-15.942-38.489 0-15.027 6.092-28.638 15.942-38.488 9.843-9.842 23.449-15.939 38.482-15.939Zm25.659 28.771c-6.568-6.564-15.64-10.627-25.663-10.627s-19.095 4.063-25.663 10.627c-6.568 6.568-10.628 15.641-10.628 25.664 0 10.023 4.063 19.095 10.628 25.663 6.568 6.564 15.64 10.626 25.663 10.626s19.095-4.062 25.663-10.626c6.564-6.568 10.628-15.64 10.628-25.663l-.005-.467c-.12-9.843-4.16-18.733-10.623-25.197Zm-62.67-65.782c11.399 0 22.309 2.086 32.376 5.9-18.85-15.206-42.83-24.311-68.934-24.311-30.334 0-57.802 12.298-77.683 32.175-19.877 19.876-32.175 47.343-32.175 77.678 0 30.338 12.295 57.801 32.175 77.682 19.881 19.877 47.345 32.175 77.683 32.175 26.108 0 50.084-9.105 68.934-24.315-10.067 3.814-20.977 5.9-32.376 5.9-25.25 0-48.115-10.237-64.657-26.783-16.546-16.547-26.783-39.407-26.783-64.655 0-25.249 10.237-48.113 26.782-64.66 16.543-16.55 39.408-26.786 64.658-26.786Z"
+          clipRule="evenodd"
+        />
+      </g>
+      <defs>
+        <clipPath id="islm-a">
+          <path fill="#fff" d="M0 0h256v256H0z" />
         </clipPath>
       </defs>
     </svg>
