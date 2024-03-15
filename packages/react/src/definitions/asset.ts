@@ -1,6 +1,7 @@
 import { Blockchain } from './blockchain';
 
-export const AssetUrl = { get: `asset?blockchains=${Object.values(Blockchain).join(',')}` };
+const chains = Object.values(Blockchain).filter((c) => c !== Blockchain.DEFICHAIN);
+export const AssetUrl = { get: `asset?blockchains=${chains.join(',')}` };
 
 export enum AssetType {
   COIN = 'Coin',

@@ -10,6 +10,7 @@ import {
   FaApple,
   FaGooglePlay,
   FaFileUpload,
+  FaReceipt,
 } from 'react-icons/fa';
 import {
   MdContentCopy,
@@ -104,6 +105,7 @@ export enum IconVariant {
   APPLE = 'APPLE',
   GOOGLE_PLAY = 'GOOGLE_PLAY',
   REPEAT = 'REPEAT',
+  TRANSACTIONS = 'TRANSACTIONS',
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
@@ -157,6 +159,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.APPLE]: <FaApple />,
   [IconVariant.GOOGLE_PLAY]: <FaGooglePlay />,
   [IconVariant.REPEAT]: <MdRepeat />,
+  [IconVariant.TRANSACTIONS]: <FaReceipt />,
 };
 
 export enum IconSize {

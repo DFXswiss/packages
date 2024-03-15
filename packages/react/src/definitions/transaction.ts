@@ -19,6 +19,7 @@ export enum TransactionError {
   AMOUNT_TOO_HIGH = 'AmountTooHigh',
   BANK_TRANSACTION_MISSING = 'BankTransactionMissing',
   KYC_REQUIRED = 'KycRequired',
+  KYC_REQUIRED_INSTANT = 'KycRequiredInstant',
 }
 
 export enum TransactionType {
@@ -39,6 +40,7 @@ export enum TransactionState {
 }
 
 export interface Transaction {
+  id: number;
   type: TransactionType;
   state: TransactionState;
   inputAmount?: number;
