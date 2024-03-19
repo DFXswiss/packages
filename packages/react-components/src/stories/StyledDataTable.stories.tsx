@@ -3,6 +3,7 @@ import { IconVariant } from './DfxIcon';
 import StyledDataTable, { AlignContent } from './StyledDataTable';
 import StyledDataTableRow from './StyledDataTableRow';
 import StyledIconButton from './StyledIconButton';
+import StyledDataTableExpandableRow from './StyledDataTableExpandableRow';
 
 export default {
   title: 'Composites/StyledDataTable',
@@ -43,7 +44,7 @@ export const PaymentData: ComponentStory<typeof StyledDataTable> = (args) => {
             }}
           />
         </StyledDataTableRow>
-        <StyledDataTableRow label="BIC">
+        <StyledDataTableExpandableRow label="BIC" expansionItems={[{ label: 'Bank', text: 'Raiffeisen' }]}>
           OLKILUL1
           <StyledIconButton
             icon={IconVariant.COPY}
@@ -51,7 +52,7 @@ export const PaymentData: ComponentStory<typeof StyledDataTable> = (args) => {
               console.log('copied.');
             }}
           />
-        </StyledDataTableRow>
+        </StyledDataTableExpandableRow>
         <StyledDataTableRow
           label="Purpose of Payment"
           infoText={

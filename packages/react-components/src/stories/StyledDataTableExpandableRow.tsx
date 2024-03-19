@@ -40,6 +40,7 @@ export default function StyledDataTableExpandableRow({
   let wrapperClasses = 'flex flex-col text-sm';
   let labelClasses = ' ';
   let rowDataClasses = 'flex gap-3 w-full';
+  let separatorClasses = 'border-b my-2.5';
 
   discreet && (wrapperClasses += ' opacity-70');
 
@@ -52,10 +53,12 @@ export default function StyledDataTableExpandableRow({
   if (theme.darkTheme) {
     labelClasses += ' text-dfxGray-600';
     wrapperClasses += ' border-white/20';
+    separatorClasses += ' border-white/20';
   } else {
     labelClasses += ' text-dfxGray-800';
     rowDataClasses += ' text-dfxBlue-800';
     wrapperClasses += ' border-dfxGray-400';
+    separatorClasses += ' border-dfxGray-400';
   }
 
   rowDataClasses += ALIGN_MAPS[theme.alignContent];
@@ -81,13 +84,14 @@ export default function StyledDataTableExpandableRow({
           {isLoading ? (
             <StyledLoadingSpinner size={SpinnerSize.SM} variant={SpinnerVariant.PALE} />
           ) : (
-            <div className={`w-full cursor-pointer`} onClick={() => setIsExpanded((e) => !e)}>
-              <div className="flex flex-row">
-                <div className="flex-1">{children}</div>
-                {expansionItems.length > 0 && (
-                  <DfxIcon icon={isExpanded ? IconVariant.EXPAND_LESS : IconVariant.EXPAND_MORE} size={IconSize.LG} />
-                )}
-              </div>
+            <div
+              className={`w-full cursor-pointer flex flex-row gap-2 ${ALIGN_MAPS[theme.alignContent]}`}
+              onClick={() => setIsExpanded((e) => !e)}
+            >
+              {children}
+              {expansionItems.length > 0 && (
+                <DfxIcon icon={isExpanded ? IconVariant.EXPAND_LESS : IconVariant.EXPAND_MORE} size={IconSize.LG} />
+              )}
             </div>
           )}
         </div>
@@ -103,7 +107,7 @@ export default function StyledDataTableExpandableRow({
           )}
           {expansionItems.length > 0 && isExpanded && (
             <div>
-              <div className="border-b border-dfxGray-900 my-2.5"></div>
+              <div className={separatorClasses} />
 
               {expansionItems.map(({ label, text }) => (
                 <div key={label} className="flex">
@@ -111,9 +115,7 @@ export default function StyledDataTableExpandableRow({
                     <p className={labelClasses}>{label}</p>
                   </div>
 
-                  <div className={rowDataClasses}>
-                    <div className="flex-1">{text}</div>
-                  </div>
+                  <div className={rowDataClasses}>{text}</div>
                 </div>
               ))}
             </div>
