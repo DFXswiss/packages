@@ -20,6 +20,7 @@ export { default as StyledCollapsible } from './stories/StyledCollapsible';
 export { default as StyledTextBox } from './stories/StyledTextBox';
 export { default as StyledDataTable, AlignContent } from './stories/StyledDataTable';
 export { default as StyledDataTableRow } from './stories/StyledDataTableRow';
+export { default as StyledDataTableExpandableRow } from './stories/StyledDataTableExpandableRow';
 export { default as StyledDataTextRow } from './stories/StyledDataTextRow';
 export { default as StyledIconButton } from './stories/StyledIconButton';
 export { default as StyledInfoText, StyledInfoTextSize } from './stories/StyledInfoText';
