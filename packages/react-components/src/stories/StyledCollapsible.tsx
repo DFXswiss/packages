@@ -1,19 +1,22 @@
-import { PropsWithChildren, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 import StyledVerticalStack from './layout-helpers/StyledVerticalStack';
 import DfxIcon, { IconSize, IconVariant } from './DfxIcon';
 
 interface StyledCollapsibleProps extends PropsWithChildren {
   darkTheme?: boolean;
   full?: boolean;
-  title: string;
+  title?: string;
+  titleContent?: React.ReactNode;
   label?: string;
   smallLabel?: boolean;
+  isExpanded?: boolean;
 }
 
 const StyledCollapsible = ({
   darkTheme = false,
   full = false,
   title,
+  titleContent,
   label,
   smallLabel,
   ...props
@@ -25,6 +28,12 @@ const StyledCollapsible = ({
   const outlineColor = darkTheme ? 'outline-none' : 'outline-2 outline-dfxBlue-400';
 
   const [isExpanded, setIsExpanded] = useState(false);
+
+  useEffect(() => {
+    if (props.isExpanded != null) {
+      setIsExpanded(props.isExpanded);
+    }
+  }, [props.isExpanded]);
 
   return (
     <StyledVerticalStack gap={1} full={full}>
@@ -48,7 +57,7 @@ const StyledCollapsible = ({
           className={`p-4 w-full cursor-pointer flex flex-row ${textColor}`}
           onClick={() => setIsExpanded((e) => !e)}
         >
-          <div className="flex-1">{title}</div>
+          <div className="flex-1">{title ?? titleContent}</div>
           <DfxIcon icon={isExpanded ? IconVariant.EXPAND_LESS : IconVariant.EXPAND_MORE} size={IconSize.LG} />
         </div>
 
