@@ -4,6 +4,7 @@ import StyledDataTable from './StyledDataTable';
 import StyledDataTableRow from './StyledDataTableRow';
 import StyledHorizontalStack from './layout-helpers/StyledHorizontalStack';
 import DfxAssetIcon, { AssetIconVariant } from './DfxAssetIcon';
+import StyledVerticalStack from './layout-helpers/StyledVerticalStack';
 
 export default {
   title: 'Building Blocks/StyledCollapsible',
@@ -50,9 +51,12 @@ export const WithTitleContent: ComponentStory<typeof StyledCollapsible> = (args)
 };
 WithTitleContent.args = {
   titleContent: (
-    <StyledHorizontalStack gap={2}>
-      <DfxAssetIcon asset={AssetIconVariant.BTC} />
-      <p>Show me the Bitcoins!</p>
-    </StyledHorizontalStack>
+    <StyledVerticalStack gap={1}>
+      <StyledHorizontalStack gap={2}>
+        <DfxAssetIcon asset={AssetIconVariant.BTC} />
+        <p>Show me the Bitcoins!</p>
+      </StyledHorizontalStack>
+      Status: Pending
+    </StyledVerticalStack>
   ),
 };
