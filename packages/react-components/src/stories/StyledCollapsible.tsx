@@ -54,7 +54,7 @@ const StyledCollapsible = ({
         }
       >
         <div
-          className={`p-4 w-full cursor-pointer flex flex-row ${textColor} items-center`}
+          className={`p-4 w-full cursor-pointer flex flex-row ${textColor} items-center gap-2`}
           onClick={() => setIsExpanded((e) => !e)}
         >
           <div className="flex-1">{title ?? titleContent}</div>

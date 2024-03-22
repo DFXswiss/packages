@@ -80,6 +80,7 @@ export {
   TransactionError,
   TransactionType,
   TransactionState,
+  TransactionFailureReason,
   Transaction,
 } from './definitions/transaction';
 

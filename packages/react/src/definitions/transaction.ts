@@ -39,10 +39,28 @@ export enum TransactionState {
   RETURNED = 'Returned',
 }
 
+export enum TransactionFailureReason {
+  UNKNOWN = 'Unknown',
+  DAILY_LIMIT_EXCEEDED = 'DailyLimitExceeded',
+  ANNUAL_LIMIT_EXCEEDED = 'AnnualLimitExceeded',
+  ACCOUNT_HOLDER_MISMATCH = 'AccountHolderMismatch',
+  KYC_REJECTED = 'KycRejected',
+  FRAUD_SUSPICION = 'FraudSuspicion',
+  SANCTION_SUSPICION = 'SanctionSuspicion',
+  MIN_DEPOSIT_NOT_REACHED = 'MinDepositNotReached',
+  ASSET_NOT_AVAILABLE = 'AssetNotAvailable',
+  STAKING_DISCONTINUED = 'StakingDiscontinued',
+  BANK_NOT_ALLOWED = 'BankNotAllowed',
+  PAYMENT_ACCOUNT_NOT_ALLOWED = 'PaymentAccountNotAllowed',
+  COUNTRY_NOT_ALLOWED = 'CountryNotAllowed',
+  INSTANT_PAYMENT = 'InstantPayment',
+}
+
 export interface Transaction {
   id: number;
   type: TransactionType;
   state: TransactionState;
+  reason: TransactionFailureReason;
   inputAmount?: number;
   inputAsset?: string;
   inputAssetId?: number;
