@@ -83,7 +83,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
 
   async function createSession(address: string, signature: string, discount?: string): Promise<string | undefined> {
     setIsProcessing(true);
-    return createApiSession(address, signature, false, undefined, undefined, discount)
+    return createApiSession(false, address, signature, undefined, discount)
       .catch((error: ApiError) => {
         if (error.statusCode === 404) {
           setStoredSignature(signature);
@@ -107,7 +107,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     if (!address || !signature) throw new Error('Address or signature not defined');
 
     setIsProcessing(true);
-    return createApiSession(address, signature, true, wallet, ref, discount).finally(() => {
+    return createApiSession(true, address, signature, undefined, discount, wallet, ref).finally(() => {
       setStoredSignature(undefined);
       setNeedsSignUp(false);
       setIsProcessing(false);
