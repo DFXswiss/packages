@@ -20,15 +20,21 @@ export function useAssetContext(): AssetInterface {
   return useContext(AssetContext);
 }
 
-export function AssetContextProvider(props: PropsWithChildren): JSX.Element {
+export interface AssetContextProviderProps extends PropsWithChildren {
+  includePrivateAssets?: boolean;
+}
+
+export function AssetContextProvider(props: AssetContextProviderProps): JSX.Element {
   const { session } = useApiSession();
   const { getAssets: getApiAssets } = useAsset();
   const [assets, setAssets] = useState<Asset[]>([]);
   const [assetsLoading, setAssetsLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    const chains = Object.values(Blockchain).filter((c) => c !== Blockchain.DEFICHAIN);
+
     setAssetsLoading(true);
-    getApiAssets()
+    getApiAssets(chains, props.includePrivateAssets ?? false)
       .then(updateAssets)
       .finally(() => setAssetsLoading(false));
   }, [session]);

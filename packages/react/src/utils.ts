@@ -26,7 +26,7 @@ export class Utils {
   }
 
   static formatAmount(amount?: number): string {
-    return amount?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') ?? '';
+    return amount?.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') ?? '';
   }
 
   static formatAmountCrypto(num: number): string {
