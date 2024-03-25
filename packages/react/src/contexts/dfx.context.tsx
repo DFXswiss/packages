@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { AssetContextProvider } from './asset.context';
+import { AssetContextProvider, AssetContextProviderProps } from './asset.context';
 import { AuthContextProvider } from './auth.context';
 import { BankAccountContextProvider } from './bank-account.context';
 import { SessionContextProvider, SessionContextProviderProps } from './session.context';
@@ -7,7 +7,7 @@ import { UserContextProvider } from './user.context';
 import { FiatContextProvider } from './fiat.context';
 import { LanguageContextProvider } from './language.context';
 
-type DfxContextProviderProps = SessionContextProviderProps & PropsWithChildren;
+type DfxContextProviderProps = SessionContextProviderProps & PropsWithChildren & AssetContextProviderProps;
 
 export function DfxContextProvider(props: DfxContextProviderProps): JSX.Element {
   return (
@@ -16,7 +16,7 @@ export function DfxContextProvider(props: DfxContextProviderProps): JSX.Element 
         <UserContextProvider>
           <FiatContextProvider>
             <LanguageContextProvider>
-              <AssetContextProvider>
+              <AssetContextProvider includePrivateAssets={props.includePrivateAssets}>
                 <BankAccountContextProvider>{props.children}</BankAccountContextProvider>
               </AssetContextProvider>
             </LanguageContextProvider>
