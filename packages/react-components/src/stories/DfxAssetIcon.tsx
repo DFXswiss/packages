@@ -47,6 +47,7 @@ export enum AssetIconVariant {
   XMR = 'XMR',
   ZCHF = 'ZCHF',
   FPS = 'FPS',
+  WFPS = 'WFPS',
   YLD = 'YLD',
   ISLM = 'ISLM',
 
@@ -111,6 +112,7 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.XMR]: ({ forceColor }) => <DfxAssetIconXMR forceColor={forceColor} />,
   [AssetIconVariant.ZCHF]: ({ forceColor }) => <DfxAssetIconZCHF forceColor={forceColor} />,
   [AssetIconVariant.FPS]: ({ forceColor }) => <DfxAssetIconFPS forceColor={forceColor} />,
+  [AssetIconVariant.WFPS]: ({ forceColor }) => <DfxAssetIconFPS forceColor={forceColor} />,
   [AssetIconVariant.YLD]: ({ forceColor }) => <DfxAssetIconYLD forceColor={forceColor} />,
   [AssetIconVariant.ISLM]: ({ forceColor }) => <DfxAssetIconISLM forceColor={forceColor} />,
 

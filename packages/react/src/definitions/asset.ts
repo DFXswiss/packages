@@ -1,11 +1,16 @@
 import { Blockchain } from './blockchain';
 
 const chains = Object.values(Blockchain).filter((c) => c !== Blockchain.DEFICHAIN);
-export const AssetUrl = { get: `asset?blockchains=${chains.join(',')}` };
+export const AssetUrl = { get: `asset?blockchains=${chains.join(',')}&includePrivate=true` };
 
 export enum AssetType {
   COIN = 'Coin',
   TOKEN = 'Token',
+}
+
+export enum AssetCategory {
+  PUBLIC = 'Public',
+  PRIVATE = 'Private',
 }
 
 export interface Asset {
@@ -27,4 +32,5 @@ export interface Asset {
   chainId?: string;
   explorerUrl?: string;
   type: AssetType;
+  category: AssetCategory;
 }

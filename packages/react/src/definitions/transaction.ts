@@ -33,6 +33,7 @@ export enum TransactionState {
   CREATED = 'Created',
   PROCESSING = 'Processing',
   AML_PENDING = 'AmlPending',
+  KYC_REQUIRED = 'KycRequired',
   FEE_TOO_HIGH = 'FeeTooHigh',
   COMPLETED = 'Completed',
   FAILED = 'Failed',
