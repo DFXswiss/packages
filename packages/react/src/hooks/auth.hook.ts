@@ -4,7 +4,7 @@ import { useApi } from './api.hook';
 
 export interface AuthInterface {
   getSignMessage: (address: string) => Promise<string>;
-  auth: (
+  authenticate: (
     address: string,
     signature: string,
     key?: string,
@@ -45,7 +45,7 @@ export function useAuth(): AuthInterface {
     );
   }
 
-  async function auth(
+  async function authenticate(
     address: string,
     signature: string,
     key?: string,
@@ -109,7 +109,7 @@ export function useAuth(): AuthInterface {
   }
 
   return useMemo(
-    () => ({ getSignMessage, auth, signIn, signUp, signInWithMail, createLnurlAuth, getLnurlAuth }),
+    () => ({ getSignMessage, authenticate, signIn, signUp, signInWithMail, createLnurlAuth, getLnurlAuth }),
     [call],
   );
 }
