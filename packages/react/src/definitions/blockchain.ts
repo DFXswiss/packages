@@ -11,5 +11,6 @@ export enum Blockchain {
   POLYGON = 'Polygon',
   BASE = 'Base',
   HAQQ = 'Haqq',
+  ARWEAVE = 'Arweave',
   CARDANO = 'Cardano',
 }
