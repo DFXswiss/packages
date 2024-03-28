@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
 import { useApi } from './api.hook';
-import { Transaction, TransactionUrl } from '../definitions/transaction';
+import { DetailTransaction, Transaction, TransactionUrl, UnassignedTransaction } from '../definitions/transaction';
 import { useAuthContext } from '../contexts/auth.context';
 
 export interface TransactionInterface {
   getTransactions: () => Promise<Transaction[]>;
+  getDetailTransactions: (from?: Date, to?: Date) => Promise<DetailTransaction[]>;
+  getUnassignedTransactions: () => Promise<UnassignedTransaction[]>;
 }
 
 export function useTransaction(): TransactionInterface {
@@ -17,9 +19,23 @@ export function useTransaction(): TransactionInterface {
     return call<Transaction[]>({ url: `${TransactionUrl.get}?userAddress=${session.address}`, method: 'GET' });
   }
 
+  async function getDetailTransactions(from?: Date, to?: Date): Promise<DetailTransaction[]> {
+    const params = new URLSearchParams();
+    from && params.append('from', from.toISOString());
+    to && params.append('to', to.toISOString());
+
+    return call<Transaction[]>({ url: `${TransactionUrl.detail}?${params.toString()}`, method: 'GET' });
+  }
+
+  async function getUnassignedTransactions(): Promise<UnassignedTransaction[]> {
+    return call<Transaction[]>({ url: `${TransactionUrl.unassigned}`, method: 'GET' });
+  }
+
   return useMemo(
     () => ({
       getTransactions,
+      getDetailTransactions,
+      getUnassignedTransactions,
     }),
     [call],
   );

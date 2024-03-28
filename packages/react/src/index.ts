@@ -81,8 +81,11 @@ export {
   TransactionType,
   TransactionState,
   TransactionFailureReason,
+  UnassignedTransaction,
   Transaction,
+  DetailTransaction,
 } from './definitions/transaction';
+export { Fees } from './definitions/fees';
 
 // Utils & Validations
 export { Utils } from './utils';

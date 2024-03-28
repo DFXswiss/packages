@@ -1,4 +1,8 @@
-export const TransactionUrl = { get: 'transaction' };
+export const TransactionUrl = {
+  get: 'transaction',
+  detail: 'transaction/detail',
+  unassigned: 'transaction/unassigned',
+};
 
 import { Blockchain } from './blockchain';
 
@@ -57,16 +61,22 @@ export enum TransactionFailureReason {
   INSTANT_PAYMENT = 'InstantPayment',
 }
 
-export interface Transaction {
+export interface UnassignedTransaction {
   id: number;
   type: TransactionType;
-  state: TransactionState;
-  reason: TransactionFailureReason;
   inputAmount?: number;
   inputAsset?: string;
   inputAssetId?: number;
   inputBlockchain?: Blockchain;
   inputPaymentMethod?: PaymentMethod;
+  inputTxId?: string;
+  inputTxUrl?: string;
+  date: Date;
+}
+
+export interface Transaction extends UnassignedTransaction {
+  state: TransactionState;
+  reason: TransactionFailureReason;
   exchangeRate?: number;
   rate?: number;
   outputAmount?: number;
@@ -74,12 +84,14 @@ export interface Transaction {
   outputAssetId?: number;
   outputBlockchain?: Blockchain;
   outputPaymentMethod?: PaymentMethod;
-  feeAmount?: number;
-  feeAsset?: string;
-  inputTxId?: string;
-  inputTxUrl?: string;
   outputTxId?: string;
   outputTxUrl?: string;
-  date: Date;
+  feeAmount?: number;
+  feeAsset?: string;
   externalTransactionId?: string;
+}
+
+export interface DetailTransaction extends Transaction {
+  sourceAccount?: string;
+  targetAccount?: string;
 }
