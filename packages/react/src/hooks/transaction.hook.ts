@@ -47,7 +47,7 @@ export function useTransaction(): TransactionInterface {
   }
 
   async function getTransactionTargets(): Promise<TransactionTarget[]> {
-    return call<TransactionTarget[]>({ url: `${TransactionUrl.unassigned}`, method: 'GET' });
+    return call<TransactionTarget[]>({ url: `${TransactionUrl.target}`, method: 'GET' });
   }
 
   async function setTransactionTarget(transactionId: number, buyId: number): Promise<void> {
