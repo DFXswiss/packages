@@ -1,9 +1,13 @@
 export const TransactionUrl = {
   get: 'transaction',
   detail: 'transaction/detail',
+  csv: 'transaction/detail/csv',
   unassigned: 'transaction/unassigned',
+  target: 'transaction/target',
+  setTarget: (id: number) => `transaction/${id}/target`,
 };
 
+import { Asset } from './asset';
 import { Blockchain } from './blockchain';
 
 export enum FiatPaymentMethod {
@@ -94,4 +98,11 @@ export interface Transaction extends UnassignedTransaction {
 export interface DetailTransaction extends Transaction {
   sourceAccount?: string;
   targetAccount?: string;
+}
+
+export interface TransactionTarget {
+  id: number;
+  bankUsage: string;
+  asset: Asset;
+  address: string;
 }

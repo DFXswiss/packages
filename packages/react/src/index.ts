@@ -84,6 +84,7 @@ export {
   UnassignedTransaction,
   Transaction,
   DetailTransaction,
+  TransactionTarget,
 } from './definitions/transaction';
 export { Fees } from './definitions/fees';
 
