@@ -4,6 +4,7 @@ export const BankAccountUrl = {
   get: 'bankAccount',
   create: 'bankAccount',
   update: (id: number) => `bankAccount/${id}`,
+  iban: 'iban',
 };
 
 export interface BankAccount {
@@ -12,4 +13,8 @@ export interface BankAccount {
   label?: string;
   preferredCurrency?: Fiat;
   sepaInstant: boolean;
+}
+
+export interface Iban {
+  iban: string;
 }
