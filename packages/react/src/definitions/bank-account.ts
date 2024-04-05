@@ -4,7 +4,7 @@ export const BankAccountUrl = {
   get: 'bankAccount',
   create: 'bankAccount',
   update: (id: number) => `bankAccount/${id}`,
-  iban: 'iban',
+  iban: 'bankAccount/iban',
 };
 
 export interface BankAccount {
