@@ -21,7 +21,7 @@ export default function StyledModalButton({
   ...props
 }: StyledModalButtonProps): JSX.Element {
   return (
-    <StyledVerticalStack gap={1} marginY={4}>
+    <StyledVerticalStack gap={1}>
       <label className="text-dfxBlue-800 text-base font-semibold pl-4 text-start">{label}</label>
       <button
         type="button"
