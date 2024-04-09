@@ -1,4 +1,4 @@
-import { KycState, KycStatus } from './kyc';
+import { KycState, KycStatus, TradingLimit } from './kyc';
 import { Language } from './language';
 
 export const UserUrl = { get: 'user/detail', change: 'user', discountCodes: 'user/discountCodes' };
@@ -10,12 +10,14 @@ export enum UserStatus {
 }
 
 export interface User {
+  wallet: string;
   language: Language;
   mail: string;
   kycDataComplete: boolean;
   kycState: KycState;
   kycStatus: KycStatus;
-  tradingLimit: UserTradingLimit;
+  kycLevel: number;
+  tradingLimit: TradingLimit;
   kycHash: string;
   status: UserStatus;
 
@@ -25,9 +27,4 @@ export interface User {
   refVolume: number;
   refCredit: number;
   paidRefCredit: number;
-}
-
-export interface UserTradingLimit {
-  limit: number;
-  period: 'Day' | 'Year';
 }

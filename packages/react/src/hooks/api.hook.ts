@@ -3,6 +3,7 @@ import { useAuthContext } from '../contexts/auth.context';
 import { ApiError } from '../definitions/error';
 
 export interface ApiInterface {
+  baseUrl: string;
   call: <T>(config: CallConfig) => Promise<T>;
 }
 
@@ -22,6 +23,10 @@ interface SpecialHandling {
 export function useApi(): ApiInterface {
   const { authenticationToken, setAuthenticationToken } = useAuthContext();
 
+  const url = process.env.REACT_APP_API_URL ?? 'https://api.dfx.swiss';
+  const version = process.env.REACT_APP_API_VERSION ?? 'v1';
+  const baseUrl = `${url}/${version}`;
+
   async function call<T>(config: CallConfig): Promise<T> {
     return fetchFrom<T>(config).catch((error: ApiError) => {
       if (error.statusCode === 401) {
@@ -34,7 +39,7 @@ export function useApi(): ApiInterface {
 
   async function fetchFrom<T>(config: CallConfig): Promise<T> {
     return fetch(
-      `${process.env.REACT_APP_API_URL ?? 'https://api.dfx.swiss/v1'}/${config.url}`,
+      `${baseUrl}/${config.url}`,
       buildInit(config.method, authenticationToken, config.data, config.noJson),
     ).then((response) => {
       if (response.status === config.specialHandling?.statusCode) {
@@ -65,5 +70,5 @@ export function useApi(): ApiInterface {
     };
   }
 
-  return useMemo(() => ({ call }), [authenticationToken]);
+  return useMemo(() => ({ baseUrl, call }), [authenticationToken]);
 }

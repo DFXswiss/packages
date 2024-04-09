@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { BankAccount, BankAccountUrl } from '../definitions/bank-account';
+import { BankAccount, BankAccountUrl, Iban } from '../definitions/bank-account';
 import { Fiat } from '../definitions/fiat';
 import { useApi } from './api.hook';
 
@@ -19,6 +19,9 @@ export interface BankAccountInterface {
   getAccount: (accounts?: BankAccount[], identifier?: string) => BankAccount | undefined;
   createAccount: (newAccount: CreateBankAccount) => Promise<BankAccount>;
   updateAccount: (id: number, changedAccount: UpdateBankAccount) => Promise<BankAccount>;
+
+  getIbans: () => Promise<Iban[]>;
+  addIban: (iban: string) => Promise<void>;
 }
 
 export function useBankAccount(): BankAccountInterface {
@@ -46,5 +49,13 @@ export function useBankAccount(): BankAccountInterface {
     return call<BankAccount>({ url: BankAccountUrl.update(id), method: 'PUT', data: changedAccount });
   }
 
-  return useMemo(() => ({ getAccounts, getAccount, createAccount, updateAccount }), [call]);
+  async function getIbans(): Promise<Iban[]> {
+    return call<Iban[]>({ url: BankAccountUrl.iban, method: 'GET' });
+  }
+
+  async function addIban(iban: string): Promise<void> {
+    return call({ url: BankAccountUrl.iban, method: 'POST', data: { iban } });
+  }
+
+  return useMemo(() => ({ getAccounts, getAccount, createAccount, updateAccount, getIbans, addIban }), [call]);
 }

@@ -82,15 +82,14 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
                 <div
                   className={`text-dfxGray-800 absolute ${
                     prefix.length > 0 ? 'left-3' : ''
-                  } flex justify-center items-center`}
-                  style={{ height: '3.6rem' }}
+                  } flex justify-center items-center h-[3.6rem]`}
                 >
                   <p>{prefix}</p>
                 </div>
               )}
 
               {loading && (
-                <div className="absolute right-3 h-w-8 flex justify-center items-center" style={{ height: '3.6rem' }}>
+                <div className="absolute right-3 h-w-8 flex justify-center items-center h-[3.6rem]">
                   <StyledLoadingSpinner />
                 </div>
               )}
@@ -99,10 +98,11 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
                 <div
                   className={`text-dfxRed-100 absolute ${
                     buttonLabel.length > 0 ? 'right-3' : ''
-                  } flex justify-center items-center`}
-                  style={{ height: '3.6rem' }}
+                  } flex justify-center items-center h-[3.6rem]`}
                 >
-                  <button onClick={buttonClick}>{buttonLabel}</button>
+                  <button type="button" onClick={buttonClick}>
+                    {buttonLabel}
+                  </button>
                 </div>
               )}
 

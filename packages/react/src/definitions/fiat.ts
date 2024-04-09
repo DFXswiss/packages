@@ -5,4 +5,8 @@ export interface Fiat {
   name: string;
   buyable: boolean;
   sellable: boolean;
+  cardBuyable: boolean;
+  cardSellable: boolean;
+  instantBuyable: boolean;
+  instantSellable: boolean;
 }

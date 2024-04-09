@@ -3,6 +3,7 @@ import { Blockchain } from '../definitions/blockchain';
 import { ApiError } from '../definitions/error';
 import { useApiSession } from '../hooks/api-session.hook';
 import { useAuthContext } from './auth.context';
+import { useAuth } from '../hooks/auth.hook';
 
 export interface SessionInterface {
   address?: string;
@@ -12,6 +13,14 @@ export interface SessionInterface {
   isLoggedIn: boolean;
   needsSignUp: boolean;
   isProcessing: boolean;
+  authenticate: (
+    address: string,
+    signature: string,
+    key?: string,
+    discount?: string,
+    wallet?: string,
+    ref?: string,
+  ) => Promise<string>;
   login: (address?: string, signature?: string, discount?: string) => Promise<string | undefined>;
   signUp: (
     address?: string,
@@ -49,6 +58,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     session,
     getSignMessage,
     createSession: createApiSession,
+    createSessionNew: createApiSessionNew,
     deleteSession,
   } = useApiSession();
   const { authenticationToken } = useAuthContext();
@@ -68,6 +78,18 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     }
   }, [data.address]);
 
+  async function authenticate(
+    address: string,
+    signature: string,
+    key?: string,
+    discount?: string,
+    wallet?: string,
+    ref?: string,
+  ): Promise<string> {
+    setIsProcessing(true);
+    return createApiSessionNew(address, signature, key, discount, wallet, ref).finally(() => setIsProcessing(false));
+  }
+
   async function login(
     address = data.address,
     signature = storedSignature,
@@ -83,7 +105,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
 
   async function createSession(address: string, signature: string, discount?: string): Promise<string | undefined> {
     setIsProcessing(true);
-    return createApiSession(address, signature, false, undefined, undefined, discount)
+    return createApiSession(false, address, signature, undefined, discount)
       .catch((error: ApiError) => {
         if (error.statusCode === 404) {
           setStoredSignature(signature);
@@ -107,7 +129,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     if (!address || !signature) throw new Error('Address or signature not defined');
 
     setIsProcessing(true);
-    return createApiSession(address, signature, true, wallet, ref, discount).finally(() => {
+    return createApiSession(true, address, signature, undefined, discount, wallet, ref).finally(() => {
       setStoredSignature(undefined);
       setNeedsSignUp(false);
       setIsProcessing(false);
@@ -135,6 +157,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       isLoggedIn,
       needsSignUp,
       isProcessing,
+      authenticate,
       login,
       signUp,
       logout,

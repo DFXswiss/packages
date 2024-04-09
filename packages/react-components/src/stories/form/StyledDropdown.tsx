@@ -38,6 +38,7 @@ export default function StyledDropdown<T>({
   assetIconFunc,
   rootRef,
   forceEnable,
+  error,
   ...props
 }: StyledDropdownProps<T>) {
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -45,7 +46,7 @@ export default function StyledDropdown<T>({
 
   const [isOpen, setIsOpen] = useState(false);
 
-  let buttonClasses = 'flex justify-between border border-dfxGray-500 px-4 py-3 shadow-sm w-full';
+  let buttonClasses = 'flex justify-between border border-dfxGray-500 px-4 py-2 shadow-sm w-full h-[58px]';
 
   isOpen ? (buttonClasses += ' rounded-x rounded-t bg-dfxGray-400/50') : (buttonClasses += ' rounded');
 
@@ -100,7 +101,7 @@ export default function StyledDropdown<T>({
             disabled={isDisabled}
             {...props}
           >
-            <div className="flex flex-row gap-2 items-center w-full">
+            <div className="flex flex-row gap-2 items-center w-full h-full">
               {value && assetIconFunc && <DfxAssetIcon asset={assetIconFunc(value)} />}
               <div className="flex flex-col gap-1 justify-between text-left w-full">
                 {value === undefined ? (
@@ -108,7 +109,9 @@ export default function StyledDropdown<T>({
                 ) : (
                   <>
                     <span
-                      className={`text-dfxBlue-800 leading-none font-semibold flex justify-between ${
+                      className={`${
+                        error ? 'text-dfxRed-100' : 'text-dfxBlue-800'
+                      } leading-none font-semibold flex justify-between ${
                         !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
                       }`}
                     >
@@ -132,15 +135,16 @@ export default function StyledDropdown<T>({
               </div>
             )}
           </button>
+
           {isOpen && (
             <div
               ref={dropdownRef}
-              className="absolute bg-white rounded-b border-x border-b border-dfxGray-500 w-full z-10 overflow-y-auto"
-              style={{ maxHeight: '15rem' }}
+              className="absolute bg-white rounded-b border-x border-b border-dfxGray-500 w-full z-10 overflow-y-auto max-h-[15rem]"
             >
               {items.map((item, index) => (
                 <button
                   key={index}
+                  type="button"
                   onClick={() => {
                     onChange(item);
                     setIsOpen(false);
@@ -170,6 +174,8 @@ export default function StyledDropdown<T>({
               ))}
             </div>
           )}
+
+          {error && <p className="text-start text-sm text-dfxRed-100 pl-3">{error?.message}</p>}
         </div>
       )}
       name={name}

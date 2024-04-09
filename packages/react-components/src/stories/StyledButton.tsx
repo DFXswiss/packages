@@ -15,6 +15,7 @@ export enum StyledButtonWidth {
 
 export enum StyledButtonColor {
   RED = 'RED',
+  BLUE = 'BLUE',
   GRAY = 'GRAY',
   GRAY_OUTLINE = 'GRAY_OUTLINE',
   PALE_WHITE = 'PALE_WHITE',
@@ -23,6 +24,7 @@ export enum StyledButtonColor {
 }
 
 export interface StyledButtonProps {
+  type?: 'submit' | 'reset' | 'button';
   className?: string;
   label: string;
   onClick: () => void;
@@ -68,6 +70,11 @@ const COLOR_MAPS: Record<StyledButtonColor, ColorMapProps> = {
       'bg-primary-red text-white hover:bg-dfxRed-150 focus:bg-dfxRed-150 active:bg-dfxRed-100 hover:shadow-lg',
     iconColor: IconColor.WHITE,
   },
+  [StyledButtonColor.BLUE]: {
+    buttonColorClasses:
+      'bg-primary-blue text-white hover:bg-dfxBlue-600 focus:bg-dfxBlue-600 active:bg-dfxBlue-800 hover:shadow-lg',
+    iconColor: IconColor.WHITE,
+  },
   [StyledButtonColor.GRAY]: {
     buttonColorClasses: 'bg-dfxGray-800 text-dfxGray-700',
     iconColor: IconColor.DARK_GRAY,
@@ -101,6 +108,7 @@ const WIDTH_MAPS: Record<StyledButtonWidth, string> = {
 };
 
 export default function StyledButton({
+  type = 'button',
   className,
   label,
   onClick,
@@ -144,7 +152,7 @@ export default function StyledButton({
 
   return (
     <>
-      <button type="button" className={buttonClasses} onClick={onClick} disabled={isDisabled}>
+      <button type={type} className={buttonClasses} onClick={onClick} disabled={isDisabled}>
         {iconAfterLabel && label}
         {icon && (
           <DfxIcon

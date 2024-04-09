@@ -20,6 +20,7 @@ export { default as StyledCollapsible } from './stories/StyledCollapsible';
 export { default as StyledTextBox } from './stories/StyledTextBox';
 export { default as StyledDataTable, AlignContent } from './stories/StyledDataTable';
 export { default as StyledDataTableRow } from './stories/StyledDataTableRow';
+export { default as StyledDataTableExpandableRow } from './stories/StyledDataTableExpandableRow';
 export { default as StyledDataTextRow } from './stories/StyledDataTextRow';
 export { default as StyledIconButton } from './stories/StyledIconButton';
 export { default as StyledInfoText, StyledInfoTextSize } from './stories/StyledInfoText';
@@ -32,6 +33,7 @@ export { default as StyledTab } from './stories/StyledTab';
 export { default as StyledTabContainer, StyledTabProps } from './stories/StyledTabContainer';
 export { default as StyledTabContentWrapper } from './stories/StyledTabContentWrapper';
 export { default as StyledVideoGrid, VideoSourcesProps } from './stories/StyledVideoGrid';
+export { default as StyledSearchInput, StyledSearchInputProps } from './stories/StyledSearchInput';
 
 // Layout helpers
 export { default as StyledHorizontalStack } from './stories/layout-helpers/StyledHorizontalStack';
@@ -42,6 +44,8 @@ export { default as StyledSpacer } from './stories/layout-helpers/StyledSpacer';
 export { default as Form } from './stories/form/Form';
 export { default as StyledBankAccountListItem } from './stories/form/StyledBankAccountListItem';
 export { default as StyledDropdown } from './stories/form/StyledDropdown';
+export { default as StyledSearchDropdown } from './stories/form/StyledSearchDropdown';
 export { default as StyledInput } from './stories/form/StyledInput';
+export { default as StyledFileUpload } from './stories/form/StyledFileUpload';
 export { default as StyledModalDropdown } from './stories/form/StyledModalDropdown';
 export { default as StyledModalButton } from './stories/form/StyledModalButton';

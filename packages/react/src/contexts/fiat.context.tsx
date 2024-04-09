@@ -21,7 +21,11 @@ export function FiatContextProvider(props: PropsWithChildren): JSX.Element {
   }, []);
 
   const context: FiatInterface = useMemo(
-    () => ({ currencies: currencies?.filter((c) => c.buyable || c.sellable) }),
+    () => ({
+      currencies: currencies?.filter(
+        (c) => c.buyable || c.sellable || c.cardBuyable || c.cardSellable || c.instantBuyable || c.instantSellable,
+      ),
+    }),
     [currencies],
   );
 

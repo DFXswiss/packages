@@ -9,12 +9,21 @@ export interface ApiSessionInterface {
   session?: Session;
   getSignMessage: (address: string) => Promise<string>;
   createSession: (
+    isSignUp: boolean,
     address: string,
     signature: string,
-    isSignUp: boolean,
+    key?: string,
+    discount?: string,
     wallet?: string,
     ref?: string,
+  ) => Promise<string>;
+  createSessionNew: (
+    address: string,
+    signature: string,
+    key?: string,
     discount?: string,
+    wallet?: string,
+    ref?: string,
   ) => Promise<string>;
   updateSession: (token: string) => void;
   deleteSession: () => Promise<void>;
@@ -22,22 +31,37 @@ export interface ApiSessionInterface {
 
 export function useApiSession(): ApiSessionInterface {
   const { isInitialized, isLoggedIn, session, setAuthenticationToken } = useAuthContext();
-  const { getSignMessage, signIn, signUp } = useAuth();
+  const { getSignMessage, authenticate, signIn, signUp } = useAuth();
 
   async function createSession(
+    isSignUp: boolean,
     address: string,
     signature: string,
-    isSignUp: boolean,
+    key?: string,
+    discount?: string,
     wallet?: string,
     ref?: string,
-    discount?: string,
   ): Promise<string> {
-    return (isSignUp ? signUp(address, signature, wallet, ref, discount) : signIn(address, signature, discount)).then(
-      ({ accessToken }) => {
-        setAuthenticationToken(accessToken);
-        return accessToken;
-      },
-    );
+    return (
+      isSignUp ? signUp(address, signature, key, discount, wallet, ref) : signIn(address, signature, key, discount)
+    ).then(({ accessToken }) => {
+      setAuthenticationToken(accessToken);
+      return accessToken;
+    });
+  }
+
+  async function createSessionNew(
+    address: string,
+    signature: string,
+    key?: string,
+    discount?: string,
+    wallet?: string,
+    ref?: string,
+  ) {
+    return authenticate(address, signature, key, discount, wallet, ref).then(({ accessToken }) => {
+      setAuthenticationToken(accessToken);
+      return accessToken;
+    });
   }
 
   async function updateSession(token: string) {
@@ -49,7 +73,16 @@ export function useApiSession(): ApiSessionInterface {
   }
 
   return useMemo(
-    () => ({ isInitialized, isLoggedIn, session, getSignMessage, createSession, updateSession, deleteSession }),
+    () => ({
+      isInitialized,
+      isLoggedIn,
+      session,
+      getSignMessage,
+      createSession,
+      createSessionNew,
+      updateSession,
+      deleteSession,
+    }),
     [isInitialized, isLoggedIn, session, setAuthenticationToken, getSignMessage, signIn, signUp],
   );
 }

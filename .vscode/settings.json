@@ -4,14 +4,20 @@
   "cSpell.words": [
     "aave",
     "arbitrum",
+    "arweave",
     "bahnhofstrasse",
     "bignumber",
     "bscusd",
     "btcb",
+    "cardano",
+    "defichain",
+    "haqq",
     "iban",
     "ibans",
     "ibantools",
+    "islm",
     "lnurl",
+    "monero",
     "multichain",
     "noreferrer",
     "olkilul",
@@ -20,7 +26,9 @@
     "sepa",
     "tailwindcss",
     "testid",
-    "videoid"
+    "videoid",
+    "wfps",
+    "zchf"
   ],
   "files.exclude": {
     "node_modules": true

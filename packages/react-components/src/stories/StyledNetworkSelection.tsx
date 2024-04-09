@@ -12,7 +12,7 @@ export default function StyledNetworkSelection({
   return (
     <div className="flex flex-row gap-4 pb-5 border-b border-dfxGray-400">
       {networks.map((element) => (
-        <button key={element.network} onClick={() => onNetworkChange(element.network)}>
+        <button type="button" key={element.network} onClick={() => onNetworkChange(element.network)}>
           <StyledNetworkChip {...element} />
         </button>
       ))}

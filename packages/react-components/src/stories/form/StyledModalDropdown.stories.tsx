@@ -22,9 +22,9 @@ function AddTest({ onSubmit }: { onSubmit: (test: TestElement) => void }): JSX.E
   } = useForm<TestElement>();
 
   return (
-    <Form control={control} errors={errors} onSubmit={handleSubmit(onSubmit)}>
+    <Form control={control} errors={errors} onSubmit={handleSubmit(onSubmit)} hasFormElement={false}>
       <StyledInput label="Test" placeholder="put something in" name="test" />
-      <StyledButton label="complete" onClick={handleSubmit(onSubmit)} caps />
+      <StyledButton type="submit" label="complete" onClick={handleSubmit(onSubmit)} caps />
     </Form>
   );
 }
@@ -41,7 +41,7 @@ export const BuyAmount: ComponentStory<typeof StyledModalDropdown> = (args) => {
   };
   return (
     <div className="bg-white p-10">
-      <Form control={control} errors={errors} onSubmit={onSubmit}>
+      <Form control={control} errors={errors} onSubmit={onSubmit} hasFormElement={false}>
         <StyledModalDropdown<TestElement>
           {...args}
           name="test"

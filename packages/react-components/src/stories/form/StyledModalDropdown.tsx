@@ -48,6 +48,7 @@ export default function StyledModalDropdown<T>({
                   .map((obj, index: number) => (
                     <button
                       key={index}
+                      type="button"
                       className="text-start"
                       onClick={() => {
                         onChange(obj.item);

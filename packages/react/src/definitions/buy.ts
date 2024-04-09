@@ -1,13 +1,9 @@
 import { Asset } from './asset';
+import { Fees } from './fees';
 import { Fiat } from './fiat';
-import { TransactionError } from './transaction';
+import { FiatPaymentMethod, TransactionError } from './transaction';
 
 export const BuyUrl = { receive: 'buy/paymentInfos' };
-
-export enum BuyPaymentMethod {
-  BANK = 'Bank',
-  CARD = 'Card',
-}
 
 export interface Buy {
   name: string;
@@ -16,26 +12,27 @@ export interface Buy {
   zip: string;
   city: string;
   country: string;
-  iban: string;
+  iban?: string;
   bic: string;
   sepaInstant: boolean;
   routeId: number;
   remittanceInfo: string;
-  fee: number;
-  minFee: number;
+  fees: Fees;
   minVolume: number;
   maxVolume: number;
-  minFeeTarget: number;
-  minVolumeTarget: number;
-  maxVolumeTarget: number;
   amount: number;
   currency: Fiat;
-  estimatedAmount: number;
-  rate: number;
+  feesTarget: Fees;
+  minVolumeTarget: number;
+  maxVolumeTarget: number;
   exchangeRate: number;
+  rate: number;
+  exactPrice: boolean;
+  estimatedAmount: number;
   asset: Asset;
   paymentRequest?: string;
   paymentLink?: string;
+  nameRequired?: boolean;
   isValid: boolean;
   error?: TransactionError;
 }
@@ -45,5 +42,7 @@ export interface BuyPaymentInfo {
   amount?: number;
   asset: Asset;
   targetAmount?: number;
-  paymentMethod?: BuyPaymentMethod;
+  paymentMethod?: FiatPaymentMethod;
+  externalTransactionId?: string;
+  exactPrice?: boolean;
 }

@@ -1,7 +1,9 @@
 export const AuthUrl = {
   signMessage: 'auth/signMessage',
+  auth: 'auth',
   signIn: 'auth/signIn',
   signUp: 'auth/signUp',
+  signInWithMail: 'auth/mail',
   lnurl: 'lnurla',
   lnurlStatus: 'lnurla/status',
 };

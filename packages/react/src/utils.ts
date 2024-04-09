@@ -25,12 +25,12 @@ export class Utils {
     return obj ? { ...obj, ...update } : undefined;
   }
 
-  static formatAmount(amount?: number): string {
-    return amount?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') ?? '';
+  static formatAmount(amount?: number, decimals = 2): string {
+    return amount?.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') ?? '';
   }
 
-  static formatAmountCrypto(num: number): string {
-    let r = (+num.toPrecision(6)).toFixed(6);
+  static formatAmountCrypto(amount: number, decimals = 5): string {
+    let r = (+amount.toPrecision(decimals)).toFixed(decimals);
     if (r.match(/\./)) {
       r = r.replace(/\.?0+$/, '');
     }

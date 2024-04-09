@@ -1,17 +1,21 @@
 import { useMemo } from 'react';
 import { Asset, AssetUrl } from '../definitions/asset';
 import { useApi } from './api.hook';
+import { Blockchain } from '../definitions/blockchain';
 
 export interface AssetInterface {
-  getAssets: () => Promise<Asset[]>;
+  getAssets: (blockchains: Blockchain[], includePrivate: boolean) => Promise<Asset[]>;
   getAsset: (assets?: Asset[], identifier?: string) => Asset | undefined;
 }
 
 export function useAsset(): AssetInterface {
   const { call } = useApi();
 
-  async function getAssets(): Promise<Asset[]> {
-    return call<Asset[]>({ url: AssetUrl.get, method: 'GET' });
+  async function getAssets(blockchains: Blockchain[], includePrivate: boolean): Promise<Asset[]> {
+    return call<Asset[]>({
+      url: `${AssetUrl.get}?blockchains=${blockchains.join(',')}&includePrivate=${includePrivate}`,
+      method: 'GET',
+    });
   }
 
   function getAsset(assets: Asset[] = [], identifier?: string): Asset | undefined {

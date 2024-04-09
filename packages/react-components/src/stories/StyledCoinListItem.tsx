@@ -87,7 +87,7 @@ export default function StyledCoinListItem({
           </div>
         </button>
         {popupLabel && onAdd && isToken && asset.chainId && (
-          <button className={threeDotsClasses} onClick={() => setOpen((o) => !o)}>
+          <button type="button" className={threeDotsClasses} onClick={() => setOpen((o) => !o)}>
             <DfxIcon icon={IconVariant.THREE_DOTS_VERT} color={IconColor.BLUE} />
           </button>
         )}

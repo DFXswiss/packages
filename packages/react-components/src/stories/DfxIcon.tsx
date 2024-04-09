@@ -1,5 +1,17 @@
 import { IconContext, IconType } from 'react-icons';
-import { FaCircle, FaRegCircle, FaUserCog, FaFileAlt, FaTelegramPlane } from 'react-icons/fa';
+import {
+  FaCircle,
+  FaRegCircle,
+  FaUserCog,
+  FaFileAlt,
+  FaTelegramPlane,
+  FaHourglassHalf,
+  FaUserCheck,
+  FaApple,
+  FaGooglePlay,
+  FaFileUpload,
+  FaReceipt,
+} from 'react-icons/fa';
 import {
   MdContentCopy,
   MdArrowBackIos,
@@ -29,6 +41,9 @@ import {
   MdSearch,
   MdHome,
   MdMenu,
+  MdNorth,
+  MdSouth,
+  MdRepeat,
 } from 'react-icons/md';
 import { VscArrowSwap } from 'react-icons/vsc';
 import { ReactElement, useContext } from 'react';
@@ -43,6 +58,8 @@ export enum IconVariant {
   ACCOUNT = 'ACCOUNT',
   ARROW_RIGHT = 'ARROW_RIGHT',
   ARROW_LEFT = 'ARROW_LEFT',
+  ARROW_UP = 'ARROW_UP',
+  ARROW_DOWN = 'ARROW_DOWN',
   BACK = 'BACK',
   BANK = 'BANK',
   CANCEL = 'CANCEL',
@@ -57,6 +74,7 @@ export enum IconVariant {
   EXPAND_LESS = 'EXPAND_LESS',
   EXPAND_MORE = 'EXPAND_MORE',
   FILE = 'FILE',
+  FILE_UPLOAD = 'FILE_UPLOAD',
   FORWARD = 'FORWARD',
   HELP = 'HELP',
   HOME = 'HOME',
@@ -82,6 +100,12 @@ export enum IconVariant {
   CIRCLE = 'CIRCLE',
   CIRCLE_OUTLINE = 'CIRCLE_OUTLINE',
   USER_DATA = 'USER_DATA',
+  LOADING = 'LOADING',
+  KYC = 'KYC',
+  APPLE = 'APPLE',
+  GOOGLE_PLAY = 'GOOGLE_PLAY',
+  REPEAT = 'REPEAT',
+  TRANSACTIONS = 'TRANSACTIONS',
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
@@ -95,6 +119,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.EXPAND_LESS]: <MdExpandLess />,
   [IconVariant.EXPAND_MORE]: <MdExpandMore />,
   [IconVariant.FILE]: <FaFileAlt />,
+  [IconVariant.FILE_UPLOAD]: <FaFileUpload />,
   [IconVariant.CHECK]: <MdCheck />,
   [IconVariant.CHECKBOX_EMPTY]: <MdOutlineCheckBoxOutlineBlank />,
   [IconVariant.CHECKBOX_CHECKED]: <MdOutlineCheckBox />,
@@ -104,6 +129,8 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.INFO]: <MdInfo />,
   [IconVariant.ARROW_LEFT]: <MdWest />,
   [IconVariant.ARROW_RIGHT]: <MdEast />,
+  [IconVariant.ARROW_UP]: <MdNorth />,
+  [IconVariant.ARROW_DOWN]: <MdSouth />,
   [IconVariant.CLOSE]: <MdClose />,
   [IconVariant.CANCEL]: <MdOutlineCancel />,
   [IconVariant.SETTINGS]: <MdSettings />,
@@ -127,6 +154,12 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.CIRCLE_OUTLINE]: <FaRegCircle />,
   [IconVariant.USER_DATA]: <DfxUserData />,
   [IconVariant.TELEGRAM]: <FaTelegramPlane />,
+  [IconVariant.LOADING]: <FaHourglassHalf />,
+  [IconVariant.KYC]: <FaUserCheck />,
+  [IconVariant.APPLE]: <FaApple />,
+  [IconVariant.GOOGLE_PLAY]: <FaGooglePlay />,
+  [IconVariant.REPEAT]: <MdRepeat />,
+  [IconVariant.TRANSACTIONS]: <FaReceipt />,
 };
 
 export enum IconSize {

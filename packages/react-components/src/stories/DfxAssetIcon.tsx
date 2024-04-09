@@ -11,6 +11,7 @@ export enum AssetIconVariant {
   BNB = 'BNB',
   DFI = 'DFI',
   USDC = 'USDC',
+  USDCe = 'USDC.e',
   BUSD = 'BUSD',
   ETH = 'ETH',
   DAI = 'DAI',
@@ -43,6 +44,14 @@ export enum AssetIconVariant {
   XCHF = 'XCHF',
   FOX = 'FOX',
   BGB = 'BGB',
+  XMR = 'XMR',
+  ZCHF = 'ZCHF',
+  FPS = 'FPS',
+  WFPS = 'WFPS',
+  YLD = 'YLD',
+  ISLM = 'ISLM',
+  MKX = 'MKX',
+  TGT = 'TGT',
 
   EUR = 'EUR',
   USD = 'USD',
@@ -69,6 +78,7 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.BNB]: ({ forceColor }) => <DfxAssetIconBNB forceColor={forceColor} />,
   [AssetIconVariant.DFI]: ({ forceColor }) => <DfxAssetIconDFI forceColor={forceColor} />,
   [AssetIconVariant.USDC]: ({ forceColor }) => <DfxAssetIconUSDC forceColor={forceColor} />,
+  [AssetIconVariant.USDCe]: ({ forceColor }) => <DfxAssetIconUSDC forceColor={forceColor} />,
   [AssetIconVariant.BUSD]: ({ forceColor }) => <DfxAssetIconBUSD forceColor={forceColor} />,
   [AssetIconVariant.ETH]: ({ forceColor }) => <DfxAssetIconETH forceColor={forceColor} />,
   [AssetIconVariant.DAI]: ({ forceColor }) => <DfxAssetIconDAI forceColor={forceColor} />,
@@ -101,6 +111,14 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.XCHF]: ({ forceColor }) => <DfxAssetIconXCHF forceColor={forceColor} />,
   [AssetIconVariant.FOX]: ({ forceColor }) => <DfxAssetIconFOX forceColor={forceColor} />,
   [AssetIconVariant.BGB]: ({ forceColor }) => <DfxAssetIconBGB forceColor={forceColor} />,
+  [AssetIconVariant.XMR]: ({ forceColor }) => <DfxAssetIconXMR forceColor={forceColor} />,
+  [AssetIconVariant.ZCHF]: ({ forceColor }) => <DfxAssetIconZCHF forceColor={forceColor} />,
+  [AssetIconVariant.FPS]: ({ forceColor }) => <DfxAssetIconFPS forceColor={forceColor} />,
+  [AssetIconVariant.WFPS]: ({ forceColor }) => <DfxAssetIconFPS forceColor={forceColor} />,
+  [AssetIconVariant.YLD]: ({ forceColor }) => <DfxAssetIconYLD forceColor={forceColor} />,
+  [AssetIconVariant.ISLM]: ({ forceColor }) => <DfxAssetIconISLM forceColor={forceColor} />,
+  [AssetIconVariant.MKX]: ({ forceColor }) => <DfxAssetIconMKX forceColor={forceColor} />,
+  [AssetIconVariant.TGT]: ({ forceColor }) => <DfxAssetIconTGT forceColor={forceColor} />,
 
   [AssetIconVariant.EUR]: ({ forceColor }) => <DfxAssetIconEUR forceColor={forceColor} />,
   [AssetIconVariant.USD]: ({ forceColor }) => <DfxAssetIconUSD forceColor={forceColor} />,
@@ -3432,6 +3450,1116 @@ function DfxAssetIconBGB({ forceColor }: BaseAssetIconProps) {
         fill={forceColor ? '#ffffff' : '#000202'}
         d="M30.5 26.5c3.476-1.143 7.142-1.31 11-.5a93.004 93.004 0 0 1 11 12 169.04 169.04 0 0 1-15 16c-4 .667-8 .667-12 0a264.885 264.885 0 0 0 16-16 70.6 70.6 0 0 0-11-11.5Z"
       />
+    </svg>
+  );
+}
+
+function DfxAssetIconXMR({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 3756.09 3756.49"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title>{'monero'}</title>
+      <path
+        d="M4128 2249.81c0 1037.19-840.74 1878.05-1878 1878.05S372 3287 372 2249.81 1212.76 371.75 2250 371.75s1878 840.79 1878 1878.06Z"
+        style={{ fill: '#fff' }}
+        transform="translate(-371.96 -371.75)"
+      />
+      <path
+        d="M2250 371.75c-1036.89 0-1879.12 842.06-1877.8 1878 .26 207.26 33.31 406.63 95.34 593.12h561.88V1263L2250 2483.57 3470.52 1263v1579.9h562c62.12-186.48 95-385.85 95.37-593.12C4129.66 1212.76 3287 372 2250 372Z"
+        data-name={149931032}
+        style={{ fill: forceColor ?? '#f26822' }}
+        transform="translate(-371.96 -371.75)"
+      />
+      <path
+        d="m1969.3 2764.17-532.67-532.7v994.14h-407.25l-384.29.07c329.63 540.8 925.35 902.56 1604.91 902.56s1275.31-361.84 1605-902.64h-791.75v-994.13l-532.7 532.7-280.61 280.61-280.62-280.61Z"
+        data-name={149931160}
+        style={{ fill: forceColor ?? '#4d4d4d' }}
+        transform="translate(-371.96 -371.75)"
+      />
+    </svg>
+  );
+}
+
+export function DfxAssetIconZCHF({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  const cls = `cls-${forceColor?.replace('#', '')}`;
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 246.22 238.68"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <style>
+          {`.${cls}-2{fill:${forceColor ?? '#f6f8f9'};}.${cls}-3{fill:${forceColor ?? '#6a7979'};}.${cls}-4{fill:${
+            forceColor ?? '#040404'
+          };}.${cls}-6{fill:${forceColor ?? '#e3e2ea'};}.${cls}-7{fill:${forceColor ?? '#e8e9ea'};}.${cls}-8{fill:${
+            forceColor ?? '#fff'
+          };}.${cls}-9{fill:${forceColor ?? '#f1f1f4'};}.${cls}-11{fill:${forceColor ?? '#fbfbfc'};}.${cls}-12{fill:${
+            forceColor ?? '#e5e6f0'
+          };}.${cls}-13{fill:${forceColor ? '#ffffff' : '#993c4d'};}.${cls}-15{fill:${
+            forceColor ? '#ffffff' : '#b75868'
+          };}.${cls}-16{fill:${forceColor ?? '#b8b8d2'};}.${cls}-18{fill:${forceColor ?? '#c2c5c9'};}.${cls}-19{fill:${
+            forceColor ? '#ffffff' : '#913648'
+          };}.${cls}-20{fill:${forceColor ?? '#babad4'};}.${cls}-23{fill:${forceColor ?? '#8d8f92'};}.${cls}-25{fill:${
+            forceColor ?? '#313c3d'
+          };}.${cls}-26{fill:${forceColor ? '#ffffff' : '#8d3748'};}.${cls}-27{fill:${
+            forceColor ?? '#cdced1'
+          };}.${cls}-28{fill:${forceColor ?? '#b1b5b8'};}.${cls}-32{fill:${forceColor ?? '#d8d8db'};}.${cls}-33{fill:${
+            forceColor ?? '#bbbbc2'
+          };}.${cls}-35{fill:${forceColor ?? '#c7c8cb'};}.${cls}-36{fill:${forceColor ?? '#dcdbe0'};}.${cls}-37{fill:${
+            forceColor ?? '#dbdadf'
+          };}.${cls}-38{fill:${forceColor ?? '#d3d3d6'};}.${cls}-39{fill:${forceColor ?? '#c8cacf'};}.${cls}-40{fill:${
+            forceColor ?? '#d5d7d9'
+          };}.${cls}-41{fill:${forceColor ?? '#172222'};}.${cls}-44{fill:${forceColor ?? '#1e292a'};}.${cls}-45{fill:${
+            forceColor ?? '#131919'
+          };}.${cls}-47{fill:${forceColor ?? '#43524e'};}.${cls}-48{fill:${forceColor ?? '#434f52'};}.${cls}-49{fill:${
+            forceColor ?? '#090a0a'
+          };}.${cls}-50{fill:${forceColor ?? '#080808'};}.${cls}-52{fill:${forceColor ?? '#1c252e'};}.${cls}-54{fill:${
+            forceColor ?? '#374543'
+          };}.${cls}-56{fill:${forceColor ?? '#445150'};}.${cls}-57{fill:${forceColor ?? '#0a0a0a'};}.${cls}-58{fill:${
+            forceColor ?? '#707980'
+          };}.${cls}-60{fill:${forceColor ?? '#565f62'};}.${cls}-61{fill:${forceColor ?? '#293334'};}.${cls}-62{fill:${
+            forceColor ?? '#263234'
+          };}.${cls}-63{fill:${forceColor ?? '#2e403b'};}.${cls}-65{fill:${forceColor ?? '#591e29'};}.${cls}-66{fill:${
+            forceColor ?? '#828990'
+          };}.${cls}-67{fill:${forceColor ?? '#4d5856'};}.${cls}-68{fill:${forceColor ?? '#757b83'};}.${cls}-69{fill:${
+            forceColor ?? '#4e6360'
+          };}`}
+        </style>
+      </defs>
+      <path d="M100.5 0h-6.28v7.54h6.28V0Zm7.54 0h-7.54v7.54h7.54V0Z" className={`${cls}-50`} />
+      <path d="M115.57 0h-7.54v7.54h7.54V0Zm7.54 0h-7.54v7.54h7.54V0Z" className={`${cls}-50`} />
+      <path d="M129.39 0h-6.28v7.54h7.54V0h-1.26Z" className={`${cls}-50`} />
+      <path d="M136.93 0h-7.54v7.54h7.54V0Zm7.54 0h-7.54v7.54h7.54V0Z" className={`${cls}-50`} />
+      <path d="M152 0h-7.54v7.54H152V0Z" className={`${cls}-50`} />
+      <path
+        d="M158.28 0h-7.54v7.54h7.54V0ZM79.14 7.54H71.6v7.54h7.54V7.54Zm7.54 0h-7.54v7.54h7.54V7.54Z"
+        className={`${cls}-50`}
+      />
+      <path
+        d="M94.22 7.54h-7.54v7.54h7.54V7.54Z"
+        style={{
+          fill: forceColor ?? '#1c2525',
+        }}
+      />
+      <path d="M100.5 7.54h-6.28v7.54h6.28V7.54Zm7.54 0h-7.54v7.54h7.54V7.54Z" className={`${cls}-60`} />
+      <path d="M115.57 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-3`} />
+      <path d="M123.11 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-66`} />
+      <path d="M129.39 7.54h-6.28v7.54h7.54V7.54h-1.26Z" className={`${cls}-66`} />
+      <path d="M136.93 7.54h-7.54v7.54h7.54V7.54Zm7.54 0h-7.54v7.54h7.54V7.54Z" className={`${cls}-66`} />
+      <path d="M152 7.54h-7.54v7.54H152V7.54Z" className={`${cls}-66`} />
+      <path d="M158.28 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-66`} />
+      <path d="M165.82 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-50`} />
+      <path d="M173.36 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-4`} />
+      <path d="M65.32 15.07h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-50`} />
+      <path d="M79.14 15.07H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-60`} />
+      <path d="M94.22 15.07h-7.54v7.54h7.54v-7.54Z" className={`${cls}-48`} />
+      <path d="M100.5 15.07h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-28`} />
+      <path d="M115.57 15.07h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M129.39 15.07h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-39`} />
+      <path d="M136.93 15.07h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M152 15.07h-7.54v7.54H152v-7.54Z" className={`${cls}-39`} />
+      <path d="M158.28 15.07h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M165.82 15.07h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-3`} />
+      <path d="M180.9 15.07h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M187.18 15.07h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M65.32 21.36h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-58`} />
+      <path d="M79.14 21.36H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-56`} />
+      <path
+        d="M94.22 21.36h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-39`}
+      />
+      <path d="M115.57 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M123.11 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M129.39 21.36h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M136.93 21.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M152 21.36h-7.54v7.54H152v-7.54Z" className={`${cls}-4`} />
+      <path d="M158.28 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path
+        d="M165.82 21.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-39`}
+      />
+      <path d="M187.18 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M194.72 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M202.25 21.36h-7.54v7.54h7.54v-7.54ZM42.71 28.89h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-50`} />
+      <path d="M50.25 28.89h-7.54v7.54h7.54v-7.54Z" className={`${cls}-44`} />
+      <path d="M65.32 28.89h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-67`} />
+      <path d="M79.14 28.89H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-11`} />
+      <path
+        d="M94.22 28.89h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-57`}
+      />
+      <path d="M115.57 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M129.39 28.89h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-19`} />
+      <path d="M136.93 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M152 28.89h-7.54v7.54H152v-7.54Z" className={`${cls}-19`} />
+      <path d="M158.28 28.89h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path
+        d="M165.82 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-4`}
+      />
+      <path d="M187.18 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M202.25 28.89h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M209.79 28.89h-7.54v7.54h7.54v-7.54ZM36.43 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M42.71 36.43h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-66`} />
+      <path d="M50.25 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
+      <path d="M65.32 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-38`} />
+      <path d="M71.6 36.43h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-11`} />
+      <path d="M79.14 36.43H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-57`} />
+      <path
+        d="M94.22 36.43h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-19`}
+      />
+      <path d="M115.57 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M129.39 36.43h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-15`} />
+      <path d="M136.93 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M152 36.43h-7.54v7.54H152v-7.54Z" className={`${cls}-15`} />
+      <path d="M158.28 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M165.82 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M173.36 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M187.18 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M194.72 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M202.25 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path d="M216.07 36.43h-7.54v7.54h7.54v-7.54ZM28.89 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-50`} />
+      <path d="M36.43 43.97h-7.54v6.28h7.54v-6.28Zm6.28 0h-6.28v6.28h7.54v-6.28h-1.26Z" className={`${cls}-35`} />
+      <path d="M50.25 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-56`} />
+      <path d="M65.32 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-27`} />
+      <path d="M71.6 43.97h-6.28v6.28h7.54v-6.28H71.6Z" className={`${cls}-57`} />
+      <path d="M79.14 43.97H71.6v6.28h7.54v-6.28Z" className={`${cls}-19`} />
+      <path d="M86.68 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-15`} />
+      <path
+        d="M94.22 43.97h-7.54v6.28h7.54v-6.28Zm6.28 0h-6.28v6.28h6.28v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 43.97h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z" className={`${cls}-15`} />
+      <path d="M129.39 43.97h-6.28v6.28h7.54v-6.28h-1.26Z" className={`${cls}-15`} />
+      <path d="M136.93 43.97h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z" className={`${cls}-15`} />
+      <path d="M152 43.97h-7.54v6.28H152v-6.28Z" className={`${cls}-15`} />
+      <path
+        d="M158.28 43.97h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z"
+        className={`${cls}-15`}
+      />
+      <path d="M187.18 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-15`} />
+      <path d="M194.72 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-19`} />
+      <path d="M202.25 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-4`} />
+      <path d="M209.79 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-39`} />
+      <path d="M216.07 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-39`} />
+      <path d="M223.61 43.97h-7.54v6.28h7.54v-6.28ZM28.89 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M36.43 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
+      <path
+        d="M42.71 50.25h-6.28v7.54h7.54v-7.54h-1.26Z"
+        style={{
+          fill: forceColor ?? '#384544',
+        }}
+      />
+      <path d="M50.25 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-38`} />
+      <path d="M65.32 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M71.6 50.25h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-19`} />
+      <path d="M79.14 50.25H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M94.22 50.25h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 50.25h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 50.25h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M165.82 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M187.18 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M209.79 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M216.07 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
+      <path
+        d="M223.61 50.25h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#313b3c',
+        }}
+      />
+      <path d="M21.36 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M28.89 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
+      <path d="M36.43 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-69`} />
+      <path d="M42.71 57.79h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
+      <path d="M50.25 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-37`} />
+      <path d="M65.32 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M71.6 57.79h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 57.79H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M94.22 57.79h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 57.79h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 57.79h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M165.82 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M187.18 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M209.79 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M216.07 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-47`} />
+      <path d="M223.61 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-6`} />
+      <path d="M231.15 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M21.36 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-45`} />
+      <path d="M28.89 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
+      <path d="M36.43 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-69`} />
+      <path d="M42.71 65.32h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
+      <path d="M50.25 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-37`} />
+      <path d="M65.32 65.32h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 65.32H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M94.22 65.32h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 65.32h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 65.32h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M165.82 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M187.18 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M209.79 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M216.07 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-47`} />
+      <path d="M223.61 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-6`} />
+      <path d="M231.15 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-49`} />
+      <path d="M21.36 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-45`} />
+      <path d="M28.89 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
+      <path
+        d="M36.43 72.86h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#364b47',
+        }}
+      />
+      <path d="M42.71 72.86h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
+      <path d="M50.25 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-57`} />
+      <path d="M65.32 72.86h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 72.86H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M94.22 72.86h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 72.86h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 72.86h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M165.82 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M187.18 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M223.61 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-48`} />
+      <path d="M231.15 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-27`} />
+      <path d="M238.68 72.86h-7.54v7.54h7.54v-7.54ZM13.82 79.14H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-50`} />
+      <path d="M21.36 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
+      <path d="M28.89 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-69`} />
+      <path
+        d="M36.43 79.14h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#f3f3f5',
+        }}
+      />
+      <path d="M42.71 79.14h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
+      <path d="M50.25 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M65.32 79.14h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 79.14H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M94.22 79.14h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 79.14h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 79.14h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M165.82 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M187.18 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M223.61 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-48`} />
+      <path d="M231.15 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-27`} />
+      <path d="M238.68 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-44`} />
+      <path d="M13.82 86.68H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-50`} />
+      <path d="M21.36 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-28`} />
+      <path
+        d="M28.89 86.68h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#374c4a',
+        }}
+      />
+      <path d="M36.43 86.68h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
+      <path d="M50.25 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M65.32 86.68h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 86.68H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M94.22 86.68h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
+      <path d="M123.11 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 86.68h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 86.68h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M165.82 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M187.18 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M223.61 86.68h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#323e40',
+        }}
+      />
+      <path d="M231.15 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-27`} />
+      <path d="M238.68 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-44`} />
+      <path d="M7.54 94.22H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 94.22H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-68`} />
+      <path d="M21.36 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-63`} />
+      <path d="M28.89 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 94.22h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 94.22h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 94.22h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
+      <path d="M79.14 94.22H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
+      <path
+        d="M94.22 94.22h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-8`}
+      />
+      <path d="M115.57 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
+      <path d="M123.11 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 94.22h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 94.22h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M165.82 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-8`}
+      />
+      <path d="M187.18 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
+      <path d="M202.25 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M209.79 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M223.61 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-26`} />
+      <path d="M231.15 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
+      <path d="M238.68 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
+      <path d="M244.96 94.22h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 101.75H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 101.75H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
+      <path d="M21.36 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-54`} />
+      <path d="M28.89 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 101.75h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 101.75h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 101.75h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
+      <path d="M79.14 101.75H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M94.22 101.75h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-12`}
+      />
+      <path d="M115.57 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 101.75h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 101.75h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M158.28 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-12`}
+      />
+      <path d="M187.18 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M202.25 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M209.79 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M223.61 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-26`} />
+      <path d="M231.15 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
+      <path d="M238.68 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
+      <path d="M244.96 101.75h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 108.04H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 108.04H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
+      <path d="M21.36 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-54`} />
+      <path d="M28.89 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 108.04h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 108.04h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 108.04h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
+      <path d="M79.14 108.04H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M94.22 108.04h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-12`}
+      />
+      <path d="M115.57 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 108.04h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 108.04h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M158.28 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-12`}
+      />
+      <path d="M187.18 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M202.25 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M209.79 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M223.61 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-26`} />
+      <path d="M231.15 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
+      <path d="M238.68 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
+      <path d="M244.96 108.04h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 115.57H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 115.57H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
+      <path d="M21.36 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-54`} />
+      <path d="M28.89 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 115.57h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 115.57h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 115.57h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
+      <path d="M79.14 115.57H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M94.22 115.57h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-12`}
+      />
+      <path d="M115.57 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 115.57h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 115.57h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M158.28 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-12`}
+      />
+      <path d="M187.18 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M202.25 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M209.79 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M231.15 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
+      <path d="M238.68 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
+      <path d="M244.96 115.57h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 123.11H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 123.11H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
+      <path d="M21.36 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-54`} />
+      <path d="M28.89 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 123.11h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 123.11h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 123.11h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
+      <path d="M79.14 123.11H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M94.22 123.11h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-12`}
+      />
+      <path d="M115.57 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 123.11h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 123.11h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M158.28 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-12`}
+      />
+      <path d="M187.18 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M202.25 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M209.79 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M231.15 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
+      <path d="M238.68 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
+      <path d="M244.96 123.11h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 130.65H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 130.65H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
+      <path d="M21.36 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-63`} />
+      <path d="M28.89 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 130.65h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 130.65h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 130.65h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
+      <path d="M79.14 130.65H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M94.22 130.65h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-12`}
+      />
+      <path d="M115.57 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 130.65h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 130.65h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M165.82 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-16`}
+      />
+      <path d="M187.18 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M202.25 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M209.79 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M216.07 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M231.15 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
+      <path d="M238.68 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
+      <path d="M244.96 130.65h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 136.93H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M13.82 136.93H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-68`} />
+      <path d="M21.36 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-63`} />
+      <path
+        d="M28.89 136.93h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#bdbad5',
+        }}
+      />
+      <path d="M36.43 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 136.93h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M50.25 136.93h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 136.93h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-20`} />
+      <path d="M79.14 136.93H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-20`} />
+      <path
+        d="M94.22 136.93h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-20`}
+      />
+      <path d="M115.57 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-20`} />
+      <path d="M123.11 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 136.93h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 136.93h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path
+        d="M158.28 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-16`}
+      />
+      <path d="M187.18 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M202.25 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M209.79 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M231.15 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
+      <path
+        d="M238.68 136.93h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#b8b8d4',
+        }}
+      />
+      <path
+        d="M244.96 136.93h-6.28v7.54h7.54v-7.54h-1.26Zm-231.14 7.54H7.54v7.54h7.54v-7.54h-1.26Z"
+        className={`${cls}-4`}
+      />
+      <path
+        d="M21.36 144.47h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#6c747c',
+        }}
+      />
+      <path d="M28.89 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-49`} />
+      <path d="M36.43 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M42.71 144.47h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-8`} />
+      <path d="M50.25 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M65.32 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M71.6 144.47h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-19`} />
+      <path d="M79.14 144.47H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path
+        d="M94.22 144.47h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-19`}
+      />
+      <path d="M115.57 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-20`} />
+      <path d="M123.11 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 144.47h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 144.47h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 144.47h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path
+        d="M165.82 144.47h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-19`}
+      />
+      <path d="M187.18 144.47h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M202.25 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M209.79 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M223.61 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M231.15 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
+      <path
+        d="M238.68 144.47h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#303c3d',
+        }}
+      />
+      <path d="M13.82 152H7.54v7.54h7.54V152h-1.26Z" className={`${cls}-4`} />
+      <path d="M21.36 152h-7.54v7.54h7.54V152Z" className={`${cls}-66`} />
+      <path d="M28.89 152h-7.54v7.54h7.54V152Z" className={`${cls}-25`} />
+      <path d="M36.43 152h-7.54v7.54h7.54V152Z" className={`${cls}-9`} />
+      <path d="M42.71 152h-6.28v7.54h7.54V152h-1.26Z" className={`${cls}-8`} />
+      <path d="M50.25 152h-7.54v7.54h7.54V152Z" className={`${cls}-4`} />
+      <path d="M65.32 152h-7.54v7.54h7.54V152Zm6.28 0h-6.28v7.54h7.54V152H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 152H71.6v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
+      <path
+        d="M94.22 152h-7.54v7.54h7.54V152Zm6.28 0h-6.28v7.54h6.28V152Zm7.54 0h-7.54v7.54h7.54V152Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 152h-7.54v7.54h7.54V152Z" className={`${cls}-8`} />
+      <path d="M123.11 152h-7.54v7.54h7.54V152Z" className={`${cls}-12`} />
+      <path d="M129.39 152h-6.28v7.54h7.54V152h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-12`} />
+      <path d="M152 152h-7.54v7.54H152V152Z" className={`${cls}-12`} />
+      <path d="M158.28 152h-7.54v7.54h7.54V152Z" className={`${cls}-16`} />
+      <path d="M165.82 152h-7.54v7.54h7.54V152Z" className={`${cls}-19`} />
+      <path d="M173.36 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
+      <path d="M187.18 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
+      <path d="M202.25 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
+      <path d="M216.07 152h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
+      <path d="M223.61 152h-7.54v7.54h7.54V152Z" className={`${cls}-19`} />
+      <path d="M231.15 152h-7.54v7.54h7.54V152Z" className={`${cls}-8`} />
+      <path
+        d="M238.68 152h-7.54v7.54h7.54V152Z"
+        style={{
+          fill: forceColor ?? '#2b3739',
+        }}
+      />
+      <path d="M13.82 159.54H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path
+        d="M21.36 159.54h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#b2b6bd',
+        }}
+      />
+      <path d="M28.89 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M36.43 159.54h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-8`} />
+      <path d="M50.25 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M65.32 159.54h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 159.54H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M94.22 159.54h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 159.54h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M152 159.54h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
+      <path d="M158.28 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M165.82 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M173.36 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M187.18 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M223.61 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M231.15 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
+      <path
+        d="M238.68 159.54h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#1f2c2c',
+        }}
+      />
+      <path d="M21.36 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M28.89 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-23`} />
+      <path d="M36.43 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M42.71 165.82h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-32`} />
+      <path d="M50.25 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
+      <path d="M65.32 165.82h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 165.82H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M94.22 165.82h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M129.39 165.82h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
+      <path d="M136.93 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M144.47 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M152 165.82h-7.54v7.54H152v-7.54Z" className={`${cls}-16`} />
+      <path d="M158.28 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M165.82 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M173.36 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M187.18 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-65`} />
+      <path d="M223.61 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path
+        d="M231.15 165.82h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#252e2f',
+        }}
+      />
+      <path d="M21.36 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M28.89 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-58`} />
+      <path d="M36.43 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M42.71 173.36h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-32`} />
+      <path d="M50.25 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
+      <path d="M65.32 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M71.6 173.36h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 173.36H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M94.22 173.36h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
+      <path d="M123.11 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M129.39 173.36h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-16`} />
+      <path d="M136.93 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M152 173.36h-7.54v7.54H152v-7.54Z" className={`${cls}-16`} />
+      <path d="M158.28 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M165.82 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M173.36 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M187.18 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M216.07 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-65`} />
+      <path d="M223.61 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M231.15 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M28.89 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M36.43 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-23`} />
+      <path d="M42.71 180.9h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-25`} />
+      <path d="M50.25 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-32`} />
+      <path d="M65.32 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M71.6 180.9h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
+      <path d="M79.14 180.9H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M94.22 180.9h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M129.39 180.9h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-16`} />
+      <path d="M136.93 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M152 180.9h-7.54v7.54H152v-7.54Z" className={`${cls}-16`} />
+      <path d="M158.28 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
+      <path d="M165.82 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M173.36 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M187.18 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M209.79 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-13`} />
+      <path d="M216.07 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M223.61 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-62`} />
+      <path d="M28.89 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M36.43 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-58`} />
+      <path d="M42.71 188.43h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-23`} />
+      <path d="M50.25 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M65.32 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M71.6 188.43h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-19`} />
+      <path d="M79.14 188.43H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M94.22 188.43h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M129.39 188.43h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-19`} />
+      <path d="M136.93 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M152 188.43h-7.54v7.54H152v-7.54Z" className={`${cls}-19`} />
+      <path d="M158.28 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path
+        d="M165.82 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M187.18 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M202.25 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-13`} />
+      <path d="M209.79 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M216.07 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-40`} />
+      <path d="M223.61 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-62`} />
+      <path d="M36.43 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M42.71 194.72h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-58`} />
+      <path d="M50.25 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-23`} />
+      <path d="M65.32 194.72h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-38`} />
+      <path d="M79.14 194.72H71.6v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M86.68 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path
+        d="M94.22 194.72h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M115.57 194.72h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M129.39 194.72h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-15`} />
+      <path d="M136.93 194.72h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M152 194.72h-7.54v7.54H152v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M158.28 194.72h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M187.18 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-13`} />
+      <path
+        d="M194.72 194.72h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#aa495a',
+        }}
+      />
+      <path d="M202.25 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M209.79 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-40`} />
+      <path d="M216.07 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-62`} />
+      <path d="M42.71 202.25h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-41`} />
+      <path d="M50.25 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-58`} />
+      <path d="M65.32 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M71.6 202.25h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-38`} />
+      <path d="M79.14 202.25H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-38`} />
+      <path
+        d="M94.22 202.25h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-19`}
+      />
+      <path d="M115.57 202.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M129.39 202.25h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-15`} />
+      <path d="M136.93 202.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M152 202.25h-7.54v7.54H152v-7.54Z" className={`${cls}-15`} />
+      <path d="M158.28 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M165.82 202.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-13`}
+      />
+      <path d="M187.18 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-2`} />
+      <path d="M194.72 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M202.25 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M209.79 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-62`} />
+      <path d="M50.25 209.79h-7.54v7.54h7.54v-7.54Zm15.07 7.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-41`} />
+      <path d="M57.79 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-41`} />
+      <path d="M65.32 217.33v-7.54h-7.54v7.54h7.54Z" className={`${cls}-23`} />
+      <path d="M71.6 209.79h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-25`} />
+      <path d="M79.14 209.79H71.6v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M86.68 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-32`} />
+      <path
+        d="M94.22 209.79h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-38`}
+      />
+      <path d="M115.57 209.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M129.39 209.79h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-19`} />
+      <path d="M136.93 209.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path d="M152 209.79h-7.54v7.54H152v-7.54Z" className={`${cls}-19`} />
+      <path d="M158.28 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path
+        d="M165.82 209.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-2`}
+      />
+      <path d="M187.18 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-40`} />
+      <path d="M194.72 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-61`} />
+      <path d="M202.25 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M71.6 217.33h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-58`} />
+      <path d="M79.14 217.33H71.6v7.54h7.54v-7.54Z" className={`${cls}-58`} />
+      <path d="M86.68 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path
+        d="M94.22 217.33h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-38`}
+      />
+      <path d="M115.57 217.33h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M129.39 217.33h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-7`} />
+      <path d="M136.93 217.33h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M152 217.33h-7.54v7.54H152v-7.54Z" className={`${cls}-7`} />
+      <path d="M158.28 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
+      <path d="M165.82 217.33h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-40`} />
+      <path d="M180.9 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M187.18 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M71.6 223.61h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-41`} />
+      <path d="M79.14 223.61H71.6v7.54h7.54v-7.54Z" className={`${cls}-41`} />
+      <path d="M86.68 223.61h-7.54v7.54h7.54v-7.54Z" className={`${cls}-60`} />
+      <path d="M94.22 223.61h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Z" className={`${cls}-60`} />
+      <path d="M108.04 223.61h-7.54v7.54h7.54v-7.54Z" className={`${cls}-66`} />
+      <path
+        d="M115.57 223.61h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#a4a5a9',
+        }}
+      />
+      <path d="M129.39 223.61h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-33`} />
+      <path d="M136.93 223.61h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-33`} />
+      <path d="M152 223.61h-7.54v7.54H152v-7.54Z" className={`${cls}-33`} />
+      <path d="M158.28 223.61h-7.54v7.54h7.54v-7.54Z" className={`${cls}-33`} />
+      <path d="M165.82 223.61h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-61`} />
+      <path d="M86.68 231.15h-7.54v7.54h7.54v-7.54Z" className={`${cls}-41`} />
+      <path
+        d="M94.22 231.15h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-41`}
+      />
+      <path d="M115.57 231.15h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M129.39 231.15h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
+      <path d="M136.93 231.15h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M152 231.15h-7.54v7.54H152v-7.54Z" className={`${cls}-4`} />
+      <path d="M158.28 231.15h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path d="M57.79 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
+      <path d="M57.79 28.89h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
+      <path d="M57.79 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-67`} />
+      <path d="M57.79 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-11`} />
+      <path d="M57.79 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-27`} />
+      <path d="M57.79 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-57`} />
+      <path d="M57.79 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-57`} />
+      <path d="M57.79 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M57.79 79.14h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M57.79 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M57.79 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M57.79 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path
+        d="M57.79 115.57h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Z"
+        className={`${cls}-15`}
+      />
+      <path d="M57.79 136.93h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
+      <path d="M57.79 152h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
+      <path d="M57.79 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
+      <path
+        d="M57.79 165.82h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#212a29',
+        }}
+      />
+      <path d="M57.79 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
+      <path
+        d="M57.79 180.9h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#f1f2f4',
+        }}
+      />
+      <path
+        d="M57.79 188.43h-7.54v7.54h7.54v-7.54Z"
+        style={{
+          fill: forceColor ?? '#e6e7e9',
+        }}
+      />
+      <path d="M57.79 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
+      <path d="M57.79 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-23`} />
+      <path d="M57.79 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-58`} />
+    </svg>
+  );
+}
+
+function DfxAssetIconFPS({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 310 310"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path fill={forceColor ? '#ffffff' : '#2668FC'} d="M31 41h248v229H31z" />
+      <path
+        fill={forceColor ?? '#000'}
+        d="M46 26h218v15H46zM31 56v199H16V56zM294 56v199h-15V56zM31 41h15v15H31zM31 255h15v15H31zM82 178h16v16H82zM98 162h16v16H98zM114 146h16v16h-16zM130 130h16v16h-16zM146 114h16v16h-16zM162 130h16v16h-16zM178 114h16v16h-16zM194 98h16v16h-16zM210 82h16v16h-16z"
+      />
+      <path
+        fill={forceColor ?? '#F46184'}
+        d="M82 162h16v16H82zM98 146h16v16H98zM114 130h16v16h-16zM130 114h16v16h-16zM146 98h16v16h-16zM162 114h16v16h-16zM178 98h16v16h-16zM194 82h16v16h-16zM210 66h16v16h-16z"
+      />
+      <path
+        fill={forceColor ?? '#000'}
+        d="M82 146h16v16H82zM98 130h16v16H98zM114 114h16v16h-16zM130 98h16v16h-16zM146 82h16v16h-16zM162 98h16v16h-16zM178 82h16v16h-16zM194 66h16v16h-16zM226 66h16v16h-16zM210 50h16v16h-16zM264 41h15v15h-15zM264 255h15v15h-15zM46 270h218v15H46z"
+      />
+      <path
+        fill={forceColor ?? '#fff'}
+        d="M47 202h11v45H47zM58 202h22v11H58zM58 219h12v9H58zM80 219h19v9H80zM108 219h13v9h-13zM132 219h13v9h-13zM131 238h13v9h-13zM142 228h12v10h-12zM166 228h8v10h-8zM183 228h10v9h-10zM216 228h10v19h-10zM235 228h10v19h-10zM254 228h10v19h-10zM202 228h12v9h-12zM174 219h9v9h-9zM193 219h14v9h-14zM216 219h48v9h-48zM193 237h14v10h-14zM174 237h9v10h-9zM108 238h13v9h-13zM80 238h19v9H80zM80 228h8v10h-8zM154 202h12v45h-12zM99 228h9v10h-9zM120 228h11v10h-11z"
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconYLD({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#yld-a)">
+        <g clipPath="url(#yld-b)">
+          <path
+            fill={forceColor ?? '#104499'}
+            d="M32 16c0 8.838-7.163 16-16 16S0 24.836 0 16 7.163 0 16 0s16 7.164 16 16"
+          />
+          <path
+            fill="#fff"
+            fillRule="evenodd"
+            d="m20.716 10.531-6.74 5.99a4.6 4.6 0 0 1-2.717.875 4.642 4.642 0 0 1 0-9.284c2.31 0 3.486 1.307 4.064 2.386l-1.85 1.52c-.467-1.088-1.135-1.584-2.214-1.584a2.322 2.322 0 0 0 0 4.644c.541 0 1.176-.305 1.57-.617l6.144-5.518c1.88-1.483 3.626-1.247 4.695-.843l-2.255 1.86c-.222.17-.452.355-.697.571M11.192 21.47l6.74-5.99a4.6 4.6 0 0 1 2.716-.875 4.642 4.642 0 0 1 0 9.284c-2.311 0-3.487-1.307-4.064-2.385l1.85-1.521c.466 1.088 1.135 1.584 2.214 1.584a2.322 2.322 0 0 0 0-4.644c-.542 0-1.176.305-1.57.617l-6.142 5.518c-1.881 1.483-3.626 1.247-4.695.843l2.255-1.86c.222-.17.452-.355.696-.571"
+            clipRule="evenodd"
+          />
+        </g>
+      </g>
+      <defs>
+        <clipPath id="yld-a">
+          <path fill="#fff" d="M0 0h137v32H0z" />
+        </clipPath>
+        <clipPath id="yld-b">
+          <path fill="#fff" d="M0 0h32v32H0z" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconISLM({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 256 256"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#islm-a)">
+        <path
+          fill={forceColor ?? '#04D484'}
+          fillRule="evenodd"
+          d="M127.999 0c35.346 0 67.348 14.328 90.511 37.49 22.888 22.889 37.147 54.407 37.482 89.251v.073l.004.475.004.705-.008 1.179v.078c-.335 34.843-14.594 66.358-37.482 89.247-23.163 23.162-55.162 37.489-90.511 37.489-35.344 0-67.345-14.327-90.508-37.489C14.328 195.335 0 163.333 0 127.989c0-35.343 14.328-67.34 37.49-90.503C60.655 14.324 92.656 0 128 0Zm73.569 73.563c4.852 0 9.56.64 14.042 1.828-13.201-12.81-31.201-20.698-51.049-20.698-20.244 0-38.571 8.203-51.831 21.467-13.265 13.264-21.468 31.591-21.468 51.834 0 20.243 8.203 38.569 21.468 51.829 13.265 13.265 31.591 21.468 51.831 21.468 19.848 0 37.852-7.889 51.049-20.699a54.517 54.517 0 0 1-14.039 1.829c-15.028 0-28.638-6.093-38.485-15.943-9.85-9.85-15.942-23.46-15.942-38.489 0-15.027 6.092-28.638 15.942-38.488 9.843-9.842 23.449-15.939 38.482-15.939Zm25.659 28.771c-6.568-6.564-15.64-10.627-25.663-10.627s-19.095 4.063-25.663 10.627c-6.568 6.568-10.628 15.641-10.628 25.664 0 10.023 4.063 19.095 10.628 25.663 6.568 6.564 15.64 10.626 25.663 10.626s19.095-4.062 25.663-10.626c6.564-6.568 10.628-15.64 10.628-25.663l-.005-.467c-.12-9.843-4.16-18.733-10.623-25.197Zm-62.67-65.782c11.399 0 22.309 2.086 32.376 5.9-18.85-15.206-42.83-24.311-68.934-24.311-30.334 0-57.802 12.298-77.683 32.175-19.877 19.876-32.175 47.343-32.175 77.678 0 30.338 12.295 57.801 32.175 77.682 19.881 19.877 47.345 32.175 77.683 32.175 26.108 0 50.084-9.105 68.934-24.315-10.067 3.814-20.977 5.9-32.376 5.9-25.25 0-48.115-10.237-64.657-26.783-16.546-16.547-26.783-39.407-26.783-64.655 0-25.249 10.237-48.113 26.782-64.66 16.543-16.55 39.408-26.786 64.658-26.786Z"
+          clipRule="evenodd"
+        />
+      </g>
+      <defs>
+        <clipPath id="islm-a">
+          <path fill="#fff" d="M0 0h256v256H0z" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconMKX({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 1125 1125"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill={forceColor ?? '#000000'}
+        fillRule="evenodd"
+        d="M579 304.04c-11.898 2.752-16.042 4.538-25.512 10.994-18.328 12.494-29.699 46.19-21.149 62.666.914 1.761 1.661 4.081 1.661 5.158s1.064 4.136 2.365 6.8c1.301 2.663 2.867 5.967 3.48 7.342 2.491 5.593 11.011 19.214 12.405 19.833 1.538.684.674 3.136-1.5 4.258-23.032 11.887-44.493 34.187-48.992 50.909C485.5 532.433 547.66 579.678 614 557.309c6.287-2.12 27.354-13.155 29-15.191.484-.598 9.877-8.401 13.078-10.864 1.342-1.032 4.333 1.489 20 16.859 23.472 23.027 19.703 21.943 32.346 9.3 12.956-12.956 13.299-10.341-3.537-26.972-27.989-27.648-26.43-25.517-22.499-30.758 3.823-5.095 14.612-24.367 14.612-26.101 0-.87.45-1.582 1-1.582s1-.569 1-1.265c0-.695.868-2.884 1.929-4.864 4.23-7.892 1.276-16.839-5.573-16.876-.471-.002-2.219-1.24-3.884-2.75-3.282-2.975-10.183-8.402-12.266-9.645-1.858-1.109-6.206 2.056-6.206 4.519 0 1.14-.607 3.267-1.348 4.727-.742 1.46-2.141 4.454-3.11 6.654-.969 2.2-2.14 4.675-2.601 5.5-.462.825-2.377 4.425-4.257 8-8.614 16.383-6.359 16.681-26.074-3.456-36.485-37.268-35.315-35.312-24.473-40.947 4.05-2.105 8.038-4.405 8.863-5.112.825-.708 4.031-2.802 7.125-4.654 12.328-7.38 29.875-25.116 29.875-30.196 0-.834.396-1.762.88-2.061 6.709-4.146 6.006-35.219-1.066-47.074-.984-1.65-2.199-3.9-2.701-5-1.034-2.268-12.507-12.921-16.188-15.031-5.445-3.121-12.093-5.911-18.79-7.886-5.832-1.721-33.431-2.094-40.135-.543m-402.965 1.894c-1.591 2.972-1.429 252.272.165 253.866 1.879 1.879 39.159 1.678 40.734-.22.89-1.073 1.103-23.714.872-92.681-.168-50.194-.161-90.505.017-89.58.178.925.675 1.681 1.104 1.681.741 0 13.105 24.528 28.985 57.5 3.974 8.25 7.645 15.675 8.159 16.5.514.825 1.385 2.549 1.937 3.831 1.728 4.013 26.982 55.421 32.878 66.927.491.958 1.73 3.542 2.753 5.742 6.325 13.595 30.646 8.025 39.278-8.996 3.346-6.598 6.083-12.56 6.083-13.25 0-.69.45-1.254 1-1.254s1-.648 1-1.44c0-1.224 7.353-16.957 10.077-21.56.488-.825 1.844-3.525 3.013-6 1.864-3.944 15.482-31.668 40.649-82.75 8.754-17.769 9.257-18.121 9.274-6.5.104 69.409 1.421 170.99 2.23 172 1.395 1.741 37.82 1.787 39.557.05 1.594-1.594 1.756-250.894.165-253.866-1.333-2.49-49.792-3.053-51.826-.602-.608.733-2.641 4.446-4.518 8.25-1.876 3.805-11.82 24.018-22.098 44.918-10.277 20.9-19.832 40.25-21.233 43-3.713 7.288-6.568 13.035-21.237 42.75-7.262 14.712-13.508 26.742-13.879 26.731-.529-.014-26.108-50.954-51.963-103.481a3074.1 3074.1 0 0 0-5.444-11 792.153 792.153 0 0 1-5.108-10.5c-1.439-3.025-3.499-7.075-4.578-9-1.079-1.925-4.917-9.532-8.528-16.905-3.611-7.373-7.068-14.011-7.682-14.75-2.043-2.462-50.497-1.911-51.836.589m579.076-.568c-1.793 2.161-1.728 253.627.066 254.765 2.692 1.706 42.54 1.049 43.216-.713.334-.87.621-15.607.639-32.75l.032-31.168 7.218-7.718c3.97-4.245 9.018-9.823 11.218-12.396 13.568-15.866 24.464-25.995 25.291-23.512.213.639.934 1.716 1.602 2.394.667.678 5.909 7.532 11.648 15.232 5.739 7.7 11.002 14.595 11.697 15.321.694.727 1.269 1.627 1.278 2 .009.374 1.359 2.202 3 4.065 1.641 1.862 2.991 3.662 3 4 .009.337 1.246 2.031 2.75 3.762 1.504 1.731 3.409 4.145 4.234 5.363 1.273 1.88 4.911 6.806 7.746 10.489.423.55 1.523 2.174 2.443 3.61.92 1.435 2.281 3.235 3.023 4 1.85 1.905 9.944 12.72 12.254 16.374 1.037 1.64 2.932 4.111 4.21 5.489 1.278 1.379 2.324 2.78 2.324 3.114 0 .334.946 1.688 2.102 3.01 1.156 1.322 3.482 4.316 5.169 6.653l3.068 4.25h25.208c31.34 0 30.849.577 15.745-18.5-.436-.55-1.917-2.684-3.292-4.743-1.375-2.059-2.837-3.746-3.25-3.75-.413-.004-.75-.456-.75-1.004 0-.549-3.081-5.161-6.846-10.25s-7.362-10.23-7.993-11.425c-.631-1.195-1.714-2.77-2.406-3.5-.692-.73-2.382-3.012-3.756-5.071-1.375-2.059-2.836-3.746-3.249-3.75-.413-.004-.75-.439-.75-.967 0-.527-2.812-4.731-6.25-9.341-3.437-4.61-8.725-11.899-11.75-16.196-7.393-10.504-17.172-23.886-17.906-24.503-.326-.275-1.044-1.238-1.594-2.14-3.617-5.932-10.053-14.86-10.712-14.86-.433 0-.788-.476-.788-1.059 0-.981-5.632-8.784-7.191-9.964-1.411-1.067-3.715-6.419-2.987-6.939 1.044-.744 12.345-13.05 20.178-21.972 6.369-7.254 10.934-12.313 24-26.599 7.194-7.866 18.677-20.605 24.635-27.33 2.126-2.4 5.89-6.514 8.365-9.142 7.848-8.335 17.471-19.173 18.304-20.617 1.765-3.059-.604-3.378-25.046-3.378h-24.624l-5.567 5.793c-3.062 3.186-7.354 7.799-9.538 10.25-2.184 2.451-7.359 8.063-11.5 12.47-4.141 4.408-11.804 12.694-17.029 18.413-5.225 5.72-11.469 12.464-13.876 14.987-2.407 2.523-7.807 8.381-12 13.017-4.193 4.637-8.974 9.851-10.624 11.587-3.558 3.745-20.25 21.915-26.557 28.91C805.915 427.221 800.23 433 799.589 433c-.324 0-.589-28.155-.589-62.566 0-41.216-.353-63.226-1.035-64.5-1.344-2.511-40.807-3.035-42.854-.568m-178.725 1.623c-10.36 2.576-26.614 11.658-29.601 16.54-.394.643-2.419 3.242-4.5 5.776-10.546 12.836-13.258 36.63-6.12 53.695l2.298 5.5c4.299 10.297 8.771 18.213 14.494 25.658 4.079 5.307 3.085 6.906-8.646 13.908-5.879 3.509-11.841 7.458-13.25 8.777-1.409 1.318-4.113 3.58-6.009 5.027-3.857 2.942-10.052 8.924-10.052 9.705 0 .28-.878 1.451-1.95 2.602-1.073 1.151-2.66 3.495-3.528 5.208a233.259 233.259 0 0 1-2.394 4.615c-2.505 4.599-3.071 6.509-4.618 15.573-2.427 14.22-.788 26.128 5.495 39.927 1.252 2.75 3.338 6.432 4.636 8.183 1.297 1.751 2.359 3.417 2.359 3.703 0 .876 9.417 9.993 13.575 13.141 19.808 15.002 48.516 20.127 74.925 13.377 2.2-.562 5.125-1.255 6.5-1.539 1.375-.283 3.4-.907 4.5-1.386 10.062-4.377 12.065-5.316 12.5-5.858.275-.343 2.638-1.667 5.25-2.942 2.612-1.276 4.75-2.738 4.75-3.249 0-.512.48-.93 1.067-.93 1.067 0 7.549-4.438 9.433-6.458 1.927-2.067 9.296-7.542 10.144-7.537.471.003 9.406 8.328 19.856 18.499 22.378 21.783 18.449 20.55 29.476 9.246 11.221-11.501 12.382-8.14-10.555-30.548-20.389-19.919-21.178-21.062-17.07-24.727.632-.564 1.86-2.364 2.729-4 .869-1.636 4.132-7.378 7.25-12.76 3.119-5.382 5.67-10.39 5.67-11.128 0-.738.675-1.902 1.5-2.587.825-.685 1.503-1.752 1.506-2.372.004-.621.609-2.283 1.346-3.695 3.267-6.261 3.005-7.355-2.702-11.285-2.921-2.012-6.365-4.781-7.655-6.153-1.289-1.372-2.763-2.495-3.275-2.495s-2.268-1.125-3.902-2.5c-4.722-3.973-3.955-4.838-11.972 13.5-3.94 9.012-10.243 20.695-11.869 22-.342.275-.889 1.225-1.215 2.111-2.147 5.838-3.827 4.412-45.828-38.893-13.565-13.987-13.637-14.299-4.319-18.721 7.757-3.682 21.262-12.236 27.044-17.13 2.838-2.402 5.508-4.367 5.934-4.367.801 0 10.407-9.643 10.407-10.447 0-.249 1.35-2.453 3-4.898s3-5.077 3-5.85c0-.773.504-1.909 1.12-2.525 3.086-3.086 4.453-24.538 2.095-32.884-4.747-16.803-22.969-33.332-39.475-35.808-2.581-.387-4.955-1.128-5.276-1.646-1.059-1.713-30.2-.912-38.078 1.047m-161.812-.215c-20.94.32-19.024-.657-25.637 13.069-5.339 11.082-13.5 27.557-14.94 30.157-.456.825-7.417 15-15.467 31.5s-15.143 30.9-15.762 32c-1.026 1.823-4.338 8.522-13.1 26.5-1.742 3.575-3.505 6.65-3.918 6.833-.413.184-.75.827-.75 1.43 0 1.331-10.34 22.475-12.286 25.122-1.843 2.509-37.714-64.163-37.714-70.098 0-.573-.675-1.602-1.5-2.287-.825-.685-1.5-2.052-1.5-3.039 0-.987-.337-1.944-.75-2.128-.676-.3-6.633-11.983-16.742-32.833-3.681-7.592-4.701-9.589-6.51-12.75-.551-.962-2.832-5.575-5.07-10.25-2.238-4.675-6.833-14.012-10.212-20.75L226.574 307H177v252h38v-92.309c0-110.631-.858-104.692 11.445-79.191 3.185 6.6 12.545 25.725 20.802 42.5s19.494 39.725 24.971 51c5.477 11.275 10.355 21.175 10.839 22 .485.825 1.819 3.525 2.965 6s4.197 8.877 6.781 14.227l4.697 9.727 12.168.023c14.908.028 14.672.118 17.939-6.824 2.52-5.355 13.947-28.609 53.27-108.396C390.295 398.648 398 382.56 398 382.007c0-.554.45-1.007 1-1.007s1-.875 1-1.944c0-3.137 4.717-7.925 5.967-6.056.652.975 1.008 33.775 1.018 93.75L407 559h38V433.469c0-99.554-.259-125.611-1.25-125.916-2.596-.798-11.827-1.044-29.176-.779m343.381.438c-1.938.717-1.96 2.31-1.709 126.007L756.5 558.5h40l.5-32.073c.416-26.66.753-32.338 2-33.642.825-.863 4.425-4.876 8-8.917 3.575-4.041 8.824-9.827 11.664-12.858 2.84-3.03 8.678-9.447 12.973-14.26 8.774-9.832 10.122-10.314 13.993-5 5.334 7.321 13.889 18.72 15.178 20.224.72.839 4.234 5.576 7.809 10.526s7.037 9.675 7.692 10.5c.655.826 1.948 2.675 2.872 4.11.925 1.435 2.289 3.235 3.031 4 2.947 3.034 10.788 13.802 10.788 14.814 0 .592.337 1.079.75 1.083.413.004 1.874 1.691 3.249 3.75 1.374 2.059 3.001 4.277 3.616 4.931.615.653 6.462 8.415 12.994 17.25L925.486 559h24.257c13.341 0 24.257-.232 24.257-.516 0-.283-1.913-3.167-4.25-6.407-2.337-3.241-4.925-6.88-5.75-8.086-.825-1.207-2.888-4.061-4.584-6.343-16.856-22.671-19.84-26.806-24.916-34.522-.55-.836-2.033-2.669-3.296-4.073-1.263-1.404-3.257-4.128-4.432-6.053-1.175-1.925-3.855-5.587-5.954-8.139-2.1-2.551-3.818-5.031-3.818-5.51 0-.479-1.013-1.992-2.25-3.361-1.237-1.37-3.473-4.29-4.968-6.49s-4.969-7.15-7.72-11c-2.75-3.85-5.577-7.838-6.281-8.863-.705-1.025-3.419-4.717-6.031-8.206-2.612-3.488-4.75-6.812-4.75-7.387 0-.574-.377-1.044-.837-1.044-.46 0-3.048-3.262-5.75-7.25s-5.25-7.4-5.663-7.583c-3.456-1.537.717-8.618 11.994-20.353 11.942-12.427 15.813-16.63 19.745-21.437 2.195-2.682 6.695-7.761 10-11.286l8.511-9.072c1.375-1.464 4.3-4.827 6.5-7.474 2.2-2.646 5.515-6.438 7.366-8.428 7.22-7.76 21.113-22.837 24.982-27.109 5.614-6.202 5.232-6.319-20.044-6.169l-22.303.133-6.5 6.934a1124.18 1124.18 0 0 0-13.501 14.728c-3.85 4.287-8.35 9.198-10 10.913-1.65 1.716-7.275 7.756-12.5 13.423s-11.616 12.556-14.202 15.308c-2.586 2.752-7.761 8.399-11.5 12.549-3.739 4.149-8.742 9.543-11.117 11.988-2.376 2.444-7.763 8.323-11.971 13.064-4.208 4.742-10.425 11.546-13.816 15.121-11.077 11.679-13.275 14.143-13.675 15.33-3.098 9.199-3.719-1.642-3.719-64.917 0-62.736-.02-63.353-2.04-64.435-2.256-1.207-33.646-1.008-37.005.234M584.5 330.817c-25.81 11.001-28.265 35.509-6.9 68.906 4.005 6.262 5.316 6.964 9.668 5.178 3.552-1.458 12.037-6.962 12.565-8.151.184-.413.902-.75 1.597-.75 1.113 0 2.481-.936 7.278-4.981.664-.561 1.564-1.028 2-1.039 1.141-.028 11.571-10.023 12.982-12.441 8.592-14.721 6.834-35.045-3.655-42.252-9.027-6.202-26.356-8.383-35.535-4.47m8.5-.134c-29.521 4.845-35.46 30.762-14.956 65.274 5.647 9.505 9.027 8.732 30.411-6.957 26.407-19.373 25.117-49.936-2.414-57.217-6.524-1.726-8.312-1.877-13.041-1.1m-23.5 111.018c-1.65.882-4.392 2.661-6.094 3.952S559.977 448 559.569 448c-.407 0-2.165 1.289-3.905 2.865-1.74 1.576-5.307 4.788-7.925 7.138-5.227 4.69-11.739 14.575-11.739 17.819 0 1.133-.45 2.338-1 2.678-.55.34-1 4.047-1 8.238 0 33.738 35.436 54.677 68.784 40.644 1.806-.76 3.831-1.386 4.5-1.391 2.136-.017 13.608-7.191 21.574-13.491 7.17-5.672 6.946-7.392-2.108-16.174-3.987-3.868-13.55-13.694-21.25-21.836-7.7-8.142-18.275-19.212-23.5-24.599l-9.5-9.795-3 1.605m-7 7.073c-21.772 14.657-31.93 36.63-24.147 52.231.906 1.816 1.647 3.702 1.647 4.192 0 3.059 9.971 13.54 16.982 17.851 15.743 9.68 43.167 7.188 61.047-5.548 15.943-11.357 15.952-11.368 11.221-15.67-4.168-3.791-35.491-36.084-46.205-47.636-11.004-11.865-10.98-11.859-20.545-5.42M353.75 620.08c-3.056 1.78-2.554 18.664.591 19.86 3.536 1.344 414.15 1.403 416.66.06 2.969-1.589 3.024-18.381.065-19.965-2.675-1.431-414.857-1.387-417.316.045m3.75 2.652c-3.434.858-5.087 10.209-2.521 14.268 1.048 1.658 413.989 2.365 415.642.712 1.238-1.237.454-14.045-.913-14.914-1.304-.829-408.894-.894-412.208-.066m-244.149 60.73c-29.486 5.865-38.418 38.095-14.636 52.811 5.834 3.61 19.324 8.08 34.285 11.361 1.375.302 3.918 1.182 5.651 1.957 1.733.775 3.552 1.409 4.042 1.409 1.715 0 7.919 6.649 9.289 9.956 8.633 20.842-33.087 30.138-58.589 13.056-4.677-3.133-6.458-2.72-8.937 2.072-1.695 3.279.904 8.916 4.112 8.916.788 0 1.432.408 1.432.907 0 1.841 14.894 7.035 24.596 8.577 22.355 3.554 42.394-3.964 48.494-18.193 3.439-8.025 2.028-27.291-1.999-27.291-.472 0-1.076-.833-1.342-1.851-.496-1.898-10.273-8.095-14.749-9.35a787.86 787.86 0 0 1-8-2.328c-5.262-1.558-12.349-3.493-20.104-5.488-9.909-2.55-16.588-8.081-17.015-14.09-.649-9.153.5-11.891 7.327-17.444 7.596-6.179 28.105-5.571 42.476 1.259 7.713 3.666 11.896.724 9.957-7.003-1.815-7.229-29.062-12.67-46.29-9.243m619.816.032c-6.419 1.274-7.463 1.664-17.034 6.368-26.669 13.107-37.583 58.942-19.141 80.384.593.69 2.075 2.644 3.293 4.342 4.698 6.551 14.461 13.215 25.215 17.211 11.491 4.27 33.463 4.09 43.151-.354 1.733-.795 3.667-1.445 4.298-1.445 1.483 0 11.167-6.202 12.822-8.212.958-1.163 1.204-6.68 1-22.415L786.5 738.5h-11l-.273 17.615c-.332 21.463-.521 21.74-17.227 25.189-9.918 2.048-27.38.716-30.415-2.319-.542-.542-1.74-.985-2.663-.985-1.988 0-15.708-12.444-17.013-15.43-.497-1.138-1.295-2.745-1.773-3.57-23.1-39.871 30.961-83.464 68.845-55.514 7.296 5.383 16.382-3.249 9.307-8.842-13.365-10.568-32.745-14.794-51.121-11.15M990 683.418c-25.019 4.596-37.799 33.133-21.483 47.969 7.292 6.632 11.338 8.307 36.483 15.107 3.575.967 7.918 2.376 9.651 3.132 1.733.756 3.593 1.374 4.132 1.374 3.873 0 9.217 8.345 9.201 14.368-.028 10.935-6.475 15.458-25.773 18.084-7.683 1.046-30.862-6.001-33.511-10.188-1.348-2.131-5.346-1.454-7.085 1.201-9.686 14.783 38.35 27.285 62.978 16.391 5.602-2.478 15.407-12.202 15.407-15.28 0-.829.769-3.121 1.709-5.091 6.789-14.238-6.921-29.074-33.709-36.476a342.875 342.875 0 0 1-8.928-2.626c-2.436-.761-5.048-1.383-5.805-1.383-3.083 0-10.999-4.469-14.517-8.195-13.908-14.734 11.807-34.277 34.795-26.444 2.646.901 5.64 1.639 6.653 1.639s3.624 1.125 5.802 2.5c4.637 2.927 7.837 3.206 8.622.75.308-.962 1.028-2.732 1.602-3.933 4.187-8.768-24.75-16.844-46.224-12.899m-816.418 1.143c-1.921 1.921-2.085 7.777-.259 9.292.819.68 7.967 1.203 18.75 1.373l17.427.274.524 49c.288 26.95.625 49.112.75 49.25.635.702 10.933.088 12.226-.729 1.302-.824 1.46-6.455 1.195-42.735-.167-22.982-.01-44.814.349-48.514l.655-6.728 18.15-.272 18.151-.272v-11l-43.168-.261c-38.259-.23-43.348-.08-44.75 1.322m106.08-.08c-1.881 1.881-2.361 105.972-.499 108.215 1.29 1.555 9.167 1.733 11.903.269 1.788-.957 1.934-2.24 1.934-17V760l12.75-.047c7.012-.026 14.784-.229 17.27-.451 5.695-.509 5.222-.888 13.744 10.998 3.944 5.5 7.537 10.45 7.985 11 .448.55 1.783 2.575 2.966 4.5 4.216 6.856 5.889 8 11.702 8 9.561 0 8.635-3.146-6.599-22.435-1.275-1.615-3.98-5.44-6.011-8.5l-3.693-5.565 2.45-2c1.348-1.1 4.654-3.557 7.347-5.46 21.188-14.973 16.782-50.606-7.684-62.143-10.248-4.832-61.48-7.501-65.565-3.416m145.116-.231c-.882.688-2.959 4.175-4.616 7.75a2544.409 2544.409 0 0 1-7.086 15.113c-2.242 4.737-4.076 8.911-4.076 9.276 0 .364-1.982 4.813-4.404 9.886-2.422 5.074-5.297 11.25-6.388 13.725-2.221 5.035-5.583 12.397-11.42 25-2.165 4.675-4.534 9.85-5.266 11.5-.731 1.65-2.689 5.756-4.352 9.124-3.609 7.311-3.053 8.376 4.375 8.376 4.905 0 8.455-1.895 8.455-4.513 0-.855.597-2.193 7.475-16.737l3.665-7.75H459.659l3.081 6.25c5.15 10.447 8.26 17.39 8.26 18.442 0 2.42 3.815 4.308 8.706 4.308 6.096 0 7.809-1.494 5.781-5.039-.775-1.354-1.699-3.136-2.055-3.961-.355-.825-1.224-2.85-1.929-4.5-3.233-7.557-6.708-15.132-7.57-16.5-.52-.825-1.217-2.175-1.548-3-.331-.825-1.509-3.525-2.618-6-1.11-2.475-3.12-6.975-4.467-10-4.641-10.42-5.136-11.523-8.305-18.5-1.75-3.85-4.759-10.375-6.688-14.5-6.996-14.964-9.129-19.576-10.951-23.68-1.024-2.306-2.753-4.429-3.856-4.736-3.497-.973-9.062-.627-10.722.666m62.422-.05c-1.614 1.614-1.528 8.283.124 9.654.823.683 8.097 1.202 19.25 1.372l17.926.274.5 49 .5 49h12l.26-47.909c.309-56.997-2.181-50.591 19.662-50.591 12.027 0 17.538-.36 18.378-1.2 1.995-1.995 1.5-8.569-.734-9.765-2.929-1.567-86.29-1.411-87.866.165m106.414.363c-.798 2.079-.805 105.777-.007 107.855.835 2.176 76.444 2.43 78.243.263 1.487-1.793.839-8.632-.924-9.748-.784-.496-14.926-.916-31.426-.933-36.482-.037-32.608 2.312-32.274-19.574l.274-17.926 26.5-.258c29.588-.288 29-.139 29-7.326 0-5.014.577-4.916-28.975-4.916-22.614 0-25.886-.196-26.418-1.582-1.19-3.1-.672-32.953.593-34.218.878-.878 9.007-1.204 30.25-1.215 15.978-.009 29.656-.4 30.397-.869 1.774-1.124 2.06-8.067.4-9.726-2.168-2.168-74.798-2.002-75.633.173m225.627-.733c-.991.629-1.204 12.348-1 55.234l.259 54.436 5.393.307c7.657.436 7.217 3.812 7.133-54.641-.086-60.529-.505-62.497-11.785-55.336m46.794 1.104c-1.719 3.213-1.402 106.517.332 107.956.979.812 12.12 1.06 39.25.872l37.883-.262.298-4.588c.457-7.024 1.265-6.851-33.383-7.147L879.5 781.5l-.272-18.75-.272-18.75h26.822c29.166 0 29.222-.011 29.222-5.618 0-6.734 1.58-6.382-28.607-6.382H879v-37h30.465c33.909 0 32.535.291 32.535-6.899 0-5.545-73.062-8.591-75.965-3.167m-753.535.68c-2.221.543-5.263 1.774-10.476 4.241C97.891 691.811 91 698.413 91 700.417c0 .779-.552 1.6-1.226 1.825-.857.286-1.234 3.402-1.249 10.333-.027 11.82.77 13.495 10.183 21.409.664.559 1.621 1.016 2.127 1.016.506 0 1.441.628 2.078 1.395.636.767 2.604 1.61 4.372 1.874 1.768.264 4.565.965 6.215 1.557 1.65.592 5.7 1.795 9 2.673 12.611 3.355 14.173 3.874 20.27 6.74 14.908 7.007 14.884 32.761-.03 32.761-.737 0-1.902.563-2.59 1.25-2.108 2.108-23.899 2.302-30.864.275-7.394-2.152-18.33-7.477-19.014-9.258-.715-1.864-4.272 1.913-4.272 4.536 0 2 2.919 5.197 4.745 5.197.599 0 1.238.337 1.422.75.474 1.066 6.343 3.646 13.25 5.823 7.902 2.491 32.418 2.513 37.083.034 1.65-.877 3.561-1.597 4.248-1.601 13.008-.064 22.247-28.489 12.591-38.738-.638-.678-1.313-1.588-1.5-2.023-.87-2.028-10.8-7.396-17.215-9.306-3.918-1.167-8.939-2.756-11.157-3.531-2.219-.774-4.748-1.408-5.62-1.408-9.095 0-22.155-7.893-26.087-15.765-3.609-7.228 4.1-23.075 11.29-23.207.853-.015 2.113-.59 2.8-1.278 3.174-3.173 27.929-1.413 35.65 2.533l7 3.579 2.214-2.444c3.545-3.915 2.502-5.011-9.214-9.686-4.917-1.962-29.542-3.452-35-2.118m63.25.46c-7.734 4.532-.932 6.926 19.675 6.926 19.749 0 17.575-6.28 17.575 50.757v48.358l4.25-.308 4.25-.307.26-48.75c.142-26.812.367-48.837.5-48.944.132-.107 8.79-.444 19.24-.75l19-.556v-7l-41.5-.226c-26.958-.146-42.113.134-43.25.8m106.028-.545c-.397.412-.731 24.536-.742 53.61l-.02 52.861H290v-16.393c0-19.522-2.512-17.452 21.449-17.674 18.237-.169 21.551.328 21.551 3.232 0 .506.467 1.463 1.037 2.127 2.866 3.339 19.963 27.261 19.963 27.932 0 .427 2.25.776 5 .776 5.559 0 5.749-.203 3.25-3.477a121.224 121.224 0 0 1-3.25-4.5c-.825-1.214-3.413-4.859-5.75-8.1-2.337-3.24-4.25-6.349-4.25-6.907 0-.559-.413-1.016-.918-1.016-.506 0-1.944-1.687-3.198-3.75-1.253-2.062-2.676-4.024-3.161-4.359-2.211-1.523-.239-6.271 2.945-7.09 16.784-4.319 25.787-38.523 13.582-51.604-.687-.737-1.25-1.662-1.25-2.055 0-2.021-12.063-9.335-20-12.128-3.94-1.386-54.019-2.733-55.222-1.485m144.094.721c-.83.688-2.331 3.275-3.335 5.75-1.003 2.475-3.509 8.1-5.569 12.5-2.059 4.4-5.179 11.15-6.933 15-1.754 3.85-4.47 9.7-6.035 13a848.99 848.99 0 0 0-5.992 13c-1.73 3.85-3.565 7.781-4.077 8.736-.512.955-.931 2.363-.931 3.128 0 .765-.675 1.951-1.5 2.636s-1.5 2.26-1.5 3.5c0 1.24-.675 2.815-1.5 3.5s-1.5 1.608-1.5 2.053c0 .444-1.35 3.724-3 7.289-1.65 3.565-3 6.971-3 7.57 0 .598-.45 1.088-1 1.088s-1 .873-1 1.941-.45 2.219-1 2.559c-.55.34-1 1.066-1 1.614 0 1.607 9.182.595 10.105-1.114.445-.825 2.848-6 5.338-11.5 2.491-5.5 5.115-11.125 5.831-12.5l1.302-2.5 30.367-.265c31.912-.278 34.057-.005 34.057 4.339 0 1.066 7.328 17.675 9.896 22.426.517.957 2.646 1.608 5.883 1.8l5.072.299-2.894-5.799c-1.592-3.19-4.058-8.5-5.479-11.8-4.092-9.504-5.633-12.891-6.594-14.5a27.397 27.397 0 0 1-1.514-3c-.34-.825-1.851-4.2-3.358-7.5-1.507-3.3-3.54-7.8-4.517-10-.978-2.2-3.774-8.275-6.214-13.5-7.77-16.64-9.521-20.453-10.33-22.5-3.073-7.771-8.182-17.375-9.516-17.886-2.644-1.015-6.955-.695-8.563.636m63.522.166c-2.202 5.737-1.286 6.063 17.89 6.357l17.783.273 1.036 2.725c.667 1.754.982 18.736.884 47.726-.084 24.752-.115 45.791-.07 46.753.066 1.395.995 1.75 4.583 1.75h4.5v-47.809c0-57.634-2.546-51.088 20-51.427l17.5-.264v-7l-41.777-.261c-35.585-.222-41.859-.048-42.329 1.177m106.856-.764c-.978.402-1.25 12.039-1.25 53.431V792h75v-6.724l-6.563-.672c-3.61-.37-17.764-.618-31.454-.551-30.349.148-26.983 2.777-26.983-21.077C605 738.5 601.587 741 634.998 741h26.129l-.314-3.25-.313-3.25-27.5-.54c-15.125-.298-27.622-.635-27.771-.75-.149-.116-.149-9.098 0-19.96l.271-19.75 30.75-.264 30.75-.265v-7.878l-34.75.022c-19.112.012-35.312.253-36 .537M728 687.395c-9.557 3.396-11.733 4.364-12.462 5.543-.361.584-1.298 1.062-2.084 1.062-1.685 0-13.454 11.16-13.454 12.758 0 .605-.562 1.701-1.25 2.436-1.291 1.38-3.193 5.186-6.279 12.563-2.487 5.944-2.572 28.214-.126 32.943.91 1.761 1.655 3.875 1.655 4.7 0 3.43 13.121 21.6 15.597 21.6.393 0 2.107 1.013 3.809 2.25 3.618 2.631 8.161 4.835 15.03 7.292 6.778 2.424 31.547 2.47 36.064.067 1.65-.878 3.796-1.599 4.77-1.603.973-.003 3.552-1.131 5.73-2.506 2.178-1.375 4.335-2.5 4.793-2.5.458 0 2.052-1.273 3.543-2.828l2.709-2.829-.272-18.921-.273-18.922-4.75-.305-4.75-.305v17.597c0 19.507.018 19.45-7 22.718-37.224 17.335-77.029-12.653-68.64-51.712 6.814-31.724 44.544-46.205 73.433-28.185 6.072 3.788 6.361 3.863 8.25 2.154 3.071-2.78 1.721-6.687-3.043-8.81-.825-.368-3.075-1.62-5-2.781-10.621-6.409-32.99-8.099-46-3.476m92.846-1.707c-1.514.386-1.641 4.857-1.5 53.117l.154 52.695 4.759.305 4.759.305-.259-53.279-.259-53.28-3-.143c-1.65-.078-3.744.048-4.654.28m47.904.001c-1.639.429-1.75 3.819-1.75 53.384V792h75v-3.386c0-4.548-1.886-4.787-35.859-4.533-32.771.244-29.141 2.852-29.141-20.94 0-24.708-3.321-22.141 28.641-22.141 27.549 0 28.056-.086 26.938-4.541l-.609-2.427-27.235-.266-27.235-.266-.5-15.5c-.275-8.525-.275-17.525 0-20l.5-4.5 31-.5 31-.5.304-3.119c.38-3.912-58.505-6.971-71.054-3.692m120.75-.048c-12.431 3.287-19.428 8.271-23.581 16.797-2.096 4.302-2.753 17.929-.919 19.062.55.34 1.002 1.379 1.005 2.309.005 1.488 3.452 5.556 7.995 9.434 2.761 2.357 10.979 5.39 25 9.227 25.965 7.105 35.994 15.469 31.19 26.012-.654 1.437-1.19 3.461-1.19 4.498 0 14.326-42.594 16.148-60.895 2.605l-3.395-2.513-1.743 3.214c-1.666 3.072-1.662 3.29.077 4.939 2.743 2.601 12.084 7.427 15.997 8.265 1.902.408 4.051 1.218 4.774 1.802 1.891 1.526 31.871 1.422 33.409-.116.647-.647 1.88-1.176 2.741-1.176 4.46 0 17.035-9.908 17.035-13.421 0-.869.387-1.579.86-1.579s1.121-2.526 1.44-5.613c1.98-19.185-5.018-26.094-34.3-33.865-27.783-7.373-33.676-12.42-31.336-26.839 1.948-12.005 35.049-23.372 43.486-14.933.688.688 2.185 1.25 3.327 1.25 1.143 0 2.966.605 4.05 1.344 4.785 3.259 8.416 3.732 9.056 1.181 1.036-4.128.047-5.624-5.083-7.689-2.75-1.107-5.9-2.505-7-3.108-2.066-1.131-28.444-2.028-32-1.087M291.2 694.2c-1.774 1.774-1.697 51.738.083 54.173 1.434 1.961 33.201 1.91 42.841-.069 27.69-5.683 27.482-45.771-.278-53.691-7.125-2.033-40.701-2.358-42.646-.413m2.467 1.467c-1.005 1.005-.771 49.621.247 51.228 1.5 2.369 35.994.972 42.753-1.733 20.333-8.136 21.505-37.811 1.833-46.424-7.457-3.265-42.256-5.649-44.833-3.071m134.431 4.196c-1.154 1.62-2.098 3.213-2.098 3.539 0 .326-1.374 3.631-3.053 7.345A3346.036 3346.036 0 0 0 418.331 721c-.86 1.925-2.186 4.694-2.947 6.154-.761 1.46-1.384 3.373-1.384 4.25 0 .878-.441 1.596-.981 1.596-.539 0-1.277 1.237-1.638 2.75s-.984 3.2-1.384 3.75c-10.491 14.42-7.77 16.572 20.571 16.268l24.932-.268.316-2.744c.18-1.562-.974-5.437-2.679-9-1.647-3.441-3.282-7.269-3.633-8.506s-1.058-2.25-1.571-2.25c-.513 0-.933-1.07-.933-2.378 0-1.307-.675-2.937-1.5-3.622s-1.5-1.874-1.5-2.643c0-.77-1.405-4.427-3.123-8.128-9.574-20.627-9.664-20.742-12.779-16.366m.132 4.407c-1.158 2.326-3.69 7.94-5.627 12.473-1.937 4.534-5.051 11.509-6.921 15.5-1.869 3.992-4.159 9.057-5.089 11.257-.929 2.2-2.118 4.781-2.641 5.736-2 3.649-1.314 3.764 22.548 3.764 14.376 0 23.5-.373 23.5-.962 0-.529-2.025-5.295-4.5-10.592-2.475-5.297-4.5-9.998-4.5-10.446 0-.449-1.182-3.219-2.626-6.158-1.444-2.938-3.31-6.917-4.146-8.842-.837-1.925-1.908-4.175-2.381-5-.473-.825-1.039-1.95-1.257-2.5-3.436-8.637-3.985-9.003-6.36-4.23"
+      />
+      <path
+        fill={forceColor ? '#ffffff' : '#fbc840'}
+        fillRule="evenodd"
+        d="M357.5 622.732c-3.434.858-5.087 10.209-2.521 14.268 1.048 1.658 413.989 2.365 415.642.712 1.238-1.237.454-14.045-.913-14.914-1.304-.829-408.894-.894-412.208-.066"
+      />
+      <path
+        fill="#ffffff"
+        fillRule="evenodd"
+        d="M577 306.96c-39.143 10.277-54.361 43.718-37.787 83.04 3.251 7.715 4.09 9.254 10.018 18.393 7.343 11.319 7.355 12.521.161 16.784-3.084 1.827-6.796 4.106-8.25 5.062-1.453.956-3.297 2.053-4.099 2.436-1.529.732-3.971 2.686-10.093 8.075-2.031 1.788-3.96 3.25-4.288 3.25-.605 0-7.662 6.802-7.662 7.385 0 .175-2.025 3.402-4.5 7.17s-4.5 7.622-4.5 8.565c0 .942-.376 1.863-.835 2.047-1.667.665-3.958 21.041-3.074 27.333 1.716 12.217 2.053 14.043 2.95 16 .505 1.1 1.364 3.125 1.91 4.5.546 1.375 2.349 4.75 4.008 7.5 1.658 2.75 3.328 5.651 3.71 6.446 2.377 4.944 22.235 19.916 30.831 23.246 24.316 9.419 55.156 8.216 76.919-3 1.605-.827 5.38-2.746 8.388-4.263 3.009-1.518 5.745-3.159 6.082-3.647.336-.488 2.186-1.859 4.111-3.046 1.925-1.187 4.85-3.351 6.5-4.809 10.421-9.208 9.448-9.252 19.736.898 4.641 4.579 10.087 9.582 12.101 11.119 2.015 1.536 3.663 3.17 3.663 3.63 0 .915 11.187 11.891 13.358 13.106 1.339.75 19.642-16.907 19.642-18.947 0-.507-8.382-9.074-18.628-19.037-22.63-22.008-22.003-21.206-19.096-24.417 1.223-1.352 3.102-4.218 4.174-6.368 1.073-2.151 2.487-4.586 3.143-5.411.656-.825 3.378-5.775 6.05-11 2.671-5.225 5.194-9.65 5.607-9.833.413-.184.75-1.11.75-2.059 0-.949.661-2.599 1.468-3.667 2.654-3.509 1.93-7.774-1.682-9.908-2.892-1.709-6.786-4.824-10.354-8.283-.709-.687-1.576-1.25-1.927-1.25s-2.164-1.164-4.029-2.586c-4.137-3.155-4.816-2.793-7.321 3.9C668.546 460.306 656.269 482 653.394 482c-1.509 0-30.357-28.405-47.132-46.409-8.396-9.011-8.397-9.888-.017-14.052 2.89-1.435 6.605-3.463 8.255-4.506 1.65-1.043 4.764-2.86 6.921-4.038 2.156-1.177 6.592-4.246 9.857-6.818 3.266-2.572 6.623-5.127 7.461-5.677 17.787-11.668 27.603-44.42 18.582-62a268.61 268.61 0 0 1-2.704-5.514C652.906 329.401 643.931 319 642.55 319c-.419 0-2.402-1.259-4.406-2.797-5.499-4.222-13.94-8.199-17.486-8.238-1.737-.02-4.283-.679-5.658-1.465-3.713-2.122-29.346-1.812-38 .46m361.888.039-19.612.501-6.138 6.275c-3.376 3.452-6.138 6.472-6.138 6.712 0 .24-1.913 2.432-4.25 4.872-2.337 2.44-7.4 7.911-11.25 12.157-3.85 4.247-9.7 10.562-13 14.033-3.3 3.471-7.8 8.32-10 10.776-7.593 8.474-21.019 22.993-27 29.199-3.3 3.424-8.475 9.076-11.5 12.561-5.43 6.254-11.125 12.421-22.137 23.97-3.1 3.251-5.898 6.594-6.218 7.428-.652 1.7-3.206 2.036-4.129.543-.331-.535-.573-29.509-.538-64.385.057-57.279-.092-63.471-1.539-64.026-38.968-14.953-39.441-13.444-39.424 125.717.018 143.753-2.999 125.777 21.058 125.44l19.427-.272.5-32.026c.374-23.963.822-32.397 1.778-33.5a802.42 802.42 0 0 1 5.5-6.182c2.322-2.589 6.922-7.848 10.222-11.687 3.3-3.839 6.563-7.008 7.25-7.042.688-.035 1.25-.643 1.25-1.351s2.138-3.582 4.75-6.385c2.612-2.804 6.174-6.724 7.915-8.712 4.303-4.915 14.223-.731 14.351 6.053.008.458 1.801 2.857 3.984 5.332 2.183 2.475 3.976 4.805 3.984 5.179.009.373.691 1.353 1.516 2.178 2.721 2.721 16.5 21.635 16.5 22.649 0 .547.337.997.75 1.001.413.004 1.875 1.688 3.25 3.742 1.375 2.054 3.486 4.864 4.69 6.243 1.205 1.379 4.892 6.333 8.194 11.008 3.303 4.675 6.419 8.979 6.927 9.565.507.586 5.047 6.595 10.087 13.353 5.041 6.759 9.836 12.959 10.657 13.78.82.82 2.168 2.799 2.994 4.397l1.502 2.905h24.475c13.461 0 24.474-.244 24.474-.542 0-.298-.472-1.086-1.049-1.75-.577-.664-3.273-4.358-5.991-8.208-2.717-3.85-5.294-7.45-5.726-8-3.629-4.625-10.167-13.56-11.707-16-1.042-1.65-2.374-3.513-2.96-4.139-.587-.627-1.822-2.202-2.744-3.5-.922-1.299-3.298-4.611-5.279-7.361-1.98-2.75-3.866-5.788-4.189-6.75-.324-.962-.931-1.75-1.35-1.75-.419 0-2.504-2.587-4.633-5.75-2.13-3.163-4.109-5.975-4.398-6.25-1.45-1.379-6.974-8.876-6.974-9.465 0-.373-.562-1.266-1.25-1.984-.687-.718-1.925-2.314-2.75-3.547s-2.717-3.875-4.204-5.873c-1.487-1.997-6.873-9.481-11.967-16.631-5.095-7.15-9.631-13.45-10.079-14-3.818-4.68-14.615-20.426-15.121-22.052-.826-2.655 6.302-11.467 22.063-27.274 3.469-3.48 6.308-6.502 6.308-6.716 0-.214 1.237-1.711 2.75-3.327 1.513-1.616 4.55-5.077 6.75-7.691 2.2-2.615 6.25-7.084 9-9.931 2.75-2.848 6.8-7.388 9-10.088 2.2-2.7 7.664-8.737 12.141-13.415 4.478-4.678 9.878-10.472 12-12.874 2.123-2.403 6.211-6.891 9.086-9.973 7.364-7.894 7.331-7.904-21.839-7.16M177 432.983V559h38v-92.878c0-99.93-.062-98.754 4.827-92.142 1.195 1.617 2.173 3.269 2.173 3.673 0 .404 5.344 11.56 11.875 24.791A19742.015 19742.015 0 0 1 255.301 446a47103.268 47103.268 0 0 0 26.15 53.25L298.05 533l12.225-.032c12.525-.032 15.725-.888 15.725-4.206 0-.834.675-2.077 1.5-2.762s1.5-1.746 1.5-2.358c0-1.013 15.9-34.106 18.086-37.642.51-.825 1.181-2.175 1.493-3 .311-.825.986-2.175 1.5-3 .513-.825 1.189-2.175 1.5-3 .312-.825.986-2.284 1.497-3.242 1.667-3.119 6.492-12.918 15.393-31.258 4.804-9.9 9.141-18.675 9.636-19.5.495-.825 1.356-2.562 1.914-3.86 3.025-7.035 21.55-43.968 22.992-45.837 3.926-5.092 3.989-3.62 3.989 92.897V559h38V308.038l-2.25-.551c-1.238-.304-12.308-.425-24.601-.269l-22.351.282-2.392 4c-1.316 2.2-2.681 4.675-3.034 5.5-1.296 3.033-14.478 30.548-15.33 32-.964 1.642-16.511 32.862-23.903 48-2.551 5.225-4.976 9.65-5.389 9.833-.413.184-.75.742-.75 1.241 0 1.712-4.375 10.926-5.187 10.926-.447 0-.813.845-.813 1.878 0 1.032-.675 2.437-1.5 3.122s-1.488 1.752-1.473 2.372c.035 1.458-9.29 20.023-10.277 20.461-.413.184-.75 1.014-.75 1.846 0 1.34-1.528 4.773-4.148 9.321-.476.825-1.087 2.063-1.358 2.75a481.68 481.68 0 0 1-.998 2.5c-1.395 3.459-6.265 11.173-7.263 11.506-.626.208-2.682-2.689-4.569-6.438-1.887-3.75-4.828-9.518-6.535-12.818-1.707-3.3-3.109-6.562-3.116-7.25-.007-.687-.463-1.25-1.013-1.25-.55 0-1-.569-1-1.263 0-1.015-5.876-13.136-12.722-26.247-.572-1.094-2.01-4.015-3.197-6.49-1.186-2.475-2.554-5.175-3.039-6-2.673-4.538-21.064-42.683-21.054-43.667.007-.641-.349-1.316-.789-1.5-.441-.183-2.391-3.483-4.334-7.333-1.943-3.85-3.996-7.9-4.563-9C239.114 333.486 235 324.692 235 323.481c0-.815-.401-1.481-.892-1.481-.49 0-1.183-1.164-1.54-2.586s-1.102-3.109-1.656-3.75c-.554-.64-1.826-2.739-2.827-4.664l-1.821-3.5-24.632-.267-24.632-.268v126.018m404.387-100.727c-22.25 11.806-24.344 32.895-6.283 63.286 7.876 13.253 7.934 13.264 21.396 4.008 2.2-1.513 5.013-3.144 6.25-3.625 1.237-.482 2.25-1.337 2.25-1.9 0-.564.498-1.025 1.106-1.025 3.63 0 16.035-12.224 19.832-19.542 3.594-6.929 4.57-24.082 1.594-28.017-.808-1.067-1.483-2.693-1.5-3.613-.198-10.377-30.773-16.932-44.645-9.572M565.621 444c-3.14 2.2-6.027 4.001-6.415 4.003-2.517.01-18.965 17.244-21.102 22.111a908.018 908.018 0 0 1-3.31 7.461c-2.059 4.524.49 27.353 3.153 28.241.579.193 1.053 1.036 1.053 1.873 0 1.603 5.388 9.001 7.981 10.958.835.631 2.6 2.094 3.921 3.25 8.957 7.837 33.004 12.676 42.752 8.603 1.975-.825 4.634-1.5 5.909-1.5 1.275 0 2.576-.415 2.889-.923.314-.508 1.996-1.236 3.737-1.618 2.888-.635 12.616-5.934 13.811-7.524.275-.366 1.4-.956 2.5-1.311 2.907-.937 11.076-8.896 11.741-11.436.45-1.723-.789-3.466-5.993-8.43-3.609-3.442-7.503-7.366-8.654-8.721-1.152-1.354-6.369-6.792-11.594-12.085-5.225-5.292-11.257-11.609-13.404-14.037-7.145-8.081-21.704-22.915-22.49-22.915-.426 0-3.344 1.8-6.485 4M113 685.596c-13.531 4.964-17.199 7.415-21.537 14.394C83.156 713.354 93.496 738 107.41 738c1.387 0 4 .634 5.806 1.409 4.969 2.131 13.723 4.591 16.34 4.591 1.279 0 2.604.45 2.944 1 .34.55 1.379 1.003 2.309 1.006.93.004 2.846.609 4.258 1.346 1.411.736 3.685 1.62 5.053 1.963 13.921 3.494 13.406 25.743-.759 32.772-5.694 2.827-32.958 3.719-35.512 1.163-.687-.687-2.454-1.25-3.927-1.25-1.472 0-3.237-.675-3.922-1.5s-1.76-1.5-2.39-1.5c-.63 0-2.773-1.106-4.762-2.457-3.456-2.349-3.687-2.379-5.232-.671-3.746 4.139.802 8.077 16.384 14.191 5.455 2.14 35.332 2.518 38.237.484 1.214-.851 3.038-1.547 4.052-1.547 9.086 0 23.649-27.212 16.822-31.432-.489-.302-1.198-1.791-1.576-3.309-1.347-5.418-12.119-13.34-20.2-14.856-1.846-.346-3.604-1.029-3.905-1.516-.301-.488-1.534-.885-2.739-.882-1.205.003-4.216-.657-6.691-1.466-2.475-.809-7.425-2.329-11-3.376-20.871-6.118-27.414-22.333-13.531-33.533 6.608-5.331 9.688-6.13 23.63-6.13 12.809 0 13.096.061 22.664 4.842 4.896 2.447 7.737 1.565 7.737-2.403 0-2.387-3.923-4.882-12.5-7.947-3.567-1.275-29.273-2.396-32-1.396m62.75.508c-7.868 4.475-.177 7.045 20.458 6.838 18.853-.19 16.792-6.411 16.792 50.68V792h4c2.2 0 4.102-.112 4.226-.25.125-.138.462-22.3.75-49.25l.524-49 18.651-.272c19.821-.288 20.83-.563 19.338-5.264-.945-2.975-79.737-4.705-84.739-1.86m106.573.007c-.854 1.028-1.108 15.159-.963 53.394l.197 51.995 4.221.307 4.222.308v-16.498c0-19.615-2.58-17.434 20.945-17.705l19.353-.222 2.824 3.405c1.553 1.873 2.836 3.817 2.851 4.321.015.504.716 1.629 1.557 2.5.842.871 4.105 5.202 7.25 9.624 10.526 14.795 10.355 14.632 14.988 14.276l4.114-.316-3.852-5.718c-2.119-3.146-7.177-10.346-11.242-16-4.064-5.655-7.725-10.835-8.135-11.511-1.194-1.969 1.082-5.054 4.24-5.747 22.705-4.987 24.054-55.48 1.632-61.107-1.389-.349-2.525-1.015-2.525-1.48 0-.466-1.687-1.15-3.75-1.522-2.062-.372-4.307-1.117-4.987-1.657-2.155-1.71-51.557-2.314-52.94-.647m144.649-.464c-.841.228-2.584 2.763-3.873 5.634a882.364 882.364 0 0 1-5.221 11.342c-1.583 3.367-2.878 6.63-2.878 7.25 0 .62-.45 1.127-1 1.127s-1 .494-1 1.099c0 1.19-1.507 4.79-6.239 14.901-7.528 16.087-8.761 18.89-8.761 19.912 0 .598-.45 1.088-1 1.088s-1 .718-1 1.596c0 .877-.607 2.79-1.348 4.25-.742 1.46-2.141 4.454-3.11 6.654-.969 2.2-2.165 4.675-2.658 5.5-.493.825-1.167 2.175-1.497 3-1.564 3.903-3.885 9.099-6.925 15.5l-3.325 7 4.006.311c4.498.349 6.378-.766 7.268-4.312.334-1.331 2.403-6.289 4.598-11.019 2.195-4.729 3.991-8.99 3.991-9.468 0-3.728 2.373-4.012 33.5-4.012 31.572 0 33.5.248 33.5 4.307 0 .64 1.097 3.421 2.439 6.179 1.341 2.758 3.801 8.052 5.467 11.764l3.029 6.75h5.188c4.962 0 5.115-.079 3.532-1.829-.91-1.006-1.655-2.237-1.655-2.735 0-.499-1.171-3.389-2.601-6.422-1.431-3.033-3.28-7.089-4.11-9.014-.83-1.925-1.912-4.175-2.405-5-.493-.825-1.162-2.175-1.487-3-.804-2.043-2.524-5.824-7.733-17a2257.455 2257.455 0 0 1-12.384-27l-4.29-9.5c-3.891-8.613-4.99-11.345-4.99-12.401 0-.605-.337-1.101-.75-1.103-.413-.002-1.6-2.139-2.638-4.75-2.696-6.773-5.383-8.297-11.64-6.599m65.22.092c-3.049.365-3.284.646-3 3.579l.308 3.182 17.956.274c22.063.336 19.511-6.326 19.529 50.976L527 792h9v-47.809c0-57.634-2.546-51.088 20-51.427l17.5-.264.304-3.128c.379-3.893-57.831-6.485-81.612-3.633m105.049.025-2.259.377.259 52.68.259 52.679 37.25.262 37.25.262v-6.944l-31.918-.29c-37.751-.343-33.51 2.312-33.907-21.225-.423-25.112-3.804-22.565 29.96-22.565h26.992l-.314-3.25-.313-3.25-27.5-.5-27.5-.5-.593-19c-.326-10.45-.393-19.556-.148-20.236.336-.936 7.867-1.299 31.092-1.5l30.649-.264.303-3.114c.387-3.973-51.348-6.667-69.562-3.622m136.259-.063c-5.548 1.3-11.475 3.619-16.5 6.457-.825.466-2.48 1.272-3.677 1.792-4.956 2.151-13.177 12.115-17.82 21.596l-4.636 9.468v13.567c0 10.632.339 14.084 1.566 15.958.862 1.315 1.567 3.158 1.567 4.095 0 5.541 11.265 20.039 18.667 24.026 1.833.987 3.333 2.142 3.333 2.567 0 .425.8.773 1.777.773.978 0 2.666.61 3.75 1.356 6.847 4.706 37.31 6.973 42.726 3.179 1.206-.844 3.185-1.535 4.398-1.535 2.875 0 14.113-6.71 15.96-9.529 1.143-1.744 1.38-5.936 1.162-20.581l-.273-18.39-4.75-.305-4.75-.305v17.9c0 21.236.514 20.4-15.783 25.712-6.221 2.028-25.279 1.836-27.391-.276-.674-.674-2.039-1.226-3.033-1.226-31.358 0-40.773-67.628-11.293-81.11 1.1-.503 3.529-1.837 5.397-2.964 13.717-8.275 35.908-7.305 49.886 2.182l5.649 3.834 2.246-2.109c9.038-8.491-27.944-20.875-48.178-16.132m87.499.132c-.649.217-.999 18.887-.999 53.25V792h9.018l-.259-53.154-.259-53.154-3.251-.096c-1.788-.053-3.7.054-4.25.237m49.501.156-3 .531V791.5l37.25.262 37.25.262v-6.944l-31.918-.29c-17.555-.16-32.222-.595-32.593-.967-.871-.872-.897-40.353-.028-41.76.438-.708 9.659-1.063 27.629-1.063 24.049 0 27.041-.177 27.601-1.636 1.75-4.562.204-4.848-27.766-5.131-31.334-.317-27.805 2.267-28.042-20.537-.24-23.002-3.98-20.568 32.13-20.909l30.487-.287v-2.928c0-4.23-50.512-6.852-69-3.583m120-.379c-1.1.276-3.125.89-4.5 1.365-1.375.474-3.708 1.125-5.185 1.446-3.552.773-13.483 10.344-14.349 13.829-.375 1.513-1.084 2.75-1.574 2.75-.491 0-.892 3.6-.892 8 0 4.667.417 8 1 8 .55 0 1 .945 1 2.1 0 2.005 8.575 11.852 10.349 11.884.467.009 2.267.617 4 1.351 5.063 2.146 9.895 3.801 13.651 4.677 3.516.82 8.077 2.048 15.5 4.176 24.951 7.152 29.104 25.614 8.5 37.789-9.184 5.427-35.944 1.707-49.27-6.849-2.074-1.331-3.898-2.242-4.053-2.024-3.341 4.689-3.536 5.572-1.599 7.23 2.829 2.423 12.951 7.665 14.813 7.672.885.004 2.94.7 4.567 1.549 4.293 2.239 31.76 2.254 36.044.02 1.649-.859 3.631-1.565 4.404-1.569 2.616-.011 13.094-8.726 13.094-10.891 0-.535.701-1.673 1.558-2.531 2.066-2.065 2.281-19.703.27-22.054-9.026-10.552-12.838-12.617-33.328-18.054-25.845-6.858-30.885-10.516-30.901-22.425-.009-6.35 2.966-14.051 5.428-14.051.457 0 1.425-.589 2.152-1.309 5.245-5.199 24.652-7.612 34.723-4.318 2.735.895 5.645 1.627 6.464 1.627.82 0 2.09.599 2.822 1.331 2.1 2.1 6.982 3.006 7.952 1.477 1.441-2.273.947-5.843-.89-6.43a49.427 49.427 0 0 1-3.75-1.424c-9.153-3.956-10.442-4.21-23-4.522-7.15-.178-13.9-.098-15 .178m-699.25 8.052c-2.626 1.06-1.705 53.906.973 55.781 2.628 1.841 26.2 2.161 33.777.459 2.475-.556 6.3-1.354 8.5-1.772 7.473-1.422 18.5-10.776 18.5-15.692 0-1.276.45-2.598 1-2.938 2.857-1.766.495-18.551-3.343-23.759-7.695-10.442-44.778-17.982-59.407-12.079m136.365 5.803c-.888 1.355-1.615 2.745-1.615 3.088 0 .343-1.35 3.54-3 7.105-1.65 3.565-3 6.943-3 7.507 0 .565-.64 2.221-1.422 3.681-.781 1.46-1.679 3.329-1.993 4.154-.315.825-.976 2.175-1.469 3-.493.825-1.588 3.075-2.434 5a969.607 969.607 0 0 1-3.807 8.5c-2.933 6.465-4.841 11.672-4.86 13.267-.012.997 5.472 1.21 25.735 1l25.75-.267.313-2.716c.172-1.494-.451-4.419-1.386-6.5A2799.7 2799.7 0 0 0 449.77 736c-1.626-3.575-3.552-7.85-4.279-9.5-13.037-29.577-14.631-31.987-17.876-27.035"
+      />
+      <path
+        fill={forceColor ?? '#000000'}
+        fillRule="evenodd"
+        d="M521.819 1.003C41.816 37.878-174.922 620.316 164.932 960.061 424.599 1219.644 854.798 1166.38 1045.792 851c44.159-72.919 78.196-182.919 78.207-252.75.001-2.888.451-5.25 1.001-5.25.646 0 1-11.186 1-31.559 0-17.357-.383-31.322-.852-31.033-.468.29-1.146-4.322-1.506-10.249C1106.235 233.558 860.132 2.974 569 .494c-20.075-.171-41.306.058-47.181.509M579 304.04c-11.898 2.752-16.042 4.538-25.512 10.994-18.328 12.494-29.699 46.19-21.149 62.666.914 1.761 1.661 4.081 1.661 5.158s1.064 4.136 2.365 6.8c1.301 2.663 2.867 5.967 3.48 7.342 2.491 5.593 11.011 19.214 12.405 19.833 1.538.684.674 3.136-1.5 4.258-23.032 11.887-44.493 34.187-48.992 50.909C485.5 532.433 547.66 579.678 614 557.309c6.287-2.12 27.354-13.155 29-15.191.484-.598 9.877-8.401 13.078-10.864 1.342-1.032 4.333 1.489 20 16.859 23.472 23.027 19.703 21.943 32.346 9.3 12.956-12.956 13.299-10.341-3.537-26.972-27.989-27.648-26.43-25.517-22.499-30.758 3.823-5.095 14.612-24.367 14.612-26.101 0-.87.45-1.582 1-1.582s1-.569 1-1.265c0-.695.868-2.884 1.929-4.864 4.23-7.892 1.276-16.839-5.573-16.876-.471-.002-2.219-1.24-3.884-2.75-3.282-2.975-10.183-8.402-12.266-9.645-1.858-1.109-6.206 2.056-6.206 4.519 0 1.14-.607 3.267-1.348 4.727-.742 1.46-2.141 4.454-3.11 6.654-.969 2.2-2.14 4.675-2.601 5.5-.462.825-2.377 4.425-4.257 8-8.614 16.383-6.359 16.681-26.074-3.456-36.485-37.268-35.315-35.312-24.473-40.947 4.05-2.105 8.038-4.405 8.863-5.112.825-.708 4.031-2.802 7.125-4.654 12.328-7.38 29.875-25.116 29.875-30.196 0-.834.396-1.762.88-2.061 6.709-4.146 6.006-35.219-1.066-47.074-.984-1.65-2.199-3.9-2.701-5-1.034-2.268-12.507-12.921-16.188-15.031-5.445-3.121-12.093-5.911-18.79-7.886-5.832-1.721-33.431-2.094-40.135-.543m-402.965 1.894c-1.591 2.972-1.429 252.272.165 253.866 1.879 1.879 39.159 1.678 40.734-.22.89-1.073 1.103-23.714.872-92.681-.168-50.194-.161-90.505.017-89.58.178.925.675 1.681 1.104 1.681.741 0 13.105 24.528 28.985 57.5 3.974 8.25 7.645 15.675 8.159 16.5.514.825 1.385 2.549 1.937 3.831 1.728 4.013 26.982 55.421 32.878 66.927.491.958 1.73 3.542 2.753 5.742 6.325 13.595 30.646 8.025 39.278-8.996 3.346-6.598 6.083-12.56 6.083-13.25 0-.69.45-1.254 1-1.254s1-.648 1-1.44c0-1.224 7.353-16.957 10.077-21.56.488-.825 1.844-3.525 3.013-6 1.864-3.944 15.482-31.668 40.649-82.75 8.754-17.769 9.257-18.121 9.274-6.5.104 69.409 1.421 170.99 2.23 172 1.395 1.741 37.82 1.787 39.557.05 1.594-1.594 1.756-250.894.165-253.866-1.333-2.49-49.792-3.053-51.826-.602-.608.733-2.641 4.446-4.518 8.25-1.876 3.805-11.82 24.018-22.098 44.918-10.277 20.9-19.832 40.25-21.233 43-3.713 7.288-6.568 13.035-21.237 42.75-7.262 14.712-13.508 26.742-13.879 26.731-.529-.014-26.108-50.954-51.963-103.481a3074.1 3074.1 0 0 0-5.444-11 792.153 792.153 0 0 1-5.108-10.5c-1.439-3.025-3.499-7.075-4.578-9-1.079-1.925-4.917-9.532-8.528-16.905-3.611-7.373-7.068-14.011-7.682-14.75-2.043-2.462-50.497-1.911-51.836.589m579.076-.568c-1.793 2.161-1.728 253.627.066 254.765 2.692 1.706 42.54 1.049 43.216-.713.334-.87.621-15.607.639-32.75l.032-31.168 7.218-7.718c3.97-4.245 9.018-9.823 11.218-12.396 13.568-15.866 24.464-25.995 25.291-23.512.213.639.934 1.716 1.602 2.394.667.678 5.909 7.532 11.648 15.232 5.739 7.7 11.002 14.595 11.697 15.321.694.727 1.269 1.627 1.278 2 .009.374 1.359 2.202 3 4.065 1.641 1.862 2.991 3.662 3 4 .009.337 1.246 2.031 2.75 3.762 1.504 1.731 3.409 4.145 4.234 5.363 1.273 1.88 4.911 6.806 7.746 10.489.423.55 1.523 2.174 2.443 3.61.92 1.435 2.281 3.235 3.023 4 1.85 1.905 9.944 12.72 12.254 16.374 1.037 1.64 2.932 4.111 4.21 5.489 1.278 1.379 2.324 2.78 2.324 3.114 0 .334.946 1.688 2.102 3.01 1.156 1.322 3.482 4.316 5.169 6.653l3.068 4.25h25.208c31.34 0 30.849.577 15.745-18.5-.436-.55-1.917-2.684-3.292-4.743-1.375-2.059-2.837-3.746-3.25-3.75-.413-.004-.75-.456-.75-1.004 0-.549-3.081-5.161-6.846-10.25s-7.362-10.23-7.993-11.425c-.631-1.195-1.714-2.77-2.406-3.5-.692-.73-2.382-3.012-3.756-5.071-1.375-2.059-2.836-3.746-3.249-3.75-.413-.004-.75-.439-.75-.967 0-.527-2.812-4.731-6.25-9.341-3.437-4.61-8.725-11.899-11.75-16.196-7.393-10.504-17.172-23.886-17.906-24.503-.326-.275-1.044-1.238-1.594-2.14-3.617-5.932-10.053-14.86-10.712-14.86-.433 0-.788-.476-.788-1.059 0-.981-5.632-8.784-7.191-9.964-1.411-1.067-3.715-6.419-2.987-6.939 1.044-.744 12.345-13.05 20.178-21.972 6.369-7.254 10.934-12.313 24-26.599 7.194-7.866 18.677-20.605 24.635-27.33 2.126-2.4 5.89-6.514 8.365-9.142 7.848-8.335 17.471-19.173 18.304-20.617 1.765-3.059-.604-3.378-25.046-3.378h-24.624l-5.567 5.793c-3.062 3.186-7.354 7.799-9.538 10.25-2.184 2.451-7.359 8.063-11.5 12.47-4.141 4.408-11.804 12.694-17.029 18.413-5.225 5.72-11.469 12.464-13.876 14.987-2.407 2.523-7.807 8.381-12 13.017-4.193 4.637-8.974 9.851-10.624 11.587-3.558 3.745-20.25 21.915-26.557 28.91C805.915 427.221 800.23 433 799.589 433c-.324 0-.589-28.155-.589-62.566 0-41.216-.353-63.226-1.035-64.5-1.344-2.511-40.807-3.035-42.854-.568M593 330.683c-29.521 4.845-35.46 30.762-14.956 65.274 5.647 9.505 9.027 8.732 30.411-6.957 26.407-19.373 25.117-49.936-2.414-57.217-6.524-1.726-8.312-1.877-13.041-1.1m-30.5 118.091c-21.772 14.657-31.93 36.63-24.147 52.231.906 1.816 1.647 3.702 1.647 4.192 0 3.059 9.971 13.54 16.982 17.851 15.743 9.68 43.167 7.188 61.047-5.548 15.943-11.357 15.952-11.368 11.221-15.67-4.168-3.791-35.491-36.084-46.205-47.636-11.004-11.865-10.98-11.859-20.545-5.42M353.75 620.08c-3.056 1.78-2.554 18.664.591 19.86 3.536 1.344 414.15 1.403 416.66.06 2.969-1.589 3.024-18.381.065-19.965-2.675-1.431-414.857-1.387-417.316.045m-240.399 63.382c-29.486 5.865-38.418 38.095-14.636 52.811 5.834 3.61 19.324 8.08 34.285 11.361 1.375.302 3.918 1.182 5.651 1.957 1.733.775 3.552 1.409 4.042 1.409 1.715 0 7.919 6.649 9.289 9.956 8.633 20.842-33.087 30.138-58.589 13.056-4.677-3.133-6.458-2.72-8.937 2.072-1.695 3.279.904 8.916 4.112 8.916.788 0 1.432.408 1.432.907 0 1.841 14.894 7.035 24.596 8.577 22.355 3.554 42.394-3.964 48.494-18.193 3.439-8.025 2.028-27.291-1.999-27.291-.472 0-1.076-.833-1.342-1.851-.496-1.898-10.273-8.095-14.749-9.35a787.86 787.86 0 0 1-8-2.328c-5.262-1.558-12.349-3.493-20.104-5.488-9.909-2.55-16.588-8.081-17.015-14.09-.649-9.153.5-11.891 7.327-17.444 7.596-6.179 28.105-5.571 42.476 1.259 7.713 3.666 11.896.724 9.957-7.003-1.815-7.229-29.062-12.67-46.29-9.243m619.816.032c-6.419 1.274-7.463 1.664-17.034 6.368-26.669 13.107-37.583 58.942-19.141 80.384.593.69 2.075 2.644 3.293 4.342 4.698 6.551 14.461 13.215 25.215 17.211 11.491 4.27 33.463 4.09 43.151-.354 1.733-.795 3.667-1.445 4.298-1.445 1.483 0 11.167-6.202 12.822-8.212.958-1.163 1.204-6.68 1-22.415L786.5 738.5h-11l-.273 17.615c-.332 21.463-.521 21.74-17.227 25.189-9.918 2.048-27.38.716-30.415-2.319-.542-.542-1.74-.985-2.663-.985-1.988 0-15.708-12.444-17.013-15.43-.497-1.138-1.295-2.745-1.773-3.57-23.1-39.871 30.961-83.464 68.845-55.514 7.296 5.383 16.382-3.249 9.307-8.842-13.365-10.568-32.745-14.794-51.121-11.15M990 683.418c-25.019 4.596-37.799 33.133-21.483 47.969 7.292 6.632 11.338 8.307 36.483 15.107 3.575.967 7.918 2.376 9.651 3.132 1.733.756 3.593 1.374 4.132 1.374 3.873 0 9.217 8.345 9.201 14.368-.028 10.935-6.475 15.458-25.773 18.084-7.683 1.046-30.862-6.001-33.511-10.188-1.348-2.131-5.346-1.454-7.085 1.201-9.686 14.783 38.35 27.285 62.978 16.391 5.602-2.478 15.407-12.202 15.407-15.28 0-.829.769-3.121 1.709-5.091 6.789-14.238-6.921-29.074-33.709-36.476a342.875 342.875 0 0 1-8.928-2.626c-2.436-.761-5.048-1.383-5.805-1.383-3.083 0-10.999-4.469-14.517-8.195-13.908-14.734 11.807-34.277 34.795-26.444 2.646.901 5.64 1.639 6.653 1.639s3.624 1.125 5.802 2.5c4.637 2.927 7.837 3.206 8.622.75.308-.962 1.028-2.732 1.602-3.933 4.187-8.768-24.75-16.844-46.224-12.899m-816.418 1.143c-1.921 1.921-2.085 7.777-.259 9.292.819.68 7.967 1.203 18.75 1.373l17.427.274.524 49c.288 26.95.625 49.112.75 49.25.635.702 10.933.088 12.226-.729 1.302-.824 1.46-6.455 1.195-42.735-.167-22.982-.01-44.814.349-48.514l.655-6.728 18.15-.272 18.151-.272v-11l-43.168-.261c-38.259-.23-43.348-.08-44.75 1.322m106.08-.08c-1.881 1.881-2.361 105.972-.499 108.215 1.29 1.555 9.167 1.733 11.903.269 1.788-.957 1.934-2.24 1.934-17V760l12.75-.047c7.012-.026 14.784-.229 17.27-.451 5.695-.509 5.222-.888 13.744 10.998 3.944 5.5 7.537 10.45 7.985 11 .448.55 1.783 2.575 2.966 4.5 4.216 6.856 5.889 8 11.702 8 9.561 0 8.635-3.146-6.599-22.435-1.275-1.615-3.98-5.44-6.011-8.5l-3.693-5.565 2.45-2c1.348-1.1 4.654-3.557 7.347-5.46 21.188-14.973 16.782-50.606-7.684-62.143-10.248-4.832-61.48-7.501-65.565-3.416m145.116-.231c-.882.688-2.959 4.175-4.616 7.75a2544.409 2544.409 0 0 1-7.086 15.113c-2.242 4.737-4.076 8.911-4.076 9.276 0 .364-1.982 4.813-4.404 9.886-2.422 5.074-5.297 11.25-6.388 13.725-2.221 5.035-5.583 12.397-11.42 25-2.165 4.675-4.534 9.85-5.266 11.5-.731 1.65-2.689 5.756-4.352 9.124-3.609 7.311-3.053 8.376 4.375 8.376 4.905 0 8.455-1.895 8.455-4.513 0-.855.597-2.193 7.475-16.737l3.665-7.75H459.659l3.081 6.25c5.15 10.447 8.26 17.39 8.26 18.442 0 2.42 3.815 4.308 8.706 4.308 6.096 0 7.809-1.494 5.781-5.039-.775-1.354-1.699-3.136-2.055-3.961-.355-.825-1.224-2.85-1.929-4.5-3.233-7.557-6.708-15.132-7.57-16.5-.52-.825-1.217-2.175-1.548-3-.331-.825-1.509-3.525-2.618-6-1.11-2.475-3.12-6.975-4.467-10-4.641-10.42-5.136-11.523-8.305-18.5-1.75-3.85-4.759-10.375-6.688-14.5-6.996-14.964-9.129-19.576-10.951-23.68-1.024-2.306-2.753-4.429-3.856-4.736-3.497-.973-9.062-.627-10.722.666m62.422-.05c-1.614 1.614-1.528 8.283.124 9.654.823.683 8.097 1.202 19.25 1.372l17.926.274.5 49 .5 49h12l.26-47.909c.309-56.997-2.181-50.591 19.662-50.591 12.027 0 17.538-.36 18.378-1.2 1.995-1.995 1.5-8.569-.734-9.765-2.929-1.567-86.29-1.411-87.866.165m106.414.363c-.798 2.079-.805 105.777-.007 107.855.835 2.176 76.444 2.43 78.243.263 1.487-1.793.839-8.632-.924-9.748-.784-.496-14.926-.916-31.426-.933-36.482-.037-32.608 2.312-32.274-19.574l.274-17.926 26.5-.258c29.588-.288 29-.139 29-7.326 0-5.014.577-4.916-28.975-4.916-22.614 0-25.886-.196-26.418-1.582-1.19-3.1-.672-32.953.593-34.218.878-.878 9.007-1.204 30.25-1.215 15.978-.009 29.656-.4 30.397-.869 1.774-1.124 2.06-8.067.4-9.726-2.168-2.168-74.798-2.002-75.633.173m225.627-.733c-.991.629-1.204 12.348-1 55.234l.259 54.436 5.393.307c7.657.436 7.217 3.812 7.133-54.641-.086-60.529-.505-62.497-11.785-55.336m46.794 1.104c-1.719 3.213-1.402 106.517.332 107.956.979.812 12.12 1.06 39.25.872l37.883-.262.298-4.588c.457-7.024 1.265-6.851-33.383-7.147L879.5 781.5l-.272-18.75-.272-18.75h26.822c29.166 0 29.222-.011 29.222-5.618 0-6.734 1.58-6.382-28.607-6.382H879v-37h30.465c33.909 0 32.535.291 32.535-6.899 0-5.545-73.062-8.591-75.965-3.167m-572.368 10.733c-1.005 1.005-.771 49.621.247 51.228 1.5 2.369 35.994.972 42.753-1.733 20.333-8.136 21.505-37.811 1.833-46.424-7.457-3.265-42.256-5.649-44.833-3.071m134.563 8.603c-1.158 2.326-3.69 7.94-5.627 12.473-1.937 4.534-5.051 11.509-6.921 15.5-1.869 3.992-4.159 9.057-5.089 11.257-.929 2.2-2.118 4.781-2.641 5.736-2 3.649-1.314 3.764 22.548 3.764 14.376 0 23.5-.373 23.5-.962 0-.529-2.025-5.295-4.5-10.592-2.475-5.297-4.5-9.998-4.5-10.446 0-.449-1.182-3.219-2.626-6.158-1.444-2.938-3.31-6.917-4.146-8.842-.837-1.925-1.908-4.175-2.381-5-.473-.825-1.039-1.95-1.257-2.5-3.436-8.637-3.985-9.003-6.36-4.23"
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconTGT({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 396 396"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx={198} cy={197.891} r={197.633} fill="url(#tgt-a)" />
+      <circle cx={198} cy={197.891} r={183.652} stroke="#fff" strokeWidth={2} />
+      <path
+        fill="#fff"
+        fillRule="evenodd"
+        d="m208.43 193.721-55.659-51.691 155.078-59.638L208.43 193.72Zm55.661 51.756L88.151 313.39l120.281-119.67 55.659 51.757Z"
+        clipRule="evenodd"
+      />
+      <defs>
+        <linearGradient id="tgt-a" x1={198} x2={-197.266} y1={-197.374} y2={197.891} gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#3F9'} />
+          <stop offset={1} stopColor={forceColor ?? '#0CF'} />
+        </linearGradient>
+      </defs>
     </svg>
   );
 }
