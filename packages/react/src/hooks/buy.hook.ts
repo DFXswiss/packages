@@ -18,7 +18,7 @@ export function useBuy(): BuyInterface {
   }
 
   return useMemo(
-    () => ({ receiveFor, currencies: currencies?.filter((c) => c.sellable || c.cardSellable) }),
+    () => ({ receiveFor, currencies: currencies?.filter((c) => c.sellable || c.cardSellable || c.instantSellable) }),
     [call, currencies],
   );
 }

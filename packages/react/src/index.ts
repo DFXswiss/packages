@@ -22,6 +22,7 @@ export { useLanguage } from './hooks/language.hook';
 export { useKyc } from './hooks/kyc.hook';
 export { useSell } from './hooks/sell.hook';
 export { useUser } from './hooks/user.hook';
+export { useSwap } from './hooks/swap.hook';
 
 // Definitions
 export { Asset, AssetType } from './definitions/asset';
@@ -70,6 +71,7 @@ export {
   isStepDone,
 } from './definitions/kyc';
 export { Sell, SellPaymentInfo } from './definitions/sell';
+export { Swap, SwapPaymentInfo } from './definitions/swap';
 export { Session } from './definitions/session';
 export { User, UserStatus } from './definitions/user';
 export { LnurlAuth, LnurlAuthStatus } from './definitions/auth';
