@@ -18,6 +18,7 @@ export interface StyledDropdownProps<T> extends ControlProps {
   assetIconFunc?: (item: T) => AssetIconVariant;
   rootRef?: RefObject<HTMLElement>;
   forceEnable?: boolean;
+  hideBalanceWhenClosed?: boolean;
 }
 
 export default function StyledDropdown<T>({
@@ -38,6 +39,7 @@ export default function StyledDropdown<T>({
   assetIconFunc,
   rootRef,
   forceEnable,
+  hideBalanceWhenClosed,
   error,
   ...props
 }: StyledDropdownProps<T>) {
@@ -116,7 +118,7 @@ export default function StyledDropdown<T>({
                       }`}
                     >
                       {labelFunc(value)}
-                      {balanceFunc && <p>{balanceFunc(value)}</p>}
+                      {balanceFunc && !hideBalanceWhenClosed && <p>{balanceFunc(value)}</p>}
                     </span>
                     {descriptionFunc && (
                       <span className="text-dfxGray-800 text-xs h-min leading-none flex justify-between">

@@ -33,7 +33,7 @@ export enum TransactionError {
 export enum TransactionType {
   BUY = 'Buy',
   SELL = 'Sell',
-  CONVERT = 'Convert',
+  SWAP = 'Swap',
   REFERRAL = 'Referral',
 }
 
