@@ -28,6 +28,7 @@ export enum TransactionError {
   BANK_TRANSACTION_MISSING = 'BankTransactionMissing',
   KYC_REQUIRED = 'KycRequired',
   KYC_REQUIRED_INSTANT = 'KycRequiredInstant',
+  LIMIT_EXCEEDED = 'LimitExceeded',
 }
 
 export enum TransactionType {
