@@ -23,6 +23,7 @@ export { useKyc } from './hooks/kyc.hook';
 export { useSell } from './hooks/sell.hook';
 export { useUser } from './hooks/user.hook';
 export { useSwap } from './hooks/swap.hook';
+export { useSupport } from './hooks/support.hook';
 
 // Definitions
 export { Asset, AssetType } from './definitions/asset';
@@ -89,6 +90,7 @@ export {
   TransactionTarget,
 } from './definitions/transaction';
 export { Fees } from './definitions/fees';
+export { CreateTransactionIssue } from './definitions/support';
 
 // Utils & Validations
 export { Utils } from './utils';

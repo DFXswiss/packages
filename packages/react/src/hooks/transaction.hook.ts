@@ -12,6 +12,7 @@ import { useAuthContext } from '../contexts/auth.context';
 export interface TransactionInterface {
   getTransactions: () => Promise<Transaction[]>;
   getDetailTransactions: (from?: Date, to?: Date) => Promise<DetailTransaction[]>;
+  getTransactionByUid: (uid: string) => Promise<Transaction>;
   getTransactionCsv: (from?: Date, to?: Date) => Promise<string>;
   getUnassignedTransactions: () => Promise<UnassignedTransaction[]>;
   getTransactionTargets: () => Promise<TransactionTarget[]>;
@@ -33,6 +34,10 @@ export function useTransaction(): TransactionInterface {
       url: `${TransactionUrl.detail}?${createFilterParams(from, to)}`,
       method: 'GET',
     });
+  }
+
+  async function getTransactionByUid(uid: string): Promise<Transaction> {
+    return call<Transaction>({ url: `${TransactionUrl.getByUid(uid)}`, method: 'GET' });
   }
 
   async function getTransactionCsv(from?: Date, to?: Date): Promise<string> {
@@ -58,6 +63,7 @@ export function useTransaction(): TransactionInterface {
     () => ({
       getTransactions,
       getDetailTransactions,
+      getTransactionByUid,
       getTransactionCsv,
       getUnassignedTransactions,
       getTransactionTargets,

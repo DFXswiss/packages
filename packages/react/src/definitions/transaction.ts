@@ -1,5 +1,6 @@
 export const TransactionUrl = {
   get: 'transaction',
+  getByUid: (uid: string) => `transaction/uid/${uid}`,
   detail: 'transaction/detail',
   csv: 'transaction/detail/csv',
   unassigned: 'transaction/unassigned',
@@ -64,6 +65,7 @@ export enum TransactionFailureReason {
   PAYMENT_ACCOUNT_NOT_ALLOWED = 'PaymentAccountNotAllowed',
   COUNTRY_NOT_ALLOWED = 'CountryNotAllowed',
   INSTANT_PAYMENT = 'InstantPayment',
+  FEE_TOO_HIGH = 'FeeTooHigh',
 }
 
 export interface UnassignedTransaction {
