@@ -23,7 +23,7 @@ export default function StyledTab({
   darkTheme,
   spread,
 }: StyledTabProps) {
-  let tabClasses = 'text-2xl font-black px-12 py-2 rounded-t-lg block flex gap-2 ';
+  let tabClasses = 'text-2xl font-black px-12 py-2 rounded-t-lg block flex items-center gap-2 w-full h-full ';
   if (!deactivated) {
     if (active) {
       tabClasses += darkTheme ? 'bg-dfxGray-500' : 'bg-white';
@@ -35,6 +35,8 @@ export default function StyledTab({
   } else {
     tabClasses += 'cursor-default text-dfxBlue-800/70';
   }
+
+  spread && (tabClasses += ' justify-center');
 
   return (
     <li className={`flex-${spread ? '1' : 'none'} text-center`}>

@@ -24,7 +24,7 @@ export default function StyledTabContainer({ tabs, activeTab = 0, darkTheme, spr
 
   return (
     <>
-      <div className="flex flex-wrap text-dfxBlue-800 mt-6">
+      <div className="flex flex-wrap text-dfxBlue-800">
         <div className={`w-full rounded-lg ${darkTheme ? 'border border-dfxGray-400' : ''}`}>
           <ul
             className={`flex mb-0 rounded-t-lg list-none flex-wrap p-0 flex-row ${
