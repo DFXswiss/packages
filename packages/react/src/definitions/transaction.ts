@@ -10,6 +10,7 @@ export const TransactionUrl = {
 
 import { Asset } from './asset';
 import { Blockchain } from './blockchain';
+import { Fees } from './fees';
 
 export enum FiatPaymentMethod {
   BANK = 'Bank',
@@ -93,8 +94,7 @@ export interface Transaction extends UnassignedTransaction {
   outputPaymentMethod?: PaymentMethod;
   outputTxId?: string;
   outputTxUrl?: string;
-  feeAmount?: number;
-  feeAsset?: string;
+  fees?: Fees;
   externalTransactionId?: string;
 }
 

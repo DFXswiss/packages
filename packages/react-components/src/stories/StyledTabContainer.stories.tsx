@@ -11,7 +11,15 @@ export const Default: ComponentStory<typeof StyledTabContainer> = (args) => {
   return <StyledTabContainer {...args} />;
 };
 
-Default.args = {
+export const Dark: ComponentStory<typeof StyledTabContainer> = (args) => {
+  return (
+    <div className="bg-white p-5">
+      <StyledTabContainer darkTheme {...args} />
+    </div>
+  );
+};
+
+const args = {
   activeTab: 0,
   tabs: [
     {
@@ -63,3 +71,6 @@ Default.args = {
     { title: 'Stake', deactivated: true, flagWord1: 'Beta', content: 'null' },
   ],
 };
+
+Default.args = args;
+Dark.args = args;
