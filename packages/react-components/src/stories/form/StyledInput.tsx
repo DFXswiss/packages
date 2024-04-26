@@ -1,4 +1,4 @@
-import { forwardRef, HTMLInputTypeAttribute } from 'react';
+import { forwardRef, HTMLInputTypeAttribute, HTMLProps } from 'react';
 import { Controller } from 'react-hook-form';
 import StyledVerticalStack from '../layout-helpers/StyledVerticalStack';
 import { ControlProps } from './Form';
@@ -19,6 +19,7 @@ interface StyledInputProps extends ControlProps {
   small?: boolean;
   smallLabel?: boolean;
   autocomplete?: string;
+  multiLine?: boolean;
 }
 
 function getMargin(affix?: string): number {
@@ -48,6 +49,7 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
       full = false,
       small = false,
       smallLabel = false,
+      multiLine,
       ...props
     }: StyledInputProps,
     ref,
@@ -65,71 +67,78 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
     return (
       <Controller
         control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <StyledVerticalStack gap={1} full={full}>
-            {label && (
-              <label
-                hidden={hideLabel}
-                className={
-                  `text-start ${smallLabel ? 'text-sm' : 'text-base'} font-semibold pl-3 pl- ` + [textColor].join(' ')
-                }
-              >
-                {label}
-              </label>
-            )}
-            <div className="relative">
-              {prefix && (
-                <div
-                  className={`text-dfxGray-800 absolute ${
-                    prefix.length > 0 ? 'left-3' : ''
-                  } flex justify-center items-center h-[3.6rem]`}
+        render={({ field: { onChange, onBlur, value } }) => {
+          const inputProps = {
+            className:
+              `text-base font-normal rounded-md p-4 ${small ? 'w-24' : 'w-full'} ` +
+              [textOrErrorColor, backgroundColor, placeholderColor, borderColor, outlineColor].join(' '),
+            style: { paddingLeft, paddingRight },
+            type: type,
+            name: autocomplete ?? name,
+            inputMode: type === 'number' ? 'decimal' : undefined,
+            onBlur: onBlur,
+            onChange: (value: any) => onChange(value.target.value),
+            placeholder: placeholder,
+            value: value ?? '',
+            disabled: disabled,
+            ref: ref,
+            onWheel: (e: any) => type === 'number' && e.currentTarget.blur(),
+            ...props,
+          };
+
+          return (
+            <StyledVerticalStack gap={1} full={full}>
+              {label && (
+                <label
+                  hidden={hideLabel}
+                  className={
+                    `text-start ${smallLabel ? 'text-sm' : 'text-base'} font-semibold pl-3 pl- ` + [textColor].join(' ')
+                  }
                 >
-                  <p>{prefix}</p>
-                </div>
+                  {label}
+                </label>
               )}
+              <div className="relative">
+                {prefix && (
+                  <div
+                    className={`text-dfxGray-800 absolute ${
+                      prefix.length > 0 ? 'left-3' : ''
+                    } flex justify-center items-center h-[3.6rem]`}
+                  >
+                    <p>{prefix}</p>
+                  </div>
+                )}
 
-              {loading && (
-                <div className="absolute right-3 h-w-8 flex justify-center items-center h-[3.6rem]">
-                  <StyledLoadingSpinner />
-                </div>
+                {loading && (
+                  <div className="absolute right-3 h-w-8 flex justify-center items-center h-[3.6rem]">
+                    <StyledLoadingSpinner />
+                  </div>
+                )}
+
+                {buttonLabel && !loading && (
+                  <div
+                    className={`text-dfxRed-100 absolute ${
+                      buttonLabel.length > 0 ? 'right-3' : ''
+                    } flex justify-center items-center h-[3.6rem]`}
+                  >
+                    <button type="button" onClick={buttonClick}>
+                      {buttonLabel}
+                    </button>
+                  </div>
+                )}
+
+                {multiLine ? (
+                  <textarea {...(inputProps as HTMLProps<HTMLTextAreaElement>)} />
+                ) : (
+                  <input {...(inputProps as HTMLProps<HTMLInputElement>)} />
+                )}
+              </div>
+              {(forceErrorMessage || error) && (
+                <p className="text-start text-sm text-dfxRed-100 pl-3">{forceErrorMessage ?? error?.message}</p>
               )}
-
-              {buttonLabel && !loading && (
-                <div
-                  className={`text-dfxRed-100 absolute ${
-                    buttonLabel.length > 0 ? 'right-3' : ''
-                  } flex justify-center items-center h-[3.6rem]`}
-                >
-                  <button type="button" onClick={buttonClick}>
-                    {buttonLabel}
-                  </button>
-                </div>
-              )}
-
-              <input
-                className={
-                  `text-base font-normal rounded-md p-4 ${small ? 'w-24' : 'w-full'} ` +
-                  [textOrErrorColor, backgroundColor, placeholderColor, borderColor, outlineColor].join(' ')
-                }
-                style={{ paddingLeft, paddingRight }}
-                type={type}
-                name={autocomplete ?? name}
-                inputMode={type === 'number' ? 'decimal' : undefined}
-                onBlur={onBlur}
-                onChange={(value) => onChange(value.target.value)}
-                placeholder={placeholder}
-                value={value ?? ''}
-                disabled={disabled}
-                ref={ref}
-                onWheel={(e) => type === 'number' && e.currentTarget.blur()}
-                {...props}
-              />
-            </div>
-            {(forceErrorMessage || error) && (
-              <p className="text-start text-sm text-dfxRed-100 pl-3">{forceErrorMessage ?? error?.message}</p>
-            )}
-          </StyledVerticalStack>
-        )}
+            </StyledVerticalStack>
+          );
+        }}
         name={name}
         rules={rules}
       />
