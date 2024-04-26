@@ -1,4 +1,4 @@
-export const SupportUrl = { createTransactionIssue: 'support/issue/transaction' };
+export const SupportUrl = { createTransactionIssue: (id: number) => `support/issue/transaction?id=${id}` };
 
 export enum SupportIssueReason {
   FUNDS_NOT_RECEIVED = 'FundsNotReceived',

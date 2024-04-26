@@ -44,6 +44,7 @@ import {
   MdNorth,
   MdSouth,
   MdRepeat,
+  MdReplay,
 } from 'react-icons/md';
 import { VscArrowSwap } from 'react-icons/vsc';
 import { ReactElement, useContext } from 'react';
@@ -106,6 +107,7 @@ export enum IconVariant {
   GOOGLE_PLAY = 'GOOGLE_PLAY',
   REPEAT = 'REPEAT',
   TRANSACTIONS = 'TRANSACTIONS',
+  RELOAD = 'RELOAD',
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
@@ -160,6 +162,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.GOOGLE_PLAY]: <FaGooglePlay />,
   [IconVariant.REPEAT]: <MdRepeat />,
   [IconVariant.TRANSACTIONS]: <FaReceipt />,
+  [IconVariant.RELOAD]: <MdReplay />,
 };
 
 export enum IconSize {
