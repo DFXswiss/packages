@@ -67,6 +67,7 @@ export enum TransactionFailureReason {
   COUNTRY_NOT_ALLOWED = 'CountryNotAllowed',
   INSTANT_PAYMENT = 'InstantPayment',
   FEE_TOO_HIGH = 'FeeTooHigh',
+  RECEIVER_REJECTED = 'ReceiverRejected',
 }
 
 export interface UnassignedTransaction {

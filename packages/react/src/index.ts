@@ -90,7 +90,7 @@ export {
   TransactionTarget,
 } from './definitions/transaction';
 export { Fees } from './definitions/fees';
-export { CreateTransactionIssue } from './definitions/support';
+export { CreateTransactionIssue, SupportIssueReason } from './definitions/support';
 
 // Utils & Validations
 export { Utils } from './utils';
