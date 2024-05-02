@@ -1,6 +1,6 @@
 export const TransactionUrl = {
   get: 'transaction',
-  getByUid: (uid: string) => `transaction/uid/${uid}`,
+  single: `transaction/single`,
   detail: 'transaction/detail',
   csv: 'transaction/detail/csv',
   unassigned: 'transaction/unassigned',
@@ -41,6 +41,7 @@ export enum TransactionType {
 }
 
 export enum TransactionState {
+  UNASSIGNED = 'Unassigned',
   CREATED = 'Created',
   PROCESSING = 'Processing',
   AML_PENDING = 'AmlPending',
@@ -73,6 +74,7 @@ export enum TransactionFailureReason {
 export interface UnassignedTransaction {
   id: number;
   type: TransactionType;
+  state: TransactionState;
   inputAmount?: number;
   inputAsset?: string;
   inputAssetId?: number;
@@ -84,7 +86,6 @@ export interface UnassignedTransaction {
 }
 
 export interface Transaction extends UnassignedTransaction {
-  state: TransactionState;
   reason: TransactionFailureReason;
   exchangeRate?: number;
   rate?: number;

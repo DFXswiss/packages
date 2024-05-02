@@ -7,6 +7,7 @@ interface StyledTabContainerProps {
   activeTab?: number;
   darkTheme?: boolean;
   spread?: boolean;
+  small?: boolean;
 }
 
 export interface StyledTabProps {
@@ -19,7 +20,7 @@ export interface StyledTabProps {
   onActivate?: () => void;
 }
 
-export default function StyledTabContainer({ tabs, activeTab = 0, darkTheme, spread }: StyledTabContainerProps) {
+export default function StyledTabContainer({ tabs, activeTab = 0, darkTheme, spread, small }: StyledTabContainerProps) {
   const [active, setActive] = useState(activeTab);
 
   return (
@@ -47,6 +48,7 @@ export default function StyledTabContainer({ tabs, activeTab = 0, darkTheme, spr
                   flagWord2={tab.flagWord2}
                   darkTheme={darkTheme}
                   spread={spread}
+                  small={small}
                 >
                   {tab.title}
                 </StyledTab>

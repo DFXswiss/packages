@@ -13,6 +13,7 @@ export interface TransactionInterface {
   getTransactions: () => Promise<Transaction[]>;
   getDetailTransactions: (from?: Date, to?: Date) => Promise<DetailTransaction[]>;
   getTransactionByUid: (uid: string) => Promise<Transaction>;
+  getTransactionByCkoId: (ckoId: string) => Promise<Transaction>;
   getTransactionCsv: (from?: Date, to?: Date) => Promise<string>;
   getUnassignedTransactions: () => Promise<UnassignedTransaction[]>;
   getTransactionTargets: () => Promise<TransactionTarget[]>;
@@ -37,7 +38,11 @@ export function useTransaction(): TransactionInterface {
   }
 
   async function getTransactionByUid(uid: string): Promise<Transaction> {
-    return call<Transaction>({ url: `${TransactionUrl.getByUid(uid)}`, method: 'GET' });
+    return call<Transaction>({ url: `${TransactionUrl.single}?uid=${uid}`, method: 'GET' });
+  }
+
+  async function getTransactionByCkoId(ckoId: string): Promise<Transaction> {
+    return call<Transaction>({ url: `${TransactionUrl.single}?cko-id=${ckoId}`, method: 'GET' });
   }
 
   async function getTransactionCsv(from?: Date, to?: Date): Promise<string> {
@@ -64,6 +69,7 @@ export function useTransaction(): TransactionInterface {
       getTransactions,
       getDetailTransactions,
       getTransactionByUid,
+      getTransactionByCkoId,
       getTransactionCsv,
       getUnassignedTransactions,
       getTransactionTargets,

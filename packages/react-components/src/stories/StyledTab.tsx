@@ -10,6 +10,7 @@ interface StyledTabProps extends PropsWithChildren {
   flagWord2?: string;
   darkTheme?: boolean;
   spread?: boolean;
+  small?: boolean;
 }
 
 export default function StyledTab({
@@ -22,8 +23,10 @@ export default function StyledTab({
   flagWord2,
   darkTheme,
   spread,
+  small,
 }: StyledTabProps) {
-  let tabClasses = 'text-2xl font-black px-12 py-2 rounded-t-lg block flex items-center gap-2 w-full h-full ';
+  let tabClasses = 'font-black rounded-t-lg block flex items-center gap-2 w-full h-full ';
+  tabClasses += small ? 'px-4 py-2 ' : 'text-2xl px-12 py-2 ';
   if (!deactivated) {
     if (active) {
       tabClasses += darkTheme ? 'bg-dfxGray-500' : 'bg-white';
