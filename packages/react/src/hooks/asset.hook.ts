@@ -6,6 +6,7 @@ import { Blockchain } from '../definitions/blockchain';
 export interface AssetInterface {
   getAssets: (blockchains: Blockchain[], includePrivate: boolean) => Promise<Asset[]>;
   getAsset: (assets?: Asset[], identifier?: string) => Asset | undefined;
+  isSameAsset: (asset: Asset, identifier: string) => boolean;
 }
 
 export function useAsset(): AssetInterface {
@@ -21,12 +22,16 @@ export function useAsset(): AssetInterface {
   function getAsset(assets: Asset[] = [], identifier?: string): Asset | undefined {
     if (!identifier) return undefined;
 
+    return assets.find((a) => isSameAsset(a, identifier));
+  }
+
+  function isSameAsset(asset: Asset, identifier: string): boolean {
     return (
-      assets.find((a) => a.id === +identifier) ??
-      assets.find((a) => a.uniqueName.toLowerCase() === identifier.toLowerCase()) ??
-      assets.find((a) => a.name.toLowerCase() === identifier.toLowerCase())
+      asset.id === +identifier ||
+      asset.uniqueName.toLowerCase() === identifier.toLowerCase() ||
+      asset.name.toLowerCase() === identifier.toLowerCase()
     );
   }
 
-  return useMemo(() => ({ getAssets, getAsset }), [call]);
+  return useMemo(() => ({ getAssets, getAsset, isSameAsset }), [call]);
 }
