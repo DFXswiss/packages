@@ -74,8 +74,8 @@ export function useAuth(): AuthInterface {
     return call({ url: AuthUrl.signUp, method: 'POST', data });
   }
 
-  async function signInWithMail(mail: string): Promise<void> {
-    return call({ url: AuthUrl.signInWithMail, method: 'POST', data: { mail } });
+  async function signInWithMail(mail: string, redirectUri?: string): Promise<void> {
+    return call({ url: AuthUrl.signInWithMail, method: 'POST', data: { mail, redirectUri } });
   }
 
   async function createLnurlAuth(): Promise<LnurlAuth> {
