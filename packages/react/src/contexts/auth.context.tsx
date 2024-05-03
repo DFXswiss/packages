@@ -2,7 +2,6 @@ import jwtDecode from 'jwt-decode';
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
 import { Jwt } from '../definitions/jwt';
 import { Session } from '../definitions/session';
-import { Utils } from '../utils';
 import { useStore } from '../hooks/store.hook';
 
 interface AuthInterface {
@@ -28,7 +27,16 @@ export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
   const isLoggedIn = token != null && !isExpired();
 
   const session = useMemo(
-    () => (jwt ? ({ address: jwt?.address, blockchains: jwt?.blockchains } as Session) : undefined),
+    () =>
+      jwt
+        ? ({
+            address: jwt?.address,
+            id: jwt?.id,
+            account: jwt?.account,
+            role: jwt?.role,
+            blockchains: jwt?.blockchains,
+          } as Session)
+        : undefined,
     [jwt],
   );
 

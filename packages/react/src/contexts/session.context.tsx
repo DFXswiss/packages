@@ -3,7 +3,6 @@ import { Blockchain } from '../definitions/blockchain';
 import { ApiError } from '../definitions/error';
 import { useApiSession } from '../hooks/api-session.hook';
 import { useAuthContext } from './auth.context';
-import { useAuth } from '../hooks/auth.hook';
 
 export interface SessionInterface {
   address?: string;

@@ -21,7 +21,7 @@ export interface AuthInterface {
     wallet?: string,
     ref?: string,
   ) => Promise<SignIn>;
-  signInWithMail: (mail: string) => Promise<void>;
+  signInWithMail: (mail: string, redirectUri?: string) => Promise<void>;
   createLnurlAuth: () => Promise<LnurlAuth>;
   getLnurlAuth: (k1: string) => Promise<LnurlAuthStatus>;
 }
