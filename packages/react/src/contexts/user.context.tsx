@@ -34,7 +34,8 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
   const [isUserUpdating, setIsUserUpdating] = useState<boolean>(false);
 
-  const refLink = user?.ref && `${process.env.REACT_APP_REF_URL ?? 'https://dfx.swiss/app?code='}${user.ref}`;
+  const refCode = user?.activeAddress?.refCode;
+  const refLink = refCode && `${process.env.REACT_APP_REF_URL ?? 'https://dfx.swiss/app?code='}${refCode}`;
   let userLinkAction: () => void | undefined;
 
   useEffect(() => {

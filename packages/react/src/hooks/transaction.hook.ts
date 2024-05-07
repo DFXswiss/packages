@@ -21,7 +21,7 @@ export interface TransactionInterface {
 }
 
 export function useTransaction(): TransactionInterface {
-  const { baseUrl, call } = useApi();
+  const { defaultUrl, call } = useApi();
   const { session } = useAuthContext();
 
   async function getTransactions(): Promise<Transaction[]> {
@@ -49,7 +49,7 @@ export function useTransaction(): TransactionInterface {
     return call<string>({
       url: `${TransactionUrl.csv}?${createFilterParams(from, to)}`,
       method: 'PUT',
-    }).then((key) => `${baseUrl}/transaction/csv?key=${key}`);
+    }).then((key) => `${defaultUrl}/transaction/csv?key=${key}`);
   }
 
   async function getUnassignedTransactions(): Promise<UnassignedTransaction[]> {

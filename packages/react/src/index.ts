@@ -74,7 +74,7 @@ export {
 export { Sell, SellPaymentInfo } from './definitions/sell';
 export { Swap, SwapPaymentInfo } from './definitions/swap';
 export { Session } from './definitions/session';
-export { User, UserStatus } from './definitions/user';
+export { User, UserStatus, UserAddress, UserKyc, Referral, Volumes, VolumeInformation } from './definitions/user';
 export { LnurlAuth, LnurlAuthStatus } from './definitions/auth';
 export {
   FiatPaymentMethod,
@@ -88,6 +88,8 @@ export {
   Transaction,
   DetailTransaction,
   TransactionTarget,
+  TransactionFilter,
+  TransactionFilterKey,
 } from './definitions/transaction';
 export { Fees } from './definitions/fees';
 export { CreateTransactionIssue, SupportIssueReason } from './definitions/support';

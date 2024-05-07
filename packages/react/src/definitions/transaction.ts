@@ -111,3 +111,13 @@ export interface TransactionTarget {
   asset: Asset;
   address: string;
 }
+
+export interface TransactionFilter {
+  buy?: boolean;
+  sell?: boolean;
+  staking?: boolean;
+  ref?: boolean;
+  lm?: boolean;
+}
+
+export type TransactionFilterKey = keyof TransactionFilter;
