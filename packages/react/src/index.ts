@@ -92,7 +92,7 @@ export {
   TransactionFilterKey,
 } from './definitions/transaction';
 export { Fees } from './definitions/fees';
-export { CreateTransactionIssue, SupportIssueReason } from './definitions/support';
+export { CreateTransactionIssue, CreateSupportMessage, SupportIssueReason } from './definitions/support';
 
 // Utils & Validations
 export { Utils } from './utils';
