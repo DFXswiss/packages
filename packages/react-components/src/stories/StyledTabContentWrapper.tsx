@@ -6,6 +6,7 @@ export interface StyledTabContentWrapperProps extends PropsWithChildren {
   showBackArrow?: boolean;
   leftBorder?: boolean;
   onBackClick?: () => void;
+  className?: string;
 }
 
 export default function StyledTabContentWrapper({
@@ -13,6 +14,7 @@ export default function StyledTabContentWrapper({
   leftBorder = false,
   children,
   onBackClick,
+  className = '',
 }: StyledTabContentWrapperProps) {
   return (
     <div className={`w-full ${leftBorder ? 'border-l border-dfxGray-400' : ''}`}>
@@ -21,7 +23,7 @@ export default function StyledTabContentWrapper({
           <StyledIconButton icon={IconVariant.BACK} onClick={onBackClick} />
         </div>
       )}
-      <div className="m-auto max-w-lg">{children}</div>
+      <div className={`m-auto max-w-lg ${className}`}>{children}</div>
     </div>
   );
 }

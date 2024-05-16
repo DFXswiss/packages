@@ -10,6 +10,8 @@
     "incremental": true,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
   }
 }
