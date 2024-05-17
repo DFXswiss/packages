@@ -73,6 +73,7 @@ export enum TransactionFailureReason {
 
 export interface UnassignedTransaction {
   id: number;
+  uid: string;
   type: TransactionType;
   state: TransactionState;
   inputAmount?: number;
