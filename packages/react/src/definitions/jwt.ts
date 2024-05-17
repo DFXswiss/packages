@@ -15,7 +15,7 @@ export interface Jwt {
   exp: number;
   iat: number;
   address: string;
-  id: number;
+  user: number;
   account: number;
   role: UserRole;
   blockchains: Blockchain[];

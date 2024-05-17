@@ -31,7 +31,7 @@ export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
       jwt
         ? ({
             address: jwt?.address,
-            id: jwt?.id,
+            user: jwt?.user,
             account: jwt?.account,
             role: jwt?.role,
             blockchains: jwt?.blockchains,
