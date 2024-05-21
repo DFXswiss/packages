@@ -29,6 +29,7 @@ export interface SessionInterface {
     discount?: string,
   ) => Promise<string | undefined>;
   logout: () => Promise<void>;
+  sync: () => void;
 }
 
 const SessionContext = createContext<SessionInterface>(undefined as any);
@@ -60,10 +61,11 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     createSessionNew: createApiSessionNew,
     deleteSession,
   } = useApiSession();
-  const { authenticationToken } = useAuthContext();
+  const { authenticationToken, setAuthenticationToken } = useAuthContext();
   const [needsSignUp, setNeedsSignUp] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [storedSignature, setStoredSignature] = useState<string>();
+  const [storedAddress, setStoredAddress] = useState<string>();
 
   const firstRender = useRef(true);
   useEffect(() => {
@@ -74,6 +76,9 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
 
     if (!data.address || data.address !== session?.address) {
       deleteSession();
+      setStoredAddress(undefined);
+    } else {
+      setStoredAddress(data.address);
     }
   }, [data.address]);
 
@@ -90,7 +95,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
   }
 
   async function login(
-    address = data.address,
+    address = storedAddress,
     signature = storedSignature,
     discount = data.discount,
   ): Promise<string | undefined> {
@@ -119,7 +124,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
   }
 
   async function signUp(
-    address = data.address,
+    address = storedAddress,
     signature = storedSignature,
     wallet = data.wallet,
     ref = data.ref,
@@ -137,6 +142,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
 
   async function logout(): Promise<void> {
     setNeedsSignUp(false);
+    setStoredAddress(undefined);
     await deleteSession();
   }
 
@@ -147,9 +153,14 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     return await api.signMessage(message, address);
   }
 
+  function sync(): void {
+    const token = localStorage.getItem('dfx.authenticationToken');
+    if (token) setAuthenticationToken(token);
+  }
+
   const context = useMemo(
     () => ({
-      address: data.address,
+      address: storedAddress,
       blockchain: data.blockchain,
       availableBlockchains: session?.blockchains,
       isInitialized,
@@ -160,9 +171,10 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       login,
       signUp,
       logout,
+      sync,
     }),
     [
-      data.address,
+      storedAddress,
       data.blockchain,
       session,
       isInitialized,
@@ -172,6 +184,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       login,
       signUp,
       logout,
+      sync,
     ],
   );
 
