@@ -24,6 +24,7 @@ export function useUser(): UserInterface {
     if (!user) return undefined;
     return call<User>({
       url: UserUrl.change,
+      version: 'v2',
       method: 'PUT',
       data: { ...user },
       specialHandling: userLinkAction && {

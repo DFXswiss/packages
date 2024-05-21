@@ -62,6 +62,7 @@ export enum TransactionFailureReason {
   SANCTION_SUSPICION = 'SanctionSuspicion',
   MIN_DEPOSIT_NOT_REACHED = 'MinDepositNotReached',
   ASSET_NOT_AVAILABLE = 'AssetNotAvailable',
+  ASSET_NOT_AVAILABLE_WITH_CHOSEN_BANK = 'AssetNotAvailableWithChosenBank',
   STAKING_DISCONTINUED = 'StakingDiscontinued',
   BANK_NOT_ALLOWED = 'BankNotAllowed',
   PAYMENT_ACCOUNT_NOT_ALLOWED = 'PaymentAccountNotAllowed',
