@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "build": "tsc -b ./tsconfig.build.json",
-    "clean": "rm -rf ./dist/ && rm -rf ./tsconfig.build.tsbuildinfo"
+    "clean": "rm -rf ./dist/ && rm -rf ./tsconfig.build.tsbuildinfo",
+    "pack": "npm pack"
   },
   "dependencies": {
     "ibantools": "^4.2.1",
