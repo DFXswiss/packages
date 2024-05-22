@@ -24,6 +24,7 @@ export interface Volumes {
 
 export interface Referral {
   code?: string;
+  commission: number;
   volume: number;
   credit: number;
   paidCredit: number;
