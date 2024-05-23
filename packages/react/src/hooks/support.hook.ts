@@ -1,16 +1,21 @@
 import { useMemo } from 'react';
 import { useApi } from './api.hook';
-import { CreateSupportMessage, CreateTransactionIssue, SupportUrl } from '../definitions/support';
+import { CreateSupportMessage, CreateSupportIssue, SupportUrl } from '../definitions/support';
 
 export interface SupportInterface {
-  createTransactionIssue: (transactionId: number, issue: CreateTransactionIssue) => Promise<void>;
+  createGeneralIssue: (issue: CreateSupportIssue) => Promise<void>;
+  createTransactionIssue: (transactionId: number, issue: CreateSupportIssue) => Promise<void>;
   createMessage: (issueId: number, message: CreateSupportMessage) => Promise<void>;
 }
 
 export function useSupport(): SupportInterface {
   const { call } = useApi();
 
-  async function createTransactionIssue(transactionId: number, issue: CreateTransactionIssue): Promise<void> {
+  async function createGeneralIssue(issue: CreateSupportIssue): Promise<void> {
+    return call({ url: SupportUrl.createGeneralIssue, method: 'POST', data: issue });
+  }
+
+  async function createTransactionIssue(transactionId: number, issue: CreateSupportIssue): Promise<void> {
     return call({ url: SupportUrl.createTransactionIssue(transactionId), method: 'POST', data: issue });
   }
 
@@ -18,5 +23,5 @@ export function useSupport(): SupportInterface {
     return call({ url: SupportUrl.createMessage(issueId), method: 'POST', data: message });
   }
 
-  return useMemo(() => ({ createTransactionIssue, createMessage }), [call]);
+  return useMemo(() => ({ createGeneralIssue, createTransactionIssue, createMessage }), [call]);
 }

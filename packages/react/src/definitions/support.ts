@@ -1,4 +1,5 @@
 export const SupportUrl = {
+  createGeneralIssue: 'support/issue',
   createTransactionIssue: (id: number) => `support/issue/transaction?id=${id}`,
   createMessage: (id: number) => `support/issue/${id}/message`,
 };
@@ -14,7 +15,7 @@ export interface CreateSupportMessage {
   fileName?: string;
 }
 
-export interface CreateTransactionIssue extends CreateSupportMessage {
+export interface CreateSupportIssue extends CreateSupportMessage {
   reason: SupportIssueReason;
   name: string;
 }
