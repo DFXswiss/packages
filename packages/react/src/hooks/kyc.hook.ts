@@ -49,6 +49,10 @@ export interface KycInterface {
 
   // limit
   increaseLimit: (code: string, request: LimitRequest) => Promise<void>;
+
+  // transfer
+  addTransferClient: (code: string, client: string) => Promise<void>;
+  removeTransferClient: (code: string, client: string) => Promise<void>;
 }
 
 export function useKyc(): KycInterface {
@@ -127,6 +131,14 @@ export function useKyc(): KycInterface {
     return call({ url: KycUrl.limit, code, method: 'POST', data: request });
   }
 
+  async function addTransferClient(code: string, client: string): Promise<void> {
+    return call({ url: KycUrl.transfer(client), code, method: 'POST' });
+  }
+
+  async function removeTransferClient(code: string, client: string): Promise<void> {
+    return call({ url: KycUrl.transfer(client), code, method: 'DELETE' });
+  }
+
   // --- HELPER METHODS --- //
   async function call<T>(config: CallConfig): Promise<T> {
     return fetch(config.url, buildInit(config)).then((response) => {
@@ -165,6 +177,8 @@ export function useKyc(): KycInterface {
       setup2fa,
       verify2fa,
       increaseLimit,
+      addTransferClient,
+      removeTransferClient,
     }),
     [callApi],
   );

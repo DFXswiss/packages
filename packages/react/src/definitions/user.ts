@@ -49,6 +49,7 @@ export interface UserKyc {
 }
 
 export interface User {
+  accountId: number;
   accountType: AccountType;
   mail?: string;
   phone?: string;

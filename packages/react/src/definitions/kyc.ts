@@ -7,6 +7,7 @@ export const KycUrl = {
   base: `${process.env.REACT_APP_API_URL}/v2/kyc`,
   tfa: `${process.env.REACT_APP_API_URL}/v2/kyc/2fa`,
   limit: `${process.env.REACT_APP_API_URL}/v2/kyc/limit`,
+  transfer: (client: string) => `${process.env.REACT_APP_API_URL}/v2/kyc/transfer?client=${encodeURIComponent(client)}`,
 };
 export const KycLevel = {
   Link: 10,
@@ -65,6 +66,7 @@ export interface KycInfo {
   twoFactorEnabled: boolean;
   language: Language;
   kycSteps: KycStep[];
+  kycClients: string[];
 }
 
 export interface KycSession extends KycInfo {
