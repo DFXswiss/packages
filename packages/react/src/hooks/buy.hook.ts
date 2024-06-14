@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 import { useFiatContext } from '../contexts/fiat.context';
-import { Buy, BuyUrl, BuyPaymentInfo } from '../definitions/buy';
+import { Buy, BuyUrl, BuyPaymentInfo, Invoice } from '../definitions/buy';
 import { Fiat } from '../definitions/fiat';
 import { useApi } from './api.hook';
 
 export interface BuyInterface {
   receiveFor: (info: BuyPaymentInfo) => Promise<Buy>;
+  invoiceFor: (txId: number) => Promise<Invoice>;
   currencies?: Fiat[];
 }
 
@@ -17,8 +18,16 @@ export function useBuy(): BuyInterface {
     return call<Buy>({ url: BuyUrl.receive, method: 'PUT', data: info });
   }
 
+  async function invoiceFor(txId: number): Promise<Invoice> {
+    return call<Invoice>({ url: `buy/paymentInfos/${txId}/invoice`, method: 'PUT' });
+  }
+
   return useMemo(
-    () => ({ receiveFor, currencies: currencies?.filter((c) => c.sellable || c.cardSellable || c.instantSellable) }),
+    () => ({
+      receiveFor,
+      invoiceFor,
+      currencies: currencies?.filter((c) => c.sellable || c.cardSellable || c.instantSellable),
+    }),
     [call, currencies],
   );
 }

@@ -7,6 +7,7 @@ import { TransactionError } from './transaction';
 export const SellUrl = { receive: 'sell/paymentInfos' };
 
 export interface Sell {
+  id: number;
   routeId: number;
   depositAddress: string;
   blockchain: Blockchain;
