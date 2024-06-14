@@ -3,7 +3,10 @@ import { Fees } from './fees';
 import { Fiat } from './fiat';
 import { FiatPaymentMethod, TransactionError } from './transaction';
 
-export const BuyUrl = { receive: 'buy/paymentInfos' };
+export const BuyUrl = {
+  receive: 'buy/paymentInfos',
+  invoice: (txId: number) => `buy/paymentInfos/${txId}/invoice`,
+};
 
 export interface Buy {
   id: number;

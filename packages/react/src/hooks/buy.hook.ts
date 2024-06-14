@@ -19,7 +19,7 @@ export function useBuy(): BuyInterface {
   }
 
   async function invoiceFor(txId: number): Promise<Invoice> {
-    return call<Invoice>({ url: `buy/paymentInfos/${txId}/invoice`, method: 'PUT' });
+    return call<Invoice>({ url: BuyUrl.invoice(txId), method: 'PUT' });
   }
 
   return useMemo(
