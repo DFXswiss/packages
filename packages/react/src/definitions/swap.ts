@@ -5,6 +5,7 @@ import { TransactionError } from './transaction';
 export const SwapUrl = { receive: 'swap/paymentInfos' };
 
 export interface Swap {
+  id: number;
   routeId: number;
   depositAddress: string;
   sourceAsset: Asset;
