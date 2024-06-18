@@ -4,5 +4,4 @@ export interface PriceStep {
   to: string;
   price: number;
   timestamp: Date;
-  invert(): PriceStep;
 }
