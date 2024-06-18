@@ -11,6 +11,7 @@ export const TransactionUrl = {
 import { Asset } from './asset';
 import { Blockchain } from './blockchain';
 import { Fees } from './fees';
+import { PriceStep } from './price-step';
 
 export enum FiatPaymentMethod {
   BANK = 'Bank',
@@ -91,6 +92,7 @@ export interface UnassignedTransaction {
 export interface Transaction extends UnassignedTransaction {
   reason: TransactionFailureReason;
   exchangeRate?: number;
+  priceSteps?: PriceStep[];
   rate?: number;
   outputAmount?: number;
   outputAsset?: string;

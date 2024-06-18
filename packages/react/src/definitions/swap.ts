@@ -1,5 +1,6 @@
 import { Asset } from './asset';
 import { Fees } from './fees';
+import { PriceStep } from './price-step';
 import { TransactionError } from './transaction';
 
 export const SwapUrl = { receive: 'swap/paymentInfos' };
@@ -18,6 +19,7 @@ export interface Swap {
   minVolumeTarget: number;
   maxVolumeTarget: number;
   exchangeRate: number;
+  priceSteps: PriceStep[];
   rate: number;
   exactPrice: boolean;
   estimatedAmount: number;
