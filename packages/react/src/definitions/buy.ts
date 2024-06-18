@@ -1,6 +1,7 @@
 import { Asset } from './asset';
 import { Fees } from './fees';
 import { Fiat } from './fiat';
+import { PriceStep } from './price-step';
 import { FiatPaymentMethod, TransactionError } from './transaction';
 
 export const BuyUrl = { receive: 'buy/paymentInfos' };
@@ -26,6 +27,7 @@ export interface Buy {
   minVolumeTarget: number;
   maxVolumeTarget: number;
   exchangeRate: number;
+  priceSteps: PriceStep[];
   rate: number;
   exactPrice: boolean;
   estimatedAmount: number;

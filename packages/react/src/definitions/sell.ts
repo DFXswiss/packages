@@ -2,6 +2,7 @@ import { Asset } from './asset';
 import { Blockchain } from './blockchain';
 import { Fees } from './fees';
 import { Fiat } from './fiat';
+import { PriceStep } from './price-step';
 import { TransactionError } from './transaction';
 
 export const SellUrl = { receive: 'sell/paymentInfos' };
@@ -19,6 +20,7 @@ export interface Sell {
   minVolumeTarget: number;
   maxVolumeTarget: number;
   exchangeRate: number;
+  priceSteps: PriceStep[];
   rate: number;
   exactPrice: boolean;
   estimatedAmount: number;

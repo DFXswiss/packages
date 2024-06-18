@@ -13,7 +13,7 @@ interface StyledDataTableExpandableRowProps extends PropsWithChildren {
   label?: string;
   discreet?: boolean;
   isLoading?: boolean;
-  infoText?: string;
+  infoText?: string | string[];
   noPadding?: boolean;
   isExpanded?: boolean;
   expansionItems: ExpansionItem[];
@@ -98,13 +98,22 @@ export default function StyledDataTableExpandableRow({
       </div>
       {!isLoading && (
         <>
-          {infoText && (
-            <div className="mt-2">
-              <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
-                {infoText}
-              </StyledInfoText>
-            </div>
-          )}
+          {infoText &&
+            (infoText instanceof Array ? (
+              <div className="mt-2 flex flex-col gap-1">
+                {infoText.map((text, index) => (
+                  <StyledInfoText key={index} textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
+                    {text}
+                  </StyledInfoText>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-2">
+                <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
+                  {infoText}
+                </StyledInfoText>
+              </div>
+            ))}
           {expansionItems.length > 0 && isExpanded && (
             <div>
               <div className={separatorClasses} />
