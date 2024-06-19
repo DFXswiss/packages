@@ -110,7 +110,7 @@ export default function StyledDataTableExpandableRow({
                     <p className={labelClasses}>{label}</p>
                     <p className="">{text}</p>
                   </div>
-                  <div className="my-1">
+                  <div className="my-1 text-left">
                     {infoText && (
                       <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
                         {infoText}
