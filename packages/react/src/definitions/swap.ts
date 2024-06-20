@@ -7,6 +7,7 @@ export const SwapUrl = { receive: 'swap/paymentInfos' };
 
 export interface Swap {
   id: number;
+  timestamp: Date;
   routeId: number;
   depositAddress: string;
   sourceAsset: Asset;
