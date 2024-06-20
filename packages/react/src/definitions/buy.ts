@@ -11,6 +11,7 @@ export const BuyUrl = {
 
 export interface Buy {
   id: number;
+  timestamp: Date;
   name: string;
   street: string;
   number: string;
