@@ -33,6 +33,7 @@ export { Buy, BuyPaymentInfo } from './definitions/buy';
 export { Country } from './definitions/country';
 export { ApiError } from './definitions/error';
 export { Fiat } from './definitions/fiat';
+export { PriceStep } from './definitions/price-step';
 export { Language } from './definitions/language';
 export { Jwt } from './definitions/jwt';
 export {
