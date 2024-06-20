@@ -108,7 +108,7 @@ export default function StyledDataTableExpandableRow({
                 <div className="flex flex-col w-full">
                   <div key={label} className="flex w-full justify-between">
                     <p className={labelClasses}>{label}</p>
-                    <p className="">{text}</p>
+                    <p className={rowDataClasses}>{text}</p>
                   </div>
                   <div className="my-1 text-left">
                     {infoText && (
