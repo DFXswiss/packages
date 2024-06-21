@@ -14,6 +14,7 @@ export interface TransactionInterface {
   getDetailTransactions: (from?: Date, to?: Date) => Promise<DetailTransaction[]>;
   getTransactionByUid: (uid: string) => Promise<Transaction>;
   getTransactionByCkoId: (ckoId: string) => Promise<Transaction>;
+  getTransactionByRequestId: (requestId: string) => Promise<Transaction>;
   getTransactionCsv: (from?: Date, to?: Date) => Promise<string>;
   getUnassignedTransactions: () => Promise<UnassignedTransaction[]>;
   getTransactionTargets: () => Promise<TransactionTarget[]>;
@@ -45,6 +46,10 @@ export function useTransaction(): TransactionInterface {
     return call<Transaction>({ url: `${TransactionUrl.single}?cko-id=${ckoId}`, method: 'GET' });
   }
 
+  async function getTransactionByRequestId(requestId: string): Promise<Transaction> {
+    return call<Transaction>({ url: `${TransactionUrl.single}?request-id=${requestId}`, method: 'GET' });
+  }
+
   async function getTransactionCsv(from?: Date, to?: Date): Promise<string> {
     return call<string>({
       url: `${TransactionUrl.csv}?${createFilterParams(from, to)}`,
@@ -70,6 +75,7 @@ export function useTransaction(): TransactionInterface {
       getDetailTransactions,
       getTransactionByUid,
       getTransactionByCkoId,
+      getTransactionByRequestId,
       getTransactionCsv,
       getUnassignedTransactions,
       getTransactionTargets,
