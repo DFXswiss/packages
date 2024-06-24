@@ -44,6 +44,7 @@ export { default as StyledSpacer } from './stories/layout-helpers/StyledSpacer';
 export { default as Form } from './stories/form/Form';
 export { default as StyledBankAccountListItem } from './stories/form/StyledBankAccountListItem';
 export { default as StyledDropdown } from './stories/form/StyledDropdown';
+export { default as StyledDropdownMultiChoice } from './stories/form/StyledDropdownMultiChoice';
 export { default as StyledSearchDropdown } from './stories/form/StyledSearchDropdown';
 export { default as StyledInput } from './stories/form/StyledInput';
 export { default as StyledFileUpload } from './stories/form/StyledFileUpload';
