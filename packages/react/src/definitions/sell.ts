@@ -27,9 +27,15 @@ export interface Sell {
   exactPrice: boolean;
   estimatedAmount: number;
   currency: Fiat;
+  beneficiary: Beneficiary;
   paymentRequest?: string;
   isValid: boolean;
   error?: TransactionError;
+}
+
+export interface Beneficiary {
+  iban: string;
+  name: string;
 }
 
 export interface SellPaymentInfo {
