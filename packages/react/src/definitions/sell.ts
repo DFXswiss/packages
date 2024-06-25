@@ -27,13 +27,13 @@ export interface Sell {
   exactPrice: boolean;
   estimatedAmount: number;
   currency: Fiat;
-  beneficiary: Beneficary;
+  beneficiary: Beneficiary;
   paymentRequest?: string;
   isValid: boolean;
   error?: TransactionError;
 }
 
-export interface Beneficary {
+export interface Beneficiary {
   iban: string;
   name: string;
 }
