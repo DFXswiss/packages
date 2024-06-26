@@ -3,7 +3,14 @@ import { AccountType, TradingLimit } from './kyc';
 import { Language } from './language';
 import { TransactionFilterKey } from './transaction';
 
-export const UserUrl = { get: 'user', ref: 'user/ref', change: 'user', discountCodes: 'user/discountCodes' };
+export const UserUrl = {
+  get: 'user',
+  ref: 'user/ref',
+  delete: 'user',
+  change: 'user',
+  changeAddress: 'user/change',
+  discountCodes: 'user/discountCodes',
+};
 
 export enum UserStatus {
   NA = 'NA',
