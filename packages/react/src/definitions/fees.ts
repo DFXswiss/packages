@@ -5,4 +5,5 @@ export interface Fees {
   dfx: number;
   network: number;
   total: number;
+  networkStart?: number;
 }
