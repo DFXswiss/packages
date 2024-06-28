@@ -4,9 +4,27 @@ export const SupportUrl = {
   createMessage: (id: number) => `support/issue/${id}/message`,
 };
 
+export enum SupportIssueType {
+  GENERIC_ISSUE = 'GenericIssue',
+  TRANSACTION_ISSUE = 'TransactionIssue',
+  KYC_ISSUE = 'KycIssue',
+  LIMIT_REQUEST = 'LimitRequest',
+  PARTNERSHIP_REQUEST = 'PartnershipRequest',
+}
+
 export enum SupportIssueReason {
-  FUNDS_NOT_RECEIVED = 'FundsNotReceived',
   OTHER = 'Other',
+
+  // transaction
+  FUNDS_NOT_RECEIVED = 'FundsNotReceived',
+  TRANSACTION_MISSING = 'TransactionMissing',
+}
+
+export interface TransactionIssue {
+  id?: number;
+  senderIban?: string;
+  receiverIban?: string;
+  date?: Date;
 }
 
 export interface CreateSupportMessage {
@@ -16,6 +34,8 @@ export interface CreateSupportMessage {
 }
 
 export interface CreateSupportIssue extends CreateSupportMessage {
+  type: SupportIssueType;
   reason: SupportIssueReason;
   name: string;
+  transaction?: TransactionIssue;
 }

@@ -14,6 +14,7 @@ export { useApi, CallConfig } from './hooks/api.hook';
 export { useAsset } from './hooks/asset.hook';
 export { useAuth } from './hooks/auth.hook';
 export { useBankAccount, CreateBankAccount, UpdateBankAccount } from './hooks/bank-account.hook';
+export { useBank } from './hooks/bank.hook';
 export { useBuy } from './hooks/buy.hook';
 export { useCountry } from './hooks/country.hook';
 export { useFiat } from './hooks/fiat.hook';
@@ -28,6 +29,7 @@ export { useSupport } from './hooks/support.hook';
 // Definitions
 export { Asset, AssetType } from './definitions/asset';
 export { BankAccount, Iban } from './definitions/bank-account';
+export { Bank } from './definitions/bank';
 export { Blockchain } from './definitions/blockchain';
 export { Buy, BuyPaymentInfo } from './definitions/buy';
 export { Country } from './definitions/country';
@@ -93,7 +95,7 @@ export {
   TransactionFilterKey,
 } from './definitions/transaction';
 export { Fees } from './definitions/fees';
-export { CreateSupportIssue, CreateSupportMessage, SupportIssueReason } from './definitions/support';
+export { CreateSupportIssue, CreateSupportMessage, SupportIssueReason, TransactionIssue } from './definitions/support';
 
 // Utils & Validations
 export { Utils } from './utils';
