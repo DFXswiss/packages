@@ -9,7 +9,7 @@ interface ExpansionItem {
   text: string;
   infoText?: string;
   icon?: IconVariant;
-  iconCallback?: () => void;
+  onClick?: () => void;
 }
 
 interface StyledDataTableExpandableRowProps extends PropsWithChildren {
@@ -106,15 +106,11 @@ export default function StyledDataTableExpandableRow({
           {expansionItems.length > 0 && isExpanded && (
             <div className="flex flex-col w-full">
               <div className={separatorClasses} />
-              {expansionItems.map(({ label, text, infoText, icon, iconCallback }) => (
+              {expansionItems.map(({ label, text, infoText, icon, onClick }) => (
                 <div className="flex flex-col w-full">
                   <div key={label} className="flex w-full justify-between">
                     <p className={labelClasses}>{label}</p>
-                    <button
-                      className="flex flex-row items-center gap-2"
-                      onClick={iconCallback}
-                      disabled={!iconCallback}
-                    >
+                    <button className="flex flex-row items-center gap-2" onClick={onClick} disabled={!onClick}>
                       <p className={rowDataClasses}>{text}</p>
                       {icon && <DfxIcon icon={icon} size={IconSize.SM} />}
                     </button>
