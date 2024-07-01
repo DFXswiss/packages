@@ -80,7 +80,10 @@ export default function StyledDataTableExpandableRow({
         {label && <p className={labelClasses}>{label}</p>}
         <div className={rowDataClasses}>
           {isLoading ? (
-            <StyledLoadingSpinner size={SpinnerSize.SM} variant={SpinnerVariant.PALE} />
+            <StyledLoadingSpinner
+              size={SpinnerSize.SM}
+              variant={theme.darkTheme ? SpinnerVariant.DARK_MODE : SpinnerVariant.LIGHT_MODE}
+            />
           ) : (
             <div
               className={`w-full cursor-pointer flex flex-row gap-2 ${ALIGN_MAPS[theme.alignContent]}`}
