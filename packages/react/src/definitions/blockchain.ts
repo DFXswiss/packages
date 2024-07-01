@@ -15,8 +15,8 @@ export enum Blockchain {
   CARDANO = 'Cardano',
 }
 
-export function getExplorerUrl(blockchain: Blockchain): string {
-  return BlockchainExplorerUrls[blockchain] ?? '';
+export function getExplorerUrl(blockchain: Blockchain): string | undefined {
+  return BlockchainExplorerUrls[blockchain];
 }
 
 const BlockchainExplorerUrls: { [b in Blockchain]: string | undefined } = {
