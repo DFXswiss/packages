@@ -61,7 +61,14 @@ export default function StyledDataTableRow({
         )}
 
         <div className={rowDataClasses}>
-          {isLoading ? <StyledLoadingSpinner size={SpinnerSize.SM} variant={SpinnerVariant.PALE} /> : children}
+          {isLoading ? (
+            <StyledLoadingSpinner
+              size={SpinnerSize.SM}
+              variant={theme.darkTheme ? SpinnerVariant.DARK_MODE : SpinnerVariant.LIGHT_MODE}
+            />
+          ) : (
+            children
+          )}
         </div>
       </div>
       {infoText && (
