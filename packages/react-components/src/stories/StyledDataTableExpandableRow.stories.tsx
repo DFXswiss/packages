@@ -12,9 +12,14 @@ export const Default: ComponentStory<typeof StyledDataTableExpandableRow> = (arg
 };
 Default.args = {
   label: 'Connected to',
+  infoText: 'This is the Ethereum Mainnet',
   expansionItems: [
     { label: 'Chain ID', text: '1245', icon: IconVariant.ARROW_RIGHT, onClick: () => console.log('Copied') },
     { label: 'Main Token', text: 'ETH' },
-    { label: 'RPC URL', text: 'https://some-url.io', infoText: 'This is the RPC URL for the Ethereum Mainnet' },
+    {
+      label: 'RPC URL',
+      text: 'https://some-url.io',
+      infoText: 'This is the RPC URL for the Ethereum Mainnet. \nThis is a second line.',
+    },
   ],
 };
