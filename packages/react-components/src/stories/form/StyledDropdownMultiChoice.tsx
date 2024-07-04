@@ -21,11 +21,6 @@ export interface StyledDropdownMultiChoiceProps<T> extends ControlProps {
   hideBalanceWhenClosed?: boolean;
 }
 
-interface IndexedItem<T> {
-  item: T;
-  index: number;
-}
-
 export default function StyledDropdownMultiChoice<T>({
   label,
   labelIcon,
@@ -84,13 +79,15 @@ export default function StyledDropdownMultiChoice<T>({
     <Controller
       control={control}
       render={({ field: { onChange, onBlur, value } }) => {
-        const selectedItems = value || ([] as IndexedItem<T>[]);
+        const selectedItems = value || ([] as T[]);
 
-        const toggleSelection = (indexedItem: IndexedItem<T>) => {
-          const isSelected = selectedItems.some((selected: IndexedItem<T>) => selected.index === indexedItem.index);
+        const isEqual = (a: T, b: T) => JSON.stringify(a) === JSON.stringify(b);
+
+        const toggleSelection = (item: T) => {
+          const isSelected = selectedItems.some((selected: T) => isEqual(selected, item));
           const newValue = isSelected
-            ? selectedItems.filter((selected: IndexedItem<T>) => selected.index !== indexedItem.index)
-            : [...selectedItems, indexedItem];
+            ? selectedItems.filter((selected: T) => !isEqual(selected, item))
+            : [...selectedItems, item];
           onChange(newValue);
         };
 
@@ -120,9 +117,7 @@ export default function StyledDropdownMultiChoice<T>({
               {...props}
             >
               <div className="flex flex-row gap-2 items-center w-full h-full">
-                {selectedItems.length > 0 && assetIconFunc && (
-                  <DfxAssetIcon asset={assetIconFunc(selectedItems[0].item)} />
-                )}
+                {selectedItems.length > 0 && assetIconFunc && <DfxAssetIcon asset={assetIconFunc(selectedItems[0])} />}
                 <div className="flex flex-col gap-1 justify-between text-left w-full">
                   {selectedItems.length === 0 ? (
                     <p className="text-dfxGray-600 drop-shadow-none py-[0.25rem]">{placeholder}</p>
@@ -135,7 +130,7 @@ export default function StyledDropdownMultiChoice<T>({
                           !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
                         }`}
                       >
-                        {selectedItems.map(({ item }: IndexedItem<T>) => labelFunc(item)).join(', ')}
+                        {selectedItems.map((item: T) => labelFunc(item)).join(', ')}
                       </span>
                     </>
                   )}
@@ -155,14 +150,13 @@ export default function StyledDropdownMultiChoice<T>({
                 className="absolute bg-white rounded-b border-x border-b border-dfxGray-500 w-full z-10 overflow-y-auto max-h-[15rem]"
               >
                 {items.map((item, index) => {
-                  const indexedItem: IndexedItem<T> = { item, index };
-                  const isSelected = selectedItems.some((selected: IndexedItem<T>) => selected.index === index);
+                  const isSelected = selectedItems.some((selected: T) => isEqual(selected, item));
 
                   return (
                     <button
                       key={index}
                       type="button"
-                      onClick={() => toggleSelection(indexedItem)}
+                      onClick={() => toggleSelection(item)}
                       className={`flex flex-col gap-2 justify-between text-left w-full px-3.5 py-2.5 ${
                         isSelected ? 'bg-dfxGray-400/50' : 'hover:bg-dfxGray-400/50'
                       }`}
