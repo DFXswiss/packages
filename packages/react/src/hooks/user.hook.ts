@@ -9,6 +9,7 @@ export interface UserInterface {
   changeUser: (user?: Partial<User>, userLinkAction?: () => void) => Promise<User | undefined>;
   changeUserAddress: (address: string) => Promise<SignIn>;
   deleteUserAddress: () => Promise<void>;
+  deleteUserAccount: () => Promise<void>;
   addDiscountCode: (code: string) => Promise<void>;
 }
 
@@ -52,6 +53,13 @@ export function useUser(): UserInterface {
     });
   }
 
+  async function deleteUserAccount(): Promise<void> {
+    return call({
+      url: `${UserUrl.delete}/account`,
+      method: 'DELETE',
+    });
+  }
+
   async function addDiscountCode(code: string): Promise<void> {
     return call({
       url: `${UserUrl.discountCodes}?code=${code}`,
@@ -60,7 +68,7 @@ export function useUser(): UserInterface {
   }
 
   return useMemo(
-    () => ({ getUser, getRef, changeUser, changeUserAddress, deleteUserAddress, addDiscountCode }),
+    () => ({ getUser, getRef, changeUser, changeUserAddress, deleteUserAddress, deleteUserAccount, addDiscountCode }),
     [call],
   );
 }
