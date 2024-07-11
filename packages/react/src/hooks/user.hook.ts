@@ -13,7 +13,7 @@ export interface UserInterface {
   addDiscountCode: (code: string) => Promise<void>;
   generateCTApiKey: (types?: TransactionFilterKey[]) => Promise<ApiKey>;
   deleteCTApiKey: () => Promise<void>;
-  putCTApiFilter: (types?: TransactionFilterKey[]) => Promise<TransactionFilter[]>;
+  updateCTApiFilter: (types?: TransactionFilterKey[]) => Promise<TransactionFilter[]>;
 }
 
 export function useUser(): UserInterface {
@@ -71,7 +71,7 @@ export function useUser(): UserInterface {
     return call<void>({ url: `${UserUrl.apiKey}/CT`, method: 'DELETE' });
   }
 
-  async function putCTApiFilter(types?: TransactionFilterKey[]): Promise<TransactionFilter[]> {
+  async function updateCTApiFilter(types?: TransactionFilterKey[]): Promise<TransactionFilter[]> {
     return call<TransactionFilter[]>({
       url: `${UserUrl.apiFilter}/CT${toHistoryQuery(types)}`,
       method: 'PUT',
@@ -88,7 +88,7 @@ export function useUser(): UserInterface {
       addDiscountCode,
       generateCTApiKey,
       deleteCTApiKey,
-      putCTApiFilter,
+      updateCTApiFilter,
     }),
     [call],
   );
