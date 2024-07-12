@@ -8,6 +8,8 @@ export const UserUrl = {
   ref: 'user/ref',
   delete: 'user',
   change: 'user',
+  apiKey: 'user/apiKey',
+  apiFilter: 'user/apiFilter',
   changeAddress: 'user/change',
   discountCodes: 'user/discountCodes',
 };
@@ -66,4 +68,9 @@ export interface User {
   volumes: Volumes;
   addresses: UserAddress[];
   activeAddress?: UserAddress;
+}
+
+export interface ApiKey {
+  key: string;
+  secret: string;
 }

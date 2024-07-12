@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
-import { Referral, User, UserUrl } from '../definitions/user';
+import { ApiKey, Referral, User, UserUrl } from '../definitions/user';
 import { useApi } from './api.hook';
 import { SignIn } from '../definitions/auth';
+import { TransactionFilter, TransactionFilterKey } from '../definitions/transaction';
 
 export interface UserInterface {
   getUser: () => Promise<User | undefined>;
@@ -11,6 +12,9 @@ export interface UserInterface {
   deleteUserAddress: () => Promise<void>;
   deleteUserAccount: () => Promise<void>;
   addDiscountCode: (code: string) => Promise<void>;
+  generateCTApiKey: (types?: TransactionFilterKey[]) => Promise<ApiKey>;
+  deleteCTApiKey: () => Promise<void>;
+  updateCTApiFilter: (types?: TransactionFilterKey[]) => Promise<TransactionFilter[]>;
 }
 
 export function useUser(): UserInterface {
@@ -67,8 +71,38 @@ export function useUser(): UserInterface {
     });
   }
 
+  async function generateCTApiKey(types?: TransactionFilterKey[]): Promise<ApiKey> {
+    return call<ApiKey>({ url: `${UserUrl.apiKey}/CT${toHistoryQuery(types)}`, method: 'POST' });
+  }
+
+  async function deleteCTApiKey(): Promise<void> {
+    return call<void>({ url: `${UserUrl.apiKey}/CT`, method: 'DELETE' });
+  }
+
+  async function updateCTApiFilter(types?: TransactionFilterKey[]): Promise<TransactionFilter[]> {
+    return call<TransactionFilter[]>({
+      url: `${UserUrl.apiFilter}/CT${toHistoryQuery(types)}`,
+      method: 'PUT',
+    });
+  }
+
   return useMemo(
-    () => ({ getUser, getRef, changeUser, changeUserAddress, deleteUserAddress, deleteUserAccount, addDiscountCode }),
+    () => ({
+      getUser,
+      getRef,
+      changeUser,
+      changeUserAddress,
+      deleteUserAddress,
+      deleteUserAccount,
+      addDiscountCode,
+      generateCTApiKey,
+      deleteCTApiKey,
+      updateCTApiFilter,
+    }),
     [call],
   );
+
+  function toHistoryQuery(types?: TransactionFilterKey[]): string {
+    return types ? '?' + types.join('&') : '';
+  }
 }
