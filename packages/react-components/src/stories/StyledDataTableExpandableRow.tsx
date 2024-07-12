@@ -121,7 +121,9 @@ export default function StyledDataTableExpandableRow({
                   <div className="my-1 text-left">
                     {infoText && (
                       <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
-                        {infoText}
+                        {infoText.split('\n').map((line) => (
+                          <div key={line}>{line}</div>
+                        ))}
                       </StyledInfoText>
                     )}
                   </div>

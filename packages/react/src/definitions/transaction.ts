@@ -72,6 +72,9 @@ export enum TransactionFailureReason {
   INSTANT_PAYMENT = 'InstantPayment',
   FEE_TOO_HIGH = 'FeeTooHigh',
   RECEIVER_REJECTED = 'ReceiverRejected',
+  CHF_ABROAD_NOT_ALLOWED = 'ChfAbroadNotAllowed',
+  ASSET_KYC_NEEDED = 'AssetKycNeeded',
+  CARD_NAME_MISMATCH = 'CardNameMismatch',
 }
 
 export interface UnassignedTransaction {
