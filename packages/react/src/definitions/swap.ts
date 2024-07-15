@@ -34,6 +34,7 @@ export interface SwapPaymentInfo {
   amount?: number;
   targetAsset: Asset;
   targetAmount?: number;
+  receiverAddress?: string;
   externalTransactionId?: string;
   exactPrice?: boolean;
 }

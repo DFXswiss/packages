@@ -14,6 +14,7 @@ export interface CallConfig {
   data?: any;
   noJson?: boolean;
   specialHandling?: SpecialHandling;
+  headers?: Record<string, string>;
 }
 
 interface SpecialHandling {
