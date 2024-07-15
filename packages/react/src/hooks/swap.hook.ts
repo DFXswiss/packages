@@ -3,6 +3,7 @@ import { CallConfig, useApi } from './api.hook';
 import { Swap, SwapPaymentInfo, SwapUrl } from '../definitions/swap';
 import { useUser } from './user.hook';
 import { useUserContext } from '../contexts/user.context';
+import { ApiError } from '../definitions/error';
 
 export interface SwapInterface {
   receiveFor: (info: SwapPaymentInfo) => Promise<Swap>;
@@ -19,7 +20,13 @@ export function useSwap(): SwapInterface {
     const request = { url: SwapUrl.receive, method: 'PUT', data: info } as CallConfig;
     if (info.receiverAddress && user?.activeAddress?.address !== info.receiverAddress) {
       accessToken.current ??= (await changeUserAddress(info.receiverAddress)).accessToken;
-      return call<Swap>({ ...request, headers: { Authorization: `Bearer ${accessToken.current}` } });
+      return call<Swap>({ ...request, token: accessToken.current }).catch((error: ApiError) => {
+        if (error.statusCode === 401) {
+          accessToken.current = undefined;
+        }
+
+        throw error;
+      });
     } else {
       return call<Swap>(request);
     }

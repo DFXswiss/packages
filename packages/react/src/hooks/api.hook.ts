@@ -14,7 +14,7 @@ export interface CallConfig {
   data?: any;
   noJson?: boolean;
   specialHandling?: SpecialHandling;
-  headers?: Record<string, string>;
+  token?: string;
 }
 
 interface SpecialHandling {
@@ -31,7 +31,7 @@ export function useApi(): ApiInterface {
   async function call<T>(config: CallConfig): Promise<T> {
     return fetchFrom<T>(config).catch((error: ApiError) => {
       if (error.statusCode === 401) {
-        setAuthenticationToken(undefined);
+        if (!config.token) setAuthenticationToken(undefined);
       }
 
       throw error;
@@ -44,7 +44,7 @@ export function useApi(): ApiInterface {
 
     return fetch(
       `${baseUrl}/${config.url}`,
-      buildInit(config.method, authenticationToken, config.data, config.noJson),
+      buildInit(config.method, config.token ?? authenticationToken, config.data, config.noJson),
     ).then((response) => {
       if (response.status === config.specialHandling?.statusCode) {
         config.specialHandling?.action?.();
