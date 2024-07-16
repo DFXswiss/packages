@@ -30,6 +30,10 @@ export interface SessionInterface {
   ) => Promise<string | undefined>;
   logout: () => Promise<void>;
   sync: () => void;
+  tokenStore: {
+    get: (address: string) => string | undefined;
+    set: (address: string, token: string | null) => void;
+  };
 }
 
 const SessionContext = createContext<SessionInterface>(undefined as any);
@@ -66,6 +70,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
   const [isProcessing, setIsProcessing] = useState(false);
   const [storedSignature, setStoredSignature] = useState<string>();
   const [storedAddress, setStoredAddress] = useState<string>();
+  const tokenCache = useRef<Map<string, string>>(new Map());
 
   const firstRender = useRef(true);
   useEffect(() => {
@@ -81,6 +86,20 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       setStoredAddress(data.address);
     }
   }, [data.address]);
+
+  const tokenStore = useMemo(
+    () => ({
+      get: (address: string) => tokenCache.current.get(address),
+      set: (address: string, token: string | null) => {
+        if (token) {
+          tokenCache.current.set(address, token);
+        } else {
+          tokenCache.current.delete(address);
+        }
+      },
+    }),
+    [],
+  );
 
   async function authenticate(
     address: string,
@@ -172,6 +191,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       signUp,
       logout,
       sync,
+      tokenStore,
     }),
     [
       storedAddress,
@@ -185,6 +205,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       signUp,
       logout,
       sync,
+      tokenStore,
     ],
   );
 

@@ -4,6 +4,7 @@ import { Swap, SwapPaymentInfo, SwapUrl } from '../definitions/swap';
 import { useUser } from './user.hook';
 import { useUserContext } from '../contexts/user.context';
 import { ApiError } from '../definitions/error';
+import { useSessionContext } from '../contexts/session.context';
 
 export interface SwapInterface {
   receiveFor: (info: SwapPaymentInfo) => Promise<Swap>;
@@ -13,18 +14,22 @@ export function useSwap(): SwapInterface {
   const { call } = useApi();
   const { changeUserAddress } = useUser();
   const { user } = useUserContext();
-
-  const accessToken = useRef<string | undefined>();
+  const { tokenStore } = useSessionContext();
 
   async function receiveFor(info: SwapPaymentInfo): Promise<Swap> {
     const request = { url: SwapUrl.receive, method: 'PUT', data: info } as CallConfig;
-    if (info.receiverAddress && user?.activeAddress?.address !== info.receiverAddress) {
-      accessToken.current ??= (await changeUserAddress(info.receiverAddress)).accessToken;
-      return call<Swap>({ ...request, token: accessToken.current }).catch((error: ApiError) => {
-        if (error.statusCode === 401) {
-          accessToken.current = undefined;
-        }
+    const { receiverAddress } = info;
 
+    if (receiverAddress && user?.activeAddress?.address !== receiverAddress) {
+      let token = tokenStore.get(receiverAddress);
+      if (!token) {
+        token = (await changeUserAddress(receiverAddress)).accessToken;
+        tokenStore.set(receiverAddress, token);
+      }
+      return call<Swap>({ ...request, token }).catch((error: ApiError) => {
+        if (error.statusCode === 401) {
+          tokenStore.set(receiverAddress, null);
+        }
         throw error;
       });
     } else {
@@ -32,5 +37,5 @@ export function useSwap(): SwapInterface {
     }
   }
 
-  return useMemo(() => ({ receiveFor }), [call]);
+  return useMemo(() => ({ receiveFor }), [call, tokenStore, user?.activeAddress?.address]);
 }
