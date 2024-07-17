@@ -3,6 +3,8 @@ import { ApiKey, Referral, User, UserUrl } from '../definitions/user';
 import { useApi } from './api.hook';
 import { SignIn } from '../definitions/auth';
 import { TransactionFilter, TransactionFilterKey } from '../definitions/transaction';
+import { useUserContext } from '../contexts/user.context';
+import { useSessionContext } from '../contexts/session.context';
 
 export interface UserInterface {
   getUser: () => Promise<User | undefined>;
@@ -19,6 +21,8 @@ export interface UserInterface {
 
 export function useUser(): UserInterface {
   const { call } = useApi();
+  const { user } = useUserContext();
+  const { tokenStore } = useSessionContext();
 
   async function getUser(): Promise<User | undefined> {
     return call<User>({ url: UserUrl.get, version: 'v2', method: 'GET' });
@@ -28,13 +32,13 @@ export function useUser(): UserInterface {
     return call<Referral>({ url: UserUrl.ref, version: 'v2', method: 'GET' });
   }
 
-  async function changeUser(user?: Partial<User>, userLinkAction?: () => void): Promise<User | undefined> {
-    if (!user) return undefined;
+  async function changeUser(userData?: Partial<User>, userLinkAction?: () => void): Promise<User | undefined> {
+    if (!userData) return undefined;
     return call<User>({
       url: UserUrl.change,
       version: 'v2',
       method: 'PUT',
-      data: { ...user },
+      data: { ...userData },
       specialHandling: userLinkAction && {
         action: userLinkAction,
         statusCode: 202,
@@ -50,10 +54,21 @@ export function useUser(): UserInterface {
     });
   }
 
-  async function deleteUserAddress(): Promise<void> {
+  async function deleteUserAddress(address?: string): Promise<void> {
+    let token: string | undefined;
+
+    if (address && user?.activeAddress?.address !== address) {
+      token = tokenStore.get(address);
+      if (!token) {
+        token = (await changeUserAddress(address)).accessToken;
+        tokenStore.set(address, token);
+      }
+    }
+
     return call({
       url: UserUrl.delete,
       method: 'DELETE',
+      token: token,
     });
   }
 
