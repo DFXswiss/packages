@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ApiKey, Referral, User, UserUrl } from '../definitions/user';
+import { ApiKey, Referral, UpdateUser, User, UserUrl } from '../definitions/user';
 import { useApi } from './api.hook';
 import { SignIn } from '../definitions/auth';
 import { TransactionFilter, TransactionFilterKey } from '../definitions/transaction';
@@ -32,13 +32,13 @@ export function useUser(): UserInterface {
     return call<Referral>({ url: UserUrl.ref, version: 'v2', method: 'GET' });
   }
 
-  async function changeUser(userData?: Partial<User>, userLinkAction?: () => void): Promise<User | undefined> {
-    if (!userData) return undefined;
+  async function changeUser(updateUser?: UpdateUser, userLinkAction?: () => void): Promise<User | undefined> {
+    if (!updateUser) return undefined;
     return call<User>({
       url: UserUrl.change,
       version: 'v2',
       method: 'PUT',
-      data: { ...userData },
+      data: { ...updateUser },
       specialHandling: userLinkAction && {
         action: userLinkAction,
         statusCode: 202,
