@@ -11,6 +11,7 @@ export interface UserInterface {
   getRef: () => Promise<Referral | undefined>;
   changeUser: (user?: Partial<User>, userLinkAction?: () => void) => Promise<User | undefined>;
   changeUserAddress: (address: string) => Promise<SignIn>;
+  renameUserAddress: (address: string, label: string) => Promise<void>;
   deleteUserAddress: () => Promise<void>;
   deleteUserAccount: () => Promise<void>;
   addDiscountCode: (code: string) => Promise<void>;
@@ -46,6 +47,15 @@ export function useUser(): UserInterface {
     });
   }
 
+  async function renameUserAddress(address: string, label: string): Promise<void> {
+    return call({
+      url: `${UserUrl.addresses}/${address}`,
+      version: 'v2',
+      method: 'PUT',
+      data: { label },
+    });
+  }
+
   async function changeUserAddress(address: string): Promise<SignIn> {
     return call<SignIn>({
       url: UserUrl.changeAddress,
@@ -55,26 +65,17 @@ export function useUser(): UserInterface {
   }
 
   async function deleteUserAddress(address?: string): Promise<void> {
-    let token: string | undefined;
-
-    if (address && user?.activeAddress?.address !== address) {
-      token = tokenStore.get(address);
-      if (!token) {
-        token = (await changeUserAddress(address)).accessToken;
-        tokenStore.set(address, token);
-      }
-    }
-
     return call({
-      url: UserUrl.delete,
+      url: `${UserUrl.addresses}/${address}`,
+      version: 'v2',
       method: 'DELETE',
-      token: token,
     });
   }
 
   async function deleteUserAccount(): Promise<void> {
     return call({
-      url: `${UserUrl.delete}/account`,
+      url: UserUrl.delete,
+      version: 'v2',
       method: 'DELETE',
     });
   }
@@ -107,6 +108,7 @@ export function useUser(): UserInterface {
       getRef,
       changeUser,
       changeUserAddress,
+      renameUserAddress,
       deleteUserAddress,
       deleteUserAccount,
       addDiscountCode,

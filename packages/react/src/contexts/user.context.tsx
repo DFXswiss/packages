@@ -5,6 +5,7 @@ import { useCountry } from '../hooks/country.hook';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
 import { Language } from '../definitions/language';
+import { Fiat } from '../definitions/fiat';
 
 interface UserInterface {
   user?: User;
@@ -14,7 +15,7 @@ interface UserInterface {
   isUserUpdating: boolean;
   changeMail: (mail: string) => Promise<void>;
   changeLanguage: (language: Language) => Promise<void>;
-  renameUserAddress: (address: string, name: string) => Promise<void>;
+  changeCurrency: (currency: Fiat) => Promise<void>;
   addDiscountCode: (code: string) => Promise<void>;
   register: (userLink: () => void) => void;
   reloadUser: () => Promise<void>;
@@ -76,8 +77,8 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     return updateUser({ language });
   }
 
-  async function renameUserAddress(address: string, name: string): Promise<void> {
-    return updateUser({ walletName: { address, name } });
+  async function changeCurrency(currency: Fiat): Promise<void> {
+    return updateUser({ currency });
   }
 
   function register(userLink: () => void) {
@@ -93,7 +94,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       isUserUpdating,
       changeMail,
       changeLanguage,
-      renameUserAddress,
+      changeCurrency,
       addDiscountCode,
       register,
       reloadUser,
