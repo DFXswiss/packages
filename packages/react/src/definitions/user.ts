@@ -72,11 +72,6 @@ export interface User {
   activeAddress?: UserAddress;
 }
 
-export interface WalletName {
-  address: string;
-  name: string;
-}
-
 export interface UpdateUser {
   mail?: string;
   phone?: string;

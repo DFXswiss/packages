@@ -3,8 +3,6 @@ import { ApiKey, Referral, UpdateUser, User, UserUrl } from '../definitions/user
 import { useApi } from './api.hook';
 import { SignIn } from '../definitions/auth';
 import { TransactionFilter, TransactionFilterKey } from '../definitions/transaction';
-import { useUserContext } from '../contexts/user.context';
-import { useSessionContext } from '../contexts/session.context';
 
 export interface UserInterface {
   getUser: () => Promise<User | undefined>;
@@ -22,8 +20,6 @@ export interface UserInterface {
 
 export function useUser(): UserInterface {
   const { call } = useApi();
-  const { user } = useUserContext();
-  const { tokenStore } = useSessionContext();
 
   async function getUser(): Promise<User | undefined> {
     return call<User>({ url: UserUrl.get, version: 'v2', method: 'GET' });
