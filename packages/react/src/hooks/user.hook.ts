@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ApiKey, Referral, User, UserUrl } from '../definitions/user';
+import { ApiKey, Referral, UpdateUser, User, UserUrl } from '../definitions/user';
 import { useApi } from './api.hook';
 import { SignIn } from '../definitions/auth';
 import { TransactionFilter, TransactionFilterKey } from '../definitions/transaction';
@@ -9,6 +9,7 @@ export interface UserInterface {
   getRef: () => Promise<Referral | undefined>;
   changeUser: (user?: Partial<User>, userLinkAction?: () => void) => Promise<User | undefined>;
   changeUserAddress: (address: string) => Promise<SignIn>;
+  renameUserAddress: (address: string, label: string) => Promise<void>;
   deleteUserAddress: () => Promise<void>;
   deleteUserAccount: () => Promise<void>;
   addDiscountCode: (code: string) => Promise<void>;
@@ -28,17 +29,26 @@ export function useUser(): UserInterface {
     return call<Referral>({ url: UserUrl.ref, version: 'v2', method: 'GET' });
   }
 
-  async function changeUser(user?: Partial<User>, userLinkAction?: () => void): Promise<User | undefined> {
-    if (!user) return undefined;
+  async function changeUser(updateUser?: UpdateUser, userLinkAction?: () => void): Promise<User | undefined> {
+    if (!updateUser) return undefined;
     return call<User>({
       url: UserUrl.change,
       version: 'v2',
       method: 'PUT',
-      data: { ...user },
+      data: { ...updateUser },
       specialHandling: userLinkAction && {
         action: userLinkAction,
         statusCode: 202,
       },
+    });
+  }
+
+  async function renameUserAddress(address: string, label: string): Promise<void> {
+    return call({
+      url: `${UserUrl.addresses}/${address}`,
+      version: 'v2',
+      method: 'PUT',
+      data: { label },
     });
   }
 
@@ -50,16 +60,18 @@ export function useUser(): UserInterface {
     });
   }
 
-  async function deleteUserAddress(): Promise<void> {
+  async function deleteUserAddress(address?: string): Promise<void> {
     return call({
-      url: UserUrl.delete,
+      url: `${UserUrl.addresses}/${address}`,
+      version: 'v2',
       method: 'DELETE',
     });
   }
 
   async function deleteUserAccount(): Promise<void> {
     return call({
-      url: `${UserUrl.delete}/account`,
+      url: UserUrl.delete,
+      version: 'v2',
       method: 'DELETE',
     });
   }
@@ -92,6 +104,7 @@ export function useUser(): UserInterface {
       getRef,
       changeUser,
       changeUserAddress,
+      renameUserAddress,
       deleteUserAddress,
       deleteUserAccount,
       addDiscountCode,

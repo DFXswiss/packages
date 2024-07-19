@@ -1,10 +1,11 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
 import { Country } from '../definitions/country';
-import { User } from '../definitions/user';
+import { UpdateUser, User } from '../definitions/user';
 import { useCountry } from '../hooks/country.hook';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
 import { Language } from '../definitions/language';
+import { Fiat } from '../definitions/fiat';
 
 interface UserInterface {
   user?: User;
@@ -14,6 +15,7 @@ interface UserInterface {
   isUserUpdating: boolean;
   changeMail: (mail: string) => Promise<void>;
   changeLanguage: (language: Language) => Promise<void>;
+  changeCurrency: (currency: Fiat) => Promise<void>;
   addDiscountCode: (code: string) => Promise<void>;
   register: (userLink: () => void) => void;
   reloadUser: () => Promise<void>;
@@ -57,7 +59,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       .finally(() => setIsUserLoading(false));
   }
 
-  async function updateUser(update: Partial<User>, linkAction?: () => void): Promise<void> {
+  async function updateUser(update: UpdateUser, linkAction?: () => void): Promise<void> {
     if (!user) return; // TODO: (Krysh) add real error handling
 
     setIsUserUpdating(true);
@@ -75,6 +77,10 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     return updateUser({ language });
   }
 
+  async function changeCurrency(currency: Fiat): Promise<void> {
+    return updateUser({ currency });
+  }
+
   function register(userLink: () => void) {
     userLinkAction = userLink;
   }
@@ -88,6 +94,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       isUserUpdating,
       changeMail,
       changeLanguage,
+      changeCurrency,
       addDiscountCode,
       register,
       reloadUser,
