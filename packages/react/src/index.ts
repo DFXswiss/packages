@@ -18,6 +18,7 @@ export { useBank } from './hooks/bank.hook';
 export { useBuy } from './hooks/buy.hook';
 export { useCountry } from './hooks/country.hook';
 export { useFiat } from './hooks/fiat.hook';
+export { usePaymentRoutes } from './hooks/payment-routes.hook';
 export { useTransaction } from './hooks/transaction.hook';
 export { useLanguage } from './hooks/language.hook';
 export { useKyc } from './hooks/kyc.hook';
@@ -35,6 +36,15 @@ export { Buy, BuyPaymentInfo } from './definitions/buy';
 export { Country } from './definitions/country';
 export { ApiError } from './definitions/error';
 export { Fiat } from './definitions/fiat';
+export {
+  MinAmount,
+  DepositDto,
+  BuyRoute,
+  SellRoute,
+  SwapRoute,
+  PaymentRoutesDto,
+  PaymentRoute,
+} from './definitions/route';
 export { PriceStep } from './definitions/price-step';
 export { Language } from './definitions/language';
 export { Jwt } from './definitions/jwt';
