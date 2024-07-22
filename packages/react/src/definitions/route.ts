@@ -2,7 +2,7 @@ import { Asset } from './asset';
 import { Blockchain } from './blockchain';
 import { Fiat } from './fiat';
 
-export const RouteUrl = { get: '/route' };
+export const PaymentRoutesUrl = { get: '/route' };
 
 export interface MinAmount {
   amount: number;
@@ -53,10 +53,10 @@ export interface SwapRoute {
   minFee: MinAmount;
 }
 
-export interface RoutesDto {
+export interface PaymentRoutesDto {
   buy: BuyRoute[];
   sell: SellRoute[];
   swap: SwapRoute[];
 }
 
-export type Route = BuyRoute | SellRoute | SwapRoute;
+export type PaymentRoute = BuyRoute | SellRoute | SwapRoute;
