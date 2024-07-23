@@ -9,6 +9,7 @@ interface ExpansionItem {
   text: string;
   infoText?: string;
   icon?: IconVariant;
+  iconColor?: IconColor;
   onClick?: () => void;
 }
 
@@ -99,23 +100,23 @@ export default function StyledDataTableExpandableRow({
       </div>
       {!isLoading && (
         <>
-          {infoText && (
-            <div className="mt-1">
-              <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
-                {infoText}
-              </StyledInfoText>
-            </div>
-          )}
           {expansionItems.length > 0 && isExpanded && (
             <div className="flex flex-col w-full">
+              {infoText && (
+                <div className="mt-1">
+                  <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
+                    {infoText}
+                  </StyledInfoText>
+                </div>
+              )}
               <div className={separatorClasses} />
-              {expansionItems.map(({ label, text, infoText, icon, onClick }) => (
+              {expansionItems.map(({ label, text, infoText, icon, iconColor, onClick }) => (
                 <div className="flex flex-col w-full">
                   <div key={label} className="flex w-full justify-between">
                     <p className={labelClasses}>{label}</p>
                     <button className="flex flex-row items-center gap-2" onClick={onClick} disabled={!onClick}>
                       <p className={rowDataClasses}>{text}</p>
-                      {icon && <DfxIcon icon={icon} size={IconSize.SM} />}
+                      {icon && <DfxIcon icon={icon} color={iconColor} size={IconSize.SM} />}
                     </button>
                   </div>
                   <div className="my-1 text-left">
