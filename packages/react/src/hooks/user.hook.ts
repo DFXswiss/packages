@@ -10,7 +10,7 @@ export interface UserInterface {
   changeUser: (user?: Partial<User>, userLinkAction?: () => void) => Promise<User | undefined>;
   changeUserAddress: (address: string) => Promise<SignIn>;
   renameUserAddress: (address: string, label: string) => Promise<void>;
-  deleteUserAddress: () => Promise<void>;
+  deleteUserAddress: (address: string) => Promise<void>;
   deleteUserAccount: () => Promise<void>;
   addDiscountCode: (code: string) => Promise<void>;
   generateCTApiKey: (types?: TransactionFilterKey[]) => Promise<ApiKey>;
@@ -60,7 +60,7 @@ export function useUser(): UserInterface {
     });
   }
 
-  async function deleteUserAddress(address?: string): Promise<void> {
+  async function deleteUserAddress(address: string): Promise<void> {
     return call({
       url: `${UserUrl.addresses}/${address}`,
       version: 'v2',
