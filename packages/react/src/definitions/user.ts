@@ -7,7 +7,7 @@ import { TransactionFilterKey } from './transaction';
 export const UserUrl = {
   get: 'user',
   ref: 'user/ref',
-  delete: 'user',
+  delete: 'user/account',
   change: 'user',
   addresses: 'user/addresses',
   apiKey: 'user/apiKey',
