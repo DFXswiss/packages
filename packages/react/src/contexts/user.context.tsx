@@ -17,6 +17,7 @@ interface UserInterface {
   changeLanguage: (language: Language) => Promise<void>;
   changeCurrency: (currency: Fiat) => Promise<void>;
   renameAddress: (address: string, label: string) => Promise<void>;
+  changeAddress: (address: string) => Promise<void>;
   deleteAddress: (address: string) => Promise<void>;
   deleteAccount: () => Promise<void>;
   addDiscountCode: (code: string) => Promise<void>;
@@ -102,15 +103,27 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       .finally(() => setIsUserUpdating(false));
   }
 
+  async function changeAddress(address: string): Promise<void> {
+    return changeUserAddress(address)
+      .then(({ accessToken }) => updateSession(accessToken))
+      .catch(console.error);
+  }
+
   async function deleteAddress(address: string): Promise<void> {
     if (!user) return;
 
+    const requiresFallback = address === user.activeAddress?.address;
+    const fallbackAddress =
+      requiresFallback && user.addresses.length > 1
+        ? user.addresses.find((a) => a.address !== address)?.address
+        : undefined;
+
     return deleteUserAddress(address)
       .then(() => {
-        if (user.addresses.length > 0) {
-          changeUserAddress(user.addresses[0].address).then(({ accessToken }) => updateSession(accessToken));
+        if (requiresFallback) {
+          fallbackAddress ? changeAddress(fallbackAddress) : deleteSession();
         } else {
-          deleteSession();
+          reloadUser();
         }
       })
       .catch(console.error);
@@ -137,6 +150,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       changeLanguage,
       changeCurrency,
       renameAddress,
+      changeAddress,
       deleteAddress,
       deleteAccount,
       addDiscountCode,
