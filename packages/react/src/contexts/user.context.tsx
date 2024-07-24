@@ -104,6 +104,8 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   }
 
   async function changeAddress(address: string): Promise<void> {
+    if (!user) return;
+
     return changeUserAddress(address)
       .then(({ accessToken }) => updateSession(accessToken))
       .catch(console.error);
