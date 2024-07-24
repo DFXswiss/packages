@@ -16,6 +16,9 @@ interface UserInterface {
   changeMail: (mail: string) => Promise<void>;
   changeLanguage: (language: Language) => Promise<void>;
   changeCurrency: (currency: Fiat) => Promise<void>;
+  renameAddress: (address: string, label: string) => Promise<void>;
+  deleteAddress: (address: string) => Promise<void>;
+  deleteAccount: () => Promise<void>;
   addDiscountCode: (code: string) => Promise<void>;
   register: (userLink: () => void) => void;
   reloadUser: () => Promise<void>;
@@ -28,8 +31,16 @@ export function useUserContext(): UserInterface {
 }
 
 export function UserContextProvider(props: PropsWithChildren): JSX.Element {
-  const { isLoggedIn, session } = useApiSession();
-  const { getUser, changeUser, addDiscountCode } = useUser();
+  const { isLoggedIn, session, updateSession, deleteSession } = useApiSession();
+  const {
+    getUser,
+    changeUser,
+    addDiscountCode,
+    renameUserAddress,
+    changeUserAddress,
+    deleteUserAddress,
+    deleteUserAccount,
+  } = useUser();
   const { getCountries } = useCountry();
   const [user, setUser] = useState<User>();
   const [countries, setCountries] = useState<Country[]>([]);
@@ -81,6 +92,36 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     return updateUser({ currency });
   }
 
+  async function renameAddress(address: string, label: string): Promise<void> {
+    if (!user) return;
+
+    setIsUserUpdating(true);
+    return renameUserAddress(address, label)
+      .then(setUser)
+      .catch(console.error)
+      .finally(() => setIsUserUpdating(false));
+  }
+
+  async function deleteAddress(address: string): Promise<void> {
+    if (!user) return;
+
+    return deleteUserAddress(address)
+      .then(() => {
+        if (user.addresses.length > 0) {
+          changeUserAddress(user.addresses[0].address).then(({ accessToken }) => updateSession(accessToken));
+        } else {
+          deleteSession();
+        }
+      })
+      .catch(console.error);
+  }
+
+  async function deleteAccount(): Promise<void> {
+    if (!user) return;
+
+    return deleteUserAccount().then(deleteSession).catch(console.error);
+  }
+
   function register(userLink: () => void) {
     userLinkAction = userLink;
   }
@@ -95,6 +136,9 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       changeMail,
       changeLanguage,
       changeCurrency,
+      renameAddress,
+      deleteAddress,
+      deleteAccount,
       addDiscountCode,
       register,
       reloadUser,

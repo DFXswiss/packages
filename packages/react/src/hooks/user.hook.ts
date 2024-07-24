@@ -9,7 +9,7 @@ export interface UserInterface {
   getRef: () => Promise<Referral | undefined>;
   changeUser: (user?: Partial<User>, userLinkAction?: () => void) => Promise<User | undefined>;
   changeUserAddress: (address: string) => Promise<SignIn>;
-  renameUserAddress: (address: string, label: string) => Promise<void>;
+  renameUserAddress: (address: string, label: string) => Promise<User | undefined>;
   deleteUserAddress: (address: string) => Promise<void>;
   deleteUserAccount: () => Promise<void>;
   addDiscountCode: (code: string) => Promise<void>;
@@ -43,8 +43,9 @@ export function useUser(): UserInterface {
     });
   }
 
-  async function renameUserAddress(address: string, label: string): Promise<void> {
-    return call({
+  async function renameUserAddress(address: string, label: string): Promise<User | undefined> {
+    if (!address || !label) return undefined;
+    return call<User>({
       url: `${UserUrl.addresses}/${address}`,
       version: 'v2',
       method: 'PUT',
