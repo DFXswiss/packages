@@ -48,7 +48,8 @@ export default function StyledDropdownMultiChoice<T>({
 
   const [isOpen, setIsOpen] = useState(false);
 
-  let buttonClasses = 'flex justify-between border border-dfxGray-500 px-4 py-2 shadow-sm w-full h-[58px]';
+  let buttonClasses =
+    'flex justify-between items-center border border-dfxGray-500 px-4 py-2 shadow-sm w-full min-h-[58px]';
 
   isOpen ? (buttonClasses += ' rounded-x rounded-t bg-dfxGray-400/50') : (buttonClasses += ' rounded');
 
@@ -157,8 +158,8 @@ export default function StyledDropdownMultiChoice<T>({
                       key={index}
                       type="button"
                       onClick={() => toggleSelection(item)}
-                      className={`flex flex-col gap-2 justify-between text-left w-full px-3.5 py-2.5 ${
-                        isSelected ? 'bg-dfxGray-400/50' : 'hover:bg-dfxGray-400/50'
+                      className={`flex flex-col gap-2 justify-between text-left w-full px-3.5 py-2.5 hover:bg-dfxGray-400 ${
+                        isSelected ? 'bg-dfxGray-400/50' : ''
                       }`}
                     >
                       <div className="flex flex-row gap-2 items-center w-full">

@@ -117,12 +117,12 @@ export default function StyledDropdown<T>({
                         !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
                       }`}
                     >
-                      {labelFunc(value)}
+                      <p className="line-clamp-1">{labelFunc(value)}</p>
                       {balanceFunc && !hideBalanceWhenClosed && <p>{balanceFunc(value)}</p>}
                     </span>
                     {descriptionFunc && (
                       <span className="text-dfxGray-800 text-xs h-min leading-none flex justify-between">
-                        {descriptionFunc(value)}
+                        <p className="line-clamp-1">{descriptionFunc(value)}</p>
                         {priceFunc && <p>{priceFunc(value)}</p>}
                       </span>
                     )}
@@ -143,37 +143,43 @@ export default function StyledDropdown<T>({
               ref={dropdownRef}
               className="absolute bg-white rounded-b border-x border-b border-dfxGray-500 w-full z-10 overflow-y-auto max-h-[15rem]"
             >
-              {items.map((item, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => {
-                    onChange(item);
-                    setIsOpen(false);
-                  }}
-                  className="flex flex-col gap-2 justify-between text-left w-full hover:bg-dfxGray-400/50 px-3.5 py-2.5"
-                >
-                  <div className="flex flex-row gap-2 items-center w-full">
-                    {assetIconFunc && <DfxAssetIcon asset={assetIconFunc(item)} />}
-                    <div className="flex flex-col gap-1 justify-between text-left w-full">
-                      <span
-                        className={`text-dfxBlue-800 leading-none font-semibold flex justify-between ${
-                          !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
-                        }`}
-                      >
-                        {labelFunc(item)}
-                        {balanceFunc && <p>{balanceFunc(item)}</p>}
-                      </span>
-                      {descriptionFunc && (
-                        <span className="text-dfxGray-800 text-xs h-min leading-none flex justify-between">
-                          {descriptionFunc(item)}
-                          {priceFunc && <p>{priceFunc(item)}</p>}
+              {items.map((item, index) => {
+                const isSelected = value !== undefined && JSON.stringify(value) === JSON.stringify(item);
+
+                return (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => {
+                      onChange(item);
+                      setIsOpen(false);
+                    }}
+                    className={`flex flex-col gap-2 justify-between text-left w-full hover:bg-dfxGray-400 px-3.5 py-2.5 ${
+                      isSelected ? 'bg-dfxGray-400/50' : ''
+                    }`}
+                  >
+                    <div className="flex flex-row gap-2 items-center w-full">
+                      {assetIconFunc && <DfxAssetIcon asset={assetIconFunc(item)} />}
+                      <div className="flex flex-col gap-1 justify-between text-left w-full">
+                        <span
+                          className={`text-dfxBlue-800 leading-none font-semibold flex justify-between ${
+                            !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
+                          }`}
+                        >
+                          {labelFunc(item)}
+                          {balanceFunc && <p>{balanceFunc(item)}</p>}
                         </span>
-                      )}
+                        {descriptionFunc && (
+                          <span className="text-dfxGray-800 text-xs h-min leading-none flex justify-between">
+                            {descriptionFunc(item)}
+                            {priceFunc && <p>{priceFunc(item)}</p>}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                );
+              })}
             </div>
           )}
 
