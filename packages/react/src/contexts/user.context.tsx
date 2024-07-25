@@ -26,7 +26,7 @@ interface UserInterface {
   reloadUser: () => Promise<void>;
   filterCT?: TransactionFilterKey[];
   keyCT?: string;
-  generateKeyCT: (types?: TransactionFilterKey[]) => Promise<void>;
+  generateKeyCT: (types?: TransactionFilterKey[]) => Promise<ApiKey | undefined>;
   deleteKeyCT: () => Promise<void>;
   updateFilterCT: (types?: TransactionFilterKey[]) => Promise<void>;
 }
@@ -150,13 +150,17 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     userLinkAction = userLink;
   }
 
-  async function generateKeyCT(types?: TransactionFilterKey[]): Promise<void> {
+  async function generateKeyCT(types?: TransactionFilterKey[]): Promise<ApiKey | undefined> {
     if (!user) return;
 
     setIsUserUpdating(true);
-    generateCTApiKey(types)
-      .then(() => getUser().then(setUser))
-      .finally(() => setIsUserUpdating(false));
+    try {
+      const key = await generateCTApiKey(types);
+      await getUser().then(setUser);
+      return key;
+    } finally {
+      setIsUserUpdating(false);
+    }
   }
 
   async function deleteKeyCT(): Promise<void> {
