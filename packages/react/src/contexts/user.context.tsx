@@ -1,11 +1,12 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
 import { Country } from '../definitions/country';
-import { UpdateUser, User } from '../definitions/user';
+import { ApiKey, UpdateUser, User } from '../definitions/user';
 import { useCountry } from '../hooks/country.hook';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
 import { Language } from '../definitions/language';
 import { Fiat } from '../definitions/fiat';
+import { TransactionFilter, TransactionFilterKey } from '../definitions/transaction';
 
 interface UserInterface {
   user?: User;
@@ -23,6 +24,11 @@ interface UserInterface {
   addDiscountCode: (code: string) => Promise<void>;
   register: (userLink: () => void) => void;
   reloadUser: () => Promise<void>;
+  filterCT?: TransactionFilterKey[];
+  keyCT?: string;
+  generateKeyCT: (types?: TransactionFilterKey[]) => Promise<void>;
+  deleteKeyCT: () => Promise<void>;
+  updateFilterCT: (types?: TransactionFilterKey[]) => Promise<void>;
 }
 
 const UserContext = createContext<UserInterface>(undefined as any);
@@ -41,6 +47,9 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     changeUserAddress,
     deleteUserAddress,
     deleteUserAccount,
+    generateCTApiKey,
+    deleteCTApiKey,
+    updateCTApiFilter,
   } = useUser();
   const { getCountries } = useCountry();
   const [user, setUser] = useState<User>();
@@ -141,6 +150,33 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     userLinkAction = userLink;
   }
 
+  async function generateKeyCT(types?: TransactionFilterKey[]): Promise<void> {
+    if (!user) return;
+
+    setIsUserUpdating(true);
+    generateCTApiKey(types)
+      .then(() => getUser().then(setUser))
+      .finally(() => setIsUserUpdating(false));
+  }
+
+  async function deleteKeyCT(): Promise<void> {
+    if (!user) return;
+
+    setIsUserUpdating(true);
+    deleteCTApiKey()
+      .then(() => getUser().then(setUser))
+      .finally(() => setIsUserUpdating(false));
+  }
+
+  async function updateFilterCT(types?: TransactionFilterKey[]): Promise<void> {
+    if (!user) return;
+
+    setIsUserUpdating(true);
+    updateCTApiFilter(types)
+      .then(() => getUser().then(setUser))
+      .finally(() => setIsUserUpdating(false));
+  }
+
   const context: UserInterface = useMemo(
     () => ({
       user,
@@ -158,6 +194,11 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       addDiscountCode,
       register,
       reloadUser,
+      filterCT: user?.activeAddress?.apiFilterCT,
+      keyCT: user?.activeAddress?.apiKeyCT,
+      generateKeyCT,
+      deleteKeyCT,
+      updateFilterCT,
     }),
     [user, refLink, countries, isUserLoading, isUserUpdating, changeMail, register, reloadUser],
   );

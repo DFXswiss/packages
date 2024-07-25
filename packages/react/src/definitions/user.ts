@@ -45,6 +45,7 @@ export interface Referral {
 
 export interface UserAddress {
   wallet: string;
+  label?: string;
   address: string;
   blockchains: Blockchain[];
   volumes: Volumes;
@@ -65,6 +66,7 @@ export interface User {
   mail?: string;
   phone?: string;
   language: Language;
+  currency: Fiat;
   tradingLimit: TradingLimit;
   kyc: UserKyc;
   volumes: Volumes;
