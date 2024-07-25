@@ -47,6 +47,7 @@ export interface UserAddress {
   wallet: string;
   label?: string;
   address: string;
+  explorerUrl?: string;
   blockchains: Blockchain[];
   volumes: Volumes;
   refCode?: string;
