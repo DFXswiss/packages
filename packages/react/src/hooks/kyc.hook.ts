@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
 import {
+  KycCommercialRegisterData,
   KycContactData,
   KycFinancialQuestions,
   KycFinancialResponses,
   KycInfo,
+  KycNationalityData,
   KycPersonalData,
   KycResult,
   KycSession,
@@ -40,6 +42,8 @@ export interface KycInterface {
   // updates
   setContactData: (code: string, url: string, data: KycContactData) => Promise<KycResult>;
   setPersonalData: (code: string, url: string, data: KycPersonalData) => Promise<KycResult>;
+  setNationalityData: (code: string, url: string, data: KycNationalityData) => Promise<KycResult>;
+  setCommercialRegisterData: (code: string, url: string, data: KycCommercialRegisterData) => Promise<KycResult>;
   getFinancialData: (code: string, url: string, lang?: string) => Promise<KycFinancialQuestions>;
   setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycResult>;
 
@@ -110,6 +114,18 @@ export function useKyc(): KycInterface {
     return call({ url, code, method: 'PUT', data });
   }
 
+  async function setNationalityData(code: string, url: string, data: KycNationalityData): Promise<KycResult> {
+    return call({ url, code, method: 'PUT', data });
+  }
+
+  async function setCommercialRegisterData(
+    code: string,
+    url: string,
+    data: KycCommercialRegisterData,
+  ): Promise<KycResult> {
+    return call({ url, code, method: 'PUT', data });
+  }
+
   async function getFinancialData(code: string, url: string, lang?: string): Promise<KycFinancialQuestions> {
     lang && (url += `?lang=${lang}`);
     return call({ url, code, method: 'GET' });
@@ -172,6 +188,8 @@ export function useKyc(): KycInterface {
       getCountries,
       setContactData,
       setPersonalData,
+      setNationalityData,
+      setCommercialRegisterData,
       getFinancialData,
       setFinancialData,
       setup2fa,

@@ -77,9 +77,12 @@ export interface KycSession extends KycInfo {
 export enum KycStepName {
   CONTACT_DATA = 'ContactData',
   PERSONAL_DATA = 'PersonalData',
+  NATIONALITY_DATA = 'NationalityData',
+  COMMERCIAL_REGISTER = 'CommercialRegister',
   IDENT = 'Ident',
   FINANCIAL_DATA = 'FinancialData',
   DOCUMENT_UPLOAD = 'DocumentUpload',
+  DFX_APPROVAL = 'DfxApproval',
 }
 
 export enum KycStepType {
@@ -148,6 +151,15 @@ export interface KycPersonalData {
   address: KycAddress;
   organizationName?: string;
   organizationAddress?: KycAddress;
+}
+
+export interface KycNationalityData {
+  country: Country;
+}
+
+export interface KycCommercialRegisterData {
+  file: string;
+  fileName?: string;
 }
 
 // financial data
