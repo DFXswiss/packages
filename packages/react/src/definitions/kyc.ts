@@ -21,6 +21,22 @@ export enum AccountType {
   SOLE_PROPRIETORSHIP = 'SoleProprietorship',
 }
 
+export enum LegalEntity {
+  PUBLIC_LIMITED_COMPANY = 'PublicLimitedCompany',
+  LIMITED_LIABILITY_COMPANY = 'LimitedLiabilityCompany',
+  ASSOCIATION = 'Association',
+  FOUNDATION = 'Foundation',
+  LIFE_INSURANCE = 'LifeInsurance',
+  TRUST = 'Trust',
+  OTHER = 'Other',
+}
+
+export enum SignatoryPower {
+  SINGLE = 'Single',
+  DOUBLE = 'Double',
+  NONE = 'None',
+}
+
 // --- LEGACY --- //
 
 export enum KycStatus {
@@ -77,8 +93,12 @@ export interface KycSession extends KycInfo {
 export enum KycStepName {
   CONTACT_DATA = 'ContactData',
   PERSONAL_DATA = 'PersonalData',
+  LEGAL_ENTITY = 'LegalEntity',
+  STOCK_REGISTER = 'StockRegister',
   NATIONALITY_DATA = 'NationalityData',
   COMMERCIAL_REGISTER = 'CommercialRegister',
+  SIGNATORY_POWER = 'SignatoryPower',
+  AUTHORITY = 'Authority',
   IDENT = 'Ident',
   FINANCIAL_DATA = 'FinancialData',
   DOCUMENT_UPLOAD = 'DocumentUpload',
@@ -157,7 +177,15 @@ export interface KycNationalityData {
   country: Country;
 }
 
-export interface KycCommercialRegisterData {
+export interface KycLegalEntityData {
+  legalEntity: LegalEntity;
+}
+
+export interface KycSignatoryPowerData {
+  signatoryPower: SignatoryPower;
+}
+
+export interface KycFileData {
   file: string;
   fileName?: string;
 }

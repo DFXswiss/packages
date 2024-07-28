@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import {
-  KycCommercialRegisterData,
+  KycFileData,
   KycContactData,
   KycFinancialQuestions,
   KycFinancialResponses,
   KycInfo,
+  KycLegalEntityData,
   KycNationalityData,
   KycPersonalData,
   KycResult,
@@ -16,6 +17,7 @@ import {
   TfaSetup,
   UserData,
   UserName,
+  KycSignatoryPowerData,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 import { Country } from '../definitions/country';
@@ -42,8 +44,10 @@ export interface KycInterface {
   // updates
   setContactData: (code: string, url: string, data: KycContactData) => Promise<KycResult>;
   setPersonalData: (code: string, url: string, data: KycPersonalData) => Promise<KycResult>;
+  setLegalEntityData: (code: string, url: string, data: KycLegalEntityData) => Promise<KycResult>;
   setNationalityData: (code: string, url: string, data: KycNationalityData) => Promise<KycResult>;
-  setCommercialRegisterData: (code: string, url: string, data: KycCommercialRegisterData) => Promise<KycResult>;
+  setFileData: (code: string, url: string, data: KycFileData) => Promise<KycResult>;
+  setSignatoryPowerData: (code: string, url: string, data: KycSignatoryPowerData) => Promise<KycResult>;
   getFinancialData: (code: string, url: string, lang?: string) => Promise<KycFinancialQuestions>;
   setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycResult>;
 
@@ -114,15 +118,19 @@ export function useKyc(): KycInterface {
     return call({ url, code, method: 'PUT', data });
   }
 
+  function setLegalEntityData(code: string, url: string, data: KycLegalEntityData): Promise<KycResult> {
+    return call({ url, code, method: 'PUT', data });
+  }
+
   async function setNationalityData(code: string, url: string, data: KycNationalityData): Promise<KycResult> {
     return call({ url, code, method: 'PUT', data });
   }
 
-  async function setCommercialRegisterData(
-    code: string,
-    url: string,
-    data: KycCommercialRegisterData,
-  ): Promise<KycResult> {
+  async function setFileData(code: string, url: string, data: KycFileData): Promise<KycResult> {
+    return call({ url, code, method: 'PUT', data });
+  }
+
+  function setSignatoryPowerData(code: string, url: string, data: KycSignatoryPowerData): Promise<KycResult> {
     return call({ url, code, method: 'PUT', data });
   }
 
@@ -188,8 +196,10 @@ export function useKyc(): KycInterface {
       getCountries,
       setContactData,
       setPersonalData,
+      setLegalEntityData,
       setNationalityData,
-      setCommercialRegisterData,
+      setFileData,
+      setSignatoryPowerData,
       getFinancialData,
       setFinancialData,
       setup2fa,
