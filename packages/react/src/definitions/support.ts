@@ -1,3 +1,5 @@
+import { Limit, InvestmentDate, FundOrigin } from './kyc';
+
 export const SupportUrl = {
   createGeneralIssue: 'support/issue',
   createTransactionIssue: (id: number) => `support/issue/transaction?id=${id}`,
@@ -27,6 +29,13 @@ export interface TransactionIssue {
   date?: Date;
 }
 
+export interface LimitRequestIssue {
+  limit: Limit;
+  investmentDate: InvestmentDate;
+  fundOrigin: FundOrigin;
+  fundOriginText: string;
+}
+
 export interface CreateSupportMessage {
   message: string;
   file?: string;
@@ -38,4 +47,5 @@ export interface CreateSupportIssue extends CreateSupportMessage {
   reason: SupportIssueReason;
   name: string;
   transaction?: TransactionIssue;
+  limitRequest?: LimitRequestIssue;
 }
