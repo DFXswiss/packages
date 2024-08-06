@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
 import {
   CreatePaymentLink,
   CreatePaymentLinkPayment,
@@ -29,7 +29,7 @@ export function usePaymentRoutesContext(): PaymentRoutesInterface {
   return useContext(PaymentRoutesContext);
 }
 
-export function PaymentRoutesContextProvider(): JSX.Element {
+export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Element {
   const { user } = useUserContext();
   const {
     getPaymentRoutes,
@@ -46,7 +46,11 @@ export function PaymentRoutesContextProvider(): JSX.Element {
   const [paymentLinksLoading, setPaymentLinksLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setPaymentRoutes(undefined);
+      setPaymentLinks(undefined);
+      return;
+    }
 
     // get routes
     setPaymentRoutesLoading(true);
@@ -161,5 +165,5 @@ export function PaymentRoutesContextProvider(): JSX.Element {
     ],
   );
 
-  return <PaymentRoutesContext.Provider value={context}>{}</PaymentRoutesContext.Provider>;
+  return <PaymentRoutesContext.Provider value={context}>{props.children}</PaymentRoutesContext.Provider>;
 }

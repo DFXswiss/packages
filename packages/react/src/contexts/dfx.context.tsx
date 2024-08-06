@@ -6,6 +6,7 @@ import { SessionContextProvider, SessionContextProviderProps } from './session.c
 import { UserContextProvider } from './user.context';
 import { FiatContextProvider } from './fiat.context';
 import { LanguageContextProvider } from './language.context';
+import { PaymentRoutesContextProvider } from './payment-routes.context';
 
 type DfxContextProviderProps = SessionContextProviderProps & PropsWithChildren & AssetContextProviderProps;
 
@@ -17,7 +18,9 @@ export function DfxContextProvider(props: DfxContextProviderProps): JSX.Element 
           <FiatContextProvider>
             <LanguageContextProvider>
               <AssetContextProvider includePrivateAssets={props.includePrivateAssets}>
-                <BankAccountContextProvider>{props.children}</BankAccountContextProvider>
+                <PaymentRoutesContextProvider>
+                  <BankAccountContextProvider>{props.children}</BankAccountContextProvider>
+                </PaymentRoutesContextProvider>
               </AssetContextProvider>
             </LanguageContextProvider>
           </FiatContextProvider>
