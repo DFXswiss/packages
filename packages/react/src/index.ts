@@ -7,6 +7,7 @@ export { useAuthContext } from './contexts/auth.context';
 export { useBankAccountContext } from './contexts/bank-account.context';
 export { useSessionContext } from './contexts/session.context';
 export { useUserContext } from './contexts/user.context';
+export { usePaymentRoutesContext } from './contexts/payment-routes.context';
 
 // Hooks
 export { useApiSession } from './hooks/api-session.hook';
@@ -43,7 +44,7 @@ export {
   BuyRoute,
   SellRoute,
   SwapRoute,
-  PaymentRoutesDto,
+  PaymentRoutes as PaymentRoutesDto,
   PaymentRoute,
 } from './definitions/route';
 export { InfoBanner } from './definitions/settings';
