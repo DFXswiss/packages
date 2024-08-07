@@ -33,7 +33,7 @@ export interface LimitRequestIssue {
   limit: Limit;
   investmentDate: InvestmentDate;
   fundOrigin: FundOrigin;
-  fundOriginText: string;
+  fundOriginText?: string;
 }
 
 export interface CreateSupportMessage {
