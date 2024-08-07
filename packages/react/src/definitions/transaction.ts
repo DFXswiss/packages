@@ -75,6 +75,7 @@ export enum TransactionFailureReason {
   CHF_ABROAD_NOT_ALLOWED = 'ChfAbroadNotAllowed',
   ASSET_KYC_NEEDED = 'AssetKycNeeded',
   CARD_NAME_MISMATCH = 'CardNameMismatch',
+  USER_DELETED = 'UserDeleted',
 }
 
 export interface UnassignedTransaction {
