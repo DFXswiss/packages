@@ -44,4 +44,11 @@ export class Utils {
   static isJwt(jwt?: string): boolean {
     return jwt ? /^[A-Za-z0-9_-]{2,}(?:\.[A-Za-z0-9_-]{2,}){2}$/.test(jwt) : false;
   }
+
+  static buildQueryParams(params: { [key: string]: string | number | undefined }): string {
+    return Object.keys(params)
+      .filter((key) => params[key] !== undefined)
+      .map((key) => `${key}=${encodeURIComponent(params[key] as string)}`)
+      .join('&');
+  }
 }

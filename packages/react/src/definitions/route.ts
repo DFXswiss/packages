@@ -2,7 +2,30 @@ import { Asset } from './asset';
 import { Blockchain } from './blockchain';
 import { Fiat } from './fiat';
 
-export const PaymentRoutesUrl = { get: '/route' };
+export const PaymentRoutesUrl = { get: 'route' };
+export const PaymentLinksUrl = {
+  get: 'paymentLink',
+  create: 'paymentLink',
+  update: 'paymentLink',
+  payment: 'paymentLink/payment',
+};
+
+export enum PaymentLinkStatus {
+  ACTIVE = 'Active',
+  INACTIVE = 'Inactive',
+}
+
+export enum PaymentLinkPaymentStatus {
+  PENDING = 'Pending',
+  COMPLETED = 'Completed',
+  CANCELLED = 'Cancelled',
+  EXPIRED = 'Expired',
+}
+
+export enum PaymentLinkPaymentMode {
+  SINGLE = 'Single',
+  MULTIPLE = 'Multiple',
+}
 
 export interface MinAmount {
   amount: number;
@@ -53,10 +76,50 @@ export interface SwapRoute {
   minFee: MinAmount;
 }
 
-export interface PaymentRoutesDto {
+export interface PaymentRoutes {
   buy: BuyRoute[];
   sell: SellRoute[];
   swap: SwapRoute[];
 }
 
 export type PaymentRoute = BuyRoute | SellRoute | SwapRoute;
+
+export interface PaymentLink {
+  id: string;
+  routeId: string;
+  externalId?: string;
+  status: PaymentLinkStatus;
+  url: string;
+  lnurl: string;
+  payment?: PaymentLinkPayment;
+}
+
+export interface PaymentLinkPayment {
+  id: string;
+  externalId?: string;
+  status: PaymentLinkPaymentStatus;
+  amount: number;
+  currency: Fiat;
+  mode: PaymentLinkPaymentMode;
+  expiryDate: Date;
+  url: string;
+  lnurl: string;
+}
+
+export interface CreatePaymentLinkPayment {
+  mode: PaymentLinkPaymentMode;
+  amount: number;
+  externalId: string;
+  currency: Fiat;
+  expiryDate: Date;
+}
+
+export interface CreatePaymentLink {
+  routeId?: number;
+  externalId?: string;
+  payment?: CreatePaymentLinkPayment;
+}
+
+export interface UpdatePaymentLink {
+  status: PaymentLinkStatus;
+}
