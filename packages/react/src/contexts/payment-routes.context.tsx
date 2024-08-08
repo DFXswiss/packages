@@ -17,9 +17,9 @@ interface PaymentRoutesInterface {
   paymentRoutesLoading: boolean;
   paymentLinksLoading: boolean;
   createPaymentLink: (request: CreatePaymentLink) => Promise<void>;
-  updatePaymentLink: (request: UpdatePaymentLink, id?: number, externalId?: number) => Promise<void>;
-  createPaymentLinkPayment: (request: CreatePaymentLinkPayment, id?: number, externalId?: number) => Promise<void>;
-  cancelPaymentLinkPayment: (id?: number, externalId?: number) => Promise<void>;
+  updatePaymentLink: (request: UpdatePaymentLink, id?: number, externalId?: string) => Promise<void>;
+  createPaymentLinkPayment: (request: CreatePaymentLinkPayment, id?: number, externalId?: string) => Promise<void>;
+  cancelPaymentLinkPayment: (id?: number, externalId?: string) => Promise<void>;
   error?: string;
 }
 
@@ -78,11 +78,10 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     setPaymentLinksLoading(true);
     createPaymentLinkApi(request)
       .then(updatePaymentLinks)
-      .catch((error: ApiError) => setError(error.message ?? 'Unknown error'))
       .finally(() => setPaymentLinksLoading(false));
   }
 
-  async function updatePaymentLink(request: UpdatePaymentLink, id?: number, externalId?: number): Promise<void> {
+  async function updatePaymentLink(request: UpdatePaymentLink, id?: number, externalId?: string): Promise<void> {
     if (!user) return;
 
     setPaymentLinksLoading(true);
@@ -95,7 +94,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
   async function createPaymentLinkPayment(
     request: CreatePaymentLinkPayment,
     id?: number,
-    externalId?: number,
+    externalId?: string,
   ): Promise<void> {
     if (!user) return;
 
@@ -106,7 +105,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       .finally(() => setPaymentLinksLoading(false));
   }
 
-  async function cancelPaymentLinkPayment(id?: number, externalId?: number): Promise<void> {
+  async function cancelPaymentLinkPayment(id?: number, externalId?: string): Promise<void> {
     if (!user) return;
 
     setPaymentLinksLoading(true);

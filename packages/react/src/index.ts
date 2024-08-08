@@ -44,7 +44,7 @@ export {
   BuyRoute,
   SellRoute,
   SwapRoute,
-  PaymentRoutes as PaymentRoutesDto,
+  PaymentRoutes,
   PaymentRoute,
 } from './definitions/route';
 export { InfoBanner } from './definitions/settings';

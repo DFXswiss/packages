@@ -12,15 +12,15 @@ import {
 
 export interface PaymentRoutesInterface {
   getPaymentRoutes: () => Promise<PaymentRoutes>;
-  getPaymentLinks: (id?: number, externalId?: number) => Promise<PaymentLink | PaymentLink[]>;
+  getPaymentLinks: (id?: number, externalId?: string) => Promise<PaymentLink | PaymentLink[]>;
   createPaymentLink: (request: CreatePaymentLink) => Promise<PaymentLink>;
-  updatePaymentLink: (request: UpdatePaymentLink, id?: number, externalId?: number) => Promise<PaymentLink>;
+  updatePaymentLink: (request: UpdatePaymentLink, id?: number, externalId?: string) => Promise<PaymentLink>;
   createPaymentLinkPayment: (
     request: CreatePaymentLinkPayment,
     id?: number,
-    externalId?: number,
+    externalId?: string,
   ) => Promise<PaymentLink>;
-  cancelPaymentLinkPayment: (id?: number, externalId?: number) => Promise<PaymentLink>;
+  cancelPaymentLinkPayment: (id?: number, externalId?: string) => Promise<PaymentLink>;
 }
 
 export function usePaymentRoutes(): PaymentRoutesInterface {
@@ -30,9 +30,11 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     return call<PaymentRoutes>({ url: PaymentRoutesUrl.get, method: 'GET' });
   }
 
-  async function getPaymentLinks(id?: number, externalId?: number): Promise<PaymentLink | PaymentLink[]> {
+  async function getPaymentLinks(id?: number, externalId?: string): Promise<PaymentLink | PaymentLink[]> {
+    const queryParams = buildQueryParams({ id, externalId });
+
     return call<PaymentLink | PaymentLink[]>({
-      url: `${PaymentLinksUrl.get}?${id ? `id=${id}` : ''}${externalId ? `&externalId=${externalId}` : ''}`,
+      url: `${PaymentLinksUrl.get}?${queryParams}`,
       method: 'GET',
     });
   }
@@ -45,9 +47,11 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     });
   }
 
-  async function updatePaymentLink(request: UpdatePaymentLink, id?: number, externalId?: number): Promise<PaymentLink> {
+  async function updatePaymentLink(request: UpdatePaymentLink, id?: number, externalId?: string): Promise<PaymentLink> {
+    const queryParams = buildQueryParams({ id, externalId });
+
     return call({
-      url: `${PaymentLinksUrl.update}?${id ? `id=${id}` : ''}${externalId ? `&externalId=${externalId}` : ''}`,
+      url: `${PaymentLinksUrl.update}?${queryParams}`,
       method: 'PUT',
       data: request,
     });
@@ -56,20 +60,31 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
   async function createPaymentLinkPayment(
     request: CreatePaymentLinkPayment,
     id?: number,
-    externalId?: number,
+    externalId?: string,
   ): Promise<PaymentLink> {
+    const queryParams = buildQueryParams({ id, externalId });
+
     return call<PaymentLink>({
-      url: `${PaymentLinksUrl.payment}?${id ? `id=${id}` : ''}${externalId ? `&externalId=${externalId}` : ''}`,
+      url: `${PaymentLinksUrl.payment}?${queryParams}`,
       method: 'POST',
       data: request,
     });
   }
 
-  async function cancelPaymentLinkPayment(id?: number, externalId?: number): Promise<PaymentLink> {
+  async function cancelPaymentLinkPayment(id?: number, externalId?: string): Promise<PaymentLink> {
+    const queryParams = buildQueryParams({ id, externalId });
+
     return call<PaymentLink>({
-      url: `${PaymentLinksUrl.payment}?${id ? `id=${id}` : ''}${externalId ? `&externalId=${externalId}` : ''}`,
+      url: `${PaymentLinksUrl.payment}?${queryParams}`,
       method: 'DELETE',
     });
+  }
+
+  function buildQueryParams(params: { [key: string]: string | number | undefined }): string {
+    return Object.keys(params)
+      .filter((key) => params[key] !== undefined)
+      .map((key) => `${key}=${encodeURIComponent(params[key] as string)}`)
+      .join('&');
   }
 
   return useMemo(
