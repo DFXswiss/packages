@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useApi } from './api.hook';
+import { Utils } from '../utils';
 import {
   CreatePaymentLink,
   CreatePaymentLinkPayment,
@@ -31,7 +32,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
   }
 
   async function getPaymentLinks(id?: number, externalId?: string): Promise<PaymentLink | PaymentLink[]> {
-    const queryParams = buildQueryParams({ id, externalId });
+    const queryParams = Utils.buildQueryParams({ id, externalId });
 
     return call<PaymentLink | PaymentLink[]>({
       url: `${PaymentLinksUrl.get}?${queryParams}`,
@@ -48,7 +49,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
   }
 
   async function updatePaymentLink(request: UpdatePaymentLink, id?: number, externalId?: string): Promise<PaymentLink> {
-    const queryParams = buildQueryParams({ id, externalId });
+    const queryParams = Utils.buildQueryParams({ id, externalId });
 
     return call({
       url: `${PaymentLinksUrl.update}?${queryParams}`,
@@ -62,7 +63,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     id?: number,
     externalId?: string,
   ): Promise<PaymentLink> {
-    const queryParams = buildQueryParams({ id, externalId });
+    const queryParams = Utils.buildQueryParams({ id, externalId });
 
     return call<PaymentLink>({
       url: `${PaymentLinksUrl.payment}?${queryParams}`,
@@ -72,19 +73,12 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
   }
 
   async function cancelPaymentLinkPayment(id?: number, externalId?: string): Promise<PaymentLink> {
-    const queryParams = buildQueryParams({ id, externalId });
+    const queryParams = Utils.buildQueryParams({ id, externalId });
 
     return call<PaymentLink>({
       url: `${PaymentLinksUrl.payment}?${queryParams}`,
       method: 'DELETE',
     });
-  }
-
-  function buildQueryParams(params: { [key: string]: string | number | undefined }): string {
-    return Object.keys(params)
-      .filter((key) => params[key] !== undefined)
-      .map((key) => `${key}=${encodeURIComponent(params[key] as string)}`)
-      .join('&');
   }
 
   return useMemo(
