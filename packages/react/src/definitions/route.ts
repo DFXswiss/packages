@@ -2,12 +2,12 @@ import { Asset } from './asset';
 import { Blockchain } from './blockchain';
 import { Fiat } from './fiat';
 
-export const PaymentRoutesUrl = { get: '/route' };
+export const PaymentRoutesUrl = { get: 'route' };
 export const PaymentLinksUrl = {
-  get: '/paymentLink',
-  create: '/paymentLink',
-  update: '/paymentLink',
-  payment: '/paymentLink/payment',
+  get: 'paymentLink',
+  create: 'paymentLink',
+  update: 'paymentLink',
+  payment: 'paymentLink/payment',
 };
 
 export enum PaymentLinkStatus {

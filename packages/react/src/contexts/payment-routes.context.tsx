@@ -87,7 +87,6 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     setPaymentLinksLoading(true);
     updatePaymentLinkApi(request, id, externalId)
       .then(updatePaymentLinks)
-      .catch((error: ApiError) => setError(error.message ?? 'Unknown error'))
       .finally(() => setPaymentLinksLoading(false));
   }
 
@@ -101,7 +100,6 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     setPaymentLinksLoading(true);
     createPaymentLinkPaymentApi(request, id, externalId)
       .then(updatePaymentLinks)
-      .catch((error: ApiError) => setError(error.message ?? 'Unknown error'))
       .finally(() => setPaymentLinksLoading(false));
   }
 
@@ -111,7 +109,6 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     setPaymentLinksLoading(true);
     cancelPaymentLinkPaymentApi(id, externalId)
       .then(updatePaymentLinks)
-      .catch((error: ApiError) => setError(error.message ?? 'Unknown error'))
       .finally(() => setPaymentLinksLoading(false));
   }
 
