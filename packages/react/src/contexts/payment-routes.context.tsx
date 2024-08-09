@@ -16,7 +16,7 @@ interface PaymentRoutesInterface {
   paymentLinks?: PaymentLink[];
   paymentRoutesLoading: boolean;
   paymentLinksLoading: boolean;
-  createPaymentLink: (request: CreatePaymentLink) => Promise<void>;
+  createPaymentLink: (request: CreatePaymentLink) => Promise<PaymentLink | undefined>;
   updatePaymentLink: (request: UpdatePaymentLink, id?: number, externalId?: string) => Promise<void>;
   createPaymentLinkPayment: (request: CreatePaymentLinkPayment, id?: number, externalId?: string) => Promise<void>;
   cancelPaymentLinkPayment: (id?: number, externalId?: string) => Promise<void>;
@@ -72,13 +72,17 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       .finally(() => setPaymentLinksLoading(false));
   }, [user]);
 
-  async function createPaymentLink(request: CreatePaymentLink): Promise<void> {
+  async function createPaymentLink(request: CreatePaymentLink): Promise<PaymentLink | undefined> {
     if (!user) return;
 
     setPaymentLinksLoading(true);
-    return createPaymentLinkApi(request)
-      .then(updatePaymentLinks)
-      .finally(() => setPaymentLinksLoading(false));
+    try {
+      const paymentLink = await createPaymentLinkApi(request);
+      updatePaymentLinks(paymentLink);
+      return paymentLink;
+    } finally {
+      setPaymentLinksLoading(false);
+    }
   }
 
   async function updatePaymentLink(request: UpdatePaymentLink, id?: number, externalId?: string): Promise<void> {
