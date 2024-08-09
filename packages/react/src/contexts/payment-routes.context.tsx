@@ -76,7 +76,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     if (!user) return;
 
     setPaymentLinksLoading(true);
-    createPaymentLinkApi(request)
+    return createPaymentLinkApi(request)
       .then(updatePaymentLinks)
       .finally(() => setPaymentLinksLoading(false));
   }
@@ -85,7 +85,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     if (!user) return;
 
     setPaymentLinksLoading(true);
-    updatePaymentLinkApi(request, id, externalId)
+    return updatePaymentLinkApi(request, id, externalId)
       .then(updatePaymentLinks)
       .finally(() => setPaymentLinksLoading(false));
   }
@@ -98,7 +98,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     if (!user) return;
 
     setPaymentLinksLoading(true);
-    createPaymentLinkPaymentApi(request, id, externalId)
+    return createPaymentLinkPaymentApi(request, id, externalId)
       .then(updatePaymentLinks)
       .finally(() => setPaymentLinksLoading(false));
   }
@@ -107,7 +107,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     if (!user) return;
 
     setPaymentLinksLoading(true);
-    cancelPaymentLinkPaymentApi(id, externalId)
+    return cancelPaymentLinkPaymentApi(id, externalId)
       .then(updatePaymentLinks)
       .finally(() => setPaymentLinksLoading(false));
   }

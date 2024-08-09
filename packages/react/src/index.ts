@@ -46,6 +46,13 @@ export {
   SwapRoute,
   PaymentRoutes,
   PaymentRoute,
+  PaymentLinkStatus,
+  PaymentLinkPaymentStatus,
+  PaymentLink,
+  PaymentLinkPayment,
+  CreatePaymentLinkPayment,
+  CreatePaymentLink,
+  UpdatePaymentLink,
 } from './definitions/route';
 export { InfoBanner } from './definitions/settings';
 export { PriceStep } from './definitions/price-step';
