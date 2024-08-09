@@ -117,7 +117,7 @@ export default function StyledDropdown<T>({
                         !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
                       }`}
                     >
-                      <p className="line-clamp-1">{labelFunc(value)}</p>
+                      <p className="line-clamp-1 pb-0.5">{labelFunc(value)}</p>
                       {balanceFunc && !hideBalanceWhenClosed && <p>{balanceFunc(value)}</p>}
                     </span>
                     {descriptionFunc && (
