@@ -68,7 +68,13 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     setPaymentLinksLoading(true);
     getPaymentLinks()
       .then((links) => setPaymentLinks(links as PaymentLink[]))
-      .catch((error: ApiError) => setError(error.message ?? 'Unknown error'))
+      .catch((error: ApiError) => {
+        if (error.message === 'permission denied') {
+          setPaymentLinks([]);
+        } else {
+          setError(error.message ?? 'Unknown error');
+        }
+      })
       .finally(() => setPaymentLinksLoading(false));
   }, [user]);
 
