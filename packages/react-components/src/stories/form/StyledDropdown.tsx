@@ -105,7 +105,7 @@ export default function StyledDropdown<T>({
           >
             <div className="flex flex-row gap-2 items-center w-full h-full">
               {value && assetIconFunc && <DfxAssetIcon asset={assetIconFunc(value)} />}
-              <div className="flex flex-col gap-1 justify-between text-left w-full">
+              <div className="flex flex-col gap-1 justify-between text-left w-full pt-0.5">
                 {value === undefined ? (
                   <p className="text-dfxGray-600 drop-shadow-none py-[0.25rem]">{placeholder}</p>
                 ) : (
@@ -117,12 +117,12 @@ export default function StyledDropdown<T>({
                         !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
                       }`}
                     >
-                      <p className="line-clamp-1">{labelFunc(value)}</p>
+                      <p className="line-clamp-1 pb-0.5">{labelFunc(value)}</p>
                       {balanceFunc && !hideBalanceWhenClosed && <p>{balanceFunc(value)}</p>}
                     </span>
                     {descriptionFunc && (
                       <span className="text-dfxGray-800 text-xs h-min leading-none flex justify-between">
-                        <p className="line-clamp-1">{descriptionFunc(value)}</p>
+                        <p className="line-clamp-1 pb-0.5">{descriptionFunc(value)}</p>
                         {priceFunc && <p>{priceFunc(value)}</p>}
                       </span>
                     )}
