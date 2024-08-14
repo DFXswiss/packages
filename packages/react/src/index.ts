@@ -100,7 +100,16 @@ export {
 export { Sell, SellPaymentInfo } from './definitions/sell';
 export { Swap, SwapPaymentInfo } from './definitions/swap';
 export { Session } from './definitions/session';
-export { User, UserStatus, UserAddress, UserKyc, Referral, Volumes, VolumeInformation } from './definitions/user';
+export {
+  User,
+  UserStatus,
+  UserAddress,
+  UserKyc,
+  UserPaymentLink,
+  Referral,
+  Volumes,
+  VolumeInformation,
+} from './definitions/user';
 export { LnurlAuth, LnurlAuthStatus } from './definitions/auth';
 export {
   FiatPaymentMethod,
