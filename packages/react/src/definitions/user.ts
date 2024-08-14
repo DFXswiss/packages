@@ -61,6 +61,10 @@ export interface UserKyc {
   dataComplete: boolean;
 }
 
+export interface UserPaymentLink {
+  active: boolean;
+}
+
 export interface User {
   accountId: number;
   accountType: AccountType;
@@ -73,6 +77,7 @@ export interface User {
   volumes: Volumes;
   addresses: UserAddress[];
   activeAddress?: UserAddress;
+  paymentLink: UserPaymentLink;
 }
 
 export interface UpdateUser {
