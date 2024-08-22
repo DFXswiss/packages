@@ -76,6 +76,7 @@ export enum TransactionFailureReason {
   ASSET_KYC_NEEDED = 'AssetKycNeeded',
   CARD_NAME_MISMATCH = 'CardNameMismatch',
   USER_DELETED = 'UserDeleted',
+  VIDEO_IDENT_NEEDED = 'VideoIdentNeeded',
 }
 
 export interface UnassignedTransaction {
