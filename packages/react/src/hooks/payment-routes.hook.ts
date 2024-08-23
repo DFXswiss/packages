@@ -6,8 +6,10 @@ import {
   CreatePaymentLinkPayment,
   PaymentLink,
   PaymentLinksUrl,
+  PaymentRoute,
   PaymentRoutes,
   PaymentRoutesUrl,
+  PaymentRouteType,
   UpdatePaymentLink,
 } from '../definitions/route';
 
@@ -22,6 +24,7 @@ export interface PaymentRoutesInterface {
     externalId?: string,
   ) => Promise<PaymentLink>;
   cancelPaymentLinkPayment: (id?: number, externalId?: string) => Promise<PaymentLink>;
+  deletePaymentRoute: (id: number, type: PaymentRouteType) => Promise<PaymentRoute>;
 }
 
 export function usePaymentRoutes(): PaymentRoutesInterface {
@@ -81,6 +84,10 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     });
   }
 
+  async function deletePaymentRoute(id: number, type: PaymentRouteType): Promise<PaymentRoute> {
+    return call<PaymentRoute>({ url: `${type}/${id}`, method: 'PUT', data: { active: false } });
+  }
+
   return useMemo(
     () => ({
       getPaymentRoutes,
@@ -89,6 +96,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
       updatePaymentLink,
       createPaymentLinkPayment,
       cancelPaymentLinkPayment,
+      deletePaymentRoute,
     }),
     [call],
   );
