@@ -24,8 +24,8 @@ interface StyledDataTableExpandableRowProps extends PropsWithChildren {
 }
 
 const ALIGN_MAPS: Record<AlignContent, string> = {
-  [AlignContent.LEFT]: ' justify-start',
-  [AlignContent.RIGHT]: ' justify-end',
+  [AlignContent.LEFT]: ' justify-start text-left',
+  [AlignContent.RIGHT]: ' justify-end text-right',
   [AlignContent.BETWEEN]: ' justify-between',
 };
 
