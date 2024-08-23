@@ -5,6 +5,7 @@ import {
   PaymentLink,
   PaymentRoute,
   PaymentRoutes,
+  PaymentRouteType,
   UpdatePaymentLink,
 } from '../definitions/route';
 import { usePaymentRoutes } from '../hooks/payment-routes.hook';
@@ -20,6 +21,7 @@ interface PaymentRoutesInterface {
   updatePaymentLink: (request: UpdatePaymentLink, id?: number, externalId?: string) => Promise<void>;
   createPaymentLinkPayment: (request: CreatePaymentLinkPayment, id?: number, externalId?: string) => Promise<void>;
   cancelPaymentLinkPayment: (id?: number, externalId?: string) => Promise<void>;
+  deletePaymentRoute: (id: number, type: PaymentRouteType) => Promise<void>;
   error?: string;
 }
 
@@ -38,6 +40,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     updatePaymentLink: updatePaymentLinkApi,
     createPaymentLinkPayment: createPaymentLinkPaymentApi,
     cancelPaymentLinkPayment: cancelPaymentLinkPaymentApi,
+    deletePaymentRoute: deletePaymentRouteApi,
   } = usePaymentRoutes();
   const [error, setError] = useState<string | undefined>();
   const [paymentRoutes, setPaymentRoutes] = useState<PaymentRoutes>();
@@ -52,30 +55,8 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       return;
     }
 
-    // get routes
-    setPaymentRoutesLoading(true);
-    getPaymentRoutes()
-      .then((routes: PaymentRoutes) => {
-        routes.buy = routes.buy.filter((route) => route.active).sort(sortRoutes);
-        routes.sell = routes.sell.filter((route) => route.active).sort(sortRoutes);
-        routes.swap = routes.swap.filter((route) => route.active).sort(sortRoutes);
-        setPaymentRoutes(routes);
-      })
-      .catch((error: ApiError) => setError(error.message ?? 'Unknown error'))
-      .finally(() => setPaymentRoutesLoading(false));
-
-    // get payment links
-    setPaymentLinksLoading(true);
-    getPaymentLinks()
-      .then((links) => setPaymentLinks(links as PaymentLink[]))
-      .catch((error: ApiError) => {
-        if (error.message === 'permission denied') {
-          setPaymentLinks([]);
-        } else {
-          setError(error.message ?? 'Unknown error');
-        }
-      })
-      .finally(() => setPaymentLinksLoading(false));
+    loadPaymentRoutes();
+    loadPaymentLinks();
   }, [user]);
 
   async function createPaymentLink(request: CreatePaymentLink): Promise<PaymentLink | undefined> {
@@ -122,6 +103,55 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       .finally(() => setPaymentLinksLoading(false));
   }
 
+  async function deletePaymentRoute(id: number, type: PaymentRouteType): Promise<void> {
+    if (!user) return;
+
+    setPaymentRoutesLoading(true);
+    return deletePaymentRouteApi(id, type)
+      .then(() => {
+        setPaymentRoutes((routes) => {
+          if (!routes) return;
+          if (type === 'buy') routes.buy = routes.buy.filter((route) => route.id !== id);
+          else if (type === 'sell') routes.sell = routes.sell.filter((route) => route.id !== id);
+          else if (type === 'swap') routes.swap = routes.swap.filter((route) => route.id !== id);
+          return routes;
+        });
+      })
+      .then(loadPaymentLinks)
+      .finally(() => setPaymentRoutesLoading(false));
+  }
+
+  async function loadPaymentRoutes(): Promise<void> {
+    if (!user) return;
+
+    setPaymentRoutesLoading(true);
+    return getPaymentRoutes()
+      .then((routes: PaymentRoutes) => {
+        routes.buy = routes.buy.filter((route) => route.active).sort(sortRoutes);
+        routes.sell = routes.sell.filter((route) => route.active).sort(sortRoutes);
+        routes.swap = routes.swap.filter((route) => route.active).sort(sortRoutes);
+        setPaymentRoutes(routes);
+      })
+      .catch((error: ApiError) => setError(error.message ?? 'Unknown error'))
+      .finally(() => setPaymentRoutesLoading(false));
+  }
+
+  async function loadPaymentLinks(): Promise<void> {
+    if (!user) return;
+
+    setPaymentLinksLoading(true);
+    return getPaymentLinks()
+      .then((links) => setPaymentLinks(links as PaymentLink[]))
+      .catch((error: ApiError) => {
+        if (error.message === 'permission denied') {
+          setPaymentLinks([]);
+        } else {
+          setError(error.message ?? 'Unknown error');
+        }
+      })
+      .finally(() => setPaymentLinksLoading(false));
+  }
+
   function updatePaymentLinks(paymentLink: PaymentLink): void {
     setPaymentLinks((links) => {
       if (!links) return [paymentLink];
@@ -155,6 +185,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       updatePaymentLink,
       createPaymentLinkPayment,
       cancelPaymentLinkPayment,
+      deletePaymentRoute,
       error,
     }),
     [
@@ -168,6 +199,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       updatePaymentLink,
       createPaymentLinkPayment,
       cancelPaymentLinkPayment,
+      deletePaymentRoute,
     ],
   );
 

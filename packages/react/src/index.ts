@@ -46,6 +46,7 @@ export {
   SellRoute,
   SwapRoute,
   PaymentRoutes,
+  PaymentRouteType,
   PaymentRoute,
   PaymentLinkStatus,
   PaymentLinkPaymentStatus,

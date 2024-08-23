@@ -83,6 +83,7 @@ export interface PaymentRoutes {
 }
 
 export type PaymentRoute = BuyRoute | SellRoute | SwapRoute;
+export type PaymentRouteType = 'buy' | 'sell' | 'swap';
 
 export interface PaymentLink {
   id: string;
