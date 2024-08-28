@@ -18,9 +18,18 @@ interface PaymentRoutesInterface {
   paymentRoutesLoading: boolean;
   paymentLinksLoading: boolean;
   createPaymentLink: (request: CreatePaymentLink) => Promise<PaymentLink | undefined>;
-  updatePaymentLink: (request: UpdatePaymentLink, id?: number, externalId?: string) => Promise<void>;
-  createPaymentLinkPayment: (request: CreatePaymentLinkPayment, id?: number, externalId?: string) => Promise<void>;
-  cancelPaymentLinkPayment: (id?: number, externalId?: string) => Promise<void>;
+  updatePaymentLink: (
+    request: UpdatePaymentLink,
+    linkId?: string,
+    externalLinkId?: string,
+    externalPaymentId?: string,
+  ) => Promise<void>;
+  createPaymentLinkPayment: (
+    request: CreatePaymentLinkPayment,
+    linkId?: string,
+    externalLinkId?: string,
+  ) => Promise<void>;
+  cancelPaymentLinkPayment: (linkId?: string, externalLinkId?: string, externalPaymentId?: string) => Promise<void>;
   deletePaymentRoute: (id: number, type: PaymentRouteType) => Promise<void>;
   error?: string;
 }
@@ -72,33 +81,42 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     }
   }
 
-  async function updatePaymentLink(request: UpdatePaymentLink, id?: number, externalId?: string): Promise<void> {
+  async function updatePaymentLink(
+    request: UpdatePaymentLink,
+    linkId?: string,
+    externalLinkId?: string,
+    externalPaymentId?: string,
+  ): Promise<void> {
     if (!user) return;
 
     setPaymentLinksLoading(true);
-    return updatePaymentLinkApi(request, id, externalId)
+    return updatePaymentLinkApi(request, linkId, externalLinkId, externalPaymentId)
       .then(updatePaymentLinks)
       .finally(() => setPaymentLinksLoading(false));
   }
 
   async function createPaymentLinkPayment(
     request: CreatePaymentLinkPayment,
-    id?: number,
-    externalId?: string,
+    linkId?: string,
+    externalLinkId?: string,
   ): Promise<void> {
     if (!user) return;
 
     setPaymentLinksLoading(true);
-    return createPaymentLinkPaymentApi(request, id, externalId)
+    return createPaymentLinkPaymentApi(request, linkId, externalLinkId)
       .then(updatePaymentLinks)
       .finally(() => setPaymentLinksLoading(false));
   }
 
-  async function cancelPaymentLinkPayment(id?: number, externalId?: string): Promise<void> {
+  async function cancelPaymentLinkPayment(
+    linkId?: string,
+    externalLinkId?: string,
+    externalPaymentId?: string,
+  ): Promise<void> {
     if (!user) return;
 
     setPaymentLinksLoading(true);
-    return cancelPaymentLinkPaymentApi(id, externalId)
+    return cancelPaymentLinkPaymentApi(linkId, externalLinkId, externalPaymentId)
       .then(updatePaymentLinks)
       .finally(() => setPaymentLinksLoading(false));
   }
