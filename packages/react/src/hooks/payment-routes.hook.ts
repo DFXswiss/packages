@@ -15,15 +15,28 @@ import {
 
 export interface PaymentRoutesInterface {
   getPaymentRoutes: () => Promise<PaymentRoutes>;
-  getPaymentLinks: (id?: number, externalId?: string) => Promise<PaymentLink | PaymentLink[]>;
+  getPaymentLinks: (
+    linkId?: string,
+    externalLinkId?: string,
+    externalPaymentId?: string,
+  ) => Promise<PaymentLink | PaymentLink[]>;
   createPaymentLink: (request: CreatePaymentLink) => Promise<PaymentLink>;
-  updatePaymentLink: (request: UpdatePaymentLink, id?: number, externalId?: string) => Promise<PaymentLink>;
+  updatePaymentLink: (
+    request: UpdatePaymentLink,
+    linkId?: string,
+    externalLinkId?: string,
+    externalPaymentId?: string,
+  ) => Promise<PaymentLink>;
   createPaymentLinkPayment: (
     request: CreatePaymentLinkPayment,
-    id?: number,
-    externalId?: string,
+    linkId?: string,
+    externalLinkId?: string,
   ) => Promise<PaymentLink>;
-  cancelPaymentLinkPayment: (id?: number, externalId?: string) => Promise<PaymentLink>;
+  cancelPaymentLinkPayment: (
+    linkId?: string,
+    externalLinkId?: string,
+    externalPaymentId?: string,
+  ) => Promise<PaymentLink>;
   deletePaymentRoute: (id: number, type: PaymentRouteType) => Promise<PaymentRoute>;
 }
 
@@ -34,8 +47,12 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     return call<PaymentRoutes>({ url: PaymentRoutesUrl.get, method: 'GET' });
   }
 
-  async function getPaymentLinks(id?: number, externalId?: string): Promise<PaymentLink | PaymentLink[]> {
-    const queryParams = Utils.buildQueryParams({ id, externalId });
+  async function getPaymentLinks(
+    linkId?: string,
+    externalLinkId?: string,
+    externalPaymentId?: string,
+  ): Promise<PaymentLink | PaymentLink[]> {
+    const queryParams = Utils.buildQueryParams({ linkId, externalLinkId, externalPaymentId });
 
     return call<PaymentLink | PaymentLink[]>({
       url: `${PaymentLinksUrl.get}?${queryParams}`,
@@ -51,8 +68,13 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     });
   }
 
-  async function updatePaymentLink(request: UpdatePaymentLink, id?: number, externalId?: string): Promise<PaymentLink> {
-    const queryParams = Utils.buildQueryParams({ id, externalId });
+  async function updatePaymentLink(
+    request: UpdatePaymentLink,
+    linkId?: string,
+    externalLinkId?: string,
+    externalPaymentId?: string,
+  ): Promise<PaymentLink> {
+    const queryParams = Utils.buildQueryParams({ linkId, externalLinkId, externalPaymentId });
 
     return call({
       url: `${PaymentLinksUrl.update}?${queryParams}`,
@@ -63,10 +85,10 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
 
   async function createPaymentLinkPayment(
     request: CreatePaymentLinkPayment,
-    id?: number,
-    externalId?: string,
+    linkId?: string,
+    externalLinkId?: string,
   ): Promise<PaymentLink> {
-    const queryParams = Utils.buildQueryParams({ id, externalId });
+    const queryParams = Utils.buildQueryParams({ linkId, externalLinkId });
 
     return call<PaymentLink>({
       url: `${PaymentLinksUrl.payment}?${queryParams}`,
@@ -75,8 +97,12 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     });
   }
 
-  async function cancelPaymentLinkPayment(id?: number, externalId?: string): Promise<PaymentLink> {
-    const queryParams = Utils.buildQueryParams({ id, externalId });
+  async function cancelPaymentLinkPayment(
+    linkId?: string,
+    externalLinkId?: string,
+    externalPaymentId?: string,
+  ): Promise<PaymentLink> {
+    const queryParams = Utils.buildQueryParams({ linkId, externalLinkId, externalPaymentId });
 
     return call<PaymentLink>({
       url: `${PaymentLinksUrl.payment}?${queryParams}`,
