@@ -20,7 +20,8 @@ interface StyledDataTableExpandableRowProps extends PropsWithChildren {
   infoText?: string;
   noPadding?: boolean;
   isExpanded?: boolean;
-  expansionItems: ExpansionItem[];
+  expansionItems?: ExpansionItem[];
+  expansionContent?: JSX.Element;
 }
 
 const ALIGN_MAPS: Record<AlignContent, string> = {
@@ -37,6 +38,7 @@ export default function StyledDataTableExpandableRow({
   infoText,
   noPadding,
   expansionItems,
+  expansionContent,
   ...props
 }: StyledDataTableExpandableRowProps) {
   const theme = useContext(ThemeContext);
@@ -75,6 +77,10 @@ export default function StyledDataTableExpandableRow({
     }
   }, [props.isExpanded]);
 
+  const hasExpansionItems = !!expansionItems?.length;
+  const hasExpansionContent = !!expansionContent;
+  const hasExpansion = hasExpansionItems || hasExpansionContent;
+
   return (
     <div className={wrapperClasses}>
       <div className="flex w-full justify-between">
@@ -91,7 +97,7 @@ export default function StyledDataTableExpandableRow({
               onClick={() => setIsExpanded((e) => !e)}
             >
               {children}
-              {expansionItems.length > 0 && (
+              {hasExpansion && (
                 <DfxIcon icon={isExpanded ? IconVariant.EXPAND_LESS : IconVariant.EXPAND_MORE} size={IconSize.LG} />
               )}
             </div>
@@ -100,7 +106,7 @@ export default function StyledDataTableExpandableRow({
       </div>
       {!isLoading && (
         <>
-          {expansionItems.length > 0 && isExpanded && (
+          {hasExpansion && isExpanded && (
             <div className="flex flex-col w-full">
               {infoText && (
                 <div className="mt-1">
@@ -110,26 +116,30 @@ export default function StyledDataTableExpandableRow({
                 </div>
               )}
               <div className={separatorClasses} />
-              {expansionItems.map(({ label, text, infoText, icon, iconColor, onClick }) => (
-                <div className="flex flex-col w-full">
-                  <div key={label} className="flex w-full justify-between">
-                    <p className={labelClasses}>{label}</p>
-                    <button className="flex flex-row items-center gap-2" onClick={onClick} disabled={!onClick}>
-                      <p className={rowDataClasses}>{text}</p>
-                      {icon && <DfxIcon icon={icon} color={iconColor} size={IconSize.SM} />}
-                    </button>
+              {hasExpansionItems ? (
+                expansionItems.map(({ label, text, infoText, icon, iconColor, onClick }) => (
+                  <div className="flex flex-col w-full">
+                    <div key={label} className="flex w-full justify-between">
+                      <p className={labelClasses}>{label}</p>
+                      <button className="flex flex-row items-center gap-2" onClick={onClick} disabled={!onClick}>
+                        <p className={rowDataClasses}>{text}</p>
+                        {icon && <DfxIcon icon={icon} color={iconColor} size={IconSize.SM} />}
+                      </button>
+                    </div>
+                    <div className="my-1 text-left">
+                      {infoText && (
+                        <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
+                          {infoText.split('\n').map((line) => (
+                            <div key={line}>{line}</div>
+                          ))}
+                        </StyledInfoText>
+                      )}
+                    </div>
                   </div>
-                  <div className="my-1 text-left">
-                    {infoText && (
-                      <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
-                        {infoText.split('\n').map((line) => (
-                          <div key={line}>{line}</div>
-                        ))}
-                      </StyledInfoText>
-                    )}
-                  </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <div className="mt-1">{expansionContent}</div>
+              )}
             </div>
           )}
         </>

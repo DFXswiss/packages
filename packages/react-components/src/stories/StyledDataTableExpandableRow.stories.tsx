@@ -22,4 +22,9 @@ Default.args = {
       infoText: 'This is the RPC URL for the Ethereum Mainnet. \nThis is a second line.',
     },
   ],
+  expansionContent: (
+    <div className="flex w-full justify-center items-center p-2">
+      <img src="https://via.placeholder.com/150" alt="placeholder" className="w-24 h-24" />
+    </div>
+  ),
 };
