@@ -12,6 +12,7 @@ export enum AssetIconVariant {
   DFI = 'DFI',
   USDC = 'USDC',
   USDCe = 'USDC.e',
+  USDbC = 'USDbC',
   BUSD = 'BUSD',
   ETH = 'ETH',
   DAI = 'DAI',
@@ -52,6 +53,7 @@ export enum AssetIconVariant {
   ISLM = 'ISLM',
   MKX = 'MKX',
   TGT = 'TGT',
+  EURS = 'EURS',
 
   EUR = 'EUR',
   USD = 'USD',
@@ -79,6 +81,7 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.DFI]: ({ forceColor }) => <DfxAssetIconDFI forceColor={forceColor} />,
   [AssetIconVariant.USDC]: ({ forceColor }) => <DfxAssetIconUSDC forceColor={forceColor} />,
   [AssetIconVariant.USDCe]: ({ forceColor }) => <DfxAssetIconUSDC forceColor={forceColor} />,
+  [AssetIconVariant.USDbC]: ({ forceColor }) => <DfxAssetIconUSDC forceColor={forceColor} />,
   [AssetIconVariant.BUSD]: ({ forceColor }) => <DfxAssetIconBUSD forceColor={forceColor} />,
   [AssetIconVariant.ETH]: ({ forceColor }) => <DfxAssetIconETH forceColor={forceColor} />,
   [AssetIconVariant.DAI]: ({ forceColor }) => <DfxAssetIconDAI forceColor={forceColor} />,
@@ -119,6 +122,7 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.ISLM]: ({ forceColor }) => <DfxAssetIconISLM forceColor={forceColor} />,
   [AssetIconVariant.MKX]: ({ forceColor }) => <DfxAssetIconMKX forceColor={forceColor} />,
   [AssetIconVariant.TGT]: ({ forceColor }) => <DfxAssetIconTGT forceColor={forceColor} />,
+  [AssetIconVariant.EURS]: ({ forceColor }) => <DfxAssetIconEURS forceColor={forceColor} />,
 
   [AssetIconVariant.EUR]: ({ forceColor }) => <DfxAssetIconEUR forceColor={forceColor} />,
   [AssetIconVariant.USD]: ({ forceColor }) => <DfxAssetIconUSD forceColor={forceColor} />,
@@ -4560,6 +4564,68 @@ function DfxAssetIconTGT({ forceColor }: BaseAssetIconProps) {
           <stop offset={1} stopColor={forceColor ?? '#0CF'} />
         </linearGradient>
       </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconEURS({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 2500 2500"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <linearGradient
+        id="eurs-a"
+        x1={807.865}
+        x2={1255.864}
+        y1={1219.284}
+        y2={1716.284}
+        gradientTransform="matrix(3.7369 0 0 -3.7369 -2605.549 6734.046)"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop
+          offset={0}
+          style={{
+            stopColor: '#15bcff',
+          }}
+        />
+        <stop
+          offset={0.361}
+          style={{
+            stopColor: '#219bf6',
+          }}
+        />
+        <stop
+          offset={0.502}
+          style={{
+            stopColor: '#2d79ed',
+          }}
+        />
+        <stop
+          offset={0.722}
+          style={{
+            stopColor: '#725ded',
+          }}
+        />
+        <stop
+          offset={1}
+          style={{
+            stopColor: '#b741ee',
+          }}
+        />
+      </linearGradient>
+      <path
+        d="M1251.9 2500C560.5 2500 0 1939.5 0 1248.1S560.5-3.7 1251.9-3.7c93.4 0 183.1 11.2 269.1 29.9-183.1 63.5-343.8 160.7-478.3 287.7s-243 280.3-306.5 455.9H467.1l-130.8 299h325.1c-3.7 41.1-7.5 82.2-7.5 123.3 0 67.3 7.5 134.5 18.7 198.1H429.7l-112.1 299H766c67.3 142 160.7 269.1 276.5 377.4 183.1 171.9 418.5 295.2 683.9 340.1-145.7 59.7-306.4 93.3-474.5 93.3zm646.5-2324.4C2264.6 384.9 2500 833.3 2500 1251.9c0 366.2-164.4 710-437.2 952.9-310.2 63.5-594.2-85.9-818.4-310.2-44.8-44.8-82.2-119.6-119.6-179.4-3.7-7.5-11.2-14.9-14.9-22.4h728.7l108.4-287.7H979.1c-11.2-48.6-18.7-100.9-22.4-153.2 0-18.7-3.7-37.4-3.7-56.1v-7.4c0-44.8 3.7-89.7 7.5-130.8h1121.1l115.8-284h-1136c48.6-93.4 108.4-213 183.1-287.7 179.4-179.4 399.9-321.4 650.2-310.2h3.7z"
+        style={{
+          fillRule: 'evenodd',
+          clipRule: 'evenodd',
+          fill: forceColor ?? 'url(#eurs-a)',
+        }}
+      />
     </svg>
   );
 }
