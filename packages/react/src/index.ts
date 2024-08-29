@@ -128,7 +128,14 @@ export {
   TransactionFilterKey,
 } from './definitions/transaction';
 export { Fees } from './definitions/fees';
-export { CreateSupportIssue, CreateSupportMessage, SupportIssueReason, TransactionIssue } from './definitions/support';
+export {
+  CreateSupportIssue,
+  CreateSupportMessage,
+  SupportIssueReason,
+  SupportIssueType,
+  TransactionIssue,
+  LimitRequestIssue,
+} from './definitions/support';
 
 // Utils & Validations
 export { Utils } from './utils';
