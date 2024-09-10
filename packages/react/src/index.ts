@@ -135,6 +135,12 @@ export {
   SupportIssueType,
   TransactionIssue,
   LimitRequestIssue,
+  SupportIssue,
+  SupportIssueTransaction,
+  SupportIssueLimitRequest,
+  SupportMessage,
+  BlobContent,
+  SupportIssueState,
 } from './definitions/support';
 
 // Utils & Validations

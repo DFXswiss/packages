@@ -1,9 +1,11 @@
 import { Limit, InvestmentDate, FundOrigin } from './kyc';
 
 export const SupportUrl = {
-  createGeneralIssue: 'support/issue',
-  createTransactionIssue: (id: number) => `support/issue/transaction?id=${id}`,
+  createIssue: 'support/issue',
   createMessage: (id: number) => `support/issue/${id}/message`,
+  getIssue: (id: number, fromMessageId?: number) =>
+    `support/issue/${id}${fromMessageId ? `?fromMessageId=${fromMessageId}` : ''}`,
+  fetchFileData: (issueId: number, messageId: number) => `support/issue/${issueId}/message/${messageId}/file`,
 };
 
 export enum SupportIssueType {
@@ -23,6 +25,53 @@ export enum SupportIssueReason {
   TRANSACTION_MISSING = 'TransactionMissing',
 }
 
+export enum SupportIssueState {
+  CREATED = 'Created',
+  PENDING = 'Pending',
+  COMPLETED = 'Completed',
+}
+
+// --- CORE INTERFACES --- //
+
+export interface SupportMessage {
+  id: number;
+  author: string;
+  created: Date;
+  message: string;
+  fileUrl?: string;
+  fileName?: string;
+}
+
+export interface SupportIssueTransaction {
+  uid: string;
+  url: string;
+}
+
+export interface SupportIssueLimitRequest {
+  id: number;
+  limit: number;
+}
+
+export interface SupportIssue {
+  id: number;
+  state: SupportIssueState;
+  type: SupportIssueType;
+  reason: SupportIssueReason;
+  name: string;
+  created: Date;
+  messages: SupportMessage[];
+  information?: string;
+  transaction?: SupportIssueTransaction;
+  limitRequest?: SupportIssueLimitRequest;
+}
+
+export interface BlobContent {
+  data: any;
+  contentType: string;
+}
+
+// --- CREATE INTERFACES --- //
+
 export interface TransactionIssue {
   id?: number;
   senderIban?: string;
@@ -38,7 +87,8 @@ export interface LimitRequestIssue {
 }
 
 export interface CreateSupportMessage {
-  message: string;
+  author?: string;
+  message?: string;
   file?: string;
   fileName?: string;
 }
