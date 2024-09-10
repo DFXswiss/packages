@@ -51,4 +51,13 @@ export class Utils {
       .map((key) => `${key}=${encodeURIComponent(params[key] as string)}`)
       .join('&');
   }
+
+  static toBase64(file: File): Promise<string | undefined> {
+    return new Promise<string | undefined>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result ? (reader.result as string) : undefined);
+      reader.onerror = (e) => reject(e);
+    });
+  }
 }

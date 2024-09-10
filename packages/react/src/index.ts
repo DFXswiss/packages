@@ -8,6 +8,7 @@ export { useBankAccountContext } from './contexts/bank-account.context';
 export { useSessionContext } from './contexts/session.context';
 export { useUserContext } from './contexts/user.context';
 export { usePaymentRoutesContext } from './contexts/payment-routes.context';
+export { useSupportChatContext } from './contexts/support.context';
 
 // Hooks
 export { useApiSession } from './hooks/api-session.hook';
