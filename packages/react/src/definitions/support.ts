@@ -31,15 +31,30 @@ export enum SupportIssueState {
   COMPLETED = 'Completed',
 }
 
-// --- CORE INTERFACES --- //
+export enum SupportMessageStatus {
+  SENT = 'Sent',
+  RECEIVED = 'Received',
+  FAILED = 'Failed',
+}
 
-export interface SupportMessage {
-  id: number;
-  author: string;
-  created: Date;
-  message: string;
-  fileUrl?: string;
-  fileName?: string;
+export const CustomerAuthor = 'Customer';
+
+// --- CORE INTERFACES --- //
+export interface Reaction {
+  emoji: string;
+  users: string[];
+}
+
+export interface BlobContent {
+  data: any;
+  contentType: string;
+}
+
+export interface DataFile {
+  file: string;
+  type: string;
+  size: number;
+  url: string;
 }
 
 export interface SupportIssueTransaction {
@@ -50,6 +65,21 @@ export interface SupportIssueTransaction {
 export interface SupportIssueLimitRequest {
   id: number;
   limit: number;
+}
+
+export interface SupportMessage {
+  id: number;
+  author: string;
+  created: Date;
+  message: string;
+  fileUrl?: string;
+  fileName?: string;
+
+  // frontend only fields
+  file?: DataFile;
+  status?: SupportMessageStatus;
+  replyTo?: number;
+  reactions?: Reaction[];
 }
 
 export interface SupportIssue {
@@ -63,11 +93,6 @@ export interface SupportIssue {
   information?: string;
   transaction?: SupportIssueTransaction;
   limitRequest?: SupportIssueLimitRequest;
-}
-
-export interface BlobContent {
-  data: any;
-  contentType: string;
 }
 
 // --- CREATE INTERFACES --- //

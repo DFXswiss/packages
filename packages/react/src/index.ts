@@ -140,7 +140,11 @@ export {
   SupportIssueLimitRequest,
   SupportMessage,
   BlobContent,
+  DataFile,
   SupportIssueState,
+  SupportMessageStatus,
+  Reaction,
+  CustomerAuthor,
 } from './definitions/support';
 
 // Utils & Validations
