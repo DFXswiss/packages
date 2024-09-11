@@ -71,8 +71,7 @@ export interface SupportMessage {
   id: number;
   author: string;
   created: Date;
-  message: string;
-  fileUrl?: string;
+  message?: string;
   fileName?: string;
 
   // frontend only fields
