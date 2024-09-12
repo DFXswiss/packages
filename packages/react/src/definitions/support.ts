@@ -89,7 +89,6 @@ export interface SupportIssue {
   name: string;
   created: Date;
   messages: SupportMessage[];
-  information?: string;
   transaction?: SupportIssueTransaction;
   limitRequest?: SupportIssueLimitRequest;
 }
