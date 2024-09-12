@@ -112,7 +112,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
       const newMessage: SupportMessage = {
         id: messageId,
         author: CustomerAuthor,
-        message: index === modFiles.length - 1 ? message : undefined,
+        message: index === modFiles.length - 1 && hasText ? message : undefined,
         file: dataFile,
         fileName: file?.name,
         created: new Date(),
