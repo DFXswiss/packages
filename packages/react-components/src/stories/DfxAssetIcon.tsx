@@ -20,6 +20,7 @@ export enum AssetIconVariant {
   WBTC = 'WBTC',
   BTCB = 'BTCB',
   MATIC = 'MATIC',
+  POL = 'POL',
   GMX = 'GMX',
   CHZ = 'CHZ',
   RPL = 'RPL',
@@ -88,7 +89,8 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.BTC]: ({ forceColor }) => <DfxAssetIconBTC forceColor={forceColor} />,
   [AssetIconVariant.WBTC]: ({ forceColor }) => <DfxAssetIconWBTC forceColor={forceColor} />,
   [AssetIconVariant.BTCB]: ({ forceColor }) => <DfxAssetIconBTCB forceColor={forceColor} />,
-  [AssetIconVariant.MATIC]: ({ forceColor }) => <DfxAssetIconMATIC forceColor={forceColor} />,
+  [AssetIconVariant.MATIC]: ({ forceColor }) => <DfxAssetIconPOL forceColor={forceColor} />,
+  [AssetIconVariant.POL]: ({ forceColor }) => <DfxAssetIconPOL forceColor={forceColor} />,
   [AssetIconVariant.GMX]: ({ forceColor }) => <DfxAssetIconGMX forceColor={forceColor} />,
   [AssetIconVariant.CHZ]: ({ forceColor }) => <DfxAssetIconCHZ forceColor={forceColor} />,
   [AssetIconVariant.RPL]: ({ forceColor }) => <DfxAssetIconRPL forceColor={forceColor} />,
@@ -369,7 +371,7 @@ function DfxAssetIconBNB({ forceColor }: BaseAssetIconProps) {
   );
 }
 
-function DfxAssetIconMATIC({ forceColor }: BaseAssetIconProps) {
+function DfxAssetIconPOL({ forceColor }: BaseAssetIconProps) {
   const sizeContext = useContext(SizeContext);
   return (
     <svg

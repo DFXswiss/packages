@@ -1,5 +1,7 @@
 // Contexts
 export { DfxContextProvider } from './contexts/dfx.context';
+export { PaymentRoutesContextProvider } from './contexts/payment-routes.context';
+
 export { useAssetContext } from './contexts/asset.context';
 export { useFiatContext } from './contexts/fiat.context';
 export { useLanguageContext } from './contexts/language.context';
