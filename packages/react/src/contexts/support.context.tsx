@@ -16,7 +16,7 @@ interface SupportChatInterface {
   isError?: string;
   loadSupportIssue: (id: number) => Promise<void>;
   createSupportIssue: (request: CreateSupportIssue, file?: File) => Promise<number>;
-  submitMessage: (message: string, files: File[], replyToMessage?: SupportMessage) => Promise<void>;
+  submitMessage: (message?: string, files?: File[], replyToMessage?: SupportMessage) => Promise<void>;
   handleEmojiClick: (messageId: number, emoji: string) => void;
   loadFileData: (messageId: number) => Promise<void>;
   setSync: (sync: boolean) => void;
@@ -76,7 +76,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
         id: messageId,
         author: CustomerAuthor,
         created: new Date(),
-        message: request.message || '',
+        message: request.message,
         fileName: file?.name,
         file: dataFile,
         status: SupportMessageStatus.SENT,
@@ -96,15 +96,15 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
     }
   }
 
-  async function submitMessage(message: string, files: File[], replyToMessage?: SupportMessage): Promise<void> {
+  async function submitMessage(message?: string, files?: File[], replyToMessage?: SupportMessage): Promise<void> {
     if (!supportIssue) return;
 
-    const hasText = message.trim() !== '';
-    const numFiles = files.length;
+    const hasText = message && message.trim() !== '';
+    const hasFiles = files && files.length > 0;
 
-    if (!hasText && numFiles === 0) return;
+    if (!hasText && !hasFiles) return;
 
-    const modFiles = numFiles !== 1 && hasText ? [...files, undefined] : files;
+    const modFiles = files?.length !== 1 && hasText ? [...(files ?? []), undefined] : files ?? [];
     modFiles.forEach(async (file: File | undefined, index) => {
       const dataFile = file && (await mapFileToDataFile(file));
       const messageId = getNextUnsettledMessageId();
@@ -112,7 +112,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
       const newMessage: SupportMessage = {
         id: messageId,
         author: CustomerAuthor,
-        message: index === modFiles.length - 1 ? message : '',
+        message: index === modFiles.length - 1 ? message : undefined,
         file: dataFile,
         fileName: file?.name,
         created: new Date(),
