@@ -118,8 +118,8 @@ export default function StyledDataTableExpandableRow({
               <div className={separatorClasses} />
               {hasExpansionItems ? (
                 expansionItems.map(({ label, text, infoText, icon, iconColor, onClick }) => (
-                  <div className="flex flex-col w-full">
-                    <div key={label} className="flex w-full justify-between">
+                  <div key={label} className="flex flex-col w-full">
+                    <div className="flex w-full justify-between">
                       <p className={labelClasses}>{label}</p>
                       <button className="flex flex-row items-center gap-2" onClick={onClick} disabled={!onClick}>
                         <p className={rowDataClasses}>{text}</p>
