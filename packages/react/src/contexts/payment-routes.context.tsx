@@ -155,7 +155,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
   }
 
   async function loadPaymentLinks(): Promise<void> {
-    if (!user) return;
+    if (!user || !user.paymentLink.active) return;
 
     setPaymentLinksLoading(true);
     return getPaymentLinks()
