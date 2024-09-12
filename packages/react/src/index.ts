@@ -146,7 +146,6 @@ export {
   SupportIssueState,
   SupportMessageStatus,
   Reaction,
-  CustomerAuthor,
 } from './definitions/support';
 
 // Utils & Validations

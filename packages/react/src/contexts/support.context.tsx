@@ -4,7 +4,6 @@ import {
   SupportIssue,
   CreateSupportIssue,
   SupportMessage,
-  CustomerAuthor,
   SupportMessageStatus,
   DataFile,
 } from '../definitions/support';
@@ -74,7 +73,6 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
       if (!supportIssue) return supportIssue;
       supportIssue.messages.push({
         id: messageId,
-        author: CustomerAuthor,
         created: new Date(),
         message: request.message,
         fileName: file?.name,
@@ -111,7 +109,6 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
 
       const newMessage: SupportMessage = {
         id: messageId,
-        author: CustomerAuthor,
         message: index === modFiles.length - 1 && hasText ? message : undefined,
         file: dataFile,
         fileName: file?.name,
@@ -126,7 +123,11 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
         return { ...supportIssue };
       });
 
-      createMessage(supportIssue.id, { ...newMessage, file: dataFile?.file })
+      createMessage(supportIssue.id, {
+        message: newMessage.message,
+        file: dataFile?.file,
+        fileName: newMessage.fileName,
+      })
         .then((response) => settleMessage(messageId, response))
         .catch(() => settleMessage(messageId));
     });
@@ -155,7 +156,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
     });
   }
 
-  function handleEmojiClick(messageId: number, emoji: string) {
+  function handleEmojiClick(messageId: number, emoji: string, user = 'Customer') {
     if (!supportIssue) return;
 
     const messageIndex = supportIssue.messages.findIndex((m) => m.id === messageId);
@@ -165,11 +166,11 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
     if (!message.reactions) message.reactions = [];
     const reactionIndex = message.reactions?.findIndex((r) => r.emoji === emoji);
     if (reactionIndex === -1) {
-      message.reactions.push({ emoji, users: [CustomerAuthor] });
+      message.reactions.push({ emoji, users: [user] });
     } else {
-      const userIndex = message.reactions[reactionIndex].users.indexOf(CustomerAuthor);
+      const userIndex = message.reactions[reactionIndex].users.indexOf(user);
       if (userIndex === -1) {
-        message.reactions[reactionIndex].users.push(CustomerAuthor);
+        message.reactions[reactionIndex].users.push(user);
       } else {
         message.reactions[reactionIndex].users.splice(userIndex, 1);
         if (message.reactions[reactionIndex].users.length === 0) {

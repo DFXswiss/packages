@@ -37,8 +37,6 @@ export enum SupportMessageStatus {
   FAILED = 'Failed',
 }
 
-export const CustomerAuthor = 'Customer';
-
 // --- CORE INTERFACES --- //
 export interface Reaction {
   emoji: string;
@@ -69,7 +67,7 @@ export interface SupportIssueLimitRequest {
 
 export interface SupportMessage {
   id: number;
-  author: string;
+  author?: string; // undefined for unsettled messages
   created: Date;
   message?: string;
   fileName?: string;
