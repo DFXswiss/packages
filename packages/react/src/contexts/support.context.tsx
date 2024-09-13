@@ -13,8 +13,8 @@ interface SupportChatInterface {
   supportIssue?: SupportIssue;
   isLoading: boolean;
   isError?: string;
-  loadSupportIssue: (id: number) => Promise<void>;
-  createSupportIssue: (request: CreateSupportIssue, file?: File) => Promise<number>;
+  loadSupportIssue: (id: string) => Promise<void>;
+  createSupportIssue: (request: CreateSupportIssue, file?: File) => Promise<string>;
   submitMessage: (message?: string, files?: File[], replyToMessage?: SupportMessage) => Promise<void>;
   handleEmojiClick: (messageId: number, emoji: string) => void;
   loadFileData: (messageId: number) => Promise<void>;
@@ -41,7 +41,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
     return () => clearInterval(interval);
   }, [supportIssue, sync]);
 
-  async function loadSupportIssue(id: number): Promise<void> {
+  async function loadSupportIssue(id: string): Promise<void> {
     if (!id || id === supportIssue?.id) return;
 
     setSupportIssue(undefined);
@@ -65,7 +65,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
       .finally(() => setIsSyncing(false));
   }
 
-  async function createSupportIssue(request: CreateSupportIssue, file?: File): Promise<number> {
+  async function createSupportIssue(request: CreateSupportIssue, file?: File): Promise<string> {
     const dataFile = file && (await mapFileToDataFile(file));
     const messageId = getNextUnsettledMessageId();
 
