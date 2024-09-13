@@ -48,9 +48,8 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
     setIsLoading(true);
     setIsError(undefined);
 
-    getIssue(id)
+    return getIssue(id)
       .then((response) => setSupportIssue(response))
-      .catch(() => setIsError('Error while fetching support issue'))
       .finally(() => setIsLoading(false));
   }
 
@@ -58,10 +57,11 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
     if (!supportIssue || isLoading || isSyncing) return;
 
     setIsSyncing(true);
+    setIsError(undefined);
     const fromMessageId = supportIssue.messages[supportIssue.messages.length - 1].id;
-    getIssue(supportIssue.id, fromMessageId)
+    return getIssue(supportIssue.id, fromMessageId)
       .then((response) => updateSupportIssue(response))
-      .catch(() => setIsError('Error while fetching support messages'))
+      .catch(() => setIsError('Error while syncing messages'))
       .finally(() => setIsSyncing(false));
   }
 
