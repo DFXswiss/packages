@@ -16,7 +16,7 @@ export interface SupportInterface {
   fetchFileData: (issueId: number, messageId: number) => Promise<BlobContent>;
 }
 
-export function useSupport(): SupportInterface {
+export function useSupportChat(): SupportInterface {
   const { call } = useApi();
 
   async function createIssue(request: CreateSupportIssue): Promise<SupportIssue> {

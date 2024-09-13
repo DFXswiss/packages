@@ -7,7 +7,7 @@ import {
   SupportMessageStatus,
   DataFile,
 } from '../definitions/support';
-import { useSupport } from '../hooks/support.hook';
+import { useSupportChat } from '../hooks/support.hook';
 
 interface SupportChatInterface {
   supportIssue?: SupportIssue;
@@ -26,7 +26,7 @@ const SupportChatContext = createContext<SupportChatInterface>(undefined as any)
 export const useSupportChatContext = () => useContext(SupportChatContext);
 
 export function SupportChatContextProvider(props: PropsWithChildren): JSX.Element {
-  const { getIssue, createIssue, createMessage, fetchFileData } = useSupport();
+  const { getIssue, createIssue, createMessage, fetchFileData } = useSupportChat();
 
   const currUnsettledMessageId = useRef(0);
 
@@ -200,7 +200,17 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
       loadFileData,
       setSync,
     }),
-    [supportIssue, isLoading, isError],
+    [
+      supportIssue,
+      isLoading,
+      isError,
+      loadSupportIssue,
+      createSupportIssue,
+      submitMessage,
+      handleEmojiClick,
+      loadFileData,
+      setSync,
+    ],
   );
 
   // --- HELPER FUNCTIONS --- //

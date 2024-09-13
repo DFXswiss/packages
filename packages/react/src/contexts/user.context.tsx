@@ -6,7 +6,7 @@ import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
 import { Language } from '../definitions/language';
 import { Fiat } from '../definitions/fiat';
-import { TransactionFilter, TransactionFilterKey } from '../definitions/transaction';
+import { TransactionFilterKey } from '../definitions/transaction';
 
 interface UserInterface {
   user?: User;
