@@ -13,8 +13,8 @@ interface SupportChatInterface {
   supportIssue?: SupportIssue;
   isLoading: boolean;
   isError?: string;
-  loadSupportIssue: (id: number) => Promise<void>;
-  createSupportIssue: (request: CreateSupportIssue, file?: File) => Promise<number>;
+  loadSupportIssue: (id: string) => Promise<void>;
+  createSupportIssue: (request: CreateSupportIssue, file?: File) => Promise<string>;
   submitMessage: (message?: string, files?: File[], replyToMessage?: SupportMessage) => Promise<void>;
   handleEmojiClick: (messageId: number, emoji: string) => void;
   loadFileData: (messageId: number) => Promise<void>;
@@ -41,16 +41,15 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
     return () => clearInterval(interval);
   }, [supportIssue, sync]);
 
-  async function loadSupportIssue(id: number): Promise<void> {
+  async function loadSupportIssue(id: string): Promise<void> {
     if (!id || id === supportIssue?.id) return;
 
     setSupportIssue(undefined);
     setIsLoading(true);
     setIsError(undefined);
 
-    getIssue(id)
+    return getIssue(id)
       .then((response) => setSupportIssue(response))
-      .catch(() => setIsError('Error while fetching support issue'))
       .finally(() => setIsLoading(false));
   }
 
@@ -58,14 +57,15 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
     if (!supportIssue || isLoading || isSyncing) return;
 
     setIsSyncing(true);
+    setIsError(undefined);
     const fromMessageId = supportIssue.messages[supportIssue.messages.length - 1].id;
-    getIssue(supportIssue.id, fromMessageId)
+    return getIssue(supportIssue.id, fromMessageId)
       .then((response) => updateSupportIssue(response))
-      .catch(() => setIsError('Error while fetching support messages'))
+      .catch(() => setIsError('Error while syncing messages'))
       .finally(() => setIsSyncing(false));
   }
 
-  async function createSupportIssue(request: CreateSupportIssue, file?: File): Promise<number> {
+  async function createSupportIssue(request: CreateSupportIssue, file?: File): Promise<string> {
     const dataFile = file && (await mapFileToDataFile(file));
     const messageId = getNextUnsettledMessageId();
 
