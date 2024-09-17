@@ -11,9 +11,9 @@ import {
 
 export interface SupportInterface {
   createIssue: (request: CreateSupportIssue) => Promise<SupportIssue>;
-  createMessage: (issueId: string, message: CreateSupportMessage) => Promise<SupportMessage>;
-  getIssue: (issueId: string, fromMessageId?: number) => Promise<SupportIssue>;
-  fetchFileData: (issueId: string, messageId: number) => Promise<BlobContent>;
+  createMessage: (issueUid: string, message: CreateSupportMessage) => Promise<SupportMessage>;
+  getIssue: (issueUid: string, fromMessageId?: number) => Promise<SupportIssue>;
+  fetchFileData: (issueUid: string, messageId: number) => Promise<BlobContent>;
 }
 
 export function useSupportChat(): SupportInterface {
@@ -27,24 +27,24 @@ export function useSupportChat(): SupportInterface {
     });
   }
 
-  async function getIssue(issueId: string, fromMessageId?: number): Promise<SupportIssue> {
+  async function getIssue(issueUid: string, fromMessageId?: number): Promise<SupportIssue> {
     return call<SupportIssue>({
-      url: SupportUrl.getIssue(issueId, fromMessageId),
+      url: SupportUrl.getIssue(issueUid, fromMessageId),
       method: 'GET',
     });
   }
 
-  async function createMessage(issueId: string, message: CreateSupportMessage): Promise<SupportMessage> {
+  async function createMessage(issueUid: string, message: CreateSupportMessage): Promise<SupportMessage> {
     return call<SupportMessage>({
-      url: SupportUrl.createMessage(issueId),
+      url: SupportUrl.createMessage(issueUid),
       method: 'POST',
       data: message,
     });
   }
 
-  async function fetchFileData(issueId: string, messageId: number): Promise<BlobContent> {
+  async function fetchFileData(issueUid: string, messageId: number): Promise<BlobContent> {
     return call<BlobContent>({
-      url: SupportUrl.fetchFileData(issueId, messageId),
+      url: SupportUrl.fetchFileData(issueUid, messageId),
       method: 'GET',
     });
   }

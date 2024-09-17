@@ -2,10 +2,10 @@ import { Limit, InvestmentDate, FundOrigin } from './kyc';
 
 export const SupportUrl = {
   createIssue: 'support/issue',
-  createMessage: (id: string) => `support/issue/${id}/message`,
-  getIssue: (id: string, fromMessageId?: number) =>
-    `support/issue/${id}${fromMessageId ? `?fromMessageId=${fromMessageId}` : ''}`,
-  fetchFileData: (id: string, messageId: number) => `support/issue/${id}/message/${messageId}/file`,
+  createMessage: (uid: string) => `support/issue/${uid}/message`,
+  getIssue: (uid: string, fromMessageId?: number) =>
+    `support/issue/${uid}${fromMessageId ? `?fromMessageId=${fromMessageId}` : ''}`,
+  fetchFileData: (uid: string, messageId: number) => `support/issue/${uid}/message/${messageId}/file`,
 };
 
 export enum SupportIssueType {
@@ -80,7 +80,7 @@ export interface SupportMessage {
 }
 
 export interface SupportIssue {
-  id: string;
+  uid: string;
   state: SupportIssueState;
   type: SupportIssueType;
   reason: SupportIssueReason;
