@@ -76,6 +76,7 @@ export interface User {
   kyc: UserKyc;
   volumes: Volumes;
   addresses: UserAddress[];
+  disabledAddresses: UserAddress[];
   activeAddress?: UserAddress;
   paymentLink: UserPaymentLink;
 }

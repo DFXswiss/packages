@@ -13,7 +13,7 @@ interface SupportChatInterface {
   supportIssue?: SupportIssue;
   isLoading: boolean;
   isError?: string;
-  loadSupportIssue: (id: string) => Promise<void>;
+  loadSupportIssue: (uid: string) => Promise<void>;
   createSupportIssue: (request: CreateSupportIssue, file?: File) => Promise<string>;
   submitMessage: (message?: string, files?: File[], replyToMessage?: SupportMessage) => Promise<void>;
   handleEmojiClick: (messageId: number, emoji: string) => void;
@@ -41,15 +41,15 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
     return () => clearInterval(interval);
   }, [supportIssue, sync]);
 
-  async function loadSupportIssue(id: string): Promise<void> {
-    if (!id || id === supportIssue?.id) return;
+  async function loadSupportIssue(uid: string): Promise<void> {
+    if (!uid || uid === supportIssue?.uid) return;
 
     setSupportIssue(undefined);
     setIsLoading(true);
     setIsError(undefined);
 
-    return getIssue(id)
-      .then((response) => setSupportIssue(response))
+    return getIssue(uid)
+      .then((response) => setSupportIssue({ ...response }))
       .finally(() => setIsLoading(false));
   }
 
@@ -59,7 +59,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
     setIsSyncing(true);
     setIsError(undefined);
     const fromMessageId = supportIssue.messages[supportIssue.messages.length - 1].id;
-    return getIssue(supportIssue.id, fromMessageId)
+    return getIssue(supportIssue.uid, fromMessageId)
       .then((response) => updateSupportIssue(response))
       .catch(() => setIsError('Error while syncing messages'))
       .finally(() => setIsSyncing(false));
@@ -87,7 +87,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
       const issue = await createIssue(request);
       settleMessage(messageId, issue.messages[issue.messages.length - 1]);
       updateSupportIssue(issue);
-      return issue.id;
+      return issue.uid;
     } catch (error) {
       settleMessage(messageId);
       throw error;
@@ -123,7 +123,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
         return { ...supportIssue };
       });
 
-      createMessage(supportIssue.id, {
+      createMessage(supportIssue.uid, {
         message: newMessage.message,
         file: dataFile?.file,
         fileName: newMessage.fileName,
@@ -137,7 +137,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
     const message = supportIssue?.messages.find((m) => m.id === messageId);
     if (!supportIssue || !message?.fileName) throw new Error('Failed to load file data');
 
-    return fetchFileData(supportIssue.id, message.id).then((blobContent) => {
+    return fetchFileData(supportIssue.uid, message.id).then((blobContent) => {
       const byteArray = new Uint8Array(blobContent.data.data);
       const blob = new Blob([byteArray], { type: blobContent.contentType });
 
