@@ -55,6 +55,8 @@ export {
   PaymentLinkStatus,
   PaymentLinkPaymentStatus,
   PaymentLink,
+  PaymentLinkRecipient,
+  PaymentLinkRecipientAddress,
   PaymentLinkPayment,
   CreatePaymentLinkPayment,
   CreatePaymentLink,

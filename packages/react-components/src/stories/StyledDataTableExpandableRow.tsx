@@ -116,30 +116,27 @@ export default function StyledDataTableExpandableRow({
                 </div>
               )}
               <div className={separatorClasses} />
-              {hasExpansionItems ? (
-                expansionItems.map(({ label, text, infoText, icon, iconColor, onClick }) => (
-                  <div key={label} className="flex flex-col w-full">
-                    <div className="flex w-full justify-between">
-                      <p className={labelClasses}>{label}</p>
-                      <button className="flex flex-row items-center gap-2" onClick={onClick} disabled={!onClick}>
-                        <p className={rowDataClasses}>{text}</p>
-                        {icon && <DfxIcon icon={icon} color={iconColor} size={IconSize.SM} />}
-                      </button>
-                    </div>
-                    <div className="my-1 text-left">
-                      {infoText && (
-                        <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
-                          {infoText.split('\n').map((line) => (
-                            <div key={line}>{line}</div>
-                          ))}
-                        </StyledInfoText>
-                      )}
-                    </div>
+              {expansionItems?.map(({ label, text, infoText, icon, iconColor, onClick }) => (
+                <div key={label} className="flex flex-col w-full">
+                  <div className="flex w-full justify-between">
+                    <p className={labelClasses}>{label}</p>
+                    <button className="flex flex-row items-center gap-2" onClick={onClick} disabled={!onClick}>
+                      <p className={rowDataClasses}>{text}</p>
+                      {icon && <DfxIcon icon={icon} color={iconColor} size={IconSize.SM} />}
+                    </button>
                   </div>
-                ))
-              ) : (
-                <div className="mt-1">{expansionContent}</div>
-              )}
+                  <div className="my-1 text-left">
+                    {infoText && (
+                      <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
+                        {infoText.split('\n').map((line) => (
+                          <div key={line}>{line}</div>
+                        ))}
+                      </StyledInfoText>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div className="mt-1">{expansionContent}</div>
             </div>
           )}
         </>

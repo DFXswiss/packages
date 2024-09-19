@@ -48,5 +48,6 @@ export { default as StyledDropdownMultiChoice } from './stories/form/StyledDropd
 export { default as StyledSearchDropdown } from './stories/form/StyledSearchDropdown';
 export { default as StyledInput } from './stories/form/StyledInput';
 export { default as StyledFileUpload } from './stories/form/StyledFileUpload';
+export { default as StyledDateAndTimePicker } from './stories/form/StyledDateAndTimePicker';
 export { default as StyledModalDropdown } from './stories/form/StyledModalDropdown';
 export { default as StyledModalButton } from './stories/form/StyledModalButton';
