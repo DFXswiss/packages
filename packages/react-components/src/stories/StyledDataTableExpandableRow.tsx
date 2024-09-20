@@ -109,7 +109,7 @@ export default function StyledDataTableExpandableRow({
           {hasExpansion && isExpanded && (
             <div className="flex flex-col w-full">
               {infoText && (
-                <div className="mt-1">
+                <div className="flex justify-start text-left mt-1">
                   <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
                     {infoText}
                   </StyledInfoText>
@@ -125,7 +125,7 @@ export default function StyledDataTableExpandableRow({
                       {icon && <DfxIcon icon={icon} color={iconColor} size={IconSize.SM} />}
                     </button>
                   </div>
-                  <div className="my-1 text-left">
+                  <div className="flex justify-start text-left my-1">
                     {infoText && (
                       <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
                         {infoText.split('\n').map((line) => (
