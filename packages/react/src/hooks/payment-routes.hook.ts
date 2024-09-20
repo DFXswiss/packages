@@ -76,7 +76,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
   ): Promise<PaymentLink> {
     const queryParams = Utils.buildQueryParams({ linkId, externalLinkId, externalPaymentId });
 
-    return call({
+    return call<PaymentLink>({
       url: `${PaymentLinksUrl.update}?${queryParams}`,
       method: 'PUT',
       data: request,

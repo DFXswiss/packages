@@ -136,6 +136,8 @@ export interface CreatePaymentLinkPayment {
 export interface CreatePaymentLink {
   routeId?: number;
   externalId?: string;
+  webhookUrl?: string;
+  recipient: PaymentLinkRecipient;
   payment?: CreatePaymentLinkPayment;
 }
 
