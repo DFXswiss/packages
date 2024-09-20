@@ -93,6 +93,8 @@ export interface UnassignedTransaction {
   inputPaymentMethod?: PaymentMethod;
   inputTxId?: string;
   inputTxUrl?: string;
+  chargebackAmount?: number;
+  chargebackTarget?: string;
   date: Date;
 }
 
