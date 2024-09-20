@@ -15,6 +15,7 @@ interface UserInterface {
   isUserLoading: boolean;
   isUserUpdating: boolean;
   changeMail: (mail: string) => Promise<void>;
+  changePhone: (phone: string) => Promise<void>;
   changeLanguage: (language: Language) => Promise<void>;
   changeCurrency: (currency: Fiat) => Promise<void>;
   renameAddress: (address: string, label: string) => Promise<void>;
@@ -92,6 +93,10 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
 
   async function changeMail(mail: string): Promise<void> {
     return updateUser({ mail }, userLinkAction);
+  }
+
+  async function changePhone(phone: string): Promise<void> {
+    return updateUser({ phone });
   }
 
   async function changeLanguage(language: Language): Promise<void> {
@@ -189,6 +194,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       isUserLoading,
       isUserUpdating,
       changeMail,
+      changePhone,
       changeLanguage,
       changeCurrency,
       renameAddress,
@@ -204,7 +210,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       deleteKeyCT,
       updateFilterCT,
     }),
-    [user, refLink, countries, isUserLoading, isUserUpdating, changeMail, register, reloadUser],
+    [user, refLink, countries, isUserLoading, isUserUpdating, changeMail, changePhone, register, reloadUser],
   );
 
   return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
