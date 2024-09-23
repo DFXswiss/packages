@@ -131,6 +131,8 @@ export {
   DetailTransaction,
   TransactionTarget,
   TransactionFilter,
+  TransactionRefundData,
+  TransactionRefundTarget,
   TransactionFilterKey,
 } from './definitions/transaction';
 export { Fees } from './definitions/fees';

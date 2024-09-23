@@ -3,6 +3,8 @@ import { useApi } from './api.hook';
 import {
   DetailTransaction,
   Transaction,
+  TransactionRefundData,
+  TransactionRefundTarget,
   TransactionTarget,
   TransactionUrl,
   UnassignedTransaction,
@@ -19,6 +21,8 @@ export interface TransactionInterface {
   getUnassignedTransactions: () => Promise<UnassignedTransaction[]>;
   getTransactionTargets: () => Promise<TransactionTarget[]>;
   setTransactionTarget: (transactionId: number, buyId: number) => Promise<void>;
+  getTransactionRefund: (id: number) => Promise<TransactionRefundData>;
+  setTransactionRefundTarget: (id: number, target: TransactionRefundTarget) => Promise<void>;
 }
 
 export function useTransaction(): TransactionInterface {
@@ -69,6 +73,14 @@ export function useTransaction(): TransactionInterface {
     return call({ url: `${TransactionUrl.setTarget(transactionId)}?buyId=${buyId}`, method: 'PUT' });
   }
 
+  async function getTransactionRefund(id: number): Promise<TransactionRefundData> {
+    return call<TransactionRefundData>({ url: `${TransactionUrl.refund(id)}`, method: 'GET' });
+  }
+
+  async function setTransactionRefundTarget(id: number, target: TransactionRefundTarget): Promise<void> {
+    return call<void>({ url: `${TransactionUrl.refund(id)}`, method: 'PUT', data: target });
+  }
+
   return useMemo(
     () => ({
       getTransactions,
@@ -80,6 +92,8 @@ export function useTransaction(): TransactionInterface {
       getUnassignedTransactions,
       getTransactionTargets,
       setTransactionTarget,
+      getTransactionRefund,
+      setTransactionRefundTarget,
     }),
     [call],
   );

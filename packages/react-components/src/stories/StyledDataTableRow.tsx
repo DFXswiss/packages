@@ -71,11 +71,13 @@ export default function StyledDataTableRow({
           )}
         </div>
       </div>
-      {infoText && (
-        <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
-          {infoText}
-        </StyledInfoText>
-      )}
+      <div className="flex justify-start text-left">
+        {infoText && (
+          <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
+            {infoText}
+          </StyledInfoText>
+        )}
+      </div>
     </div>
   );
 }

@@ -5,12 +5,14 @@ export const TransactionUrl = {
   csv: 'transaction/detail/csv',
   unassigned: 'transaction/unassigned',
   target: 'transaction/target',
+  refund: (id: number) => `transaction/${id}/refund`,
   setTarget: (id: number) => `transaction/${id}/target`,
 };
 
 import { Asset } from './asset';
 import { Blockchain } from './blockchain';
 import { Fees } from './fees';
+import { Fiat } from './fiat';
 import { PriceStep } from './price-step';
 
 export enum FiatPaymentMethod {
@@ -91,6 +93,8 @@ export interface UnassignedTransaction {
   inputPaymentMethod?: PaymentMethod;
   inputTxId?: string;
   inputTxUrl?: string;
+  chargebackAmount?: number;
+  chargebackTarget?: string;
   date: Date;
 }
 
@@ -128,6 +132,17 @@ export interface TransactionFilter {
   staking?: boolean;
   ref?: boolean;
   lm?: boolean;
+}
+
+export interface TransactionRefundData {
+  expiryDate: Date;
+  feeAmount: number;
+  refundAmount: number;
+  refundAsset: Asset | Fiat;
+}
+
+export interface TransactionRefundTarget {
+  refundTarget: string;
 }
 
 export type TransactionFilterKey = keyof TransactionFilter;
