@@ -110,6 +110,7 @@ export enum KycStepType {
   AUTO = 'Auto',
   VIDEO = 'Video',
   MANUAL = 'Manual',
+  SUMSUB_AUTO = 'SumsubAuto',
 }
 
 export enum KycStepStatus {
@@ -124,6 +125,8 @@ export enum KycStepStatus {
 export enum UrlType {
   BROWSER = 'Browser',
   API = 'API',
+  TOKEN = 'Token',
+  NONE = 'None',
 }
 
 export interface KycSessionInfo {
