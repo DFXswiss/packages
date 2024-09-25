@@ -18,6 +18,7 @@ import {
   UserData,
   UserName,
   KycSignatoryPowerData,
+  KycManualIdentData,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 import { Country } from '../definitions/country';
@@ -44,6 +45,7 @@ export interface KycInterface {
   // updates
   setContactData: (code: string, url: string, data: KycContactData) => Promise<KycResult>;
   setPersonalData: (code: string, url: string, data: KycPersonalData) => Promise<KycResult>;
+  setManualIdentData: (code: string, url: string, data: KycManualIdentData) => Promise<KycResult>;
   setLegalEntityData: (code: string, url: string, data: KycLegalEntityData) => Promise<KycResult>;
   setNationalityData: (code: string, url: string, data: KycNationalityData) => Promise<KycResult>;
   setFileData: (code: string, url: string, data: KycFileData) => Promise<KycResult>;
@@ -115,6 +117,10 @@ export function useKyc(): KycInterface {
   }
 
   async function setPersonalData(code: string, url: string, data: KycPersonalData): Promise<KycResult> {
+    return call({ url, code, method: 'PUT', data });
+  }
+
+  async function setManualIdentData(code: string, url: string, data: KycManualIdentData): Promise<KycResult> {
     return call({ url, code, method: 'PUT', data });
   }
 
@@ -196,6 +202,7 @@ export function useKyc(): KycInterface {
       getCountries,
       setContactData,
       setPersonalData,
+      setManualIdentData,
       setLegalEntityData,
       setNationalityData,
       setFileData,
