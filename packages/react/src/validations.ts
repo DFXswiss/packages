@@ -7,8 +7,14 @@ const regex = {
   Mail: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 };
 
+export type ValidationRule = {
+  required?: { value: boolean; message: string };
+  pattern?: { value: RegExp; message: string };
+  validate?: (val: any) => string | true;
+};
+
 class ValidationsClass {
-  public get Required() {
+  public get Required(): ValidationRule {
     return {
       required: {
         value: true,
@@ -17,7 +23,7 @@ class ValidationsClass {
     };
   }
 
-  public get Mail() {
+  public get Mail(): ValidationRule {
     return {
       pattern: {
         value: regex.Mail,
@@ -26,11 +32,11 @@ class ValidationsClass {
     };
   }
 
-  public get Phone() {
+  public get Phone(): ValidationRule {
     return this.Custom((number: string) => {
       try {
         if (number) {
-          if (!number.match(/^\+\d/)) return 'code_and_number';
+          if (!/^\+\d+$/.test(number)) return 'code_and_number';
           if (!PhoneNumber(number)?.isValid()) return 'pattern';
         }
 
@@ -41,7 +47,7 @@ class ValidationsClass {
     });
   }
 
-  public Iban(countries: Country[]) {
+  public Iban(countries: Country[]): ValidationRule {
     return this.Custom((iban: string) => {
       iban = iban.split(' ').join('');
 
@@ -61,9 +67,11 @@ class ValidationsClass {
     });
   }
 
-  public Custom = (validator: (value: any) => true | string) => ({
-    validate: (val: any) => validator(val),
-  });
+  public Custom(validator: (val: any) => string | true): ValidationRule {
+    return {
+      validate: validator,
+    };
+  }
 }
 
 const Validations = new ValidationsClass();

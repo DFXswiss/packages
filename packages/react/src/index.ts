@@ -97,6 +97,9 @@ export {
   KycFinancialOption,
   KycFinancialQuestion,
   KycFinancialQuestions,
+  KycManualIdentData,
+  GenderType,
+  DocumentType,
   TfaSetup,
   Limit,
   InvestmentDate,
@@ -156,4 +159,4 @@ export {
 
 // Utils & Validations
 export { Utils } from './utils';
-export { default as Validations } from './validations';
+export { default as Validations, ValidationRule } from './validations';
