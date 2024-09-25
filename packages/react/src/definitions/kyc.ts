@@ -17,7 +17,7 @@ export const KycLevel = {
 
 export enum AccountType {
   PERSONAL = 'Personal',
-  BUSINESS = 'Business',
+  ORGANIZATION = 'Organization',
   SOLE_PROPRIETORSHIP = 'SoleProprietorship',
 }
 
