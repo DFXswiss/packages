@@ -7,14 +7,22 @@ const regex = {
   Mail: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 };
 
-export type ValidationRule = {
-  required?: { value: boolean; message: string };
-  pattern?: { value: RegExp; message: string };
-  validate?: (val: any) => string | true;
+export type RequiredRule = {
+  required: { value: boolean; message: string };
 };
 
+export type PatternRule = {
+  pattern: { value: RegExp; message: string };
+};
+
+export type CustomRule = {
+  validate: (value: any) => string | true;
+};
+
+export type ValidationRule = RequiredRule | PatternRule | CustomRule;
+
 class ValidationsClass {
-  public get Required(): ValidationRule {
+  public get Required(): RequiredRule {
     return {
       required: {
         value: true,
@@ -23,7 +31,7 @@ class ValidationsClass {
     };
   }
 
-  public get Mail(): ValidationRule {
+  public get Mail(): PatternRule {
     return {
       pattern: {
         value: regex.Mail,
@@ -32,7 +40,7 @@ class ValidationsClass {
     };
   }
 
-  public get Phone(): ValidationRule {
+  public get Phone(): CustomRule {
     return this.Custom((number: string) => {
       try {
         if (number) {
@@ -47,7 +55,7 @@ class ValidationsClass {
     });
   }
 
-  public Iban(countries: Country[]): ValidationRule {
+  public Iban(countries: Country[]): CustomRule {
     return this.Custom((iban: string) => {
       iban = iban.split(' ').join('');
 
@@ -67,7 +75,7 @@ class ValidationsClass {
     });
   }
 
-  public Custom(validator: (val: any) => string | true): ValidationRule {
+  public Custom(validator: (value: any) => true | string): CustomRule {
     return {
       validate: validator,
     };

@@ -159,4 +159,4 @@ export {
 
 // Utils & Validations
 export { Utils } from './utils';
-export { default as Validations, ValidationRule } from './validations';
+export { default as Validations, RequiredRule, PatternRule, CustomRule, ValidationRule } from './validations';
