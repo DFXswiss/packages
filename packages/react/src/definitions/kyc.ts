@@ -185,6 +185,30 @@ export interface KycLegalEntityData {
   legalEntity: LegalEntity;
 }
 
+export enum DocumentTypes {
+  IDCARD = 'ID Card',
+  PASSPORT = 'Passport',
+  DRIVERS_LICENSE = "Driver's License",
+  RESIDENCE_PERMIT = 'Residence Permit',
+}
+
+export enum GenderTypes {
+  MALE = 'Male',
+  FEMALE = 'Female',
+}
+
+export interface KycManualIdentData {
+  firstName: string;
+  lastName: string;
+  birthName: string;
+  documentType: DocumentTypes;
+  documentNumber?: string;
+  nationality: Country;
+  birthplace: string;
+  gender: GenderTypes;
+  file: string;
+}
+
 export interface KycSignatoryPowerData {
   signatoryPower: SignatoryPower;
 }
