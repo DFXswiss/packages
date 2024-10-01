@@ -105,6 +105,12 @@ export {
   InvestmentDate,
   FundOrigin,
   LimitRequest,
+  KycFileData,
+  KycLegalEntityData,
+  KycNationalityData,
+  KycSignatoryPowerData,
+  LegalEntity,
+  SignatoryPower,
   isStepDone,
 } from './definitions/kyc';
 export { Sell, SellPaymentInfo } from './definitions/sell';

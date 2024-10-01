@@ -206,7 +206,7 @@ export interface KycManualIdentData {
   nationality: Country;
   birthplace: string;
   gender: GenderType;
-  file: string;
+  document: KycFileData;
 }
 
 export interface KycSignatoryPowerData {
