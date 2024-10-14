@@ -54,6 +54,7 @@ export enum TransactionState {
   COMPLETED = 'Completed',
   FAILED = 'Failed',
   RETURNED = 'Returned',
+  RETURN_PENDING = 'ReturnPending',
 }
 
 export enum TransactionFailureReason {

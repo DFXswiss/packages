@@ -108,12 +108,14 @@ export default function StyledDataTableExpandableRow({
         <>
           {hasExpansion && isExpanded && (
             <div className="flex flex-col w-full">
-              {infoText && (
+              {infoText ? (
                 <div className="flex justify-start text-left mt-1">
                   <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
                     {infoText}
                   </StyledInfoText>
                 </div>
+              ) : (
+                <></>
               )}
               <div className={separatorClasses} />
               {expansionItems?.map(({ label, text, infoText, icon, iconColor, onClick }) => (
