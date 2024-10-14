@@ -29,6 +29,7 @@ export interface Asset {
   comingSoon: boolean;
   sortOrder?: number;
   chainId?: string;
+  decimals?: number;
   explorerUrl?: string;
   type: AssetType;
   category: AssetCategory;
