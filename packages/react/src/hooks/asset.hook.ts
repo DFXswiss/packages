@@ -29,7 +29,8 @@ export function useAsset(): AssetInterface {
     return (
       asset.id === +identifier ||
       asset.uniqueName.toLowerCase() === identifier.toLowerCase() ||
-      asset.name.toLowerCase() === identifier.toLowerCase()
+      asset.name.toLowerCase() === identifier.toLowerCase() ||
+      asset.chainId?.toLowerCase() === identifier.toLowerCase()
     );
   }
 
