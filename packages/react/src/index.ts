@@ -100,6 +100,7 @@ export {
   KycManualIdentData,
   GenderType,
   DocumentType,
+  TfaType,
   TfaSetup,
   Limit,
   InvestmentDate,

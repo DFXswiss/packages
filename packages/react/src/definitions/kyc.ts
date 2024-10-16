@@ -79,7 +79,6 @@ export interface TradingLimit {
 export interface KycInfo {
   kycLevel: number;
   tradingLimit: TradingLimit;
-  twoFactorEnabled: boolean;
   language: Language;
   kycSteps: KycStep[];
   kycClients: string[];
@@ -253,7 +252,13 @@ export interface KycFinancialQuestions extends KycFinancialResponses {
 }
 
 // 2FA
+export enum TfaType {
+  APP = 'App',
+  MAIL = 'Mail',
+}
+
 export interface TfaSetup {
+  type: TfaType;
   secret: string;
   uri: string;
 }
