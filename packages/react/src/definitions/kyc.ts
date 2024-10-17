@@ -257,6 +257,11 @@ export enum TfaType {
   MAIL = 'Mail',
 }
 
+export enum TfaLevel {
+  BASIC = 'Basic',
+  STRICT = 'Strict',
+}
+
 export interface TfaSetup {
   type: TfaType;
   secret: string;

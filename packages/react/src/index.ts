@@ -101,6 +101,7 @@ export {
   GenderType,
   DocumentType,
   TfaType,
+  TfaLevel,
   TfaSetup,
   Limit,
   InvestmentDate,
