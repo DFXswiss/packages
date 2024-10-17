@@ -14,11 +14,13 @@ import {
   KycStepType,
   KycUrl,
   LimitRequest,
+  TfaType,
   TfaSetup,
   UserData,
   UserName,
   KycSignatoryPowerData,
   KycManualIdentData,
+  TfaLevel,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 import { Country } from '../definitions/country';
@@ -54,7 +56,7 @@ export interface KycInterface {
   setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycResult>;
 
   // 2fa
-  setup2fa: (code: string) => Promise<TfaSetup>;
+  setup2fa: (code: string, level?: TfaLevel) => Promise<TfaSetup>;
   verify2fa: (code: string, token: string) => Promise<void>;
 
   // limit
@@ -149,8 +151,9 @@ export function useKyc(): KycInterface {
     return call({ url, code, method: 'PUT', data });
   }
 
-  async function setup2fa(code: string): Promise<TfaSetup> {
-    return call({ url: KycUrl.tfa, code, method: 'POST' });
+  async function setup2fa(code: string, level?: TfaLevel): Promise<TfaSetup> {
+    const url = level ? `${KycUrl.tfa}?level=${level}` : KycUrl.tfa;
+    return call({ url, code, method: 'POST' });
   }
 
   async function verify2fa(code: string, token: string): Promise<void> {
