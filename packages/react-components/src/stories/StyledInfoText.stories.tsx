@@ -20,4 +20,5 @@ export const DemoIconButton: ComponentStory<typeof StyledInfoText> = (args) => {
 };
 DemoIconButton.args = {
   darkTheme: false,
+  isLoading: true,
 };

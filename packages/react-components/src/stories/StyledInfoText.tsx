@@ -1,5 +1,6 @@
 import { PropsWithChildren } from 'react';
 import DfxIcon, { IconColor, IconSize, IconVariant } from './DfxIcon';
+import StyledLoadingSpinner, { SpinnerSize, SpinnerVariant } from './StyledLoadingSpinner';
 
 export interface StyledInfoTextProps extends PropsWithChildren {
   darkTheme?: boolean;
@@ -7,6 +8,7 @@ export interface StyledInfoTextProps extends PropsWithChildren {
   invertedIcon?: boolean;
   iconColor?: IconColor;
   discreet?: boolean;
+  isLoading?: boolean;
 }
 
 export enum StyledInfoTextSize {
@@ -33,6 +35,7 @@ export default function StyledInfoText({
   invertedIcon,
   iconColor = IconColor.RED,
   discreet,
+  isLoading = false,
 }: StyledInfoTextProps) {
   let wrapperClasses = 'flex gap-2' + TEXT_SIZE_MAPS[textSize].wrapperClasses;
   const iconSize = TEXT_SIZE_MAPS[textSize].iconSize;
@@ -49,7 +52,18 @@ export default function StyledInfoText({
       <div className="shrink-0">
         <DfxIcon icon={iconVariant} size={iconSize} color={iconColor} />
       </div>
-      <p>{children}</p>
+      <div>
+        {isLoading ? (
+          <div className="mt-1 ml-0.5">
+            <StyledLoadingSpinner
+              size={SpinnerSize.SM}
+              variant={darkTheme ? SpinnerVariant.DARK_MODE : SpinnerVariant.LIGHT_MODE}
+            />
+          </div>
+        ) : (
+          children
+        )}
+      </div>
     </div>
   );
 }
