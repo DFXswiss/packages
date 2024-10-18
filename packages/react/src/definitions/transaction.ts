@@ -96,6 +96,9 @@ export interface UnassignedTransaction {
   inputTxUrl?: string;
   chargebackAmount?: number;
   chargebackTarget?: string;
+  chargeBackTxId?: string;
+  chargeBackTxUrl?: string;
+  chargebackDate?: Date;
   date: Date;
 }
 
