@@ -1,7 +1,7 @@
 import { Limit, InvestmentDate, FundOrigin } from './kyc';
 
 export const SupportUrl = {
-  createIssue: 'support/issue',
+  supportIssue: 'support/issue',
   createMessage: (uid: string) => `support/issue/${uid}/message`,
   getIssue: (uid: string, fromMessageId?: number) =>
     `support/issue/${uid}${fromMessageId ? `?fromMessageId=${fromMessageId}` : ''}`,

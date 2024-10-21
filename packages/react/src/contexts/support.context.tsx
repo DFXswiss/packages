@@ -10,9 +10,11 @@ import {
 import { useSupportChat } from '../hooks/support.hook';
 
 interface SupportChatInterface {
+  tickets: SupportIssue[];
   supportIssue?: SupportIssue;
   isLoading: boolean;
   isError?: string;
+  loadTickets: () => Promise<void>;
   loadSupportIssue: (uid: string) => Promise<void>;
   createSupportIssue: (request: CreateSupportIssue, file?: File) => Promise<string>;
   submitMessage: (message?: string, files?: File[], replyToMessage?: SupportMessage) => Promise<void>;
@@ -26,10 +28,11 @@ const SupportChatContext = createContext<SupportChatInterface>(undefined as any)
 export const useSupportChatContext = () => useContext(SupportChatContext);
 
 export function SupportChatContextProvider(props: PropsWithChildren): JSX.Element {
-  const { getIssue, createIssue, createMessage, fetchFileData } = useSupportChat();
+  const { getIssues, getIssue, createIssue, createMessage, fetchFileData } = useSupportChat();
 
   const currUnsettledMessageId = useRef(0);
 
+  const [tickets, setTickets] = useState<SupportIssue[]>([]);
   const [supportIssue, setSupportIssue] = useState<SupportIssue>();
   const [isLoading, setIsLoading] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -40,6 +43,15 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
     const interval = setTimeout(() => sync && syncSupportIssue(), 5000);
     return () => clearInterval(interval);
   }, [supportIssue, sync]);
+
+  async function loadTickets(): Promise<void> {
+    setIsLoading(true);
+    setIsError(undefined);
+
+    return getIssues()
+      .then((tickets) => setTickets(tickets))
+      .finally(() => setIsLoading(false));
+  }
 
   async function loadSupportIssue(uid: string): Promise<void> {
     if (!uid || uid === supportIssue?.uid) return;
@@ -190,9 +202,11 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
 
   const context = useMemo(
     () => ({
+      tickets,
       supportIssue,
       isLoading,
       isError,
+      loadTickets,
       loadSupportIssue,
       createSupportIssue,
       submitMessage,
@@ -201,9 +215,11 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
       setSync,
     }),
     [
+      tickets,
       supportIssue,
       isLoading,
       isError,
+      loadTickets,
       loadSupportIssue,
       createSupportIssue,
       submitMessage,
