@@ -12,6 +12,7 @@ import {
 export interface SupportInterface {
   createIssue: (request: CreateSupportIssue) => Promise<SupportIssue>;
   createMessage: (issueUid: string, message: CreateSupportMessage) => Promise<SupportMessage>;
+  getIssues: () => Promise<SupportIssue[]>;
   getIssue: (issueUid: string, fromMessageId?: number) => Promise<SupportIssue>;
   fetchFileData: (issueUid: string, messageId: number) => Promise<BlobContent>;
 }
@@ -21,9 +22,16 @@ export function useSupportChat(): SupportInterface {
 
   async function createIssue(request: CreateSupportIssue): Promise<SupportIssue> {
     return call<SupportIssue>({
-      url: SupportUrl.createIssue,
+      url: SupportUrl.supportIssue,
       method: 'POST',
       data: request,
+    });
+  }
+
+  async function getIssues(): Promise<SupportIssue[]> {
+    return call<SupportIssue[]>({
+      url: SupportUrl.supportIssue,
+      method: 'GET',
     });
   }
 
@@ -49,5 +57,5 @@ export function useSupportChat(): SupportInterface {
     });
   }
 
-  return useMemo(() => ({ createIssue, createMessage, getIssue, fetchFileData }), [call]);
+  return useMemo(() => ({ createIssue, createMessage, getIssues, getIssue, fetchFileData }), [call]);
 }
