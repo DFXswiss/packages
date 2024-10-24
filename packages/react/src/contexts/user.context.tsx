@@ -15,6 +15,7 @@ interface UserInterface {
   isUserLoading: boolean;
   isUserUpdating: boolean;
   changeMail: (mail: string) => Promise<void>;
+  verifyMail: (token: string) => Promise<void>;
   changePhone: (phone: string) => Promise<void>;
   changeLanguage: (language: Language) => Promise<void>;
   changeCurrency: (currency: Fiat) => Promise<void>;
@@ -43,6 +44,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const {
     getUser,
     changeUser,
+    verifyMail: verifyMailApi,
     addDiscountCode,
     renameUserAddress,
     changeUserAddress,
@@ -77,7 +79,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     setIsUserLoading(true);
     getUser()
       .then(setUser)
-      .catch(console.error) // TODO: (Krysh) add real error handling
+      // .catch(console.error) // TODO: (Krysh) add real error handling
       .finally(() => setIsUserLoading(false));
   }
 
@@ -85,14 +87,25 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     if (!user) return; // TODO: (Krysh) add real error handling
 
     setIsUserUpdating(true);
-    return changeUser(update, linkAction)
-      .then(setUser)
-      .catch(console.error) // TODO: (Krysh) add real error handling
-      .finally(() => setIsUserUpdating(false));
+    return (
+      changeUser(update, linkAction)
+        .then(setUser)
+        // .catch(console.error) // TODO: (Krysh) add real error handling
+        .finally(() => setIsUserUpdating(false))
+    );
   }
 
   async function changeMail(mail: string): Promise<void> {
     return updateUser({ mail }, userLinkAction);
+  }
+
+  async function verifyMail(token: string): Promise<void> {
+    if (!user) return;
+
+    setIsUserUpdating(true);
+    return verifyMailApi(token)
+      .then(setUser)
+      .finally(() => setIsUserUpdating(false));
   }
 
   async function changePhone(phone: string): Promise<void> {
@@ -111,18 +124,19 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     if (!user) return;
 
     setIsUserUpdating(true);
-    return renameUserAddress(address, label)
-      .then(setUser)
-      .catch(console.error)
-      .finally(() => setIsUserUpdating(false));
+    return (
+      renameUserAddress(address, label)
+        .then(setUser)
+        // .catch(console.error)
+        .finally(() => setIsUserUpdating(false))
+    );
   }
 
   async function changeAddress(address: string): Promise<void> {
     if (!user) return;
 
-    return changeUserAddress(address)
-      .then(({ accessToken }) => updateSession(accessToken))
-      .catch(console.error);
+    return changeUserAddress(address).then(({ accessToken }) => updateSession(accessToken));
+    // .catch(console.error);
   }
 
   async function deleteAddress(address: string): Promise<void> {
@@ -134,21 +148,20 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
         ? user.addresses.find((a) => a.address !== address)?.address
         : undefined;
 
-    return deleteUserAddress(address)
-      .then(() => {
-        if (requiresFallback) {
-          fallbackAddress ? changeAddress(fallbackAddress) : deleteSession();
-        } else {
-          reloadUser();
-        }
-      })
-      .catch(console.error);
+    return deleteUserAddress(address).then(() => {
+      if (requiresFallback) {
+        fallbackAddress ? changeAddress(fallbackAddress) : deleteSession();
+      } else {
+        reloadUser();
+      }
+    });
+    // .catch(console.error);
   }
 
   async function deleteAccount(): Promise<void> {
     if (!user) return;
 
-    return deleteUserAccount().then(deleteSession).catch(console.error);
+    return deleteUserAccount().then(deleteSession); // .catch(console.error);
   }
 
   function register(userLink: () => void) {
@@ -194,6 +207,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       isUserLoading,
       isUserUpdating,
       changeMail,
+      verifyMail,
       changePhone,
       changeLanguage,
       changeCurrency,
