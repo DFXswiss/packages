@@ -79,20 +79,16 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     setIsUserLoading(true);
     getUser()
       .then(setUser)
-      // .catch(console.error) // TODO: (Krysh) add real error handling
       .finally(() => setIsUserLoading(false));
   }
 
   async function updateUser(update: UpdateUser, linkAction?: () => void): Promise<void> {
-    if (!user) return; // TODO: (Krysh) add real error handling
+    if (!user) return;
 
     setIsUserUpdating(true);
-    return (
-      changeUser(update, linkAction)
-        .then(setUser)
-        // .catch(console.error) // TODO: (Krysh) add real error handling
-        .finally(() => setIsUserUpdating(false))
-    );
+    return changeUser(update, linkAction)
+      .then(setUser)
+      .finally(() => setIsUserUpdating(false));
   }
 
   async function changeMail(mail: string): Promise<void> {
@@ -124,19 +120,15 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     if (!user) return;
 
     setIsUserUpdating(true);
-    return (
-      renameUserAddress(address, label)
-        .then(setUser)
-        // .catch(console.error)
-        .finally(() => setIsUserUpdating(false))
-    );
+    return renameUserAddress(address, label)
+      .then(setUser)
+      .finally(() => setIsUserUpdating(false));
   }
 
   async function changeAddress(address: string): Promise<void> {
     if (!user) return;
 
     return changeUserAddress(address).then(({ accessToken }) => updateSession(accessToken));
-    // .catch(console.error);
   }
 
   async function deleteAddress(address: string): Promise<void> {
@@ -155,13 +147,12 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
         reloadUser();
       }
     });
-    // .catch(console.error);
   }
 
   async function deleteAccount(): Promise<void> {
     if (!user) return;
 
-    return deleteUserAccount().then(deleteSession); // .catch(console.error);
+    return deleteUserAccount().then(deleteSession);
   }
 
   function register(userLink: () => void) {
