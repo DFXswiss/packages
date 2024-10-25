@@ -2,7 +2,9 @@ import { useMemo } from 'react';
 import { useApi } from './api.hook';
 import {
   DetailTransaction,
+  ExportType,
   Transaction,
+  TransactionHistoryQuery,
   TransactionRefundData,
   TransactionRefundTarget,
   TransactionTarget,
@@ -18,6 +20,7 @@ export interface TransactionInterface {
   getTransactionByCkoId: (ckoId: string) => Promise<Transaction>;
   getTransactionByRequestId: (requestId: number) => Promise<Transaction>;
   getTransactionCsv: (from?: Date, to?: Date) => Promise<string>;
+  getTransactionHistory: (type: ExportType, queryParams: TransactionHistoryQuery) => Promise<string>;
   getUnassignedTransactions: () => Promise<UnassignedTransaction[]>;
   getTransactionTargets: () => Promise<TransactionTarget[]>;
   setTransactionTarget: (transactionId: number, buyId: number) => Promise<void>;
@@ -37,7 +40,7 @@ export function useTransaction(): TransactionInterface {
 
   async function getDetailTransactions(from?: Date, to?: Date): Promise<DetailTransaction[]> {
     return call<Transaction[]>({
-      url: `${TransactionUrl.detail}?${createFilterParams(from, to)}`,
+      url: `${TransactionUrl.detail}?${createFilterParams({ from, to })}`,
       method: 'GET',
     });
   }
@@ -56,9 +59,19 @@ export function useTransaction(): TransactionInterface {
 
   async function getTransactionCsv(from?: Date, to?: Date): Promise<string> {
     return call<string>({
-      url: `${TransactionUrl.csv}?${createFilterParams(from, to)}`,
+      url: `${TransactionUrl.csv}?${createFilterParams({ from, to })}`,
       method: 'PUT',
     }).then((key) => `${defaultUrl}/transaction/csv?key=${key}`);
+  }
+
+  async function getTransactionHistory(type: ExportType, queryParams: TransactionHistoryQuery): Promise<string> {
+    if (!queryParams.userAddress) throw new Error('No user address provided');
+
+    return call<string>({
+      url: `transaction/${type}?${createFilterParams(queryParams)}`,
+      method: 'GET',
+      noJson: true,
+    });
   }
 
   async function getUnassignedTransactions(): Promise<UnassignedTransaction[]> {
@@ -89,6 +102,7 @@ export function useTransaction(): TransactionInterface {
       getTransactionByCkoId,
       getTransactionByRequestId,
       getTransactionCsv,
+      getTransactionHistory,
       getUnassignedTransactions,
       getTransactionTargets,
       setTransactionTarget,
@@ -98,11 +112,22 @@ export function useTransaction(): TransactionInterface {
     [call],
   );
 
-  function createFilterParams(from?: Date, to?: Date): string {
+  // --- HELPER FUNCTIONS --- //
+
+  function createFilterParams(query: TransactionHistoryQuery): string {
     const params = new URLSearchParams();
 
-    from && params.append('from', from.toISOString());
-    to && params.append('to', to.toISOString());
+    query.from && params.append('from', query.from.toISOString());
+    query.to && params.append('to', query.to.toISOString());
+    query.format && params.append('format', query.format);
+    query.userAddress && params.append('userAddress', query.userAddress);
+
+    ['buy', 'sell', 'staking', 'ref', 'lm'].forEach((key) => {
+      const value = query[key as keyof TransactionHistoryQuery];
+      if (typeof value === 'boolean') {
+        params.append(key, String(value));
+      }
+    });
 
     return params.toString();
   }
