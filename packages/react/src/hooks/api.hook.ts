@@ -50,7 +50,11 @@ export function useApi(): ApiInterface {
         config.specialHandling?.action?.();
       }
       if (response.ok) {
-        return response.json().catch(() => undefined);
+        if (config.noJson) {
+          return response.text() as unknown as T;
+        } else {
+          return response.json().catch(() => undefined);
+        }
       }
       return response.json().then((body) => {
         throw body;
