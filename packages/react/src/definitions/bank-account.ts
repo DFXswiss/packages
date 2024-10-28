@@ -12,7 +12,6 @@ export interface BankAccount {
   iban: string;
   label?: string;
   preferredCurrency?: Fiat;
-  sepaInstant: boolean;
 }
 
 export interface Iban {
