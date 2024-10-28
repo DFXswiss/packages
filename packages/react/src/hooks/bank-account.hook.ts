@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { BankAccount, BankAccountUrl, Iban } from '../definitions/bank-account';
+import { BankAccount, BankAccountUrl } from '../definitions/bank-account';
 import { Fiat } from '../definitions/fiat';
 import { useApi } from './api.hook';
 

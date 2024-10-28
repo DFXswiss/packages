@@ -12,7 +12,3 @@ export interface BankAccount {
   label?: string;
   preferredCurrency?: Fiat;
 }
-
-export interface Iban {
-  iban: string;
-}

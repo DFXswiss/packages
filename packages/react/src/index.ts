@@ -36,7 +36,7 @@ export { useSupportChat } from './hooks/support.hook';
 
 // Definitions
 export { Asset, AssetType } from './definitions/asset';
-export { BankAccount, Iban } from './definitions/bank-account';
+export { BankAccount } from './definitions/bank-account';
 export { Bank } from './definitions/bank';
 export { Blockchain } from './definitions/blockchain';
 export { Buy, BuyPaymentInfo } from './definitions/buy';
