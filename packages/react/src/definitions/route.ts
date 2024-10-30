@@ -89,7 +89,7 @@ export interface PaymentLink {
   id: string;
   routeId: string;
   externalId?: string;
-  recipient: PaymentLinkRecipient;
+  recipient?: PaymentLinkRecipient;
   status: PaymentLinkStatus;
   payment?: PaymentLinkPayment;
   url: string;
@@ -97,19 +97,19 @@ export interface PaymentLink {
 }
 
 export interface PaymentLinkRecipient {
-  name: string;
-  address: PaymentLinkRecipientAddress;
-  phone: string;
-  mail: string;
+  name?: string;
+  address?: PaymentLinkRecipientAddress;
+  phone?: string;
+  mail?: string;
   website?: string;
 }
 
 export interface PaymentLinkRecipientAddress {
-  street: string;
-  houseNumber: string;
-  city: string;
-  zip: string;
-  country: string;
+  street?: string;
+  houseNumber?: string;
+  city?: string;
+  zip?: string;
+  country?: string;
 }
 
 export interface PaymentLinkPayment {

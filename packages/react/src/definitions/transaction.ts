@@ -82,6 +82,17 @@ export enum TransactionFailureReason {
   VIDEO_IDENT_NEEDED = 'VideoIdentNeeded',
 }
 
+export enum ExportType {
+  COMPACT = 'Compact',
+  COIN_TRACKING = 'CoinTracking',
+  CHAIN_REPORT = 'ChainReport',
+}
+
+export enum ExportFormat {
+  CSV = 'csv',
+  JSON = 'json',
+}
+
 export interface UnassignedTransaction {
   id: number;
   uid: string;
@@ -143,6 +154,18 @@ export interface TransactionRefundData {
   feeAmount: number;
   refundAmount: number;
   refundAsset: Asset | Fiat;
+}
+
+export interface TransactionHistoryQuery {
+  userAddress?: string;
+  from?: Date;
+  to?: Date;
+  format?: ExportFormat;
+  buy?: boolean;
+  sell?: boolean;
+  staking?: boolean;
+  ref?: boolean;
+  lm?: boolean;
 }
 
 export interface TransactionRefundTarget {

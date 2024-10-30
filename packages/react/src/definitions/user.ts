@@ -9,6 +9,7 @@ export const UserUrl = {
   ref: 'user/ref',
   delete: 'user',
   change: 'user',
+  verifyMail: 'user/mail/verify',
   addresses: 'user/addresses',
   apiKey: 'user/apiKey',
   apiFilter: 'user/apiFilter',

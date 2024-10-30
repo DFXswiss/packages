@@ -8,6 +8,7 @@ export interface UserInterface {
   getUser: () => Promise<User | undefined>;
   getRef: () => Promise<Referral | undefined>;
   changeUser: (user?: Partial<User>, userLinkAction?: () => void) => Promise<User | undefined>;
+  verifyMail: (token: string) => Promise<User>;
   changeUserAddress: (address: string) => Promise<SignIn>;
   renameUserAddress: (address: string, label: string) => Promise<User | undefined>;
   deleteUserAddress: (address: string) => Promise<void>;
@@ -41,6 +42,10 @@ export function useUser(): UserInterface {
         statusCode: 202,
       },
     });
+  }
+
+  async function verifyMail(token: string): Promise<User> {
+    return call<User>({ url: UserUrl.verifyMail, version: 'v2', method: 'POST', data: { token } });
   }
 
   async function renameUserAddress(address: string, label: string): Promise<User | undefined> {
@@ -104,6 +109,7 @@ export function useUser(): UserInterface {
       getUser,
       getRef,
       changeUser,
+      verifyMail,
       changeUserAddress,
       renameUserAddress,
       deleteUserAddress,
