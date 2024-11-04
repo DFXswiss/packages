@@ -55,6 +55,7 @@ export enum AssetIconVariant {
   MKX = 'MKX',
   TGT = 'TGT',
   EURS = 'EURS',
+  EURT = 'EURt',
 
   EUR = 'EUR',
   USD = 'USD',
@@ -125,6 +126,7 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.MKX]: ({ forceColor }) => <DfxAssetIconMKX forceColor={forceColor} />,
   [AssetIconVariant.TGT]: ({ forceColor }) => <DfxAssetIconTGT forceColor={forceColor} />,
   [AssetIconVariant.EURS]: ({ forceColor }) => <DfxAssetIconEURS forceColor={forceColor} />,
+  [AssetIconVariant.EURT]: ({ forceColor }) => <DfxAssetIconEURt forceColor={forceColor} />,
 
   [AssetIconVariant.EUR]: ({ forceColor }) => <DfxAssetIconEUR forceColor={forceColor} />,
   [AssetIconVariant.USD]: ({ forceColor }) => <DfxAssetIconUSD forceColor={forceColor} />,
@@ -4627,6 +4629,24 @@ function DfxAssetIconEURS({ forceColor }: BaseAssetIconProps) {
           clipRule: 'evenodd',
           fill: forceColor ?? 'url(#eurs-a)',
         }}
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconEURt({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 1000 1000"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill={forceColor ?? '#000'}
+        d="M543.792 420.282v-44.911h129.854v-64.78H327.71v64.78h129.858v44.911c-91.202 4.799-159.623 24.515-160.133 48.143v49.255c.507 23.628 68.931 43.34 160.133 48.139V676.04h86.225V565.819c91.198-4.799 159.623-24.511 160.129-48.139l.004-49.255c-.51-23.628-68.935-43.344-160.133-48.143Zm155.472 72.769c-19.909 22.26-101.26 38.928-198.587 38.928S322 515.31 302.09 493.051c16.883-18.877 77.948-33.729 155.476-37.813v47.027c13.895.728 28.317 1.116 43.11 1.116s29.219-.388 43.114-1.116v-47.027c77.524 4.083 138.59 18.936 155.472 37.813ZM500 0C223.858 0 0 223.858 0 500s223.858 500 500 500 500-223.858 500-500S776.142 0 500 0Zm21.121 851.707c-11.842 11.703-30.893 11.703-42.735 0L113.32 490.91c-10.05-9.935-11.933-25.488-4.542-37.536l141.961-231.359a30.408 30.408 0 0 1 25.911-14.501h455.853a30.402 30.402 0 0 1 26.351 15.241l132.809 230.872c6.884 11.972 4.839 27.086-4.985 36.796L521.121 851.706Z"
       />
     </svg>
   );
