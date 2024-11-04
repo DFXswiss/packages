@@ -8,7 +8,8 @@ export const UserUrl = {
   get: 'user',
   ref: 'user/ref',
   delete: 'user',
-  change: 'user',
+  update: 'user',
+  updateMail: 'user/mail',
   verifyMail: 'user/mail/verify',
   addresses: 'user/addresses',
   apiKey: 'user/apiKey',
@@ -83,7 +84,6 @@ export interface User {
 }
 
 export interface UpdateUser {
-  mail?: string;
   phone?: string;
   language?: Language;
   currency?: Fiat;
