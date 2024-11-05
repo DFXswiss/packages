@@ -11,6 +11,7 @@ export const UserUrl = {
   change: 'user',
   verifyMail: 'user/mail/verify',
   addresses: 'user/addresses',
+  paymentLinksConfig: 'user/paymentLinksConfig',
   apiKey: 'user/apiKey',
   apiFilter: 'user/apiFilter',
   changeAddress: 'user/change',
