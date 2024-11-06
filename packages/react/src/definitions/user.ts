@@ -2,6 +2,7 @@ import { Blockchain } from './blockchain';
 import { Fiat } from './fiat';
 import { AccountType, TradingLimit } from './kyc';
 import { Language } from './language';
+import { PaymentLinkConfig } from './route';
 import { TransactionFilterKey } from './transaction';
 
 export const UserUrl = {
@@ -65,7 +66,7 @@ export interface UserKyc {
 
 export interface UserPaymentLink {
   active: boolean;
-  config: string;
+  config: PaymentLinkConfig;
 }
 
 export interface User {
