@@ -111,6 +111,7 @@ export interface PaymentLink {
   recipient?: PaymentLinkRecipient;
   status: PaymentLinkStatus;
   payment?: PaymentLinkPayment;
+  config?: PaymentLinkConfig;
   url: string;
   lnurl: string;
 }

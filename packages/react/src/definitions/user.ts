@@ -65,6 +65,7 @@ export interface UserKyc {
 
 export interface UserPaymentLink {
   active: boolean;
+  config: string;
 }
 
 export interface User {
