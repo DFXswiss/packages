@@ -200,12 +200,13 @@ export interface KycManualIdentData {
   firstName: string;
   lastName: string;
   birthName: string;
-  documentType: DocumentType;
-  documentNumber?: string;
+  birthday: Date;
   nationality: Country;
   birthplace: string;
   gender: GenderType;
-  document: KycFileData;
+  identificationDocType: DocumentType;
+  identificationDocNumber?: string;
+  identificationDoc: KycFileData;
 }
 
 export interface KycSignatoryPowerData {
