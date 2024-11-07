@@ -204,9 +204,9 @@ export interface KycManualIdentData {
   nationality: Country;
   birthplace?: string;
   gender?: GenderType;
-  identificationDocType: DocumentType;
-  identificationDocNumber?: string;
-  identificationDoc: KycFileData;
+  documentType: DocumentType;
+  documentNumber: string;
+  document: KycFileData;
 }
 
 export interface KycSignatoryPowerData {
