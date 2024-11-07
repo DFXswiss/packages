@@ -199,12 +199,13 @@ export enum GenderType {
 export interface KycManualIdentData {
   firstName: string;
   lastName: string;
-  birthName: string;
-  documentType: DocumentType;
-  documentNumber?: string;
+  birthName?: string;
+  birthday: Date;
   nationality: Country;
-  birthplace: string;
-  gender: GenderType;
+  birthplace?: string;
+  gender?: GenderType;
+  documentType: DocumentType;
+  documentNumber: string;
   document: KycFileData;
 }
 
