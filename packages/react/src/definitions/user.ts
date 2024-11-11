@@ -80,6 +80,8 @@ export interface User {
   disabledAddresses: UserAddress[];
   activeAddress?: UserAddress;
   paymentLink: UserPaymentLink;
+  apiKeyCT: string;
+  apiFilterCT: TransactionFilterKey[];
 }
 
 export interface UpdateUser {
