@@ -7,7 +7,6 @@ import { useApiSession } from '../hooks/api-session.hook';
 import { Language } from '../definitions/language';
 import { Fiat } from '../definitions/fiat';
 import { TransactionFilterKey } from '../definitions/transaction';
-import { PaymentLinkConfig } from '../definitions/route';
 
 interface UserInterface {
   user?: User;
@@ -21,7 +20,6 @@ interface UserInterface {
   changeLanguage: (language: Language) => Promise<void>;
   changeCurrency: (currency: Fiat) => Promise<void>;
   renameAddress: (address: string, label: string) => Promise<void>;
-  updatePaymentLinksConfig: (config: PaymentLinkConfig) => Promise<void>;
   changeAddress: (address: string) => Promise<void>;
   deleteAddress: (address: string) => Promise<void>;
   deleteAccount: () => Promise<void>;
@@ -49,7 +47,6 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     verifyMail: verifyMailApi,
     addDiscountCode,
     renameUserAddress,
-    updatePaymentLinksConfig: updatePaymentLinksConfigApi,
     changeUserAddress,
     deleteUserAddress,
     deleteUserAccount,
@@ -124,15 +121,6 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
 
     setIsUserUpdating(true);
     return renameUserAddress(address, label)
-      .then(setUser)
-      .finally(() => setIsUserUpdating(false));
-  }
-
-  async function updatePaymentLinksConfig(config: PaymentLinkConfig): Promise<void> {
-    if (!user) return;
-
-    setIsUserUpdating(true);
-    return updatePaymentLinksConfigApi(config)
       .then(setUser)
       .finally(() => setIsUserUpdating(false));
   }
@@ -215,7 +203,6 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       changeLanguage,
       changeCurrency,
       renameAddress,
-      updatePaymentLinksConfig,
       changeAddress,
       deleteAddress,
       deleteAccount,

@@ -3,7 +3,6 @@ import { ApiKey, Referral, UpdateUser, User, UserUrl } from '../definitions/user
 import { useApi } from './api.hook';
 import { SignIn } from '../definitions/auth';
 import { TransactionFilter, TransactionFilterKey } from '../definitions/transaction';
-import { PaymentLinkConfig } from '../definitions/route';
 
 export interface UserInterface {
   getUser: () => Promise<User | undefined>;
@@ -12,7 +11,6 @@ export interface UserInterface {
   verifyMail: (token: string) => Promise<User>;
   changeUserAddress: (address: string) => Promise<SignIn>;
   renameUserAddress: (address: string, label: string) => Promise<User | undefined>;
-  updatePaymentLinksConfig: (config: PaymentLinkConfig) => Promise<User | undefined>;
   deleteUserAddress: (address: string) => Promise<void>;
   deleteUserAccount: () => Promise<void>;
   addDiscountCode: (code: string) => Promise<void>;
@@ -57,15 +55,6 @@ export function useUser(): UserInterface {
       version: 'v2',
       method: 'PUT',
       data: { label },
-    });
-  }
-
-  async function updatePaymentLinksConfig(config: PaymentLinkConfig): Promise<User | undefined> {
-    return call<User>({
-      url: UserUrl.paymentLinksConfig,
-      version: 'v2',
-      method: 'PUT',
-      data: { config },
     });
   }
 
@@ -123,7 +112,6 @@ export function useUser(): UserInterface {
       verifyMail,
       changeUserAddress,
       renameUserAddress,
-      updatePaymentLinksConfig,
       deleteUserAddress,
       deleteUserAccount,
       addDiscountCode,

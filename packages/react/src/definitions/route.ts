@@ -8,6 +8,7 @@ export const PaymentLinksUrl = {
   create: 'paymentLink',
   update: 'paymentLink',
   payment: 'paymentLink/payment',
+  userPaymentLinksConfig: 'paymentLink/config',
 };
 
 export enum PaymentLinkStatus {
