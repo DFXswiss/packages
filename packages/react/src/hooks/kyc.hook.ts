@@ -14,13 +14,13 @@ import {
   KycStepType,
   KycUrl,
   LimitRequest,
-  TfaType,
   TfaSetup,
   UserData,
   UserName,
   KycSignatoryPowerData,
   KycManualIdentData,
   TfaLevel,
+  KycFile,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 import { Country } from '../definitions/country';
@@ -54,6 +54,7 @@ export interface KycInterface {
   setSignatoryPowerData: (code: string, url: string, data: KycSignatoryPowerData) => Promise<KycResult>;
   getFinancialData: (code: string, url: string, lang?: string) => Promise<KycFinancialQuestions>;
   setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycResult>;
+  getFile: (kycFileId: string) => Promise<KycFile>;
 
   // 2fa
   setup2fa: (code: string, level?: TfaLevel) => Promise<TfaSetup>;
@@ -147,6 +148,14 @@ export function useKyc(): KycInterface {
     return call({ url, code, method: 'GET' });
   }
 
+  async function getFile(kycFileId: string): Promise<KycFile> {
+    return callApi({
+      url: `${KycUrl.file}/${kycFileId}`,
+      method: 'GET',
+      version: 'v2',
+    });
+  }
+
   async function setFinancialData(code: string, url: string, data: KycFinancialResponses): Promise<KycResult> {
     return call({ url, code, method: 'PUT', data });
   }
@@ -211,6 +220,7 @@ export function useKyc(): KycInterface {
       setFileData,
       setSignatoryPowerData,
       getFinancialData,
+      getFile,
       setFinancialData,
       setup2fa,
       verify2fa,
