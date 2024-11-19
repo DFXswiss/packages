@@ -14,7 +14,7 @@ export const UserUrl = {
   apiKey: 'user/apiKey',
   apiFilter: 'user/apiFilter',
   changeAddress: 'user/change',
-  discountCodes: 'user/discountCodes',
+  specialCodes: 'user/specialCodes',
 };
 
 export enum UserStatus {

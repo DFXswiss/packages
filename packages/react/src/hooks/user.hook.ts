@@ -13,7 +13,7 @@ export interface UserInterface {
   renameUserAddress: (address: string, label: string) => Promise<User | undefined>;
   deleteUserAddress: (address: string) => Promise<void>;
   deleteUserAccount: () => Promise<void>;
-  addDiscountCode: (code: string) => Promise<void>;
+  addSpecialCode: (code: string) => Promise<void>;
   generateCTApiKey: (types?: TransactionFilterKey[]) => Promise<ApiKey>;
   deleteCTApiKey: () => Promise<void>;
   updateCTApiFilter: (types?: TransactionFilterKey[]) => Promise<TransactionFilter[]>;
@@ -82,9 +82,9 @@ export function useUser(): UserInterface {
     });
   }
 
-  async function addDiscountCode(code: string): Promise<void> {
+  async function addSpecialCode(code: string): Promise<void> {
     return call({
-      url: `${UserUrl.discountCodes}?code=${code}`,
+      url: `${UserUrl.specialCodes}?code=${code}`,
       method: 'PUT',
     });
   }
@@ -114,7 +114,7 @@ export function useUser(): UserInterface {
       renameUserAddress,
       deleteUserAddress,
       deleteUserAccount,
-      addDiscountCode,
+      addSpecialCode,
       generateCTApiKey,
       deleteCTApiKey,
       updateCTApiFilter,
