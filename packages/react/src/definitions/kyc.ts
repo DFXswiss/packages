@@ -4,6 +4,7 @@ import { Language } from './language';
 export const KycUrl = {
   setName: 'user/name',
   setData: 'user/data',
+  file: 'kyc/file',
   base: `${process.env.REACT_APP_API_URL}/v2/kyc`,
   tfa: `${process.env.REACT_APP_API_URL}/v2/kyc/2fa`,
   limit: `${process.env.REACT_APP_API_URL}/v2/kyc/limit`,
@@ -129,6 +130,19 @@ export enum UrlType {
   NONE = 'None',
 }
 
+export enum FileType {
+  NAME_CHECK = 'NameCheck',
+  USER_INFORMATION = 'UserInformation',
+  IDENTIFICATION = 'Identification',
+  USER_NOTES = 'UserNotes',
+  TRANSACTION_NOTES = 'TransactionNotes',
+  STOCK_REGISTER = 'StockRegister',
+  COMMERCIAL_REGISTER = 'CommercialRegister',
+  RESIDENCE_PERMIT = 'ResidencePermit',
+  ADDITIONAL_DOCUMENTS = 'AdditionalDocuments',
+  AUTHORITY = 'Authority',
+}
+
 export interface KycSessionInfo {
   url: string;
   type: UrlType;
@@ -216,6 +230,14 @@ export interface KycSignatoryPowerData {
 export interface KycFileData {
   file: string;
   fileName?: string;
+}
+
+export interface KycFile {
+  uid: string;
+  name: string;
+  type: FileType;
+  contentType: string;
+  content: Buffer;
 }
 
 // financial data
