@@ -237,7 +237,7 @@ export interface KycFile {
   name: string;
   type: FileType;
   contentType: string;
-  content: any;
+  content: Buffer;
 }
 
 // financial data
