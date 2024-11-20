@@ -68,7 +68,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     if (isLoggedIn) {
       reloadUser();
 
-      getCountries().then((c) => setCountries(c.sort((a, b) => (a.name > b.name ? 1 : -1))));
+      getCountries().then(setCountries);
     } else {
       setUser(undefined);
       setCountries([]);

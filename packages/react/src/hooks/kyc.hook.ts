@@ -23,7 +23,6 @@ import {
   KycFile,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
-import { Country } from '../definitions/country';
 
 export interface CallConfig {
   url: string;
@@ -42,7 +41,6 @@ export interface KycInterface {
   getKycInfo: (code: string) => Promise<KycInfo>;
   continueKyc: (code: string, autoStep?: boolean) => Promise<KycSession>;
   startStep: (code: string, name: KycStepName, type?: KycStepType, sequence?: number) => Promise<KycSession>;
-  getCountries: (code: string) => Promise<Country[]>;
 
   // updates
   setContactData: (code: string, url: string, data: KycContactData) => Promise<KycResult>;
@@ -109,10 +107,6 @@ export function useKyc(): KycInterface {
     const url = `${KycUrl.base}/${name}?${params.toString()}`;
 
     return call({ url, code, method: 'GET' });
-  }
-
-  async function getCountries(code: string): Promise<Country[]> {
-    return call({ url: `${KycUrl.base}/countries`, code, method: 'GET' });
   }
 
   async function setContactData(code: string, url: string, data: KycContactData): Promise<KycResult> {
@@ -211,7 +205,6 @@ export function useKyc(): KycInterface {
       getKycInfo,
       continueKyc,
       startStep,
-      getCountries,
       setContactData,
       setPersonalData,
       setManualIdentData,
