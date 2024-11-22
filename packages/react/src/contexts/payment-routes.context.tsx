@@ -8,6 +8,7 @@ import {
   PaymentRoutes,
   PaymentRouteType,
   UpdatePaymentLink,
+  UpdatePaymentLinkConfig,
 } from '../definitions/route';
 import { usePaymentRoutes } from '../hooks/payment-routes.hook';
 import { ApiError } from '../definitions/error';
@@ -27,7 +28,7 @@ interface PaymentRoutesInterface {
     externalLinkId?: string,
     externalPaymentId?: string,
   ) => Promise<void>;
-  updateUserPaymentLinksConfig: (config: PaymentLinkConfig) => Promise<void>;
+  updateUserPaymentLinksConfig: (config: UpdatePaymentLinkConfig) => Promise<void>;
   createPaymentLinkPayment: (
     request: CreatePaymentLinkPayment,
     linkId?: string,
@@ -203,7 +204,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     });
   }
 
-  async function updateUserPaymentLinksConfig(config: PaymentLinkConfig): Promise<void> {
+  async function updateUserPaymentLinksConfig(config: UpdatePaymentLinkConfig): Promise<void> {
     if (!user) return;
 
     setUserPaymentLinksConfigLoading(true);

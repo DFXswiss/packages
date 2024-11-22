@@ -162,18 +162,21 @@ export interface CreatePaymentLink {
   payment?: CreatePaymentLinkPayment;
 }
 
-export interface PaymentLinkConfig {
+export interface UpdatePaymentLinkConfig {
   standards?: PaymentStandardType[];
   blockchains?: Blockchain[];
   minCompletionStatus?: PaymentQuoteStatus;
   displayQr?: boolean;
-  fee?: number;
   recipient?: PaymentLinkRecipient;
   paymentTimeout?: number;
+}
+
+export interface PaymentLinkConfig extends UpdatePaymentLinkConfig {
+  fee?: number;
 }
 
 export interface UpdatePaymentLink {
   status?: PaymentLinkStatus;
   webhookUrl?: string;
-  config?: PaymentLinkConfig;
+  config?: UpdatePaymentLinkConfig;
 }
