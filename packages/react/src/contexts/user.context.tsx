@@ -1,7 +1,5 @@
-import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
-import { Country } from '../definitions/country';
+import { createContext, PropsWithChildren, useContext, useMemo, useState } from 'react';
 import { ApiKey, UpdateUser, User } from '../definitions/user';
-import { useCountry } from '../hooks/country.hook';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
 import { Language } from '../definitions/language';
@@ -11,7 +9,6 @@ import { TransactionFilterKey } from '../definitions/transaction';
 interface UserInterface {
   user?: User;
   refLink?: string;
-  countries: Country[];
   isUserLoading: boolean;
   isUserUpdating: boolean;
   changeMail: (mail: string) => Promise<void>;
@@ -40,7 +37,7 @@ export function useUserContext(): UserInterface {
 }
 
 export function UserContextProvider(props: PropsWithChildren): JSX.Element {
-  const { isLoggedIn, session, updateSession, deleteSession } = useApiSession();
+  const { updateSession, deleteSession } = useApiSession();
   const {
     getUser,
     changeUser,
@@ -54,26 +51,13 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     deleteCTApiKey,
     updateCTApiFilter,
   } = useUser();
-  const { getCountries } = useCountry();
   const [user, setUser] = useState<User>();
-  const [countries, setCountries] = useState<Country[]>([]);
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
   const [isUserUpdating, setIsUserUpdating] = useState<boolean>(false);
 
   const refCode = user?.activeAddress?.refCode;
   const refLink = refCode && `${process.env.REACT_APP_REF_URL ?? 'https://dfx.swiss/app?code='}${refCode}`;
   let userLinkAction: () => void | undefined;
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      reloadUser();
-
-      getCountries().then(setCountries);
-    } else {
-      setUser(undefined);
-      setCountries([]);
-    }
-  }, [isLoggedIn, session]);
 
   async function reloadUser(): Promise<void> {
     setIsUserLoading(true);
@@ -194,7 +178,6 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     () => ({
       user,
       refLink,
-      countries,
       isUserLoading,
       isUserUpdating,
       changeMail,
@@ -215,7 +198,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       deleteKeyCT,
       updateFilterCT,
     }),
-    [user, refLink, countries, isUserLoading, isUserUpdating, changeMail, changePhone, register, reloadUser],
+    [user, refLink, isUserLoading, isUserUpdating, changeMail, changePhone, register, reloadUser],
   );
 
   return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
