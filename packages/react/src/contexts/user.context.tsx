@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useContext, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
 import { ApiKey, UpdateUser, User } from '../definitions/user';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
@@ -37,7 +37,7 @@ export function useUserContext(): UserInterface {
 }
 
 export function UserContextProvider(props: PropsWithChildren): JSX.Element {
-  const { updateSession, deleteSession } = useApiSession();
+  const { isLoggedIn, session, updateSession, deleteSession } = useApiSession();
   const {
     getUser,
     changeUser,
@@ -58,6 +58,14 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const refCode = user?.activeAddress?.refCode;
   const refLink = refCode && `${process.env.REACT_APP_REF_URL ?? 'https://dfx.swiss/app?code='}${refCode}`;
   let userLinkAction: () => void | undefined;
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      reloadUser();
+    } else {
+      setUser(undefined);
+    }
+  }, [isLoggedIn, session]);
 
   async function reloadUser(): Promise<void> {
     setIsUserLoading(true);
