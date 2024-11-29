@@ -1,7 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
-import { Country } from '../definitions/country';
 import { ApiKey, UpdateUser, User } from '../definitions/user';
-import { useCountry } from '../hooks/country.hook';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
 import { Language } from '../definitions/language';
@@ -11,7 +9,6 @@ import { TransactionFilterKey } from '../definitions/transaction';
 interface UserInterface {
   user?: User;
   refLink?: string;
-  countries: Country[];
   isUserLoading: boolean;
   isUserUpdating: boolean;
   updateMail: (mail: string) => Promise<void>;
@@ -54,9 +51,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     deleteCTApiKey,
     updateCTApiFilter,
   } = useUser();
-  const { getCountries } = useCountry();
   const [user, setUser] = useState<User>();
-  const [countries, setCountries] = useState<Country[]>([]);
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
   const [isUserUpdating, setIsUserUpdating] = useState<boolean>(false);
 
@@ -66,11 +61,8 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   useEffect(() => {
     if (isLoggedIn) {
       reloadUser();
-
-      getCountries().then((c) => setCountries(c.sort((a, b) => (a.name > b.name ? 1 : -1))));
     } else {
       setUser(undefined);
-      setCountries([]);
     }
   }, [isLoggedIn, session]);
 
@@ -189,7 +181,6 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     () => ({
       user,
       refLink,
-      countries,
       isUserLoading,
       isUserUpdating,
       updateMail,
@@ -203,13 +194,13 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       deleteAccount,
       addDiscountCode,
       reloadUser,
-      filterCT: user?.activeAddress?.apiFilterCT,
-      keyCT: user?.activeAddress?.apiKeyCT,
+      filterCT: user?.apiFilterCT ?? user?.activeAddress?.apiFilterCT,
+      keyCT: user?.apiKeyCT ?? user?.activeAddress?.apiKeyCT,
       generateKeyCT,
       deleteKeyCT,
       updateFilterCT,
     }),
-    [user, refLink, countries, isUserLoading, isUserUpdating, updateMail, updatePhone, reloadUser],
+    [user, refLink, isUserLoading, isUserUpdating, updateMail, updatePhone, reloadUser],
   );
 
   return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;

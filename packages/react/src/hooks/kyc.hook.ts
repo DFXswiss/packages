@@ -14,16 +14,15 @@ import {
   KycStepType,
   KycUrl,
   LimitRequest,
-  TfaType,
   TfaSetup,
   UserData,
   UserName,
   KycSignatoryPowerData,
   KycManualIdentData,
   TfaLevel,
+  KycFile,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
-import { Country } from '../definitions/country';
 
 export interface CallConfig {
   url: string;
@@ -42,7 +41,6 @@ export interface KycInterface {
   getKycInfo: (code: string) => Promise<KycInfo>;
   continueKyc: (code: string, autoStep?: boolean) => Promise<KycSession>;
   startStep: (code: string, name: KycStepName, type?: KycStepType, sequence?: number) => Promise<KycSession>;
-  getCountries: (code: string) => Promise<Country[]>;
 
   // updates
   setContactData: (code: string, url: string, data: KycContactData) => Promise<KycResult>;
@@ -54,6 +52,7 @@ export interface KycInterface {
   setSignatoryPowerData: (code: string, url: string, data: KycSignatoryPowerData) => Promise<KycResult>;
   getFinancialData: (code: string, url: string, lang?: string) => Promise<KycFinancialQuestions>;
   setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycResult>;
+  getFile: (kycFileId: string) => Promise<KycFile>;
 
   // 2fa
   setup2fa: (code: string, level?: TfaLevel) => Promise<TfaSetup>;
@@ -110,10 +109,6 @@ export function useKyc(): KycInterface {
     return call({ url, code, method: 'GET' });
   }
 
-  async function getCountries(code: string): Promise<Country[]> {
-    return call({ url: `${KycUrl.base}/countries`, code, method: 'GET' });
-  }
-
   async function setContactData(code: string, url: string, data: KycContactData): Promise<KycResult> {
     return call({ url, code, method: 'PUT', data });
   }
@@ -145,6 +140,14 @@ export function useKyc(): KycInterface {
   async function getFinancialData(code: string, url: string, lang?: string): Promise<KycFinancialQuestions> {
     lang && (url += `?lang=${lang}`);
     return call({ url, code, method: 'GET' });
+  }
+
+  async function getFile(kycFileId: string): Promise<KycFile> {
+    return callApi({
+      url: `${KycUrl.file}/${kycFileId}`,
+      method: 'GET',
+      version: 'v2',
+    });
   }
 
   async function setFinancialData(code: string, url: string, data: KycFinancialResponses): Promise<KycResult> {
@@ -202,7 +205,6 @@ export function useKyc(): KycInterface {
       getKycInfo,
       continueKyc,
       startStep,
-      getCountries,
       setContactData,
       setPersonalData,
       setManualIdentData,
@@ -211,6 +213,7 @@ export function useKyc(): KycInterface {
       setFileData,
       setSignatoryPowerData,
       getFinancialData,
+      getFile,
       setFinancialData,
       setup2fa,
       verify2fa,

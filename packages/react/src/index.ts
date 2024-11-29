@@ -114,6 +114,8 @@ export {
   KycSignatoryPowerData,
   LegalEntity,
   SignatoryPower,
+  FileType,
+  KycFile,
   isStepDone,
 } from './definitions/kyc';
 export { Sell, SellPaymentInfo } from './definitions/sell';
