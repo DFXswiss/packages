@@ -130,6 +130,11 @@ export enum UrlType {
   NONE = 'None',
 }
 
+export enum KycStepReason {
+  ACCOUNT_EXISTS = 'AccountExists',
+  ACCOUNT_MERGE_REQUESTED = 'AccountMergeRequested',
+}
+
 export enum FileType {
   NAME_CHECK = 'NameCheck',
   USER_INFORMATION = 'UserInformation',
@@ -152,6 +157,7 @@ export interface KycStepBase {
   name: KycStepName;
   type?: KycStepType;
   status: KycStepStatus;
+  reason?: KycStepReason;
   sequenceNumber: number;
 }
 

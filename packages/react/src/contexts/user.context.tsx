@@ -11,17 +11,16 @@ interface UserInterface {
   refLink?: string;
   isUserLoading: boolean;
   isUserUpdating: boolean;
-  changeMail: (mail: string) => Promise<void>;
+  updateMail: (mail: string) => Promise<void>;
   verifyMail: (token: string) => Promise<void>;
-  changePhone: (phone: string) => Promise<void>;
-  changeLanguage: (language: Language) => Promise<void>;
-  changeCurrency: (currency: Fiat) => Promise<void>;
+  updatePhone: (phone: string) => Promise<void>;
+  updateLanguage: (language: Language) => Promise<void>;
+  updateCurrency: (currency: Fiat) => Promise<void>;
   renameAddress: (address: string, label: string) => Promise<void>;
   changeAddress: (address: string) => Promise<void>;
   deleteAddress: (address: string) => Promise<void>;
   deleteAccount: () => Promise<void>;
   addDiscountCode: (code: string) => Promise<void>;
-  register: (userLink: () => void) => void;
   reloadUser: () => Promise<void>;
   filterCT?: TransactionFilterKey[];
   keyCT?: string;
@@ -40,7 +39,8 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const { isLoggedIn, session, updateSession, deleteSession } = useApiSession();
   const {
     getUser,
-    changeUser,
+    updateUser: updateUserApi,
+    updateMail: updateMailApi,
     verifyMail: verifyMailApi,
     addDiscountCode,
     renameUserAddress,
@@ -57,7 +57,6 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
 
   const refCode = user?.activeAddress?.refCode;
   const refLink = refCode && `${process.env.REACT_APP_REF_URL ?? 'https://dfx.swiss/app?code='}${refCode}`;
-  let userLinkAction: () => void | undefined;
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -78,13 +77,13 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     if (!user) return;
 
     setIsUserUpdating(true);
-    return changeUser(update, linkAction)
+    return updateUserApi(update, linkAction)
       .then(setUser)
       .finally(() => setIsUserUpdating(false));
   }
 
-  async function changeMail(mail: string): Promise<void> {
-    return updateUser({ mail }, userLinkAction);
+  async function updateMail(mail: string): Promise<void> {
+    return updateMailApi(mail);
   }
 
   async function verifyMail(token: string): Promise<void> {
@@ -96,15 +95,15 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       .finally(() => setIsUserUpdating(false));
   }
 
-  async function changePhone(phone: string): Promise<void> {
+  async function updatePhone(phone: string): Promise<void> {
     return updateUser({ phone });
   }
 
-  async function changeLanguage(language: Language): Promise<void> {
+  async function updateLanguage(language: Language): Promise<void> {
     return updateUser({ language });
   }
 
-  async function changeCurrency(currency: Fiat): Promise<void> {
+  async function updateCurrency(currency: Fiat): Promise<void> {
     return updateUser({ currency });
   }
 
@@ -147,10 +146,6 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     return deleteUserAccount().then(deleteSession);
   }
 
-  function register(userLink: () => void) {
-    userLinkAction = userLink;
-  }
-
   async function generateKeyCT(types?: TransactionFilterKey[]): Promise<ApiKey | undefined> {
     if (!user) return;
 
@@ -188,17 +183,16 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       refLink,
       isUserLoading,
       isUserUpdating,
-      changeMail,
+      updateMail,
       verifyMail,
-      changePhone,
-      changeLanguage,
-      changeCurrency,
+      updatePhone,
+      updateLanguage,
+      updateCurrency,
       renameAddress,
       changeAddress,
       deleteAddress,
       deleteAccount,
       addDiscountCode,
-      register,
       reloadUser,
       filterCT: user?.apiFilterCT ?? user?.activeAddress?.apiFilterCT,
       keyCT: user?.apiKeyCT ?? user?.activeAddress?.apiKeyCT,
@@ -206,7 +200,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       deleteKeyCT,
       updateFilterCT,
     }),
-    [user, refLink, isUserLoading, isUserUpdating, changeMail, changePhone, register, reloadUser],
+    [user, refLink, isUserLoading, isUserUpdating, updateMail, updatePhone, reloadUser],
   );
 
   return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;

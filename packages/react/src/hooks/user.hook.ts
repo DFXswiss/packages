@@ -7,7 +7,8 @@ import { TransactionFilter, TransactionFilterKey } from '../definitions/transact
 export interface UserInterface {
   getUser: () => Promise<User | undefined>;
   getRef: () => Promise<Referral | undefined>;
-  changeUser: (user?: Partial<User>, userLinkAction?: () => void) => Promise<User | undefined>;
+  updateUser: (user?: Partial<User>, userLinkAction?: () => void) => Promise<User | undefined>;
+  updateMail: (mail: string) => Promise<void>;
   verifyMail: (token: string) => Promise<User>;
   changeUserAddress: (address: string) => Promise<SignIn>;
   renameUserAddress: (address: string, label: string) => Promise<User | undefined>;
@@ -30,10 +31,10 @@ export function useUser(): UserInterface {
     return call<Referral>({ url: UserUrl.ref, version: 'v2', method: 'GET' });
   }
 
-  async function changeUser(updateUser?: UpdateUser, userLinkAction?: () => void): Promise<User | undefined> {
+  async function updateUser(updateUser?: UpdateUser, userLinkAction?: () => void): Promise<User | undefined> {
     if (!updateUser) return undefined;
     return call<User>({
-      url: UserUrl.change,
+      url: UserUrl.update,
       version: 'v2',
       method: 'PUT',
       data: { ...updateUser },
@@ -41,6 +42,15 @@ export function useUser(): UserInterface {
         action: userLinkAction,
         statusCode: 202,
       },
+    });
+  }
+
+  async function updateMail(mail: string): Promise<void> {
+    return call<void>({
+      url: UserUrl.updateMail,
+      version: 'v2',
+      method: 'PUT',
+      data: { mail },
     });
   }
 
@@ -108,7 +118,8 @@ export function useUser(): UserInterface {
     () => ({
       getUser,
       getRef,
-      changeUser,
+      updateUser,
+      updateMail,
       verifyMail,
       changeUserAddress,
       renameUserAddress,
