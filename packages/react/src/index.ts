@@ -85,6 +85,7 @@ export {
   UrlType,
   KycSessionInfo,
   KycStepBase,
+  KycStepReason,
   KycStep,
   KycStepSession,
   KycResult,
