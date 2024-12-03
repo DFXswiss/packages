@@ -13,6 +13,7 @@ export interface CallConfig {
   version?: string;
   data?: any;
   noJson?: boolean;
+  noJsonResponse?: boolean;
   specialHandling?: SpecialHandling;
   token?: string;
 }
@@ -50,7 +51,7 @@ export function useApi(): ApiInterface {
         config.specialHandling?.action?.();
       }
       if (response.ok) {
-        if (config.noJson) {
+        if (config.noJsonResponse) {
           return response.text() as unknown as T;
         } else {
           return response.json().catch(() => undefined);
