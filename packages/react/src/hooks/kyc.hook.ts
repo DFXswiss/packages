@@ -8,7 +8,6 @@ import {
   KycLegalEntityData,
   KycNationalityData,
   KycPersonalData,
-  KycResult,
   KycSession,
   KycStepName,
   KycStepType,
@@ -21,6 +20,7 @@ import {
   KycManualIdentData,
   TfaLevel,
   KycFile,
+  KycStepBase,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 
@@ -43,15 +43,15 @@ export interface KycInterface {
   startStep: (code: string, name: KycStepName, type?: KycStepType, sequence?: number) => Promise<KycSession>;
 
   // updates
-  setContactData: (code: string, url: string, data: KycContactData) => Promise<KycResult>;
-  setPersonalData: (code: string, url: string, data: KycPersonalData) => Promise<KycResult>;
-  setManualIdentData: (code: string, url: string, data: KycManualIdentData) => Promise<KycResult>;
-  setLegalEntityData: (code: string, url: string, data: KycLegalEntityData) => Promise<KycResult>;
-  setNationalityData: (code: string, url: string, data: KycNationalityData) => Promise<KycResult>;
-  setFileData: (code: string, url: string, data: KycFileData) => Promise<KycResult>;
-  setSignatoryPowerData: (code: string, url: string, data: KycSignatoryPowerData) => Promise<KycResult>;
+  setContactData: (code: string, url: string, data: KycContactData) => Promise<KycStepBase>;
+  setPersonalData: (code: string, url: string, data: KycPersonalData) => Promise<KycStepBase>;
+  setManualIdentData: (code: string, url: string, data: KycManualIdentData) => Promise<KycStepBase>;
+  setLegalEntityData: (code: string, url: string, data: KycLegalEntityData) => Promise<KycStepBase>;
+  setNationalityData: (code: string, url: string, data: KycNationalityData) => Promise<KycStepBase>;
+  setFileData: (code: string, url: string, data: KycFileData) => Promise<KycStepBase>;
+  setSignatoryPowerData: (code: string, url: string, data: KycSignatoryPowerData) => Promise<KycStepBase>;
   getFinancialData: (code: string, url: string, lang?: string) => Promise<KycFinancialQuestions>;
-  setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycResult>;
+  setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycStepBase>;
   getFile: (kycFileId: string) => Promise<KycFile>;
 
   // 2fa
@@ -110,31 +110,31 @@ export function useKyc(): KycInterface {
     return call({ url, code, method: 'GET' });
   }
 
-  async function setContactData(code: string, url: string, data: KycContactData): Promise<KycResult> {
+  async function setContactData(code: string, url: string, data: KycContactData): Promise<KycStepBase> {
     return call({ url, code, method: 'PUT', data });
   }
 
-  async function setPersonalData(code: string, url: string, data: KycPersonalData): Promise<KycResult> {
+  async function setPersonalData(code: string, url: string, data: KycPersonalData): Promise<KycStepBase> {
     return call({ url, code, method: 'PUT', data });
   }
 
-  async function setManualIdentData(code: string, url: string, data: KycManualIdentData): Promise<KycResult> {
+  async function setManualIdentData(code: string, url: string, data: KycManualIdentData): Promise<KycStepBase> {
     return call({ url, code, method: 'PUT', data });
   }
 
-  function setLegalEntityData(code: string, url: string, data: KycLegalEntityData): Promise<KycResult> {
+  function setLegalEntityData(code: string, url: string, data: KycLegalEntityData): Promise<KycStepBase> {
     return call({ url, code, method: 'PUT', data });
   }
 
-  async function setNationalityData(code: string, url: string, data: KycNationalityData): Promise<KycResult> {
+  async function setNationalityData(code: string, url: string, data: KycNationalityData): Promise<KycStepBase> {
     return call({ url, code, method: 'PUT', data });
   }
 
-  async function setFileData(code: string, url: string, data: KycFileData): Promise<KycResult> {
+  async function setFileData(code: string, url: string, data: KycFileData): Promise<KycStepBase> {
     return call({ url, code, method: 'PUT', data });
   }
 
-  function setSignatoryPowerData(code: string, url: string, data: KycSignatoryPowerData): Promise<KycResult> {
+  function setSignatoryPowerData(code: string, url: string, data: KycSignatoryPowerData): Promise<KycStepBase> {
     return call({ url, code, method: 'PUT', data });
   }
 
@@ -151,7 +151,7 @@ export function useKyc(): KycInterface {
     });
   }
 
-  async function setFinancialData(code: string, url: string, data: KycFinancialResponses): Promise<KycResult> {
+  async function setFinancialData(code: string, url: string, data: KycFinancialResponses): Promise<KycStepBase> {
     return call({ url, code, method: 'PUT', data });
   }
 
