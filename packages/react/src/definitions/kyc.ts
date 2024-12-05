@@ -170,10 +170,6 @@ export interface KycStepSession extends KycStepBase {
   session?: KycSessionInfo;
 }
 
-export interface KycResult {
-  status: KycStepStatus;
-}
-
 // personal data
 export interface KycContactData {
   mail: string;
@@ -332,6 +328,6 @@ export interface LimitRequest {
 }
 
 // helpers
-export function isStepDone(result: KycResult): boolean {
+export function isStepDone(result: KycStepBase): boolean {
   return [KycStepStatus.IN_REVIEW, KycStepStatus.COMPLETED].includes(result.status);
 }

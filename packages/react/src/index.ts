@@ -88,7 +88,6 @@ export {
   KycStepReason,
   KycStep,
   KycStepSession,
-  KycResult,
   KycContactData,
   KycAddress,
   KycPersonalData,
