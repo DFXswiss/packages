@@ -55,6 +55,7 @@ export interface KycInterface {
   getFile: (kycFileId: string) => Promise<KycFile>;
 
   // 2fa
+  check2fa: (level?: TfaLevel) => Promise<TfaSetup>;
   setup2fa: (code: string, level?: TfaLevel) => Promise<TfaSetup>;
   verify2fa: (code: string, token: string) => Promise<void>;
 
@@ -154,6 +155,11 @@ export function useKyc(): KycInterface {
     return call({ url, code, method: 'PUT', data });
   }
 
+  async function check2fa(level?: TfaLevel): Promise<TfaSetup> {
+    const url = level ? `${KycUrl.checkTfa}?level=${level}` : KycUrl.checkTfa;
+    return callApi({ url, version: 'v2', method: 'GET' });
+  }
+
   async function setup2fa(code: string, level?: TfaLevel): Promise<TfaSetup> {
     const url = level ? `${KycUrl.tfa}?level=${level}` : KycUrl.tfa;
     return call({ url, code, method: 'POST' });
@@ -215,6 +221,7 @@ export function useKyc(): KycInterface {
       getFinancialData,
       getFile,
       setFinancialData,
+      check2fa,
       setup2fa,
       verify2fa,
       increaseLimit,
