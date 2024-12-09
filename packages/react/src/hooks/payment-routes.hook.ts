@@ -5,12 +5,14 @@ import {
   CreatePaymentLink,
   CreatePaymentLinkPayment,
   PaymentLink,
+  PaymentLinkConfig,
   PaymentLinksUrl,
   PaymentRoute,
   PaymentRoutes,
   PaymentRoutesUrl,
   PaymentRouteType,
   UpdatePaymentLink,
+  UpdatePaymentLinkConfig,
 } from '../definitions/route';
 
 export interface PaymentRoutesInterface {
@@ -27,6 +29,8 @@ export interface PaymentRoutesInterface {
     externalLinkId?: string,
     externalPaymentId?: string,
   ) => Promise<PaymentLink>;
+  getUserPaymentLinksConfig: () => Promise<PaymentLinkConfig>;
+  updateUserPaymentLinksConfig: (config: UpdatePaymentLinkConfig) => Promise<void>;
   createPaymentLinkPayment: (
     request: CreatePaymentLinkPayment,
     linkId?: string,
@@ -83,6 +87,18 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     });
   }
 
+  async function getUserPaymentLinksConfig(): Promise<PaymentLinkConfig> {
+    return call<PaymentLinkConfig>({ url: PaymentLinksUrl.userPaymentLinksConfig, method: 'GET' });
+  }
+
+  async function updateUserPaymentLinksConfig(config: UpdatePaymentLinkConfig): Promise<void> {
+    return call<void>({
+      url: PaymentLinksUrl.userPaymentLinksConfig,
+      method: 'PUT',
+      data: config,
+    });
+  }
+
   async function createPaymentLinkPayment(
     request: CreatePaymentLinkPayment,
     linkId?: string,
@@ -120,6 +136,8 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
       getPaymentLinks,
       createPaymentLink,
       updatePaymentLink,
+      getUserPaymentLinksConfig,
+      updateUserPaymentLinksConfig,
       createPaymentLinkPayment,
       cancelPaymentLinkPayment,
       deletePaymentRoute,

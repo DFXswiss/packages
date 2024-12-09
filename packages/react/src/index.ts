@@ -62,6 +62,10 @@ export {
   CreatePaymentLink,
   UpdatePaymentLink,
   PaymentLinkPaymentMode,
+  PaymentStandardType,
+  PaymentQuoteStatus,
+  PaymentLinkConfig,
+  UpdatePaymentLinkConfig,
 } from './definitions/route';
 export { PaymentLinkPayRequest, TransferInfo, TransferMethod } from './definitions/lnurl';
 export { InfoBanner } from './definitions/settings';

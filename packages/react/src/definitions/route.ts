@@ -8,6 +8,7 @@ export const PaymentLinksUrl = {
   create: 'paymentLink',
   update: 'paymentLink',
   payment: 'paymentLink/payment',
+  userPaymentLinksConfig: 'paymentLink/config',
 };
 
 export enum PaymentLinkStatus {
@@ -25,6 +26,25 @@ export enum PaymentLinkPaymentStatus {
 export enum PaymentLinkPaymentMode {
   SINGLE = 'Single',
   MULTIPLE = 'Multiple',
+}
+
+export enum PaymentStandardType {
+  OPEN_CRYPTO_PAY = 'OpenCryptoPay',
+  FRANKENCOIN_PAY = 'FrankencoinPay',
+  LIGHTNING_BOLT11 = 'LightningBolt11',
+  PAY_TO_ADDRESS = 'PayToAddress',
+}
+
+export enum PaymentQuoteStatus {
+  ACTUAL = 'Actual',
+  CANCELLED = 'Cancelled',
+  EXPIRED = 'Expired',
+
+  TX_RECEIVED = 'TxReceived',
+  TX_MEMPOOL = 'TxMempool',
+  TX_BLOCKCHAIN = 'TxBlockchain',
+  TX_COMPLETED = 'TxCompleted',
+  TX_FAILED = 'TxFailed',
 }
 
 export interface MinAmount {
@@ -92,6 +112,7 @@ export interface PaymentLink {
   recipient?: PaymentLinkRecipient;
   status: PaymentLinkStatus;
   payment?: PaymentLinkPayment;
+  config?: PaymentLinkConfig;
   url: string;
   lnurl: string;
 }
@@ -141,8 +162,21 @@ export interface CreatePaymentLink {
   payment?: CreatePaymentLinkPayment;
 }
 
+export interface UpdatePaymentLinkConfig {
+  standards?: PaymentStandardType[];
+  blockchains?: Blockchain[];
+  minCompletionStatus?: PaymentQuoteStatus;
+  displayQr?: boolean;
+  recipient?: PaymentLinkRecipient;
+  paymentTimeout?: number;
+}
+
+export interface PaymentLinkConfig extends UpdatePaymentLinkConfig {
+  fee?: number;
+}
+
 export interface UpdatePaymentLink {
   status?: PaymentLinkStatus;
   webhookUrl?: string;
-  recipient?: PaymentLinkRecipient;
+  config?: UpdatePaymentLinkConfig;
 }
