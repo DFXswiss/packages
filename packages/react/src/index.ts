@@ -15,7 +15,7 @@ export { useSupportChatContext } from './contexts/support.context';
 
 // Hooks
 export { useApiSession } from './hooks/api-session.hook';
-export { useApi, CallConfig } from './hooks/api.hook';
+export { useApi, CallConfig, ResponseType } from './hooks/api.hook';
 export { useAsset } from './hooks/asset.hook';
 export { useAuth } from './hooks/auth.hook';
 export { useBankAccount, CreateBankAccount, UpdateBankAccount } from './hooks/bank-account.hook';
