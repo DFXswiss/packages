@@ -34,7 +34,6 @@ export function useApi(): ApiInterface {
 
   const url = process.env.REACT_APP_API_URL ?? 'https://api.dfx.swiss';
   const defaultVersion = 'v1';
-  const defaultResponseType = ResponseType.JSON;
 
   async function call<T>(config: CallConfig): Promise<T> {
     return fetchFrom<T>(config).catch((error: ApiError) => {
