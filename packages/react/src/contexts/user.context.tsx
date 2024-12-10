@@ -119,7 +119,11 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   async function changeAddress(address: string): Promise<void> {
     if (!user) return;
 
-    return changeUserAddress(address).then(({ accessToken }) => updateSession(accessToken));
+    setIsUserUpdating(true);
+    return changeUserAddress(address)
+      .then(({ accessToken }) => updateSession(accessToken))
+      .then(() => setUser({ ...user, activeAddress: user.addresses.find((a) => a.address === address) }))
+      .finally(() => setIsUserUpdating(false));
   }
 
   async function deleteAddress(address: string): Promise<void> {
