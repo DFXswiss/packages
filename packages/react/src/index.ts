@@ -151,6 +151,7 @@ export {
   DetailTransaction,
   TransactionTarget,
   TransactionFilter,
+  RefundFeeData,
   TransactionRefundData,
   TransactionRefundTarget,
   TransactionFilterKey,

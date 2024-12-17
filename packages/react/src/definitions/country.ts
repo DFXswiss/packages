@@ -9,4 +9,6 @@ export interface Country {
   nationalityAllowed: boolean;
   bankAllowed: boolean;
   cardAllowed: boolean;
+  cryptoAllowed: boolean;
+  kycOrganizationAllowed: boolean;
 }
