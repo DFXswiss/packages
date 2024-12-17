@@ -47,6 +47,25 @@ export enum PaymentQuoteStatus {
   TX_FAILED = 'TxFailed',
 }
 
+export enum MinCompletionStatus {
+  TX_RECEIVED = PaymentQuoteStatus.TX_RECEIVED,
+  TX_MEMPOOL = PaymentQuoteStatus.TX_MEMPOOL,
+  TX_BLOCKCHAIN = PaymentQuoteStatus.TX_BLOCKCHAIN,
+  TX_COMPLETED = PaymentQuoteStatus.TX_COMPLETED,
+}
+
+export const PaymentLinkBlockchain = {
+  ARBITRUM: Blockchain.ARBITRUM,
+  BASE: Blockchain.BASE,
+  ETHEREUM: Blockchain.ETHEREUM,
+  LIGHTNING: Blockchain.LIGHTNING,
+  MONERO: Blockchain.MONERO,
+  OPTIMISM: Blockchain.OPTIMISM,
+  POLYGON: Blockchain.POLYGON,
+} as const;
+
+export type PaymentLinkBlockchain = typeof PaymentLinkBlockchain[keyof typeof PaymentLinkBlockchain];
+
 export interface MinAmount {
   amount: number;
   asset: string;
@@ -164,8 +183,8 @@ export interface CreatePaymentLink {
 
 export interface UpdatePaymentLinkConfig {
   standards?: PaymentStandardType[];
-  blockchains?: Blockchain[];
-  minCompletionStatus?: PaymentQuoteStatus;
+  blockchains?: PaymentLinkBlockchain[];
+  minCompletionStatus?: MinCompletionStatus;
   displayQr?: boolean;
   recipient?: PaymentLinkRecipient;
   paymentTimeout?: number;

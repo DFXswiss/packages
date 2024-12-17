@@ -64,6 +64,8 @@ export {
   PaymentLinkPaymentMode,
   PaymentStandardType,
   PaymentQuoteStatus,
+  MinCompletionStatus,
+  PaymentLinkBlockchain,
   PaymentLinkConfig,
   UpdatePaymentLinkConfig,
 } from './definitions/route';
