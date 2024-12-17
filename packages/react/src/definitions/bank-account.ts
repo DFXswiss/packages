@@ -9,6 +9,8 @@ export const BankAccountUrl = {
 export interface BankAccount {
   id: number;
   iban: string;
+  active: boolean;
+  default: boolean;
   label?: string;
   preferredCurrency?: Fiat;
 }
