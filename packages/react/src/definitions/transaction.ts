@@ -55,6 +55,7 @@ export enum TransactionState {
   FAILED = 'Failed',
   RETURNED = 'Returned',
   RETURN_PENDING = 'ReturnPending',
+  LIMIT_EXCEEDED = 'LimitExceeded',
 }
 
 export enum TransactionFailureReason {
@@ -149,9 +150,14 @@ export interface TransactionFilter {
   lm?: boolean;
 }
 
+export interface RefundFeeData {
+  network: number;
+  bank: number;
+}
+
 export interface TransactionRefundData {
   expiryDate: Date;
-  feeAmount: number;
+  fee: RefundFeeData;
   refundAmount: number;
   refundAsset: Asset | Fiat;
 }

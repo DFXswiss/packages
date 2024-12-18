@@ -7,12 +7,19 @@ export interface ApiInterface {
   call: <T>(config: CallConfig) => Promise<T>;
 }
 
+export enum ResponseType {
+  JSON = 'json',
+  TEXT = 'text',
+  BLOB = 'blob',
+}
+
 export interface CallConfig {
   url: string;
   method: 'GET' | 'PUT' | 'POST' | 'DELETE';
   version?: string;
   data?: any;
   noJson?: boolean;
+  responseType?: ResponseType;
   specialHandling?: SpecialHandling;
   token?: string;
 }
@@ -41,6 +48,7 @@ export function useApi(): ApiInterface {
   async function fetchFrom<T>(config: CallConfig): Promise<T> {
     const version = config.version ?? defaultVersion;
     const baseUrl = `${url}/${version}`;
+    const responseType = config.responseType ?? ResponseType.JSON;
 
     return fetch(
       `${baseUrl}/${config.url}`,
@@ -50,12 +58,18 @@ export function useApi(): ApiInterface {
         config.specialHandling?.action?.();
       }
       if (response.ok) {
-        if (config.noJson) {
-          return response.text() as unknown as T;
-        } else {
-          return response.json().catch(() => undefined);
+        switch (responseType) {
+          case ResponseType.JSON:
+            return response.json().catch(() => undefined) as Promise<T>;
+          case ResponseType.TEXT:
+            return response.text() as Promise<T>;
+          case ResponseType.BLOB:
+            return response.blob() as Promise<T>;
+          default:
+            throw new Error('Unknown response type');
         }
       }
+
       return response.json().then((body) => {
         throw body;
       });

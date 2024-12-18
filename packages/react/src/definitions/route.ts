@@ -8,6 +8,7 @@ export const PaymentLinksUrl = {
   create: 'paymentLink',
   update: 'paymentLink',
   payment: 'paymentLink/payment',
+  userPaymentLinksConfig: 'paymentLink/config',
 };
 
 export enum PaymentLinkStatus {
@@ -26,6 +27,44 @@ export enum PaymentLinkPaymentMode {
   SINGLE = 'Single',
   MULTIPLE = 'Multiple',
 }
+
+export enum PaymentStandardType {
+  OPEN_CRYPTO_PAY = 'OpenCryptoPay',
+  FRANKENCOIN_PAY = 'FrankencoinPay',
+  LIGHTNING_BOLT11 = 'LightningBolt11',
+  PAY_TO_ADDRESS = 'PayToAddress',
+}
+
+export enum PaymentQuoteStatus {
+  ACTUAL = 'Actual',
+  CANCELLED = 'Cancelled',
+  EXPIRED = 'Expired',
+
+  TX_RECEIVED = 'TxReceived',
+  TX_MEMPOOL = 'TxMempool',
+  TX_BLOCKCHAIN = 'TxBlockchain',
+  TX_COMPLETED = 'TxCompleted',
+  TX_FAILED = 'TxFailed',
+}
+
+export enum MinCompletionStatus {
+  TX_RECEIVED = PaymentQuoteStatus.TX_RECEIVED,
+  TX_MEMPOOL = PaymentQuoteStatus.TX_MEMPOOL,
+  TX_BLOCKCHAIN = PaymentQuoteStatus.TX_BLOCKCHAIN,
+  TX_COMPLETED = PaymentQuoteStatus.TX_COMPLETED,
+}
+
+export const PaymentLinkBlockchain = {
+  ARBITRUM: Blockchain.ARBITRUM,
+  BASE: Blockchain.BASE,
+  ETHEREUM: Blockchain.ETHEREUM,
+  LIGHTNING: Blockchain.LIGHTNING,
+  MONERO: Blockchain.MONERO,
+  OPTIMISM: Blockchain.OPTIMISM,
+  POLYGON: Blockchain.POLYGON,
+} as const;
+
+export type PaymentLinkBlockchain = typeof PaymentLinkBlockchain[keyof typeof PaymentLinkBlockchain];
 
 export interface MinAmount {
   amount: number;
@@ -92,6 +131,7 @@ export interface PaymentLink {
   recipient?: PaymentLinkRecipient;
   status: PaymentLinkStatus;
   payment?: PaymentLinkPayment;
+  config?: PaymentLinkConfig;
   url: string;
   lnurl: string;
 }
@@ -141,8 +181,21 @@ export interface CreatePaymentLink {
   payment?: CreatePaymentLinkPayment;
 }
 
+export interface UpdatePaymentLinkConfig {
+  standards?: PaymentStandardType[];
+  blockchains?: PaymentLinkBlockchain[];
+  minCompletionStatus?: MinCompletionStatus;
+  displayQr?: boolean;
+  recipient?: PaymentLinkRecipient;
+  paymentTimeout?: number;
+}
+
+export interface PaymentLinkConfig extends UpdatePaymentLinkConfig {
+  fee?: number;
+}
+
 export interface UpdatePaymentLink {
   status?: PaymentLinkStatus;
   webhookUrl?: string;
-  recipient?: PaymentLinkRecipient;
+  config?: UpdatePaymentLinkConfig;
 }

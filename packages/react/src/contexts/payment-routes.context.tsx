@@ -3,10 +3,12 @@ import {
   CreatePaymentLink,
   CreatePaymentLinkPayment,
   PaymentLink,
+  PaymentLinkConfig,
   PaymentRoute,
   PaymentRoutes,
   PaymentRouteType,
   UpdatePaymentLink,
+  UpdatePaymentLinkConfig,
 } from '../definitions/route';
 import { usePaymentRoutes } from '../hooks/payment-routes.hook';
 import { ApiError } from '../definitions/error';
@@ -14,9 +16,11 @@ import { useUserContext } from './user.context';
 
 interface PaymentRoutesInterface {
   paymentRoutes?: PaymentRoutes;
-  paymentLinks?: PaymentLink[];
   paymentRoutesLoading: boolean;
+  paymentLinks?: PaymentLink[];
   paymentLinksLoading: boolean;
+  userPaymentLinksConfig?: PaymentLinkConfig;
+  userPaymentLinksConfigLoading: boolean;
   createPaymentLink: (request: CreatePaymentLink) => Promise<PaymentLink | undefined>;
   updatePaymentLink: (
     request: UpdatePaymentLink,
@@ -24,6 +28,7 @@ interface PaymentRoutesInterface {
     externalLinkId?: string,
     externalPaymentId?: string,
   ) => Promise<void>;
+  updateUserPaymentLinksConfig: (config: UpdatePaymentLinkConfig) => Promise<void>;
   createPaymentLinkPayment: (
     request: CreatePaymentLinkPayment,
     linkId?: string,
@@ -50,22 +55,28 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     createPaymentLinkPayment: createPaymentLinkPaymentApi,
     cancelPaymentLinkPayment: cancelPaymentLinkPaymentApi,
     deletePaymentRoute: deletePaymentRouteApi,
+    getUserPaymentLinksConfig: getUserPaymentLinksConfigApi,
+    updateUserPaymentLinksConfig: updateUserPaymentLinksConfigApi,
   } = usePaymentRoutes();
   const [error, setError] = useState<string | undefined>();
   const [paymentRoutes, setPaymentRoutes] = useState<PaymentRoutes>();
   const [paymentLinks, setPaymentLinks] = useState<PaymentLink[]>();
   const [paymentRoutesLoading, setPaymentRoutesLoading] = useState<boolean>(false);
   const [paymentLinksLoading, setPaymentLinksLoading] = useState<boolean>(false);
+  const [userPaymentLinksConfig, setUserPaymentLinksConfig] = useState<PaymentLinkConfig>();
+  const [userPaymentLinksConfigLoading, setUserPaymentLinksConfigLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!user) {
       setPaymentRoutes(undefined);
       setPaymentLinks(undefined);
+      setUserPaymentLinksConfig(undefined);
       return;
     }
 
     loadPaymentRoutes();
     loadPaymentLinks();
+    loadUserPaymentLinksConfig();
   }, [user]);
 
   async function createPaymentLink(request: CreatePaymentLink): Promise<PaymentLink | undefined> {
@@ -170,6 +181,16 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       .finally(() => setPaymentLinksLoading(false));
   }
 
+  async function loadUserPaymentLinksConfig(): Promise<void> {
+    if (!user) return;
+
+    setUserPaymentLinksConfigLoading(true);
+    return getUserPaymentLinksConfigApi()
+      .then(setUserPaymentLinksConfig)
+      .catch((error: ApiError) => setError(error.message ?? 'Unknown error'))
+      .finally(() => setUserPaymentLinksConfigLoading(false));
+  }
+
   function updatePaymentLinks(paymentLink: PaymentLink): void {
     setPaymentLinks((links) => {
       if (!links) return [paymentLink];
@@ -181,6 +202,16 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       }
       return links;
     });
+  }
+
+  async function updateUserPaymentLinksConfig(config: UpdatePaymentLinkConfig): Promise<void> {
+    if (!user) return;
+
+    setUserPaymentLinksConfigLoading(true);
+    return updateUserPaymentLinksConfigApi(config)
+      .then(() => setUserPaymentLinksConfig(config))
+      .then(loadPaymentLinks)
+      .finally(() => setUserPaymentLinksConfigLoading(false));
   }
 
   function sortRoutes(a: PaymentRoute, b: PaymentRoute): number {
@@ -197,10 +228,13 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     () => ({
       paymentRoutes,
       paymentRoutesLoading,
-      paymentLinks,
       paymentLinksLoading,
+      paymentLinks,
+      userPaymentLinksConfig,
+      userPaymentLinksConfigLoading,
       createPaymentLink,
       updatePaymentLink,
+      updateUserPaymentLinksConfig,
       createPaymentLinkPayment,
       cancelPaymentLinkPayment,
       deletePaymentRoute,
@@ -212,9 +246,12 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       paymentRoutesLoading,
       paymentLinks,
       paymentLinksLoading,
+      userPaymentLinksConfig,
+      userPaymentLinksConfigLoading,
       error,
       createPaymentLink,
       updatePaymentLink,
+      updateUserPaymentLinksConfig,
       createPaymentLinkPayment,
       cancelPaymentLinkPayment,
       deletePaymentRoute,

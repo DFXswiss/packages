@@ -15,7 +15,7 @@ export { useSupportChatContext } from './contexts/support.context';
 
 // Hooks
 export { useApiSession } from './hooks/api-session.hook';
-export { useApi, CallConfig } from './hooks/api.hook';
+export { useApi, CallConfig, ResponseType } from './hooks/api.hook';
 export { useAsset } from './hooks/asset.hook';
 export { useAuth } from './hooks/auth.hook';
 export { useBankAccount, CreateBankAccount, UpdateBankAccount } from './hooks/bank-account.hook';
@@ -62,6 +62,12 @@ export {
   CreatePaymentLink,
   UpdatePaymentLink,
   PaymentLinkPaymentMode,
+  PaymentStandardType,
+  PaymentQuoteStatus,
+  MinCompletionStatus,
+  PaymentLinkBlockchain,
+  PaymentLinkConfig,
+  UpdatePaymentLinkConfig,
 } from './definitions/route';
 export { PaymentLinkPayRequest, TransferInfo, TransferMethod } from './definitions/lnurl';
 export { InfoBanner } from './definitions/settings';
@@ -85,9 +91,9 @@ export {
   UrlType,
   KycSessionInfo,
   KycStepBase,
+  KycStepReason,
   KycStep,
   KycStepSession,
-  KycResult,
   KycContactData,
   KycAddress,
   KycPersonalData,
@@ -147,6 +153,7 @@ export {
   DetailTransaction,
   TransactionTarget,
   TransactionFilter,
+  RefundFeeData,
   TransactionRefundData,
   TransactionRefundTarget,
   TransactionFilterKey,

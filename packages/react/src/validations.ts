@@ -44,7 +44,7 @@ class ValidationsClass {
     return this.Custom((number: string) => {
       try {
         if (number) {
-          if (!/^\+\d+$/.test(number)) return 'code_and_number';
+          if (!number.match(/^\+\d/)) return 'code_and_number';
           if (!PhoneNumber(number)?.isValid()) return 'pattern';
         }
 

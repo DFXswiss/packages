@@ -3,6 +3,7 @@ export interface Fees {
   fixed: number;
   min: number;
   dfx: number;
+  bank: number;
   network: number;
   total: number;
   networkStart?: number;

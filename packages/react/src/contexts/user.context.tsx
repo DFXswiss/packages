@@ -1,7 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
-import { Country } from '../definitions/country';
 import { ApiKey, UpdateUser, User } from '../definitions/user';
-import { useCountry } from '../hooks/country.hook';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
 import { Language } from '../definitions/language';
@@ -11,20 +9,18 @@ import { TransactionFilterKey } from '../definitions/transaction';
 interface UserInterface {
   user?: User;
   refLink?: string;
-  countries: Country[];
   isUserLoading: boolean;
   isUserUpdating: boolean;
-  changeMail: (mail: string) => Promise<void>;
+  updateMail: (mail: string) => Promise<void>;
   verifyMail: (token: string) => Promise<void>;
-  changePhone: (phone: string) => Promise<void>;
-  changeLanguage: (language: Language) => Promise<void>;
-  changeCurrency: (currency: Fiat) => Promise<void>;
+  updatePhone: (phone: string) => Promise<void>;
+  updateLanguage: (language: Language) => Promise<void>;
+  updateCurrency: (currency: Fiat) => Promise<void>;
   renameAddress: (address: string, label: string) => Promise<void>;
   changeAddress: (address: string) => Promise<void>;
   deleteAddress: (address: string) => Promise<void>;
   deleteAccount: () => Promise<void>;
   addSpecialCode: (code: string) => Promise<void>;
-  register: (userLink: () => void) => void;
   reloadUser: () => Promise<void>;
   filterCT?: TransactionFilterKey[];
   keyCT?: string;
@@ -43,7 +39,8 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const { isLoggedIn, session, updateSession, deleteSession } = useApiSession();
   const {
     getUser,
-    changeUser,
+    updateUser: updateUserApi,
+    updateMail: updateMailApi,
     verifyMail: verifyMailApi,
     addSpecialCode,
     renameUserAddress,
@@ -54,24 +51,18 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     deleteCTApiKey,
     updateCTApiFilter,
   } = useUser();
-  const { getCountries } = useCountry();
   const [user, setUser] = useState<User>();
-  const [countries, setCountries] = useState<Country[]>([]);
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
   const [isUserUpdating, setIsUserUpdating] = useState<boolean>(false);
 
   const refCode = user?.activeAddress?.refCode;
   const refLink = refCode && `${process.env.REACT_APP_REF_URL ?? 'https://dfx.swiss/app?code='}${refCode}`;
-  let userLinkAction: () => void | undefined;
 
   useEffect(() => {
     if (isLoggedIn) {
       reloadUser();
-
-      getCountries().then((c) => setCountries(c.sort((a, b) => (a.name > b.name ? 1 : -1))));
     } else {
       setUser(undefined);
-      setCountries([]);
     }
   }, [isLoggedIn, session]);
 
@@ -86,13 +77,13 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     if (!user) return;
 
     setIsUserUpdating(true);
-    return changeUser(update, linkAction)
+    return updateUserApi(update, linkAction)
       .then(setUser)
       .finally(() => setIsUserUpdating(false));
   }
 
-  async function changeMail(mail: string): Promise<void> {
-    return updateUser({ mail }, userLinkAction);
+  async function updateMail(mail: string): Promise<void> {
+    return updateMailApi(mail);
   }
 
   async function verifyMail(token: string): Promise<void> {
@@ -104,15 +95,15 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       .finally(() => setIsUserUpdating(false));
   }
 
-  async function changePhone(phone: string): Promise<void> {
+  async function updatePhone(phone: string): Promise<void> {
     return updateUser({ phone });
   }
 
-  async function changeLanguage(language: Language): Promise<void> {
+  async function updateLanguage(language: Language): Promise<void> {
     return updateUser({ language });
   }
 
-  async function changeCurrency(currency: Fiat): Promise<void> {
+  async function updateCurrency(currency: Fiat): Promise<void> {
     return updateUser({ currency });
   }
 
@@ -128,7 +119,11 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   async function changeAddress(address: string): Promise<void> {
     if (!user) return;
 
-    return changeUserAddress(address).then(({ accessToken }) => updateSession(accessToken));
+    setIsUserUpdating(true);
+    return changeUserAddress(address)
+      .then(({ accessToken }) => updateSession(accessToken))
+      .then(() => setUser({ ...user, activeAddress: user.addresses.find((a) => a.address === address) }))
+      .finally(() => setIsUserUpdating(false));
   }
 
   async function deleteAddress(address: string): Promise<void> {
@@ -153,10 +148,6 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     if (!user) return;
 
     return deleteUserAccount().then(deleteSession);
-  }
-
-  function register(userLink: () => void) {
-    userLinkAction = userLink;
   }
 
   async function generateKeyCT(types?: TransactionFilterKey[]): Promise<ApiKey | undefined> {
@@ -194,20 +185,18 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     () => ({
       user,
       refLink,
-      countries,
       isUserLoading,
       isUserUpdating,
-      changeMail,
+      updateMail,
       verifyMail,
-      changePhone,
-      changeLanguage,
-      changeCurrency,
+      updatePhone,
+      updateLanguage,
+      updateCurrency,
       renameAddress,
       changeAddress,
       deleteAddress,
       deleteAccount,
       addSpecialCode,
-      register,
       reloadUser,
       filterCT: user?.apiFilterCT ?? user?.activeAddress?.apiFilterCT,
       keyCT: user?.apiKeyCT ?? user?.activeAddress?.apiKeyCT,
@@ -215,7 +204,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       deleteKeyCT,
       updateFilterCT,
     }),
-    [user, refLink, countries, isUserLoading, isUserUpdating, changeMail, changePhone, register, reloadUser],
+    [user, refLink, isUserLoading, isUserUpdating, updateMail, updatePhone, reloadUser],
   );
 
   return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;

@@ -7,6 +7,7 @@ export const KycUrl = {
   file: 'kyc/file',
   base: `${process.env.REACT_APP_API_URL}/v2/kyc`,
   tfa: `${process.env.REACT_APP_API_URL}/v2/kyc/2fa`,
+  checkTfa: 'kyc/2fa',
   limit: `${process.env.REACT_APP_API_URL}/v2/kyc/limit`,
   transfer: (client: string) => `${process.env.REACT_APP_API_URL}/v2/kyc/transfer?client=${encodeURIComponent(client)}`,
 };
@@ -130,6 +131,11 @@ export enum UrlType {
   NONE = 'None',
 }
 
+export enum KycStepReason {
+  ACCOUNT_EXISTS = 'AccountExists',
+  ACCOUNT_MERGE_REQUESTED = 'AccountMergeRequested',
+}
+
 export enum FileType {
   NAME_CHECK = 'NameCheck',
   USER_INFORMATION = 'UserInformation',
@@ -152,6 +158,7 @@ export interface KycStepBase {
   name: KycStepName;
   type?: KycStepType;
   status: KycStepStatus;
+  reason?: KycStepReason;
   sequenceNumber: number;
 }
 
@@ -161,10 +168,6 @@ export interface KycStep extends KycStepBase {
 
 export interface KycStepSession extends KycStepBase {
   session?: KycSessionInfo;
-}
-
-export interface KycResult {
-  status: KycStepStatus;
 }
 
 // personal data
@@ -325,6 +328,6 @@ export interface LimitRequest {
 }
 
 // helpers
-export function isStepDone(result: KycResult): boolean {
+export function isStepDone(result: KycStepBase): boolean {
   return [KycStepStatus.IN_REVIEW, KycStepStatus.COMPLETED].includes(result.status);
 }
