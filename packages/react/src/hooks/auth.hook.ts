@@ -8,16 +8,16 @@ export interface AuthInterface {
     address: string,
     signature: string,
     key?: string,
-    discountCode?: string,
+    specialCode?: string,
     wallet?: string,
     ref?: string,
   ) => Promise<SignIn>;
-  signIn: (address: string, signature: string, key?: string, discountCode?: string) => Promise<SignIn>;
+  signIn: (address: string, signature: string, key?: string, specialCode?: string) => Promise<SignIn>;
   signUp: (
     address: string,
     signature: string,
     key?: string,
-    discountCode?: string,
+    specialCode?: string,
     wallet?: string,
     ref?: string,
   ) => Promise<SignIn>;
@@ -30,7 +30,7 @@ interface SignUpParams {
   address: string;
   signature: string;
   key?: string;
-  discountCode?: string;
+  specialCode?: string;
   walletId?: number;
   wallet?: string;
   usedRef?: string;
@@ -49,16 +49,16 @@ export function useAuth(): AuthInterface {
     address: string,
     signature: string,
     key?: string,
-    discountCode?: string,
+    specialCode?: string,
     wallet?: string,
     usedRef?: string,
   ): Promise<SignIn> {
-    const data = getParams(address, signature, key, discountCode, wallet, usedRef);
+    const data = getParams(address, signature, key, specialCode, wallet, usedRef);
     return call({ url: AuthUrl.auth, method: 'POST', data });
   }
 
-  async function signIn(address: string, signature: string, key?: string, discountCode?: string): Promise<SignIn> {
-    const data = getParams(address, signature, key, discountCode);
+  async function signIn(address: string, signature: string, key?: string, specialCode?: string): Promise<SignIn> {
+    const data = getParams(address, signature, key, specialCode);
     return call({ url: AuthUrl.signIn, method: 'POST', data });
   }
 
@@ -66,11 +66,11 @@ export function useAuth(): AuthInterface {
     address: string,
     signature: string,
     key?: string,
-    discountCode?: string,
+    specialCode?: string,
     wallet?: string,
     usedRef?: string,
   ): Promise<SignIn> {
-    const data = getParams(address, signature, key, discountCode, wallet, usedRef);
+    const data = getParams(address, signature, key, specialCode, wallet, usedRef);
     return call({ url: AuthUrl.signUp, method: 'POST', data });
   }
 
@@ -90,11 +90,11 @@ export function useAuth(): AuthInterface {
     address: string,
     signature: string,
     key?: string,
-    discountCode?: string,
+    specialCode?: string,
     wallet?: string,
     usedRef?: string,
   ): SignUpParams {
-    const params: SignUpParams = { address, signature, key, usedRef, discountCode };
+    const params: SignUpParams = { address, signature, key, usedRef, specialCode };
 
     if (wallet) {
       const walletId = parseInt(wallet);

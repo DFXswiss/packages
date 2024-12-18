@@ -20,7 +20,7 @@ interface UserInterface {
   changeAddress: (address: string) => Promise<void>;
   deleteAddress: (address: string) => Promise<void>;
   deleteAccount: () => Promise<void>;
-  addDiscountCode: (code: string) => Promise<void>;
+  addSpecialCode: (code: string) => Promise<void>;
   reloadUser: () => Promise<void>;
   filterCT?: TransactionFilterKey[];
   keyCT?: string;
@@ -42,7 +42,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     updateUser: updateUserApi,
     updateMail: updateMailApi,
     verifyMail: verifyMailApi,
-    addDiscountCode,
+    addSpecialCode,
     renameUserAddress,
     changeUserAddress,
     deleteUserAddress,
@@ -196,7 +196,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       changeAddress,
       deleteAddress,
       deleteAccount,
-      addDiscountCode,
+      addSpecialCode,
       reloadUser,
       filterCT: user?.apiFilterCT ?? user?.activeAddress?.apiFilterCT,
       keyCT: user?.apiKeyCT ?? user?.activeAddress?.apiKeyCT,
