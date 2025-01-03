@@ -161,6 +161,8 @@ export interface TransactionRefundData {
   fee: RefundFeeData;
   refundAmount: number;
   refundAsset: Asset | Fiat;
+  inputAmount: number;
+  inputAsset: Asset | Fiat;
 }
 
 export interface TransactionHistoryQuery {
