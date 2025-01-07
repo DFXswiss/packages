@@ -82,6 +82,7 @@ export enum TransactionFailureReason {
   CARD_NAME_MISMATCH = 'CardNameMismatch',
   USER_DELETED = 'UserDeleted',
   VIDEO_IDENT_NEEDED = 'VideoIdentNeeded',
+  MISSING_LIQUIDITY = 'MissingLiquidity',
 }
 
 export enum ExportType {
