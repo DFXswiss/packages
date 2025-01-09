@@ -49,18 +49,19 @@ export function BankAccountContextProvider(props: PropsWithChildren): JSX.Elemen
     setIsLoading(true);
     return updateAccount(id, changedAccount)
       .then((b) => {
-        setBankAccounts((accounts) => updateLocal(b, accounts ?? []));
+        if (changedAccount.active === false) b.active = false;
+        setBankAccounts((accounts) => updateLocal(b, accounts));
         return b;
       })
       .finally(() => setIsLoading(false));
   }
 
-  function updateLocal(account: BankAccount, accounts: BankAccount[]): BankAccount[] | undefined {
-    const index = accounts && accounts.findIndex((b) => b.id === account.id);
-    if (!index) return undefined;
+  function updateLocal(account: BankAccount, accounts?: BankAccount[]): BankAccount[] | undefined {
+    const index = accounts?.findIndex((b) => b.id === account.id);
+    if (!accounts || index === undefined || index === -1) return undefined;
 
-    if (!account.active) {
-      return accounts.filter((b) => b.id !== account.id);
+    if (account.active === false) {
+      return accounts?.filter((b) => b.id !== account.id);
     }
 
     if (account.default) {
