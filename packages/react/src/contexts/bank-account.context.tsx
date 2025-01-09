@@ -29,7 +29,7 @@ export function BankAccountContextProvider(props: PropsWithChildren): JSX.Elemen
     if (isLoggedIn) {
       setIsLoading(true);
       getAccounts()
-        .then(setBankAccounts)
+        .then((accounts) => setBankAccounts(accounts.filter((a) => a.active)))
         .catch((e) => setError(e.message))
         .finally(() => setIsLoading(false));
     }
@@ -49,7 +49,6 @@ export function BankAccountContextProvider(props: PropsWithChildren): JSX.Elemen
     setIsLoading(true);
     return updateAccount(id, changedAccount)
       .then((b) => {
-        if (changedAccount.active === false) b.active = false;
         setBankAccounts((accounts) => updateLocal(b, accounts));
         return b;
       })
