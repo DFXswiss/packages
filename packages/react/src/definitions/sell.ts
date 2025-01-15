@@ -9,6 +9,7 @@ export const SellUrl = { receive: 'sell/paymentInfos' };
 
 export interface Sell {
   id: number;
+  uid: string;
   timestamp: Date;
   routeId: number;
   depositAddress: string;

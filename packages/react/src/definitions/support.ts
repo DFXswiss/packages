@@ -97,6 +97,8 @@ export interface SupportIssue {
 
 export interface TransactionIssue {
   id?: number;
+  uid?: string;
+  quoteUid?: string;
   senderIban?: string;
   receiverIban?: string;
   date?: Date;
