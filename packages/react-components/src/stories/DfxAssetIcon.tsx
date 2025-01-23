@@ -19,6 +19,7 @@ export enum AssetIconVariant {
   BTC = 'BTC',
   WBTC = 'WBTC',
   BTCB = 'BTCB',
+  kBTC = 'kBTC',
   MATIC = 'MATIC',
   POL = 'POL',
   GMX = 'GMX',
@@ -91,6 +92,7 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.BTC]: ({ forceColor }) => <DfxAssetIconBTC forceColor={forceColor} />,
   [AssetIconVariant.WBTC]: ({ forceColor }) => <DfxAssetIconWBTC forceColor={forceColor} />,
   [AssetIconVariant.BTCB]: ({ forceColor }) => <DfxAssetIconBTCB forceColor={forceColor} />,
+  [AssetIconVariant.kBTC]: ({ forceColor }) => <DfxAssetIconKBTC forceColor={forceColor} />,
   [AssetIconVariant.MATIC]: ({ forceColor }) => <DfxAssetIconPOL forceColor={forceColor} />,
   [AssetIconVariant.POL]: ({ forceColor }) => <DfxAssetIconPOL forceColor={forceColor} />,
   [AssetIconVariant.GMX]: ({ forceColor }) => <DfxAssetIconGMX forceColor={forceColor} />,
@@ -443,6 +445,25 @@ function DfxAssetIconBTCB({ forceColor }: BaseAssetIconProps) {
           <rect width="21" height="21" fill="white" transform="translate(1.5 1.5)" />
         </clipPath>
       </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconKBTC({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="16" cy="16" r="16" fill={forceColor ?? '#7132F5'} />
+      <path
+        d="M19.5141 9.30328L20.3141 6.30338L18.5141 5.80339L17.8142 8.7033C17.3142 8.6033 16.8142 8.5033 16.3142 8.40331L17.0142 5.40341L15.1143 5.00342L14.4143 8.00332C14.0143 7.90332 13.6143 7.80333 13.2143 7.70333L10.7144 7.10335L10.2144 9.10328C10.2144 9.10328 11.6144 9.40327 11.5144 9.40327C12.2144 9.60327 12.4143 10.1033 12.4143 10.5032L10.3144 18.703C10.2144 18.903 10.0144 19.303 9.41444 19.103L8.11449 18.803L7.21452 20.9029L9.61444 21.5029L10.9144 21.8029L10.1144 24.8028L11.9144 25.3028L12.7143 22.3029C13.2143 22.4029 13.7143 22.6028 14.2143 22.7028L13.5143 25.7027L15.3143 26.2027L16.1142 23.2028C19.2141 23.8028 21.614 23.6028 22.614 20.7029C23.414 18.403 22.614 17.103 20.9141 16.303C22.114 16.0031 23.014 15.2031 23.214 13.6031C23.514 11.3032 21.914 10.1033 19.5141 9.30328ZM19.0141 19.4029C18.4142 21.7029 14.6143 20.4029 13.4143 20.1029L14.4143 16.1031C15.6142 16.403 19.6141 17.003 19.0141 19.4029ZM19.6141 13.5031C19.1141 15.6031 15.9142 14.5031 14.9143 14.3031L15.8142 10.6032C16.8142 10.8032 20.1141 11.3032 19.6141 13.5031Z"
+        fill="white"
+      />
     </svg>
   );
 }
