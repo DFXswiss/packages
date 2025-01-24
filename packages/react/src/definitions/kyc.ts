@@ -70,6 +70,7 @@ export type UserData = KycContactData & KycPersonalData;
 // info
 export enum LimitPeriod {
   DAY = 'Day',
+  MONTH = 'Month',
   YEAR = 'Year',
 }
 
