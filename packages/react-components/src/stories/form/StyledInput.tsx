@@ -74,7 +74,7 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
               [textOrErrorColor, backgroundColor, placeholderColor, borderColor, outlineColor].join(' '),
             style: { paddingLeft, paddingRight },
             type: type,
-            name: autocomplete ?? name,
+            name: autocomplete,
             inputMode: type === 'number' ? 'decimal' : undefined,
             onBlur: onBlur,
             onChange: (value: any) => onChange(value.target.value),
