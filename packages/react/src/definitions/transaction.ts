@@ -62,6 +62,7 @@ export enum TransactionState {
 export enum TransactionFailureReason {
   UNKNOWN = 'Unknown',
   DAILY_LIMIT_EXCEEDED = 'DailyLimitExceeded',
+  MONTHLY_LIMIT_EXCEEDED = 'MonthlyLimitExceeded',
   ANNUAL_LIMIT_EXCEEDED = 'AnnualLimitExceeded',
   ACCOUNT_HOLDER_MISMATCH = 'AccountHolderMismatch',
   KYC_REJECTED = 'KycRejected',
