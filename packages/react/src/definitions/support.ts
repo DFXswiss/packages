@@ -31,6 +31,7 @@ export enum SupportIssueState {
   CREATED = 'Created',
   PENDING = 'Pending',
   COMPLETED = 'Completed',
+  CANCELED = 'Canceled',
 }
 
 export enum SupportMessageStatus {

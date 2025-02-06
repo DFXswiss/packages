@@ -124,6 +124,7 @@ export enum KycStepStatus {
   FAILED = 'Failed',
   COMPLETED = 'Completed',
   OUTDATED = 'Outdated',
+  DATA_REQUESTED = 'DataRequested',
 }
 
 export enum UrlType {
