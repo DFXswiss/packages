@@ -33,9 +33,11 @@ export enum TransactionError {
   BANK_TRANSACTION_MISSING = 'BankTransactionMissing',
   KYC_REQUIRED = 'KycRequired',
   KYC_DATA_REQUIRED = 'KycDataRequired',
+  NAME_REQUIRED = 'NameRequired',
   KYC_REQUIRED_INSTANT = 'KycRequiredInstant',
   LIMIT_EXCEEDED = 'LimitExceeded',
   NATIONALITY_NOT_ALLOWED = 'NationalityNotAllowed',
+  VIDEO_IDENT_REQUIRED = 'VideoIdentRequired',
 }
 
 export enum TransactionType {
