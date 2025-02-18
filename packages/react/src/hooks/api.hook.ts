@@ -21,7 +21,7 @@ export interface CallConfig {
   noJson?: boolean;
   responseType?: ResponseType;
   specialHandling?: SpecialHandling;
-  token?: string;
+  token?: string | false;
 }
 
 interface SpecialHandling {
@@ -49,31 +49,31 @@ export function useApi(): ApiInterface {
     const version = config.version ?? defaultVersion;
     const baseUrl = `${url}/${version}`;
     const responseType = config.responseType ?? ResponseType.JSON;
+    const token = config.token === false ? undefined : config.token ?? authenticationToken;
 
-    return fetch(
-      `${baseUrl}/${config.url}`,
-      buildInit(config.method, config.token ?? authenticationToken, config.data, config.noJson),
-    ).then((response) => {
-      if (response.status === config.specialHandling?.statusCode) {
-        config.specialHandling?.action?.();
-      }
-      if (response.ok) {
-        switch (responseType) {
-          case ResponseType.JSON:
-            return response.json().catch(() => undefined) as Promise<T>;
-          case ResponseType.TEXT:
-            return response.text() as Promise<T>;
-          case ResponseType.BLOB:
-            return response.blob() as Promise<T>;
-          default:
-            throw new Error('Unknown response type');
+    return fetch(`${baseUrl}/${config.url}`, buildInit(config.method, token, config.data, config.noJson)).then(
+      (response) => {
+        if (response.status === config.specialHandling?.statusCode) {
+          config.specialHandling?.action?.();
         }
-      }
+        if (response.ok) {
+          switch (responseType) {
+            case ResponseType.JSON:
+              return response.json().catch(() => undefined) as Promise<T>;
+            case ResponseType.TEXT:
+              return response.text() as Promise<T>;
+            case ResponseType.BLOB:
+              return response.blob() as Promise<T>;
+            default:
+              throw new Error('Unknown response type');
+          }
+        }
 
-      return response.json().then((body) => {
-        throw body;
-      });
-    });
+        return response.json().then((body) => {
+          throw body;
+        });
+      },
+    );
   }
 
   function buildInit(

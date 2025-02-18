@@ -54,7 +54,7 @@ export function useAuth(): AuthInterface {
     usedRef?: string,
   ): Promise<SignIn> {
     const data = getParams(address, signature, key, specialCode, wallet, usedRef);
-    return call({ url: AuthUrl.auth, method: 'POST', data });
+    return call({ url: AuthUrl.auth, method: 'POST', data, token: false });
   }
 
   async function signIn(address: string, signature: string, key?: string, specialCode?: string): Promise<SignIn> {
