@@ -4678,10 +4678,8 @@ function DfxAssetIconDEURO({ forceColor }: BaseAssetIconProps) {
   const sizeContext = useContext(SizeContext);
   return (
     <svg
-      // width={SIZE_MAPS[sizeContext]}
-      // height={SIZE_MAPS[sizeContext]}
-      width={100}
-      height={100}
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
       viewBox="0 0 96 97"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
