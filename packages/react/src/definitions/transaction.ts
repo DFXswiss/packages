@@ -105,6 +105,7 @@ export enum ExportFormat {
 export interface UnassignedTransaction {
   id: number;
   uid: string;
+  orderUid: string;
   type: TransactionType;
   state: TransactionState;
   inputAmount?: number;

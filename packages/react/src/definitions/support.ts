@@ -99,7 +99,7 @@ export interface SupportIssue {
 export interface TransactionIssue {
   id?: number;
   uid?: string;
-  quoteUid?: string;
+  orderUid?: string;
   senderIban?: string;
   receiverIban?: string;
   date?: Date;
