@@ -55,6 +55,7 @@ export interface UserAddress {
   refCode?: string;
   apiKeyCT?: string;
   apiFilterCT?: TransactionFilterKey[];
+  isCustody: boolean;
 }
 
 export interface UserKyc {
