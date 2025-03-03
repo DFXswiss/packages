@@ -9,6 +9,7 @@ export enum UserRole {
   SUPPORT = 'Support',
   COMPLIANCE = 'Compliance',
   KYC_CLIENT_COMPANY = 'KycClientCompany',
+  CUSTODY = 'Custody',
 }
 
 export interface Jwt {
