@@ -117,6 +117,8 @@ export {
   KycLegalEntityData,
   KycNationalityData,
   KycSignatoryPowerData,
+  KycBeneficialData,
+  BeneficialOwnerData,
   LegalEntity,
   SignatoryPower,
   FileType,

@@ -96,11 +96,12 @@ export enum KycStepName {
   CONTACT_DATA = 'ContactData',
   PERSONAL_DATA = 'PersonalData',
   LEGAL_ENTITY = 'LegalEntity',
-  STOCK_REGISTER = 'StockRegister',
+  OWNER_DIRECTORY = 'OwnerDirectory',
   NATIONALITY_DATA = 'NationalityData',
   COMMERCIAL_REGISTER = 'CommercialRegister',
   SIGNATORY_POWER = 'SignatoryPower',
   AUTHORITY = 'Authority',
+  BENEFICIAL_OWNER = 'BeneficialOwner',
   IDENT = 'Ident',
   FINANCIAL_DATA = 'FinancialData',
   ADDITIONAL_DOCUMENTS = 'AdditionalDocuments',
@@ -231,6 +232,16 @@ export interface KycManualIdentData {
 
 export interface KycSignatoryPowerData {
   signatoryPower: SignatoryPower;
+}
+
+export interface KycBeneficialData {
+  hasBeneficialOwners: boolean;
+  beneficialOwners: BeneficialOwnerData[];
+}
+
+export interface BeneficialOwnerData extends KycAddress {
+  firstName: string;
+  lastName: string;
 }
 
 export interface KycFileData {
