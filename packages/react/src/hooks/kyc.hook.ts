@@ -22,6 +22,7 @@ import {
   KycFile,
   KycStepBase,
   KycBeneficialData,
+  KycOperationalData,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 
@@ -52,6 +53,7 @@ export interface KycInterface {
   setFileData: (code: string, url: string, data: KycFileData) => Promise<KycStepBase>;
   setSignatoryPowerData: (code: string, url: string, data: KycSignatoryPowerData) => Promise<KycStepBase>;
   setBeneficialData: (code: string, url: string, data: KycBeneficialData) => Promise<KycStepBase>;
+  setOperationalData: (code: string, url: string, data: KycOperationalData) => Promise<KycStepBase>;
   getFinancialData: (code: string, url: string, lang?: string) => Promise<KycFinancialQuestions>;
   setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycStepBase>;
   getFile: (kycFileId: string) => Promise<KycFile>;
@@ -144,6 +146,10 @@ export function useKyc(): KycInterface {
     return call({ url, code, method: 'PUT', data });
   }
 
+  function setOperationalData(code: string, url: string, data: KycOperationalData): Promise<KycStepBase> {
+    return call({ url, code, method: 'PUT', data });
+  }
+
   async function getFinancialData(code: string, url: string, lang?: string): Promise<KycFinancialQuestions> {
     lang && (url += `?lang=${lang}`);
     return call({ url, code, method: 'GET' });
@@ -225,6 +231,7 @@ export function useKyc(): KycInterface {
       setFileData,
       setSignatoryPowerData,
       setBeneficialData,
+      setOperationalData,
       getFinancialData,
       getFile,
       setFinancialData,

@@ -236,12 +236,19 @@ export interface KycSignatoryPowerData {
 
 export interface KycBeneficialData {
   hasBeneficialOwners: boolean;
-  beneficialOwners: BeneficialOwnerData[];
+  accountHolderIsBeneficialOwner: boolean;
+  managingDirector: ContactPersonData;
+  beneficialOwners?: ContactPersonData[];
 }
 
-export interface BeneficialOwnerData extends KycAddress {
+export interface ContactPersonData extends KycAddress {
   firstName: string;
   lastName: string;
+}
+
+export interface KycOperationalData {
+  isOperational: boolean;
+  websiteUrl: string;
 }
 
 export interface KycFileData {

@@ -25,6 +25,8 @@ export function BankAccountContextProvider(props: PropsWithChildren): JSX.Elemen
   useEffect(() => {
     if (isLoggedIn) {
       getAccounts().then(setBankAccounts).catch(console.error); // TODO: (Krysh) add real error handling
+    } else {
+      setBankAccounts(undefined);
     }
   }, [isLoggedIn, session]);
 
