@@ -102,6 +102,7 @@ export enum KycStepName {
   SIGNATORY_POWER = 'SignatoryPower',
   AUTHORITY = 'Authority',
   BENEFICIAL_OWNER = 'BeneficialOwner',
+  OPERATIONAL_ACTIVITY = 'OperationalActivity',
   IDENT = 'Ident',
   FINANCIAL_DATA = 'FinancialData',
   ADDITIONAL_DOCUMENTS = 'AdditionalDocuments',
@@ -153,9 +154,14 @@ export enum FileType {
   AUTHORITY = 'Authority',
 }
 
+export interface KycAdditionalInfo {
+  accountHolder?: string;
+}
+
 export interface KycSessionInfo {
   url: string;
   type: UrlType;
+  additionalInfo?: KycAdditionalInfo;
 }
 
 export interface KycStepBase {
@@ -236,8 +242,8 @@ export interface KycSignatoryPowerData {
 
 export interface KycBeneficialData {
   hasBeneficialOwners: boolean;
-  accountHolderIsBeneficialOwner: boolean;
-  managingDirector: ContactPersonData;
+  isAccountHolderInvolved: boolean;
+  managingDirector?: ContactPersonData;
   beneficialOwners?: ContactPersonData[];
 }
 
@@ -248,7 +254,7 @@ export interface ContactPersonData extends KycAddress {
 
 export interface KycOperationalData {
   isOperational: boolean;
-  websiteUrl: string;
+  websiteUrl?: string;
 }
 
 export interface KycFileData {

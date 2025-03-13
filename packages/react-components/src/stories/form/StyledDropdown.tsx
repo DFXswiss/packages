@@ -104,7 +104,7 @@ export default function StyledDropdown<T>({
             {...props}
           >
             <div className="flex flex-row gap-2 items-center w-full h-full">
-              {value && assetIconFunc && <DfxAssetIcon asset={assetIconFunc(value)} />}
+              {value != null && assetIconFunc && <DfxAssetIcon asset={assetIconFunc(value)} />}
               <div className="flex flex-col gap-1 justify-between text-left w-full pt-0.5">
                 {value === undefined ? (
                   <p className="text-dfxGray-600 drop-shadow-none py-[0.25rem]">{placeholder}</p>
