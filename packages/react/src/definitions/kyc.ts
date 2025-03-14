@@ -308,6 +308,8 @@ export interface KycFinancialQuestions extends KycFinancialResponses {
 export enum TfaType {
   APP = 'App',
   MAIL = 'Mail',
+  PASSKEY = 'Passkey',
+  UNDEFINED = 'Undefined',
 }
 
 export enum TfaLevel {
