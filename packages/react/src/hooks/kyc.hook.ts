@@ -63,6 +63,10 @@ export interface KycInterface {
   setup2fa: (code: string, level?: TfaLevel) => Promise<TfaSetup>;
   verify2fa: (code: string, token: string) => Promise<void>;
 
+  // passkey
+  setupPasskey: (code: string, credential: { id: string; rawId: string; attestationObject: string; clientDataJSON: string; }) => Promise<void>;
+  verifyPasskey: (code: string, credential: { id: string; rawId: string; authenticatorData: string; clientDataJSON: string; signature: string; userHandle: string | null; }) => Promise<void>;
+
   // limit
   increaseLimit: (code: string, request: LimitRequest) => Promise<void>;
 
@@ -181,6 +185,26 @@ export function useKyc(): KycInterface {
     return call({ url: `${KycUrl.tfa}/verify`, code, method: 'POST', data: { token } });
   }
 
+  async function setupPasskey(code: string, credential: {
+    id: string;
+    rawId: string;
+    attestationObject: string;
+    clientDataJSON: string;
+  }): Promise<void> {
+    return call({ url: `${KycUrl.passkey}/setup`, code, method: 'POST', data: credential });
+  }
+
+  async function verifyPasskey(code: string, credential: {
+    id: string;
+    rawId: string;
+    authenticatorData: string;
+    clientDataJSON: string;
+    signature: string;
+    userHandle: string | null;
+  }): Promise<void> {
+    return call({ url: `${KycUrl.passkey}/verify`, code, method: 'POST', data: credential });
+  }
+
   async function increaseLimit(code: string, request: LimitRequest): Promise<void> {
     return call({ url: KycUrl.limit, code, method: 'POST', data: request });
   }
@@ -238,6 +262,8 @@ export function useKyc(): KycInterface {
       check2fa,
       setup2fa,
       verify2fa,
+      setupPasskey,
+      verifyPasskey,
       increaseLimit,
       addTransferClient,
       removeTransferClient,

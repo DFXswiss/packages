@@ -7,6 +7,7 @@ export const KycUrl = {
   file: 'kyc/file',
   base: `${process.env.REACT_APP_API_URL}/v2/kyc`,
   tfa: `${process.env.REACT_APP_API_URL}/v2/kyc/2fa`,
+  passkey: `${process.env.REACT_APP_API_URL}/v2/kyc/passkey`,
   checkTfa: 'kyc/2fa',
   limit: `${process.env.REACT_APP_API_URL}/v2/kyc/limit`,
   transfer: (client: string) => `${process.env.REACT_APP_API_URL}/v2/kyc/transfer?client=${encodeURIComponent(client)}`,
