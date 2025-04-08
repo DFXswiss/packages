@@ -298,6 +298,10 @@ export interface KycFinancialQuestion {
   title: string;
   description: string;
   options?: KycFinancialOption[];
+  conditions?: {
+    question: string;
+    response: string;
+  }[];
 }
 
 export interface KycFinancialQuestions extends KycFinancialResponses {
