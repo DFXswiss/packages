@@ -7,6 +7,7 @@ export const TransactionUrl = {
   target: 'transaction/target',
   refund: (id: number) => `transaction/${id}/refund`,
   setTarget: (id: number) => `transaction/${id}/target`,
+  invoice: (id: number) => `transaction/${id}/invoice`,
 };
 
 import { Asset } from './asset';
