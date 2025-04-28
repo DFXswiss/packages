@@ -3,18 +3,18 @@ import StyledVerticalStack from '../layout-helpers/StyledVerticalStack';
 import DfxIcon, { IconSize, IconVariant } from '../DfxIcon';
 
 export interface StyledModalButtonProps {
-  label?: string;
   onClick: () => void;
   onBlur: Noop;
+  label?: string;
   value?: string;
   description?: string;
   placeholder: string;
 }
 
 export default function StyledModalButton({
-  label,
   onClick,
   onBlur,
+  label,
   value,
   description,
   placeholder,
