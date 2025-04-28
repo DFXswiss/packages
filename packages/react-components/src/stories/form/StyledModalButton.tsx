@@ -22,7 +22,7 @@ export default function StyledModalButton({
 }: StyledModalButtonProps): JSX.Element {
   return (
     <StyledVerticalStack gap={1}>
-      <label className="text-dfxBlue-800 text-base font-semibold pl-4 text-start">{label}</label>
+      {label && <label className="text-dfxBlue-800 text-base font-semibold pl-4 text-start">{label}</label>}
       <button
         type="button"
         className="flex justify-between border border-dfxGray-400 text-base font-normal rounded-md px-4 py-2 shadow-sm w-full h-[58px]"
