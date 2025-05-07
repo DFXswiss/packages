@@ -55,5 +55,5 @@ export interface BuyPaymentInfo {
 }
 
 export interface PdfDocument {
-  pdfBase64: string;
+  pdfData: string;
 }
