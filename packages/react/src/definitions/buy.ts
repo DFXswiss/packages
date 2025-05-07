@@ -54,6 +54,6 @@ export interface BuyPaymentInfo {
   exactPrice?: boolean;
 }
 
-export interface Invoice {
-  invoicePdf: string;
+export interface PdfDocument {
+  pdfData: string;
 }
