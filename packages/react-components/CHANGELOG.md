@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.139 (2025-05-07)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.138 (2025-05-06)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
 # 1.3.0-beta.137 (2025-04-30)
 
 **Note:** Version bump only for package @dfx.swiss/react-components

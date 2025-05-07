@@ -91,6 +91,7 @@ export enum TransactionFailureReason {
   USER_DELETED = 'UserDeleted',
   VIDEO_IDENT_NEEDED = 'VideoIdentNeeded',
   MISSING_LIQUIDITY = 'MissingLiquidity',
+  KYC_DATA_NEEDED = 'KycDataNeeded',
 }
 
 export enum ExportType {

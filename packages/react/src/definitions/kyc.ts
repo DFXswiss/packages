@@ -24,8 +24,9 @@ export enum AccountType {
 }
 
 export enum LegalEntity {
-  PUBLIC_LIMITED_COMPANY = 'PublicLimitedCompany',
-  LIMITED_LIABILITY_COMPANY = 'LimitedLiabilityCompany',
+  AG = 'AG',
+  GMBH = 'GmbH',
+  UG = 'UG',
   ASSOCIATION = 'Association',
   FOUNDATION = 'Foundation',
   LIFE_INSURANCE = 'LifeInsurance',
