@@ -119,6 +119,8 @@ export interface UnassignedTransaction {
   inputTxId?: string;
   inputTxUrl?: string;
   chargebackAmount?: number;
+  chargebackAsset?: string;
+  chargebackAssetId?: number;
   chargebackTarget?: string;
   chargeBackTxId?: string;
   chargeBackTxUrl?: string;
