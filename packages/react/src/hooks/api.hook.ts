@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useAuthContext } from '../contexts/auth.context';
 import { ApiError } from '../definitions/error';
 import { useStore } from './store.hook';
