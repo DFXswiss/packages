@@ -87,7 +87,7 @@ export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
       isInitialized,
       isLoggedIn,
     }),
-    [token, session, jwt, setAuthenticationToken, authenticationToken, isInitialized, isLoggedIn],
+    [token, session, jwt, authenticationToken, isInitialized, isLoggedIn, decodeJwt, isExpired, setToken, setJwt],
   );
 
   return <AuthContext.Provider value={context}>{props.children}</AuthContext.Provider>;

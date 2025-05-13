@@ -64,7 +64,7 @@ export function useApiSession(): ApiSessionInterface {
     });
   }
 
-  async function updateSession(token: string) {
+  function updateSession(token: string) {
     setAuthenticationToken(token);
   }
 
@@ -83,6 +83,6 @@ export function useApiSession(): ApiSessionInterface {
       updateSession,
       deleteSession,
     }),
-    [isInitialized, isLoggedIn, session, setAuthenticationToken, getSignMessage, signIn, signUp],
+    [isInitialized, isLoggedIn, session, setAuthenticationToken, getSignMessage, signIn, signUp, authenticate],
   );
 }

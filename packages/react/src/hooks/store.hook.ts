@@ -35,6 +35,6 @@ export function useStore(): StoreInterface {
         remove: () => remove(StoreKey.AUTH_TOKEN),
       },
     }),
-    [],
+    [localStorage],
   );
 }

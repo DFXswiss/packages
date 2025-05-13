@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useAuthContext } from '../contexts/auth.context';
 import { ApiError } from '../definitions/error';
+import { useStore } from './store.hook';
 
 export interface ApiInterface {
   defaultUrl: string;
@@ -31,6 +32,7 @@ interface SpecialHandling {
 
 export function useApi(): ApiInterface {
   const { authenticationToken, setAuthenticationToken } = useAuthContext();
+  const { authenticationToken: authenticationTokenStore } = useStore();
 
   const url = process.env.REACT_APP_API_URL ?? 'https://api.dfx.swiss';
   const defaultVersion = 'v1';
@@ -40,7 +42,14 @@ export function useApi(): ApiInterface {
 
     return fetchFrom<T>(config).catch((error: ApiError) => {
       if (error.statusCode === 401) {
-        if (config.token === authenticationToken) setAuthenticationToken(undefined);
+        if (config.token === authenticationTokenStore.get()) {
+          setAuthenticationToken(undefined);
+        } else {
+          return call<T>({
+            ...config,
+            token: authenticationTokenStore.get(),
+          });
+        }
       }
 
       throw error;
@@ -94,5 +103,8 @@ export function useApi(): ApiInterface {
     };
   }
 
-  return useMemo(() => ({ defaultUrl: `${url}/${defaultVersion}`, call }), [authenticationToken]);
+  return useMemo(
+    () => ({ defaultUrl: `${url}/${defaultVersion}`, call }),
+    [authenticationToken, authenticationTokenStore],
+  );
 }
