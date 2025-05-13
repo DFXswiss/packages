@@ -20,6 +20,7 @@ export enum SupportIssueType {
 
 export enum SupportIssueReason {
   OTHER = 'Other',
+  DATA_REQUEST = 'DataRequest',
 
   // transaction
   FUNDS_NOT_RECEIVED = 'FundsNotReceived',
@@ -30,6 +31,7 @@ export enum SupportIssueState {
   CREATED = 'Created',
   PENDING = 'Pending',
   COMPLETED = 'Completed',
+  CANCELED = 'Canceled',
 }
 
 export enum SupportMessageStatus {
@@ -96,6 +98,8 @@ export interface SupportIssue {
 
 export interface TransactionIssue {
   id?: number;
+  uid?: string;
+  orderUid?: string;
   senderIban?: string;
   receiverIban?: string;
   date?: Date;

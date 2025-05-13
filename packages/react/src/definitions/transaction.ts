@@ -7,6 +7,8 @@ export const TransactionUrl = {
   target: 'transaction/target',
   refund: (id: number) => `transaction/${id}/refund`,
   setTarget: (id: number) => `transaction/${id}/target`,
+  invoice: (id: number) => `transaction/${id}/invoice`,
+  receipt: (id: number) => `transaction/${id}/receipt`,
 };
 
 import { Asset } from './asset';
@@ -33,9 +35,11 @@ export enum TransactionError {
   BANK_TRANSACTION_MISSING = 'BankTransactionMissing',
   KYC_REQUIRED = 'KycRequired',
   KYC_DATA_REQUIRED = 'KycDataRequired',
+  NAME_REQUIRED = 'NameRequired',
   KYC_REQUIRED_INSTANT = 'KycRequiredInstant',
   LIMIT_EXCEEDED = 'LimitExceeded',
   NATIONALITY_NOT_ALLOWED = 'NationalityNotAllowed',
+  VIDEO_IDENT_REQUIRED = 'VideoIdentRequired',
 }
 
 export enum TransactionType {
@@ -46,22 +50,26 @@ export enum TransactionType {
 }
 
 export enum TransactionState {
-  UNASSIGNED = 'Unassigned',
   CREATED = 'Created',
   PROCESSING = 'Processing',
+  LIQUIDITY_PENDING = 'LiquidityPending',
   AML_PENDING = 'AmlPending',
   KYC_REQUIRED = 'KycRequired',
+  LIMIT_EXCEEDED = 'LimitExceeded',
   FEE_TOO_HIGH = 'FeeTooHigh',
+  PRICE_UNDETERMINABLE = 'PriceUndeterminable',
+  PAYOUT_IN_PROGRESS = 'PayoutInProgress',
   COMPLETED = 'Completed',
   FAILED = 'Failed',
-  RETURNED = 'Returned',
   RETURN_PENDING = 'ReturnPending',
-  LIMIT_EXCEEDED = 'LimitExceeded',
+  RETURNED = 'Returned',
+  UNASSIGNED = 'Unassigned',
 }
 
 export enum TransactionFailureReason {
   UNKNOWN = 'Unknown',
   DAILY_LIMIT_EXCEEDED = 'DailyLimitExceeded',
+  MONTHLY_LIMIT_EXCEEDED = 'MonthlyLimitExceeded',
   ANNUAL_LIMIT_EXCEEDED = 'AnnualLimitExceeded',
   ACCOUNT_HOLDER_MISMATCH = 'AccountHolderMismatch',
   KYC_REJECTED = 'KycRejected',
@@ -83,6 +91,7 @@ export enum TransactionFailureReason {
   USER_DELETED = 'UserDeleted',
   VIDEO_IDENT_NEEDED = 'VideoIdentNeeded',
   MISSING_LIQUIDITY = 'MissingLiquidity',
+  KYC_DATA_NEEDED = 'KycDataNeeded',
 }
 
 export enum ExportType {
@@ -99,6 +108,7 @@ export enum ExportFormat {
 export interface UnassignedTransaction {
   id: number;
   uid: string;
+  orderUid: string;
   type: TransactionType;
   state: TransactionState;
   inputAmount?: number;
@@ -109,6 +119,8 @@ export interface UnassignedTransaction {
   inputTxId?: string;
   inputTxUrl?: string;
   chargebackAmount?: number;
+  chargebackAsset?: string;
+  chargebackAssetId?: number;
   chargebackTarget?: string;
   chargeBackTxId?: string;
   chargeBackTxUrl?: string;

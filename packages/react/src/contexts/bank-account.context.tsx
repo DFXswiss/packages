@@ -30,7 +30,10 @@ export function BankAccountContextProvider(props: PropsWithChildren): JSX.Elemen
       setIsLoading(true);
       getAccounts()
         .then((accounts) => setBankAccounts(accounts.filter((a) => a.active)))
-        .catch((e) => setError(e.message))
+        .catch((e) => {
+          setError(e.message);
+          setBankAccounts(undefined);
+        })
         .finally(() => setIsLoading(false));
     }
   }, [isLoggedIn, session]);

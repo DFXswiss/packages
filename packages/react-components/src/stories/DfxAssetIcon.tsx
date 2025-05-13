@@ -19,6 +19,7 @@ export enum AssetIconVariant {
   BTC = 'BTC',
   WBTC = 'WBTC',
   BTCB = 'BTCB',
+  kBTC = 'kBTC',
   MATIC = 'MATIC',
   POL = 'POL',
   GMX = 'GMX',
@@ -57,6 +58,11 @@ export enum AssetIconVariant {
   EURS = 'EURS',
   EURT = 'EURt',
   EDLC = 'EDLC',
+  dEURO = 'dEURO',
+  DEPS = 'DEPS',
+  nDEPS = 'nDEPS',
+  dEURO_PRESALE = 'dEUROPresale',
+  DEPS_PRESALE = 'DEPSPresale',
 
   EUR = 'EUR',
   USD = 'USD',
@@ -91,6 +97,7 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.BTC]: ({ forceColor }) => <DfxAssetIconBTC forceColor={forceColor} />,
   [AssetIconVariant.WBTC]: ({ forceColor }) => <DfxAssetIconWBTC forceColor={forceColor} />,
   [AssetIconVariant.BTCB]: ({ forceColor }) => <DfxAssetIconBTCB forceColor={forceColor} />,
+  [AssetIconVariant.kBTC]: ({ forceColor }) => <DfxAssetIconKBTC forceColor={forceColor} />,
   [AssetIconVariant.MATIC]: ({ forceColor }) => <DfxAssetIconPOL forceColor={forceColor} />,
   [AssetIconVariant.POL]: ({ forceColor }) => <DfxAssetIconPOL forceColor={forceColor} />,
   [AssetIconVariant.GMX]: ({ forceColor }) => <DfxAssetIconGMX forceColor={forceColor} />,
@@ -129,6 +136,11 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.EURS]: ({ forceColor }) => <DfxAssetIconEURS forceColor={forceColor} />,
   [AssetIconVariant.EURT]: ({ forceColor }) => <DfxAssetIconEURt forceColor={forceColor} />,
   [AssetIconVariant.EDLC]: ({ forceColor }) => <DfxAssetIconEDLC forceColor={forceColor} />,
+  [AssetIconVariant.dEURO]: ({ forceColor }) => <DfxAssetIconDEURO forceColor={forceColor} />,
+  [AssetIconVariant.DEPS]: ({ forceColor }) => <DfxAssetIconDEPS forceColor={forceColor} />,
+  [AssetIconVariant.nDEPS]: ({ forceColor }) => <DfxAssetIconNDEPS forceColor={forceColor} />,
+  [AssetIconVariant.dEURO_PRESALE]: ({ forceColor }) => <DfxAssetIconDEURO forceColor={forceColor} />,
+  [AssetIconVariant.DEPS_PRESALE]: ({ forceColor }) => <DfxAssetIconDEPS forceColor={forceColor} />,
 
   [AssetIconVariant.EUR]: ({ forceColor }) => <DfxAssetIconEUR forceColor={forceColor} />,
   [AssetIconVariant.USD]: ({ forceColor }) => <DfxAssetIconUSD forceColor={forceColor} />,
@@ -443,6 +455,25 @@ function DfxAssetIconBTCB({ forceColor }: BaseAssetIconProps) {
           <rect width="21" height="21" fill="white" transform="translate(1.5 1.5)" />
         </clipPath>
       </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconKBTC({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="16" cy="16" r="16" fill={forceColor ?? '#7132F5'} />
+      <path
+        d="M19.5141 9.30328L20.3141 6.30338L18.5141 5.80339L17.8142 8.7033C17.3142 8.6033 16.8142 8.5033 16.3142 8.40331L17.0142 5.40341L15.1143 5.00342L14.4143 8.00332C14.0143 7.90332 13.6143 7.80333 13.2143 7.70333L10.7144 7.10335L10.2144 9.10328C10.2144 9.10328 11.6144 9.40327 11.5144 9.40327C12.2144 9.60327 12.4143 10.1033 12.4143 10.5032L10.3144 18.703C10.2144 18.903 10.0144 19.303 9.41444 19.103L8.11449 18.803L7.21452 20.9029L9.61444 21.5029L10.9144 21.8029L10.1144 24.8028L11.9144 25.3028L12.7143 22.3029C13.2143 22.4029 13.7143 22.6028 14.2143 22.7028L13.5143 25.7027L15.3143 26.2027L16.1142 23.2028C19.2141 23.8028 21.614 23.6028 22.614 20.7029C23.414 18.403 22.614 17.103 20.9141 16.303C22.114 16.0031 23.014 15.2031 23.214 13.6031C23.514 11.3032 21.914 10.1033 19.5141 9.30328ZM19.0141 19.4029C18.4142 21.7029 14.6143 20.4029 13.4143 20.1029L14.4143 16.1031C15.6142 16.403 19.6141 17.003 19.0141 19.4029ZM19.6141 13.5031C19.1141 15.6031 15.9142 14.5031 14.9143 14.3031L15.8142 10.6032C16.8142 10.8032 20.1141 11.3032 19.6141 13.5031Z"
+        fill="white"
+      />
     </svg>
   );
 }
@@ -4641,6 +4672,432 @@ function DfxAssetIconEDLC({ forceColor }: BaseAssetIconProps) {
           transform="matrix(1 0 0 -1 0 425.198)"
         />
       </g>
+    </svg>
+  );
+}
+
+function DfxAssetIconDEURO({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 96 97"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#deuro_a)">
+        <path fill="url(#deuro_b)" d="M48 96.6c26.51 0 48-21.49 48-48S74.51.6 48 .6 0 22.09 0 48.6s21.49 48 48 48Z" />
+        <path fill="url(#deuro_c)" d="M48 96.6c26.51 0 48-21.49 48-48S74.51.6 48 .6 0 22.09 0 48.6s21.49 48 48 48Z" />
+        <path
+          fill="url(#deuro_d)"
+          d="M48 3.6c24.81 0 45 20.19 45 45s-20.19 45-45 45-45-20.19-45-45 20.19-45 45-45Zm0-3C21.48.6 0 22.08 0 48.6s21.48 48 48 48 48-21.48 48-48S74.52.6 48 .6Z"
+        />
+        <path
+          fill={forceColor ?? '#272B38'}
+          fillOpacity={0.45}
+          d="M60 78.6v-6H36v6h24ZM66 66.6h-6v6h6v-6ZM36 66.6h-6v6h6v-6ZM72 60.6h-6v6h6v-6ZM72 36.6h-6v6h6v-6ZM24 42.6h-6v6h6v6h-6v6h6v6h6v-6h24v-6H30v-6h30v-6H30v-6h-6v6ZM66 30.6h-6v6h6v-6Z"
+        />
+        <path fill={forceColor ?? '#272B38'} fillOpacity={0.45} d="M36 30.6h-6v6h6v-6ZM36 24.6v6h24v-6H36Z" />
+        <path fill="url(#deuro_e)" d="M60 75.6v-6H36v6h24Z" />
+        <path fill="url(#deuro_f)" d="M66 63.6h-6v6h6v-6Z" />
+        <path fill="url(#deuro_g)" d="M36 63.6h-6v6h6v-6Z" />
+        <path fill="url(#deuro_h)" d="M72 57.6h-6v6h6v-6Z" />
+        <path fill="url(#deuro_i)" d="M72 33.6h-6v6h6v-6Z" />
+        <path fill="url(#deuro_j)" d="M24 39.6h-6v6h6v6h-6v6h6v6h6v-6h24v-6H30v-6h30v-6H30v-6h-6v6Z" />
+        <path fill="url(#deuro_k)" d="M66 27.6h-6v6h6v-6Z" />
+        <path fill="url(#deuro_l)" d="M36 27.6h-6v6h6v-6Z" />
+        <path fill="url(#deuro_m)" d="M36 21.6v6h24v-6H36Z" />
+      </g>
+      <defs>
+        <linearGradient id="deuro_b" x1={48} x2={48} y1={96.6} y2={0.6} gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#424756'} />
+          <stop offset={0.31} stopColor={forceColor ?? '#505565'} />
+          <stop offset={0.42} stopColor={forceColor ?? '#5F6475'} />
+          <stop offset={0.61} stopColor={forceColor ?? '#747A8B'} />
+          <stop offset={0.73} stopColor={forceColor ?? '#7C8394'} />
+          <stop offset={0.88} stopColor={forceColor ?? '#757C8C'} />
+          <stop offset={1} stopColor={forceColor ?? '#6E7484'} />
+        </linearGradient>
+        <linearGradient id="deuro_d" x1={48} x2={48} y1={96.6} y2={0.6} gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#6D6E7C'} />
+          <stop offset={0.17} stopColor={forceColor ?? '#7A7C8A'} />
+          <stop offset={0.51} stopColor={forceColor ?? '#9EA2B1'} />
+          <stop offset={0.67} stopColor={forceColor ?? '#B3B8C7'} />
+        </linearGradient>
+        <linearGradient id="deuro_e" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_f" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_g" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_h" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_i" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_j" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_k" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_l" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_m" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <radialGradient
+          id="deuro_c"
+          cx={0}
+          cy={0}
+          r={1}
+          gradientTransform="matrix(0 48 -48 0 48 48.6)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset={0.802} stopColor={forceColor ?? '#272B38'} stopOpacity={0} />
+          <stop offset={0.848} stopColor={forceColor ?? '#272B38'} stopOpacity={0.042} />
+          <stop offset={0.883} stopColor={forceColor ?? '#272B38'} stopOpacity={0.095} />
+          <stop offset={0.914} stopColor={forceColor ?? '#272B38'} stopOpacity={0.15} />
+          <stop offset={0.957} stopColor={forceColor ?? '#272B38'} stopOpacity={0.34} />
+        </radialGradient>
+        <clipPath id="deuro_a">
+          <path fill="#fff" d="M0 .6h96v96H0z" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconDEPS({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 96 97"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#deps_a)">
+        <path fill="url(#deps_b)" d="M48 96.6c26.51 0 48-21.49 48-48S74.51.6 48 .6 0 22.09 0 48.6s21.49 48 48 48Z" />
+        <path fill="url(#deps_c)" d="M48 96.6c26.51 0 48-21.49 48-48S74.51.6 48 .6 0 22.09 0 48.6s21.49 48 48 48Z" />
+        <path
+          fill="url(#deps_d)"
+          d="M48 3.6c24.81 0 45 20.19 45 45s-20.19 45-45 45-45-20.19-45-45 20.19-45 45-45Zm0-3C21.48.6 0 22.08 0 48.6s21.48 48 48 48 48-21.48 48-48S74.52.6 48 .6Z"
+        />
+        <path
+          fill={forceColor ?? '#272B38'}
+          fillOpacity={0.45}
+          d="M28.1 75v3.6h39.6V75H28.1ZM28.1 60.6h-3.6V75h3.6V60.6ZM67.7 75h3.6V60.6h-3.6V75ZM49.7 49.8v-3.6h3.6v-3.6h-3.6v-7.2h-3.6v10.8H35.3v3.6h10.8v14.4h-3.6v3.6h-3.6v3.6h18v-3.6h-3.6v-3.6h-3.6V53.4h14.4v-3.6H49.7ZM67.7 46.2h-3.6v3.6h3.6v-3.6ZM35.3 42.6h-3.6v3.6h3.6v-3.6Z"
+        />
+        <path
+          fill={forceColor ?? '#272B38'}
+          fillOpacity={0.45}
+          d="M56.9 39h-3.6v3.6h3.6V39ZM31.7 39h-3.6v3.6h3.6V39ZM56.9 35.4V39h10.8v7.2h3.6V35.4H56.9ZM46.1 31.8h-3.6v3.6h3.6v-3.6ZM28.1 28.2h10.8v-3.6H24.5V39h3.6V28.2Z"
+        />
+        <path fill={forceColor ?? '#272B38'} fillOpacity={0.45} d="M42.5 28.2h-3.6v3.6h3.6v-3.6Z" />
+        <path fill="url(#deps_e)" d="M28.1 72v3.6h39.6V72H28.1Z" />
+        <path fill="url(#deps_f)" d="M28.1 57.6h-3.6V72h3.6V57.6Z" />
+        <path fill="url(#deps_g)" d="M67.7 72h3.6V57.6h-3.6V72Z" />
+        <path
+          fill="url(#deps_h)"
+          d="M49.7 46.8v-3.6h3.6v-3.6h-3.6v-7.2h-3.6v10.8H35.3v3.6h10.8v14.4h-3.6v3.6h-3.6v3.6h18v-3.6h-3.6v-3.6h-3.6V50.4h14.4v-3.6H49.7Z"
+        />
+        <path fill="url(#deps_i)" d="M67.7 43.2h-3.6v3.6h3.6v-3.6Z" />
+        <path fill="url(#deps_j)" d="M35.3 39.6h-3.6v3.6h3.6v-3.6Z" />
+        <path fill="url(#deps_k)" d="M56.9 36h-3.6v3.6h3.6V36Z" />
+        <path fill="url(#deps_l)" d="M31.7 36h-3.6v3.6h3.6V36Z" />
+        <path fill="url(#deps_m)" d="M56.9 32.4V36h10.8v7.2h3.6V32.4H56.9Z" />
+        <path fill="url(#deps_n)" d="M46.1 28.8h-3.6v3.6h3.6v-3.6Z" />
+        <path fill="url(#deps_o)" d="M28.1 25.2h10.8v-3.6H24.5V36h3.6V25.2Z" />
+        <path fill="url(#deps_p)" d="M42.5 25.2h-3.6v3.6h3.6v-3.6Z" />
+      </g>
+      <defs>
+        <linearGradient id="deps_b" x1={48} x2={48} y1={96.6} y2={0.6} gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#424756'} />
+          <stop offset={0.31} stopColor={forceColor ?? '#505565'} />
+          <stop offset={0.42} stopColor={forceColor ?? '#5F6475'} />
+          <stop offset={0.61} stopColor={forceColor ?? '#747A8B'} />
+          <stop offset={0.73} stopColor={forceColor ?? '#7C8394'} />
+          <stop offset={0.88} stopColor={forceColor ?? '#757C8C'} />
+          <stop offset={1} stopColor={forceColor ?? '#6E7484'} />
+        </linearGradient>
+        <linearGradient id="deps_d" x1={48} x2={48} y1={96.6} y2={0.6} gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#6D6E7C'} />
+          <stop offset={0.17} stopColor={forceColor ?? '#7A7C8A'} />
+          <stop offset={0.51} stopColor={forceColor ?? '#9EA2B1'} />
+          <stop offset={0.67} stopColor={forceColor ?? '#B3B8C7'} />
+        </linearGradient>
+        <linearGradient id="deps_e" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_f" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_g" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_h" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_i" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_j" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_k" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_l" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_m" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_n" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_o" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_p" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <radialGradient
+          id="deps_c"
+          cx={0}
+          cy={0}
+          r={1}
+          gradientTransform="matrix(0 48 -48 0 48 48.6)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset={0.802} stopColor={forceColor ?? '#272B38'} stopOpacity={0} />
+          <stop offset={0.848} stopColor={forceColor ?? '#272B38'} stopOpacity={0.042} />
+          <stop offset={0.883} stopColor={forceColor ?? '#272B38'} stopOpacity={0.095} />
+          <stop offset={0.914} stopColor={forceColor ?? '#272B38'} stopOpacity={0.15} />
+          <stop offset={0.957} stopColor={forceColor ?? '#272B38'} stopOpacity={0.34} />
+        </radialGradient>
+        <clipPath id="deps_a">
+          <path fill="#fff" d="M0 .6h96v96H0z" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconNDEPS({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 96 97"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#ndeps_a)">
+        <path fill="url(#ndeps_b)" d="M48 96.6c26.51 0 48-21.49 48-48S74.51.6 48 .6 0 22.09 0 48.6s21.49 48 48 48Z" />
+        <path fill="url(#ndeps_c)" d="M48 96.6c26.51 0 48-21.49 48-48S74.51.6 48 .6 0 22.09 0 48.6s21.49 48 48 48Z" />
+        <path
+          fill="url(#ndeps_d)"
+          d="M48 3.6c24.81 0 45 20.19 45 45s-20.19 45-45 45-45-20.19-45-45 20.19-45 45-45Zm0-3C21.48.6 0 22.08 0 48.6s21.48 48 48 48 48-21.48 48-48S74.52.6 48 .6Z"
+        />
+        <path
+          fill={forceColor ?? '#272B38'}
+          fillOpacity={0.45}
+          d="M49.923 55.523v-3.846h3.846v-3.846h-3.846v-7.692h-3.846v11.538H30.693v3.846h15.384v15.384H42.23v3.847h-3.846V78.6h19.23v-3.846h-3.846v-3.847h-3.846V59.37h15.384v-3.846H49.923ZM69.153 51.677h-3.846v3.846h3.846v-3.846ZM73 47.83h-3.847v3.846H73V47.83ZM30.692 47.83h-3.846v3.846l3.846.001V47.83Z"
+        />
+        <path
+          fill={forceColor ?? '#272B38'}
+          fillOpacity={0.45}
+          d="M57.615 43.984H53.77v3.847l3.846-.001v-3.846ZM26.846 43.984H23v3.846h3.846v-3.846ZM61.461 40.139h-3.846v3.845h3.846V40.14ZM61.461 36.292v3.847L73 40.138v7.692h3.847V36.292H61.46ZM46.077 36.292H42.23v3.846h3.846v-3.846ZM23 32.446h15.385V28.6h-19.23v15.384H23V32.446Z"
+        />
+        <path fill={forceColor ?? '#272B38'} fillOpacity={0.45} d="M42.23 32.447h-3.845v3.846h3.846v-3.846Z" />
+        <path
+          fill="url(#ndeps_e)"
+          d="M49.923 52.523v-3.846h3.846v-3.846h-3.846v-7.692h-3.846v11.538H30.693v3.846h15.384v15.384H42.23v3.847h-3.846V75.6h19.23v-3.846h-3.846v-3.847h-3.846V56.37h15.384v-3.846H49.923Z"
+        />
+        <path fill="url(#ndeps_f)" d="M69.153 48.677h-3.846v3.846h3.846v-3.846Z" />
+        <path fill="url(#ndeps_g)" d="M73 44.83h-3.847v3.846H73V44.83Z" />
+        <path fill="url(#ndeps_h)" d="M30.692 44.83h-3.846v3.846l3.846.001V44.83Z" />
+        <path fill="url(#ndeps_i)" d="M57.615 40.984H53.77v3.847l3.846-.001v-3.846Z" />
+        <path fill="url(#ndeps_j)" d="M26.846 40.984H23v3.846h3.846v-3.846Z" />
+        <path fill="url(#ndeps_k)" d="M61.461 37.139h-3.846v3.845h3.846V37.14Z" />
+        <path fill="url(#ndeps_l)" d="M61.461 33.292v3.847L73 37.138v7.692h3.847V33.292H61.46Z" />
+        <path fill="url(#ndeps_m)" d="M46.077 33.292H42.23v3.846h3.846v-3.846Z" />
+        <path fill="url(#ndeps_n)" d="M23 29.446h15.385V25.6h-19.23v15.384H23V29.446Z" />
+        <path fill="url(#ndeps_o)" d="M42.23 29.447h-3.845v3.846h3.846v-3.846Z" />
+      </g>
+      <defs>
+        <linearGradient id="ndeps_b" x1={48} x2={48} y1={96.6} y2={0.6} gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#424756'} />
+          <stop offset={0.31} stopColor={forceColor ?? '#505565'} />
+          <stop offset={0.42} stopColor={forceColor ?? '#5F6475'} />
+          <stop offset={0.61} stopColor={forceColor ?? '#747A8B'} />
+          <stop offset={0.73} stopColor={forceColor ?? '#7C8394'} />
+          <stop offset={0.88} stopColor={forceColor ?? '#757C8C'} />
+          <stop offset={1} stopColor={forceColor ?? '#6E7484'} />
+        </linearGradient>
+        <linearGradient id="ndeps_d" x1={48} x2={48} y1={96.6} y2={0.6} gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#6D6E7C'} />
+          <stop offset={0.17} stopColor={forceColor ?? '#7A7C8A'} />
+          <stop offset={0.51} stopColor={forceColor ?? '#9EA2B1'} />
+          <stop offset={0.67} stopColor={forceColor ?? '#B3B8C7'} />
+        </linearGradient>
+        <linearGradient id="ndeps_e" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_f" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_g" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_h" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_i" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_j" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_k" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_l" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_m" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_n" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_o" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <radialGradient
+          id="ndeps_c"
+          cx={0}
+          cy={0}
+          r={1}
+          gradientTransform="matrix(0 48 -48 0 48 48.6)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset={0.802} stopColor={forceColor ?? '#272B38'} stopOpacity={0} />
+          <stop offset={0.848} stopColor={forceColor ?? '#272B38'} stopOpacity={0.042} />
+          <stop offset={0.883} stopColor={forceColor ?? '#272B38'} stopOpacity={0.095} />
+          <stop offset={0.914} stopColor={forceColor ?? '#272B38'} stopOpacity={0.15} />
+          <stop offset={0.957} stopColor={forceColor ?? '#272B38'} stopOpacity={0.34} />
+        </radialGradient>
+        <clipPath id="ndeps_a">
+          <path fill="#fff" d="M0 .6h96v96H0z" />
+        </clipPath>
+      </defs>
     </svg>
   );
 }

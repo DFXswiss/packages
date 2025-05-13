@@ -209,7 +209,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
 
     setUserPaymentLinksConfigLoading(true);
     return updateUserPaymentLinksConfigApi(config)
-      .then(() => setUserPaymentLinksConfig(config))
+      .then(() => setUserPaymentLinksConfig((prevConfig) => ({ ...prevConfig, ...config })))
       .then(loadPaymentLinks)
       .finally(() => setUserPaymentLinksConfigLoading(false));
   }

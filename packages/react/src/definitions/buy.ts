@@ -11,6 +11,7 @@ export const BuyUrl = {
 
 export interface Buy {
   id: number;
+  uid: string;
   timestamp: Date;
   name: string;
   street: string;
@@ -39,7 +40,6 @@ export interface Buy {
   asset: Asset;
   paymentRequest?: string;
   paymentLink?: string;
-  nameRequired?: boolean;
   isValid: boolean;
   error?: TransactionError;
 }
@@ -54,6 +54,6 @@ export interface BuyPaymentInfo {
   exactPrice?: boolean;
 }
 
-export interface Invoice {
-  invoicePdf: string;
+export interface PdfDocument {
+  pdfData: string;
 }

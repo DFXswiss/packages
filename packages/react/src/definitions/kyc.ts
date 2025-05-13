@@ -24,8 +24,10 @@ export enum AccountType {
 }
 
 export enum LegalEntity {
-  PUBLIC_LIMITED_COMPANY = 'PublicLimitedCompany',
-  LIMITED_LIABILITY_COMPANY = 'LimitedLiabilityCompany',
+  AG = 'AG',
+  GMBH = 'GmbH',
+  UG = 'UG',
+  GBR = 'GbR',
   ASSOCIATION = 'Association',
   FOUNDATION = 'Foundation',
   LIFE_INSURANCE = 'LifeInsurance',
@@ -70,6 +72,7 @@ export type UserData = KycContactData & KycPersonalData;
 // info
 export enum LimitPeriod {
   DAY = 'Day',
+  MONTH = 'Month',
   YEAR = 'Year',
 }
 
@@ -95,11 +98,13 @@ export enum KycStepName {
   CONTACT_DATA = 'ContactData',
   PERSONAL_DATA = 'PersonalData',
   LEGAL_ENTITY = 'LegalEntity',
-  STOCK_REGISTER = 'StockRegister',
+  OWNER_DIRECTORY = 'OwnerDirectory',
   NATIONALITY_DATA = 'NationalityData',
   COMMERCIAL_REGISTER = 'CommercialRegister',
   SIGNATORY_POWER = 'SignatoryPower',
   AUTHORITY = 'Authority',
+  BENEFICIAL_OWNER = 'BeneficialOwner',
+  OPERATIONAL_ACTIVITY = 'OperationalActivity',
   IDENT = 'Ident',
   FINANCIAL_DATA = 'FinancialData',
   ADDITIONAL_DOCUMENTS = 'AdditionalDocuments',
@@ -123,6 +128,7 @@ export enum KycStepStatus {
   FAILED = 'Failed',
   COMPLETED = 'Completed',
   OUTDATED = 'Outdated',
+  DATA_REQUESTED = 'DataRequested',
 }
 
 export enum UrlType {
@@ -150,9 +156,14 @@ export enum FileType {
   AUTHORITY = 'Authority',
 }
 
+export interface KycAdditionalInfo {
+  accountHolder?: string;
+}
+
 export interface KycSessionInfo {
   url: string;
   type: UrlType;
+  additionalInfo?: KycAdditionalInfo;
 }
 
 export interface KycStepBase {
@@ -231,6 +242,23 @@ export interface KycSignatoryPowerData {
   signatoryPower: SignatoryPower;
 }
 
+export interface KycBeneficialData {
+  hasBeneficialOwners: boolean;
+  isAccountHolderInvolved: boolean;
+  managingDirector?: ContactPersonData;
+  beneficialOwners?: ContactPersonData[];
+}
+
+export interface ContactPersonData extends KycAddress {
+  firstName: string;
+  lastName: string;
+}
+
+export interface KycOperationalData {
+  isOperational: boolean;
+  websiteUrl?: string;
+}
+
 export interface KycFileData {
   file: string;
   fileName?: string;
@@ -272,6 +300,10 @@ export interface KycFinancialQuestion {
   title: string;
   description: string;
   options?: KycFinancialOption[];
+  conditions?: {
+    question: string;
+    response: string;
+  }[];
 }
 
 export interface KycFinancialQuestions extends KycFinancialResponses {

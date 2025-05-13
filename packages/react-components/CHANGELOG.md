@@ -3,6 +3,254 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.143 (2025-05-12)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.142 (2025-05-08)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.141 (2025-05-07)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.140 (2025-05-07)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.139 (2025-05-07)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.138 (2025-05-06)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.137 (2025-04-30)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.136 (2025-04-28)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.135 (2025-04-28)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.134 (2025-04-28)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.133 (2025-04-08)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.132 (2025-03-13)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.131 (2025-03-12)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.130 (2025-03-05)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.129 (2025-03-05)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.128 (2025-03-04)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.127 (2025-03-03)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.126 (2025-03-03)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.125 (2025-02-20)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.124 (2025-02-20)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.123 (2025-02-19)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.122 (2025-02-18)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.121 (2025-02-14)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.120 (2025-02-06)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.119 (2025-01-30)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.118 (2025-01-27)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.117 (2025-01-24)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.116 (2025-01-23)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.115 (2025-01-23)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.114 (2025-01-15)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.113 (2025-01-09)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
 # 1.3.0-beta.112 (2025-01-08)
 
 **Note:** Version bump only for package @dfx.swiss/react-components
