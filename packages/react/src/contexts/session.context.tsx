@@ -29,7 +29,6 @@ export interface SessionInterface {
     discount?: string,
   ) => Promise<string | undefined>;
   logout: () => Promise<void>;
-  sync: () => void;
   tokenStore: {
     get: (address: string) => string | undefined;
     set: (address: string, token: string | null) => void;
@@ -172,11 +171,6 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     return await api.signMessage(message, address);
   }
 
-  function sync(): void {
-    const token = getAuthToken();
-    if (token) setAuthToken(token);
-  }
-
   const context = useMemo(
     () => ({
       address: storedAddress,
@@ -190,7 +184,6 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       login,
       signUp,
       logout,
-      sync,
       tokenStore,
     }),
     [
