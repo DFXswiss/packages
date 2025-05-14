@@ -1,13 +1,13 @@
 import jwtDecode from 'jwt-decode';
-import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Jwt } from '../definitions/jwt';
 import { Session } from '../definitions/session';
 import { useStore } from '../hooks/store.hook';
 
 interface AuthInterface {
-  authenticationToken?: string;
   session?: Session;
-  setAuthenticationToken: (authenticationToken?: string) => void;
+  getAuthToken: () => string | undefined;
+  setAuthToken: (authenticationToken?: string) => void;
   isInitialized: boolean;
   isLoggedIn: boolean;
 }
@@ -19,12 +19,14 @@ export function useAuthContext(): AuthInterface {
 }
 
 export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
-  const [isInitialized, setIsInitialized] = useState(false);
-  const [token, setToken] = useState<string>();
-  const [jwt, setJwt] = useState<Jwt>();
-  const { authenticationToken } = useStore();
+  const { authTokenStore } = useStore();
 
-  const isLoggedIn = token != null && !isExpired();
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [jwt, setJwt] = useState<Jwt>();
+
+  const tokenRef = useRef<string>();
+
+  const isLoggedIn = tokenRef.current != null && !isExpired();
 
   const session = useMemo(
     () =>
@@ -41,31 +43,31 @@ export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
   );
 
   useEffect(() => {
-    if (!token) {
-      setAuthenticationToken(authenticationToken.get());
+    if (!tokenRef.current) {
+      setAuthToken(authTokenStore.get());
     }
 
     setIsInitialized(true);
   }, []);
 
   function isExpired(): boolean {
-    if (!token) return true;
+    if (!tokenRef.current) return true;
 
-    const decoded = jwt ?? decodeJwt(token);
+    const decoded = jwt ?? decodeJwt(tokenRef.current);
 
     if (decoded) {
       return decoded.exp != null && Date.now() > new Date(decoded.exp * 1000).getTime();
     } else {
-      authenticationToken.remove();
-      setToken(undefined);
+      authTokenStore.remove();
+      tokenRef.current = undefined;
       setJwt(undefined);
       return true;
     }
   }
 
-  function setAuthenticationToken(newToken?: string) {
-    newToken ? authenticationToken.set(newToken) : authenticationToken.remove();
-    setToken(newToken);
+  function setAuthToken(newToken?: string) {
+    newToken ? authTokenStore.set(newToken) : authTokenStore.remove();
+    tokenRef.current = newToken;
     setJwt(decodeJwt(newToken));
   }
 
@@ -79,15 +81,19 @@ export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
     }
   }
 
+  function getAuthToken(): string | undefined {
+    return tokenRef.current ?? authTokenStore.get();
+  }
+
   const context: AuthInterface = useMemo(
     () => ({
-      authenticationToken: token,
       session,
-      setAuthenticationToken,
+      getAuthToken,
+      setAuthToken,
       isInitialized,
       isLoggedIn,
     }),
-    [token, session, jwt, authenticationToken, isInitialized, isLoggedIn, decodeJwt, isExpired, setToken, setJwt],
+    [session, jwt, isInitialized, isLoggedIn, tokenRef, authTokenStore],
   );
 
   return <AuthContext.Provider value={context}>{props.children}</AuthContext.Provider>;

@@ -65,7 +65,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     createSessionNew: createApiSessionNew,
     deleteSession,
   } = useApiSession();
-  const { authenticationToken, setAuthenticationToken } = useAuthContext();
+  const { getAuthToken, setAuthToken } = useAuthContext();
   const [needsSignUp, setNeedsSignUp] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [storedSignature, setStoredSignature] = useState<string>();
@@ -119,7 +119,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     discount = data.discount,
   ): Promise<string | undefined> {
     if (!address) throw new Error('Address is not defined');
-    if (isLoggedIn && session?.address === address) authenticationToken;
+    if (isLoggedIn && session?.address === address && getAuthToken()) return getAuthToken();
 
     signature ??= await getSignature(address);
 
@@ -173,8 +173,8 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
   }
 
   function sync(): void {
-    const token = localStorage.getItem('dfx.authenticationToken');
-    if (token) setAuthenticationToken(token);
+    const token = getAuthToken();
+    if (token) setAuthToken(token);
   }
 
   const context = useMemo(
@@ -201,10 +201,8 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       isLoggedIn,
       needsSignUp,
       isProcessing,
-      login,
-      signUp,
-      logout,
-      sync,
+      getAuthToken,
+      setAuthToken,
       tokenStore,
     ],
   );

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 export interface StoreInterface {
-  authenticationToken: {
+  authTokenStore: {
     get: () => string | undefined;
     set: (token: string) => void;
     remove: () => void;
@@ -29,7 +29,7 @@ export function useStore(): StoreInterface {
 
   return useMemo(
     () => ({
-      authenticationToken: {
+      authTokenStore: {
         get: () => get(StoreKey.AUTH_TOKEN),
         set: (value: string) => set(StoreKey.AUTH_TOKEN, value),
         remove: () => remove(StoreKey.AUTH_TOKEN),
