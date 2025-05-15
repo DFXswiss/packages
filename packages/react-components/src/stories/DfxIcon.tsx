@@ -47,6 +47,7 @@ import {
   MdRepeat,
   MdReplay,
 } from 'react-icons/md';
+import { HiOutlineDocumentSearch } from 'react-icons/hi';
 import { VscArrowSwap } from 'react-icons/vsc';
 import { ReactElement, useContext } from 'react';
 
@@ -111,6 +112,7 @@ export enum IconVariant {
   TRANSACTIONS = 'TRANSACTIONS',
   RELOAD = 'RELOAD',
   SUPPORT = 'SUPPORT',
+  REVIEW = 'REVIEW',
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
@@ -168,6 +170,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.TRANSACTIONS]: <FaReceipt />,
   [IconVariant.RELOAD]: <MdReplay />,
   [IconVariant.SUPPORT]: <FaHeadset />,
+  [IconVariant.REVIEW]: <HiOutlineDocumentSearch />,
 };
 
 export enum IconSize {
