@@ -30,17 +30,24 @@ interface SpecialHandling {
 }
 
 export function useApi(): ApiInterface {
-  const { authenticationToken, setAuthenticationToken } = useAuthContext();
+  const { getAuthToken, setAuthToken } = useAuthContext();
 
   const url = process.env.REACT_APP_API_URL ?? 'https://api.dfx.swiss';
   const defaultVersion = 'v1';
 
   async function call<T>(config: CallConfig): Promise<T> {
-    config.token ??= authenticationToken;
+    config.token ??= getAuthToken();
 
     return fetchFrom<T>(config).catch((error: ApiError) => {
       if (error.statusCode === 401) {
-        if (config.token === authenticationToken) setAuthenticationToken(undefined);
+        if (config.token === getAuthToken()) {
+          setAuthToken(undefined);
+        } else {
+          return call<T>({
+            ...config,
+            token: getAuthToken(),
+          });
+        }
       }
 
       throw error;
@@ -94,5 +101,5 @@ export function useApi(): ApiInterface {
     };
   }
 
-  return useMemo(() => ({ defaultUrl: `${url}/${defaultVersion}`, call }), [authenticationToken]);
+  return useMemo(() => ({ defaultUrl: `${url}/${defaultVersion}`, call }), [getAuthToken]);
 }

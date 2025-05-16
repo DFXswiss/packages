@@ -129,6 +129,7 @@ export enum KycStepStatus {
   COMPLETED = 'Completed',
   OUTDATED = 'Outdated',
   DATA_REQUESTED = 'DataRequested',
+  ON_HOLD = 'OnHold',
 }
 
 export enum UrlType {
@@ -362,5 +363,5 @@ export interface LimitRequest {
 
 // helpers
 export function isStepDone(result: KycStepBase): boolean {
-  return [KycStepStatus.IN_REVIEW, KycStepStatus.COMPLETED].includes(result.status);
+  return [KycStepStatus.IN_REVIEW, KycStepStatus.ON_HOLD, KycStepStatus.COMPLETED].includes(result.status);
 }
