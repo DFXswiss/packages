@@ -5,7 +5,8 @@ import { useApiSession } from '../hooks/api-session.hook';
 
 interface BankAccountInterface {
   bankAccounts?: BankAccount[];
-  isAccountLoading: boolean;
+  isLoading: boolean;
+  error?: string;
   createAccount: (newAccount: CreateBankAccount) => Promise<BankAccount>;
   updateAccount: (id: number, changedAccount: UpdateBankAccount) => Promise<BankAccount>;
 }
@@ -18,49 +19,77 @@ export function useBankAccountContext(): BankAccountInterface {
 
 export function BankAccountContextProvider(props: PropsWithChildren): JSX.Element {
   const { isLoggedIn, session } = useApiSession();
-  const [bankAccounts, setBankAccounts] = useState<BankAccount[]>();
-  const [isAccountLoading, setIsAccountLoading] = useState(false);
   const { getAccounts, createAccount, updateAccount } = useBankAccount();
+
+  const [bankAccounts, setBankAccounts] = useState<BankAccount[]>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>();
 
   useEffect(() => {
     if (isLoggedIn) {
-      getAccounts().then(setBankAccounts).catch(console.error); // TODO: (Krysh) add real error handling
-    } else {
-      setBankAccounts(undefined);
+      setIsLoading(true);
+      getAccounts()
+        .then((accounts) => setBankAccounts(accounts.filter((a) => a.active)))
+        .catch((e) => {
+          setError(e.message);
+          setBankAccounts(undefined);
+        })
+        .finally(() => setIsLoading(false));
     }
   }, [isLoggedIn, session]);
 
   async function addNewAccount(newAccount: CreateBankAccount): Promise<BankAccount> {
-    setIsAccountLoading(true);
+    setIsLoading(true);
     return createAccount(newAccount)
       .then((b) => {
-        setBankAccounts((bankAccounts ?? []).concat(b));
+        setBankAccounts((accounts) => {
+          const exists = accounts?.some((a) => a.active && a.id === b.id);
+          return exists ? accounts : (accounts ?? []).concat(b);
+        });
         return b;
       })
-      .finally(() => setIsAccountLoading(false));
+      .finally(() => setIsLoading(false));
   }
 
   async function updateExistingAccount(id: number, changedAccount: UpdateBankAccount): Promise<BankAccount> {
-    return updateAccount(id, changedAccount).then((b) => {
-      setBankAccounts(replace(b, bankAccounts));
-      return b;
-    });
+    setIsLoading(true);
+    return updateAccount(id, changedAccount)
+      .then((b) => {
+        setBankAccounts((accounts) => updateLocal(b, accounts));
+        return b;
+      })
+      .finally(() => setIsLoading(false));
   }
 
-  function replace(account: BankAccount, accounts?: BankAccount[]): BankAccount[] | undefined {
+  function updateLocal(account: BankAccount, accounts?: BankAccount[]): BankAccount[] | undefined {
     const index = accounts?.findIndex((b) => b.id === account.id);
-    if (index && accounts) accounts[index] = account;
+    if (!accounts || index === undefined || index === -1) return undefined;
+
+    if (account.active === false) {
+      return accounts?.filter((b) => b.id !== account.id);
+    }
+
+    if (account.default) {
+      accounts?.forEach((a) => {
+        if (a.id !== account.id) {
+          a.default = false;
+        }
+      });
+    }
+
+    accounts[index] = account;
     return accounts;
   }
 
   const context: BankAccountInterface = useMemo(
     () => ({
       bankAccounts,
-      isAccountLoading,
+      isLoading,
+      error,
       createAccount: addNewAccount,
       updateAccount: updateExistingAccount,
     }),
-    [bankAccounts, isAccountLoading, addNewAccount, updateExistingAccount],
+    [bankAccounts, isLoading, error, addNewAccount, updateExistingAccount],
   );
 
   return <BankAccountContext.Provider value={context}>{props.children}</BankAccountContext.Provider>;
