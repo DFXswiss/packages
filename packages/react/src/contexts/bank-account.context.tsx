@@ -42,7 +42,10 @@ export function BankAccountContextProvider(props: PropsWithChildren): JSX.Elemen
     setIsLoading(true);
     return createAccount(newAccount)
       .then((b) => {
-        setBankAccounts((accounts) => (accounts ?? []).concat(b));
+        setBankAccounts((accounts) => {
+          const exists = accounts?.some((a) => a.active && a.id === b.id);
+          return exists ? accounts : (accounts ?? []).concat(b);
+        });
         return b;
       })
       .finally(() => setIsLoading(false));
