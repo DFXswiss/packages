@@ -128,6 +128,7 @@ export interface PaymentLink {
   id: string;
   routeId: string;
   externalId?: string;
+  label?: string;
   recipient?: PaymentLinkRecipient;
   status: PaymentLinkStatus;
   payment?: PaymentLinkPayment;
@@ -196,6 +197,7 @@ export interface PaymentLinkConfig extends UpdatePaymentLinkConfig {
 
 export interface UpdatePaymentLink {
   status?: PaymentLinkStatus;
+  label?: string;
   webhookUrl?: string;
   config?: UpdatePaymentLinkConfig;
 }
