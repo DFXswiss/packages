@@ -73,7 +73,10 @@ export function useApi(): ApiInterface {
           case ResponseType.TEXT:
             return response.text() as Promise<T>;
           case ResponseType.BLOB:
-            return response.blob() as Promise<T>;
+            return response.blob().then((blob) => ({
+              data: blob,
+              headers: Object.fromEntries(response.headers.entries()),
+            })) as Promise<T>;
           default:
             throw new Error('Unknown response type');
         }
