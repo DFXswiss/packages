@@ -62,6 +62,7 @@ export const PaymentLinkBlockchain = {
   MONERO: Blockchain.MONERO,
   OPTIMISM: Blockchain.OPTIMISM,
   POLYGON: Blockchain.POLYGON,
+  SOLANA: Blockchain.SOLANA,
 } as const;
 
 export type PaymentLinkBlockchain = typeof PaymentLinkBlockchain[keyof typeof PaymentLinkBlockchain];
