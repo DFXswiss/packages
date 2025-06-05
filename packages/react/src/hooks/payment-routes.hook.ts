@@ -136,7 +136,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
 
   async function getPaymentRecipient(route: string): Promise<Sell> {
     return call<Sell>({
-      url: `paymentLink/recipient?id=${route}`,
+      url: PaymentLinksUrl.recipient(route),
       method: 'GET',
     });
   }
@@ -146,7 +146,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     if (externalIds) params.externalIds = externalIds;
     if (ids) params.ids = ids;
     return call<CustomFile>({
-      url: `paymentLink/stickers?${new URLSearchParams(params).toString()}`,
+      url: `${PaymentLinksUrl.stickers}?${new URLSearchParams(params).toString()}`,
       method: 'GET',
       responseType: ResponseType.BLOB,
     });

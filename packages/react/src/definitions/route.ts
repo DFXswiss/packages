@@ -9,7 +9,7 @@ export const PaymentLinksUrl = {
   update: 'paymentLink',
   payment: 'paymentLink/payment',
   userPaymentLinksConfig: 'paymentLink/config',
-  recipient: 'paymentLink/recipient',
+  recipient: (route: string) => `paymentLink/recipient?id=${route}`,
   stickers: 'paymentLink/stickers',
 };
 
