@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useApi } from './api.hook';
+import { ResponseType, useApi } from './api.hook';
 import { Utils } from '../utils';
 import {
   CreatePaymentLink,
@@ -14,6 +14,8 @@ import {
   UpdatePaymentLink,
   UpdatePaymentLinkConfig,
 } from '../definitions/route';
+import { Sell } from '../definitions/sell';
+import { CustomFile } from '../definitions/file';
 
 export interface PaymentRoutesInterface {
   getPaymentRoutes: () => Promise<PaymentRoutes>;
@@ -42,6 +44,8 @@ export interface PaymentRoutesInterface {
     externalPaymentId?: string,
   ) => Promise<PaymentLink>;
   deletePaymentRoute: (id: number, type: PaymentRouteType) => Promise<PaymentRoute>;
+  getPaymentRecipient: (route: string) => Promise<Sell>;
+  getPaymentStickers: (route: string, externalIds?: string, ids?: string) => Promise<CustomFile>;
 }
 
 export function usePaymentRoutes(): PaymentRoutesInterface {
@@ -130,6 +134,24 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     return call<PaymentRoute>({ url: `${type}/${id}`, method: 'PUT', data: { active: false } });
   }
 
+  async function getPaymentRecipient(route: string): Promise<Sell> {
+    return call<Sell>({
+      url: PaymentLinksUrl.recipient(route),
+      method: 'GET',
+    });
+  }
+
+  async function getPaymentStickers(route: string, externalIds?: string, ids?: string): Promise<CustomFile> {
+    const params: Record<string, string> = { route };
+    if (externalIds) params.externalIds = externalIds;
+    if (ids) params.ids = ids;
+    return call<CustomFile>({
+      url: `${PaymentLinksUrl.stickers}?${new URLSearchParams(params).toString()}`,
+      method: 'GET',
+      responseType: ResponseType.BLOB,
+    });
+  }
+
   return useMemo(
     () => ({
       getPaymentRoutes,
@@ -141,6 +163,8 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
       createPaymentLinkPayment,
       cancelPaymentLinkPayment,
       deletePaymentRoute,
+      getPaymentRecipient,
+      getPaymentStickers,
     }),
     [call],
   );

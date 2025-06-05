@@ -43,6 +43,7 @@ export { Buy, BuyPaymentInfo } from './definitions/buy';
 export { Country } from './definitions/country';
 export { ApiError } from './definitions/error';
 export { Fiat } from './definitions/fiat';
+export { CustomFile } from './definitions/file';
 export {
   MinAmount,
   DepositDto,

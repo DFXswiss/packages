@@ -9,6 +9,8 @@ export const PaymentLinksUrl = {
   update: 'paymentLink',
   payment: 'paymentLink/payment',
   userPaymentLinksConfig: 'paymentLink/config',
+  recipient: (route: string) => `paymentLink/recipient?id=${route}`,
+  stickers: 'paymentLink/stickers',
 };
 
 export enum PaymentLinkStatus {
