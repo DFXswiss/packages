@@ -23,6 +23,7 @@ import {
   KycStepBase,
   KycBeneficialData,
   KycOperationalData,
+  PaymentData,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 
@@ -56,6 +57,7 @@ export interface KycInterface {
   setOperationalData: (code: string, url: string, data: KycOperationalData) => Promise<KycStepBase>;
   getFinancialData: (code: string, url: string, lang?: string) => Promise<KycFinancialQuestions>;
   setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycStepBase>;
+  setPaymentData: (code: string, url: string, data: PaymentData) => Promise<KycStepBase>;
   getFile: (kycFileId: string) => Promise<KycFile>;
 
   // 2fa
@@ -155,6 +157,10 @@ export function useKyc(): KycInterface {
     return call({ url, code, method: 'GET' });
   }
 
+  async function setPaymentData(code: string, url: string, data: PaymentData): Promise<KycStepBase> {
+    return call({ url, code, method: 'PUT', data });
+  }
+
   async function getFile(kycFileId: string): Promise<KycFile> {
     return callApi({
       url: `${KycUrl.file}/${kycFileId}`,
@@ -235,6 +241,7 @@ export function useKyc(): KycInterface {
       getFinancialData,
       getFile,
       setFinancialData,
+      setPaymentData,
       check2fa,
       setup2fa,
       verify2fa,

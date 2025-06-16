@@ -273,6 +273,11 @@ export interface KycFile {
   content: any;
 }
 
+export interface PaymentData {
+  purpose: string;
+  contractAccepted: boolean;
+}
+
 // financial data
 export enum QuestionType {
   CONFIRMATION = 'Confirmation',
