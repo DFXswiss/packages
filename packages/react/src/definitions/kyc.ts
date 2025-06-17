@@ -95,6 +95,7 @@ export interface KycSession extends KycInfo {
 
 // steps
 export enum KycStepName {
+  // standard KYC
   CONTACT_DATA = 'ContactData',
   PERSONAL_DATA = 'PersonalData',
   LEGAL_ENTITY = 'LegalEntity',
@@ -110,6 +111,9 @@ export enum KycStepName {
   ADDITIONAL_DOCUMENTS = 'AdditionalDocuments',
   RESIDENCE_PERMIT = 'ResidencePermit',
   DFX_APPROVAL = 'DfxApproval',
+
+  // additional features
+  PAYMENT_AGREEMENT = 'PaymentAgreement',
 }
 
 export enum KycStepType {
