@@ -7,6 +7,7 @@ import { FiatPaymentMethod, TransactionError } from './transaction';
 export const BuyUrl = {
   receive: 'buy/paymentInfos',
   invoice: (txId: number) => `buy/paymentInfos/${txId}/invoice`,
+  confirm: (txId: number) => `buy/paymentInfos/${txId}/confirm`,
 };
 
 export interface Buy {
@@ -54,6 +55,6 @@ export interface BuyPaymentInfo {
   exactPrice?: boolean;
 }
 
-export interface Invoice {
-  invoicePdf: string;
+export interface PdfDocument {
+  pdfData: string;
 }

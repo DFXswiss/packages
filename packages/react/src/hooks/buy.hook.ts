@@ -1,12 +1,13 @@
 import { useMemo } from 'react';
 import { useFiatContext } from '../contexts/fiat.context';
-import { Buy, BuyUrl, BuyPaymentInfo, Invoice } from '../definitions/buy';
+import { Buy, BuyUrl, BuyPaymentInfo, PdfDocument } from '../definitions/buy';
 import { Fiat } from '../definitions/fiat';
 import { useApi } from './api.hook';
 
 export interface BuyInterface {
   receiveFor: (info: BuyPaymentInfo) => Promise<Buy>;
-  invoiceFor: (txId: number) => Promise<Invoice>;
+  invoiceFor: (txId: number) => Promise<PdfDocument>;
+  confirmFor: (txId: number) => Promise<void>;
   currencies?: Fiat[];
 }
 
@@ -18,14 +19,19 @@ export function useBuy(): BuyInterface {
     return call<Buy>({ url: BuyUrl.receive, method: 'PUT', data: info });
   }
 
-  async function invoiceFor(txId: number): Promise<Invoice> {
-    return call<Invoice>({ url: BuyUrl.invoice(txId), method: 'PUT' });
+  async function invoiceFor(txId: number): Promise<PdfDocument> {
+    return call<PdfDocument>({ url: BuyUrl.invoice(txId), method: 'PUT' });
+  }
+
+  async function confirmFor(txId: number): Promise<void> {
+    return call<void>({ url: BuyUrl.confirm(txId), method: 'PUT' });
   }
 
   return useMemo(
     () => ({
       receiveFor,
       invoiceFor,
+      confirmFor,
       currencies: currencies?.filter((c) => c.sellable || c.cardSellable || c.instantSellable),
     }),
     [call, currencies],

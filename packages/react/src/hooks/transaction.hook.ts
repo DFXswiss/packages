@@ -12,6 +12,7 @@ import {
   UnassignedTransaction,
 } from '../definitions/transaction';
 import { useAuthContext } from '../contexts/auth.context';
+import { PdfDocument } from '../definitions/buy';
 
 export interface TransactionInterface {
   getTransactions: () => Promise<Transaction[]>;
@@ -20,6 +21,8 @@ export interface TransactionInterface {
   getTransactionByCkoId: (ckoId: string) => Promise<Transaction>;
   getTransactionByRequestId: (requestId: number) => Promise<Transaction>;
   getTransactionCsv: (from?: Date, to?: Date) => Promise<string>;
+  getTransactionInvoice: (id: number) => Promise<PdfDocument>;
+  getTransactionReceipt: (id: number) => Promise<PdfDocument>;
   getTransactionHistory: (type: ExportType, queryParams: TransactionHistoryQuery) => Promise<string>;
   getUnassignedTransactions: () => Promise<UnassignedTransaction[]>;
   getTransactionTargets: () => Promise<TransactionTarget[]>;
@@ -64,6 +67,20 @@ export function useTransaction(): TransactionInterface {
     }).then((key) => `${defaultUrl}/transaction/csv?key=${key}`);
   }
 
+  async function getTransactionInvoice(id: number): Promise<PdfDocument> {
+    return call<PdfDocument>({
+      url: `${TransactionUrl.invoice(id)}`,
+      method: 'PUT',
+    });
+  }
+
+  async function getTransactionReceipt(id: number): Promise<PdfDocument> {
+    return call<PdfDocument>({
+      url: `${TransactionUrl.receipt(id)}`,
+      method: 'PUT',
+    });
+  }
+
   async function getTransactionHistory(type: ExportType, queryParams: TransactionHistoryQuery): Promise<string> {
     if (!queryParams.userAddress) throw new Error('No user address provided');
 
@@ -102,6 +119,8 @@ export function useTransaction(): TransactionInterface {
       getTransactionByCkoId,
       getTransactionByRequestId,
       getTransactionCsv,
+      getTransactionInvoice,
+      getTransactionReceipt,
       getTransactionHistory,
       getUnassignedTransactions,
       getTransactionTargets,

@@ -9,6 +9,8 @@ export const PaymentLinksUrl = {
   update: 'paymentLink',
   payment: 'paymentLink/payment',
   userPaymentLinksConfig: 'paymentLink/config',
+  recipient: (route: string) => `paymentLink/recipient?id=${route}`,
+  stickers: 'paymentLink/stickers',
 };
 
 export enum PaymentLinkStatus {
@@ -30,7 +32,6 @@ export enum PaymentLinkPaymentMode {
 
 export enum PaymentStandardType {
   OPEN_CRYPTO_PAY = 'OpenCryptoPay',
-  FRANKENCOIN_PAY = 'FrankencoinPay',
   LIGHTNING_BOLT11 = 'LightningBolt11',
   PAY_TO_ADDRESS = 'PayToAddress',
 }
@@ -59,9 +60,11 @@ export const PaymentLinkBlockchain = {
   BASE: Blockchain.BASE,
   ETHEREUM: Blockchain.ETHEREUM,
   LIGHTNING: Blockchain.LIGHTNING,
+  BITCOIN: Blockchain.BITCOIN,
   MONERO: Blockchain.MONERO,
   OPTIMISM: Blockchain.OPTIMISM,
   POLYGON: Blockchain.POLYGON,
+  SOLANA: Blockchain.SOLANA,
 } as const;
 
 export type PaymentLinkBlockchain = typeof PaymentLinkBlockchain[keyof typeof PaymentLinkBlockchain];
@@ -128,6 +131,7 @@ export interface PaymentLink {
   id: string;
   routeId: string;
   externalId?: string;
+  label?: string;
   recipient?: PaymentLinkRecipient;
   status: PaymentLinkStatus;
   payment?: PaymentLinkPayment;
@@ -196,6 +200,7 @@ export interface PaymentLinkConfig extends UpdatePaymentLinkConfig {
 
 export interface UpdatePaymentLink {
   status?: PaymentLinkStatus;
+  label?: string;
   webhookUrl?: string;
   config?: UpdatePaymentLinkConfig;
 }

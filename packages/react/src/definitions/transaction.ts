@@ -7,6 +7,8 @@ export const TransactionUrl = {
   target: 'transaction/target',
   refund: (id: number) => `transaction/${id}/refund`,
   setTarget: (id: number) => `transaction/${id}/target`,
+  invoice: (id: number) => `transaction/${id}/invoice`,
+  receipt: (id: number) => `transaction/${id}/receipt`,
 };
 
 import { Asset } from './asset';
@@ -51,7 +53,7 @@ export enum TransactionState {
   CREATED = 'Created',
   PROCESSING = 'Processing',
   LIQUIDITY_PENDING = 'LiquidityPending',
-  AML_PENDING = 'AmlPending',
+  CHECK_PENDING = 'CheckPending',
   KYC_REQUIRED = 'KycRequired',
   LIMIT_EXCEEDED = 'LimitExceeded',
   FEE_TOO_HIGH = 'FeeTooHigh',
@@ -62,6 +64,7 @@ export enum TransactionState {
   RETURN_PENDING = 'ReturnPending',
   RETURNED = 'Returned',
   UNASSIGNED = 'Unassigned',
+  WAITING_FOR_PAYMENT = 'WaitingForPayment',
 }
 
 export enum TransactionFailureReason {
@@ -89,6 +92,8 @@ export enum TransactionFailureReason {
   USER_DELETED = 'UserDeleted',
   VIDEO_IDENT_NEEDED = 'VideoIdentNeeded',
   MISSING_LIQUIDITY = 'MissingLiquidity',
+  KYC_DATA_NEEDED = 'KycDataNeeded',
+  BANK_TX_NEEDED = 'BankTxNeeded',
 }
 
 export enum ExportType {
@@ -103,7 +108,7 @@ export enum ExportFormat {
 }
 
 export interface UnassignedTransaction {
-  id: number;
+  id?: number;
   uid: string;
   orderUid: string;
   type: TransactionType;
@@ -116,6 +121,8 @@ export interface UnassignedTransaction {
   inputTxId?: string;
   inputTxUrl?: string;
   chargebackAmount?: number;
+  chargebackAsset?: string;
+  chargebackAssetId?: number;
   chargebackTarget?: string;
   chargeBackTxId?: string;
   chargeBackTxUrl?: string;

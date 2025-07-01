@@ -61,8 +61,8 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
   const [error, setError] = useState<string | undefined>();
   const [paymentRoutes, setPaymentRoutes] = useState<PaymentRoutes>();
   const [paymentLinks, setPaymentLinks] = useState<PaymentLink[]>();
-  const [paymentRoutesLoading, setPaymentRoutesLoading] = useState<boolean>(false);
-  const [paymentLinksLoading, setPaymentLinksLoading] = useState<boolean>(false);
+  const [paymentRoutesLoading, setPaymentRoutesLoading] = useState<boolean>(true);
+  const [paymentLinksLoading, setPaymentLinksLoading] = useState<boolean>(true);
   const [userPaymentLinksConfig, setUserPaymentLinksConfig] = useState<PaymentLinkConfig>();
   const [userPaymentLinksConfigLoading, setUserPaymentLinksConfigLoading] = useState<boolean>(false);
 
@@ -166,7 +166,10 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
   }
 
   async function loadPaymentLinks(): Promise<void> {
-    if (!user || !user.paymentLink.active) return;
+    if (!user?.paymentLink.active) {
+      setPaymentLinksLoading(false);
+      return;
+    }
 
     setPaymentLinksLoading(true);
     return getPaymentLinks()
@@ -209,7 +212,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
 
     setUserPaymentLinksConfigLoading(true);
     return updateUserPaymentLinksConfigApi(config)
-      .then(() => setUserPaymentLinksConfig(config))
+      .then(() => setUserPaymentLinksConfig((prevConfig) => ({ ...prevConfig, ...config })))
       .then(loadPaymentLinks)
       .finally(() => setUserPaymentLinksConfigLoading(false));
   }

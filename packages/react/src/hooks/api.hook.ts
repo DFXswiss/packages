@@ -30,15 +30,24 @@ interface SpecialHandling {
 }
 
 export function useApi(): ApiInterface {
-  const { authenticationToken, setAuthenticationToken } = useAuthContext();
+  const { getAuthToken, setAuthToken } = useAuthContext();
 
   const url = process.env.REACT_APP_API_URL ?? 'https://api.dfx.swiss';
   const defaultVersion = 'v1';
 
   async function call<T>(config: CallConfig): Promise<T> {
+    config.token ??= getAuthToken();
+
     return fetchFrom<T>(config).catch((error: ApiError) => {
       if (error.statusCode === 401) {
-        if (!config.token) setAuthenticationToken(undefined);
+        if (config.token === getAuthToken()) {
+          setAuthToken(undefined);
+        } else {
+          return call<T>({
+            ...config,
+            token: getAuthToken(),
+          });
+        }
       }
 
       throw error;
@@ -49,31 +58,34 @@ export function useApi(): ApiInterface {
     const version = config.version ?? defaultVersion;
     const baseUrl = `${url}/${version}`;
     const responseType = config.responseType ?? ResponseType.JSON;
-    const token = config.token === false ? undefined : config.token ?? authenticationToken;
 
-    return fetch(`${baseUrl}/${config.url}`, buildInit(config.method, token, config.data, config.noJson)).then(
-      (response) => {
-        if (response.status === config.specialHandling?.statusCode) {
-          config.specialHandling?.action?.();
+    return fetch(
+      `${baseUrl}/${config.url}`,
+      buildInit(config.method, config.token === false ? undefined : config.token, config.data, config.noJson),
+    ).then((response) => {
+      if (response.status === config.specialHandling?.statusCode) {
+        config.specialHandling?.action?.();
+      }
+      if (response.ok) {
+        switch (responseType) {
+          case ResponseType.JSON:
+            return response.json().catch(() => undefined) as Promise<T>;
+          case ResponseType.TEXT:
+            return response.text() as Promise<T>;
+          case ResponseType.BLOB:
+            return response.blob().then((blob) => ({
+              data: blob,
+              headers: Object.fromEntries(response.headers.entries()),
+            })) as Promise<T>;
+          default:
+            throw new Error('Unknown response type');
         }
-        if (response.ok) {
-          switch (responseType) {
-            case ResponseType.JSON:
-              return response.json().catch(() => undefined) as Promise<T>;
-            case ResponseType.TEXT:
-              return response.text() as Promise<T>;
-            case ResponseType.BLOB:
-              return response.blob() as Promise<T>;
-            default:
-              throw new Error('Unknown response type');
-          }
-        }
+      }
 
-        return response.json().then((body) => {
-          throw body;
-        });
-      },
-    );
+      return response.json().then((body) => {
+        throw body;
+      });
+    });
   }
 
   function buildInit(
@@ -92,5 +104,5 @@ export function useApi(): ApiInterface {
     };
   }
 
-  return useMemo(() => ({ defaultUrl: `${url}/${defaultVersion}`, call }), [authenticationToken]);
+  return useMemo(() => ({ defaultUrl: `${url}/${defaultVersion}`, call }), [getAuthToken]);
 }

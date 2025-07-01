@@ -43,6 +43,7 @@ export { Buy, BuyPaymentInfo } from './definitions/buy';
 export { Country } from './definitions/country';
 export { ApiError } from './definitions/error';
 export { Fiat } from './definitions/fiat';
+export { CustomFile } from './definitions/file';
 export {
   MinAmount,
   DepositDto,
@@ -125,6 +126,7 @@ export {
   SignatoryPower,
   FileType,
   KycFile,
+  PaymentData,
   isStepDone,
 } from './definitions/kyc';
 export { Sell, SellPaymentInfo } from './definitions/sell';

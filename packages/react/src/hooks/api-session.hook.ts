@@ -30,7 +30,7 @@ export interface ApiSessionInterface {
 }
 
 export function useApiSession(): ApiSessionInterface {
-  const { isInitialized, isLoggedIn, session, setAuthenticationToken } = useAuthContext();
+  const { isInitialized, isLoggedIn, session, setAuthToken } = useAuthContext();
   const { getSignMessage, authenticate, signIn, signUp } = useAuth();
 
   async function createSession(
@@ -45,7 +45,7 @@ export function useApiSession(): ApiSessionInterface {
     return (
       isSignUp ? signUp(address, signature, key, discount, wallet, ref) : signIn(address, signature, key, discount)
     ).then(({ accessToken }) => {
-      setAuthenticationToken(accessToken);
+      setAuthToken(accessToken);
       return accessToken;
     });
   }
@@ -59,17 +59,17 @@ export function useApiSession(): ApiSessionInterface {
     ref?: string,
   ) {
     return authenticate(address, signature, key, discount, wallet, ref).then(({ accessToken }) => {
-      setAuthenticationToken(accessToken);
+      setAuthToken(accessToken);
       return accessToken;
     });
   }
 
-  async function updateSession(token: string) {
-    setAuthenticationToken(token);
+  function updateSession(token: string) {
+    setAuthToken(token);
   }
 
   async function deleteSession(): Promise<void> {
-    setAuthenticationToken(undefined);
+    setAuthToken(undefined);
   }
 
   return useMemo(
@@ -83,6 +83,6 @@ export function useApiSession(): ApiSessionInterface {
       updateSession,
       deleteSession,
     }),
-    [isInitialized, isLoggedIn, session, setAuthenticationToken, getSignMessage, signIn, signUp],
+    [isInitialized, isLoggedIn, session, setAuthToken, getSignMessage, signIn, signUp, authenticate],
   );
 }

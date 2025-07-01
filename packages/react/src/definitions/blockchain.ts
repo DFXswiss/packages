@@ -1,8 +1,6 @@
 export enum Blockchain {
-  DEFICHAIN = 'DeFiChain',
   BITCOIN = 'Bitcoin',
   LIGHTNING = 'Lightning',
-  LIQUID = 'Liquid',
   MONERO = 'Monero',
   ETHEREUM = 'Ethereum',
   BINANCE_SMART_CHAIN = 'BinanceSmartChain',
@@ -10,7 +8,13 @@ export enum Blockchain {
   ARBITRUM = 'Arbitrum',
   POLYGON = 'Polygon',
   BASE = 'Base',
+  GNOSIS = 'Gnosis',
   HAQQ = 'Haqq',
+  LIQUID = 'Liquid',
   ARWEAVE = 'Arweave',
   CARDANO = 'Cardano',
+  RAILGUN = 'Railgun',
+  SOLANA = 'Solana',
+  TRON = 'Tron',
+  DEFICHAIN = 'DeFiChain',
 }

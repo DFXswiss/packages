@@ -24,8 +24,10 @@ export enum AccountType {
 }
 
 export enum LegalEntity {
-  PUBLIC_LIMITED_COMPANY = 'PublicLimitedCompany',
-  LIMITED_LIABILITY_COMPANY = 'LimitedLiabilityCompany',
+  AG = 'AG',
+  GMBH = 'GmbH',
+  UG = 'UG',
+  GBR = 'GbR',
   ASSOCIATION = 'Association',
   FOUNDATION = 'Foundation',
   LIFE_INSURANCE = 'LifeInsurance',
@@ -93,6 +95,7 @@ export interface KycSession extends KycInfo {
 
 // steps
 export enum KycStepName {
+  // standard KYC
   CONTACT_DATA = 'ContactData',
   PERSONAL_DATA = 'PersonalData',
   LEGAL_ENTITY = 'LegalEntity',
@@ -108,6 +111,9 @@ export enum KycStepName {
   ADDITIONAL_DOCUMENTS = 'AdditionalDocuments',
   RESIDENCE_PERMIT = 'ResidencePermit',
   DFX_APPROVAL = 'DfxApproval',
+
+  // additional features
+  PAYMENT_AGREEMENT = 'PaymentAgreement',
 }
 
 export enum KycStepType {
@@ -127,6 +133,7 @@ export enum KycStepStatus {
   COMPLETED = 'Completed',
   OUTDATED = 'Outdated',
   DATA_REQUESTED = 'DataRequested',
+  ON_HOLD = 'OnHold',
 }
 
 export enum UrlType {
@@ -270,6 +277,11 @@ export interface KycFile {
   content: any;
 }
 
+export interface PaymentData {
+  purpose: string;
+  contractAccepted: boolean;
+}
+
 // financial data
 export enum QuestionType {
   CONFIRMATION = 'Confirmation',
@@ -360,5 +372,5 @@ export interface LimitRequest {
 
 // helpers
 export function isStepDone(result: KycStepBase): boolean {
-  return [KycStepStatus.IN_REVIEW, KycStepStatus.COMPLETED].includes(result.status);
+  return [KycStepStatus.IN_REVIEW, KycStepStatus.ON_HOLD, KycStepStatus.COMPLETED].includes(result.status);
 }
