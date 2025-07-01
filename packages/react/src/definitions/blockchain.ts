@@ -15,5 +15,6 @@ export enum Blockchain {
   CARDANO = 'Cardano',
   RAILGUN = 'Railgun',
   SOLANA = 'Solana',
+  TRON = 'Tron',
   DEFICHAIN = 'DeFiChain',
 }
