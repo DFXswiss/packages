@@ -64,6 +64,7 @@ export enum TransactionState {
   RETURN_PENDING = 'ReturnPending',
   RETURNED = 'Returned',
   UNASSIGNED = 'Unassigned',
+  WAITING_FOR_PAYMENT = 'WaitingForPayment',
 }
 
 export enum TransactionFailureReason {
@@ -107,7 +108,7 @@ export enum ExportFormat {
 }
 
 export interface UnassignedTransaction {
-  id: number;
+  id?: number;
   uid: string;
   orderUid: string;
   type: TransactionType;

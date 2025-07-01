@@ -7,6 +7,7 @@ import { useApi } from './api.hook';
 export interface BuyInterface {
   receiveFor: (info: BuyPaymentInfo) => Promise<Buy>;
   invoiceFor: (txId: number) => Promise<PdfDocument>;
+  confirmFor: (txId: number) => Promise<void>;
   currencies?: Fiat[];
 }
 
@@ -22,10 +23,15 @@ export function useBuy(): BuyInterface {
     return call<PdfDocument>({ url: BuyUrl.invoice(txId), method: 'PUT' });
   }
 
+  async function confirmFor(txId: number): Promise<void> {
+    return call<void>({ url: BuyUrl.confirm(txId), method: 'PUT' });
+  }
+
   return useMemo(
     () => ({
       receiveFor,
       invoiceFor,
+      confirmFor,
       currencies: currencies?.filter((c) => c.sellable || c.cardSellable || c.instantSellable),
     }),
     [call, currencies],
