@@ -47,6 +47,7 @@ import {
   MdRepeat,
   MdReplay,
 } from 'react-icons/md';
+import { BsSafe2Fill } from 'react-icons/bs';
 import { VscArrowSwap } from 'react-icons/vsc';
 import { ReactElement, useContext } from 'react';
 
@@ -111,6 +112,7 @@ export enum IconVariant {
   TRANSACTIONS = 'TRANSACTIONS',
   RELOAD = 'RELOAD',
   SUPPORT = 'SUPPORT',
+  SAFE = 'SAFE',
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
@@ -168,6 +170,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.TRANSACTIONS]: <FaReceipt />,
   [IconVariant.RELOAD]: <MdReplay />,
   [IconVariant.SUPPORT]: <FaHeadset />,
+  [IconVariant.SAFE]: <BsSafe2Fill />,
 };
 
 export enum IconSize {
