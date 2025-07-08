@@ -45,7 +45,13 @@ export interface PaymentRoutesInterface {
   ) => Promise<PaymentLink>;
   deletePaymentRoute: (id: number, type: PaymentRouteType) => Promise<PaymentRoute>;
   getPaymentRecipient: (route: string) => Promise<Sell>;
-  getPaymentStickers: (route: string, externalIds?: string, ids?: string, language?: string) => Promise<CustomFile>;
+  getPaymentStickers: (
+    route: string,
+    externalIds?: string,
+    ids?: string,
+    version?: string,
+    language?: string,
+  ) => Promise<CustomFile>;
 }
 
 export function usePaymentRoutes(): PaymentRoutesInterface {
@@ -145,11 +151,13 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     route: string,
     externalIds?: string,
     ids?: string,
+    version?: string,
     language?: string,
   ): Promise<CustomFile> {
     const params: Record<string, string> = { route };
     if (externalIds) params.externalIds = externalIds;
     if (ids) params.ids = ids;
+    if (version) params.version = version;
     if (language) params.lang = language;
     return call<CustomFile>({
       url: `${PaymentLinksUrl.stickers}?${new URLSearchParams(params).toString()}`,
