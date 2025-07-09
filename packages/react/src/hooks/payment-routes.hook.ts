@@ -49,7 +49,7 @@ export interface PaymentRoutesInterface {
     route: string,
     externalIds?: string,
     ids?: string,
-    version?: string,
+    type?: string,
     language?: string,
   ) => Promise<CustomFile>;
 }
@@ -151,13 +151,13 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     route: string,
     externalIds?: string,
     ids?: string,
-    version?: string,
+    type?: string,
     language?: string,
   ): Promise<CustomFile> {
     const params: Record<string, string> = { route };
     if (externalIds) params.externalIds = externalIds;
     if (ids) params.ids = ids;
-    if (version) params.version = version;
+    if (type) params.type = type;
     if (language) params.lang = language;
     return call<CustomFile>({
       url: `${PaymentLinksUrl.stickers}?${new URLSearchParams(params).toString()}`,
