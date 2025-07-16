@@ -6,6 +6,7 @@ import {
   CreatePaymentLinkPayment,
   PaymentLink,
   PaymentLinkConfig,
+  PaymentLinkPos,
   PaymentLinksUrl,
   PaymentRoute,
   PaymentRoutes,
@@ -52,6 +53,7 @@ export interface PaymentRoutesInterface {
     type?: string,
     language?: string,
   ) => Promise<CustomFile>;
+  createPosLink: (linkId?: string, externalLinkId?: string, externalPaymentId?: string) => Promise<PaymentLinkPos>;
 }
 
 export function usePaymentRoutes(): PaymentRoutesInterface {
@@ -140,6 +142,16 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     return call<PaymentRoute>({ url: `${type}/${id}`, method: 'PUT', data: { active: false } });
   }
 
+  async function createPosLink(
+    linkId?: string,
+    externalLinkId?: string,
+    externalPaymentId?: string,
+  ): Promise<PaymentLinkPos> {
+    const queryParams = Utils.buildQueryParams({ linkId, externalLinkId, externalPaymentId });
+
+    return call<PaymentLinkPos>({ url: `${PaymentLinksUrl.pos}?${queryParams}`, method: 'PUT' });
+  }
+
   async function getPaymentRecipient(route: string): Promise<Sell> {
     return call<Sell>({
       url: PaymentLinksUrl.recipient(route),
@@ -179,6 +191,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
       deletePaymentRoute,
       getPaymentRecipient,
       getPaymentStickers,
+      createPosLink,
     }),
     [call],
   );

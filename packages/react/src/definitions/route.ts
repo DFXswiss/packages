@@ -11,6 +11,7 @@ export const PaymentLinksUrl = {
   userPaymentLinksConfig: 'paymentLink/config',
   recipient: (route: string) => `paymentLink/recipient?id=${route}`,
   stickers: 'paymentLink/stickers',
+  pos: 'paymentLink/pos',
 };
 
 export enum PaymentLinkStatus {
@@ -203,4 +204,8 @@ export interface UpdatePaymentLink {
   label?: string;
   webhookUrl?: string;
   config?: UpdatePaymentLinkConfig;
+}
+
+export interface PaymentLinkPos {
+  url: string;
 }

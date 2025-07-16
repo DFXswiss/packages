@@ -69,6 +69,7 @@ export {
   PaymentLinkBlockchain,
   PaymentLinkConfig,
   UpdatePaymentLinkConfig,
+  PaymentLinkPos,
 } from './definitions/route';
 export { PaymentLinkPayRequest, TransferInfo, TransferMethod } from './definitions/lnurl';
 export { InfoBanner } from './definitions/settings';
