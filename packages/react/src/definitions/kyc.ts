@@ -215,7 +215,7 @@ export interface KycNationalityData {
   country: Country;
 }
 
-export interface KycLegalEntityData {
+export interface KycLegalEntityData extends KycFileData {
   legalEntity: LegalEntity;
 }
 
