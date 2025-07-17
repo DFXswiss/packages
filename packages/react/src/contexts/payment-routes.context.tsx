@@ -4,7 +4,6 @@ import {
   CreatePaymentLinkPayment,
   PaymentLink,
   PaymentLinkConfig,
-  PaymentLinkPos,
   PaymentRoute,
   PaymentRoutes,
   PaymentRouteType,
@@ -37,7 +36,6 @@ interface PaymentRoutesInterface {
   ) => Promise<void>;
   cancelPaymentLinkPayment: (linkId?: string, externalLinkId?: string, externalPaymentId?: string) => Promise<void>;
   deletePaymentRoute: (id: number, type: PaymentRouteType) => Promise<void>;
-  createPosLink: (linkId?: string, externalLinkId?: string, externalPaymentId?: string) => Promise<PaymentLinkPos>;
   error?: string;
 }
 
@@ -52,7 +50,6 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
   const {
     getPaymentRoutes,
     getPaymentLinks,
-    createPosLink,
     createPaymentLink: createPaymentLinkApi,
     updatePaymentLink: updatePaymentLinkApi,
     createPaymentLinkPayment: createPaymentLinkPaymentApi,
@@ -244,7 +241,6 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       createPaymentLinkPayment,
       cancelPaymentLinkPayment,
       deletePaymentRoute,
-      createPosLink,
       error,
     }),
     [
@@ -262,7 +258,6 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       createPaymentLinkPayment,
       cancelPaymentLinkPayment,
       deletePaymentRoute,
-      createPosLink,
     ],
   );
 
