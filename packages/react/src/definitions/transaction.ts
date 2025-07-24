@@ -40,6 +40,7 @@ export enum TransactionError {
   LIMIT_EXCEEDED = 'LimitExceeded',
   NATIONALITY_NOT_ALLOWED = 'NationalityNotAllowed',
   VIDEO_IDENT_REQUIRED = 'VideoIdentRequired',
+  IBAN_CURRENCY_MISMATCH = 'IbanCurrencyMismatch',
 }
 
 export enum TransactionType {
