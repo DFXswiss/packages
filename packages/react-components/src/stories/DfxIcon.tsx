@@ -117,6 +117,7 @@ export enum IconVariant {
   SAFE = 'SAFE',
   REVIEW = 'REVIEW',
   PLUS = 'PLUS',
+  OPEN_CRYPTOPAY = 'OPEN_CRYPTOPAY',
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
@@ -177,6 +178,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.SAFE]: <BsSafe2Fill />,
   [IconVariant.REVIEW]: <HiOutlineDocumentSearch />,
   [IconVariant.PLUS]: <GoPlus />,
+  [IconVariant.OPEN_CRYPTOPAY]: <OpenCryptoPayIcon />,
 };
 
 export enum IconSize {
@@ -647,6 +649,35 @@ function DfxUserData() {
         d="M48.1445 38.9303H43.4896V34.2754H41.2997V38.9303H36.6448V41.1202H41.2997V45.7751H43.4896V41.1202H48.1445V38.9303Z"
         fill={icContext.color}
       />
+    </svg>
+  );
+}
+
+function OpenCryptoPayIcon() {
+  const icContext = useContext(IconContext);
+  return (
+    <svg
+      width={icContext.size}
+      height={icContext.size}
+      viewBox="0 0 170 129"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#clip0_4021_8643)">
+        <path
+          d="M119.754 114.608L168.013 66.3482C169.26 65.102 169.26 63.0791 168.013 61.8149L110.326 4.14533L88.7788 25.6924L124.919 61.8329C126.166 63.0791 126.166 65.102 124.919 66.3663L98.2249 93.0608L119.772 114.608H119.754Z"
+          fill={icContext.color}
+        />
+        <path
+          d="M106.28 128.1L44.5468 66.3663C43.3006 65.1201 43.3006 63.0972 44.5468 61.8329L106.28 0.0996094H64.5045C63.6556 0.0996094 62.8429 0.442773 62.2469 1.03879L1.43467 61.8329C0.188444 63.0791 0.188444 65.102 1.43467 66.3663L62.2288 127.16C62.8248 127.756 63.6376 128.1 64.4865 128.1H106.28Z"
+          fill={icContext.color}
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_4021_8643">
+          <rect width="169" height="128" fill="white" transform="translate(0.5 0.0996094)" />
+        </clipPath>
+      </defs>
     </svg>
   );
 }
