@@ -126,6 +126,10 @@ export {
   FileType,
   KycFile,
   PaymentData,
+  StoreType,
+  MerchantCategory,
+  GoodsType,
+  GoodsCategory,
   isStepDone,
 } from './definitions/kyc';
 export { Sell, SellPaymentInfo } from './definitions/sell';
