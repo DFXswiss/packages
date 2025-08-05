@@ -34,11 +34,11 @@ export { useSwap } from './hooks/swap.hook';
 export { useSupportChat } from './hooks/support.hook';
 
 // Definitions
-export { Asset, AssetType } from './definitions/asset';
+export { Asset, AssetType, AssetCategory } from './definitions/asset';
 export { BankAccount } from './definitions/bank-account';
 export { Bank } from './definitions/bank';
 export { Blockchain } from './definitions/blockchain';
-export { Buy, BuyPaymentInfo } from './definitions/buy';
+export { Buy, BuyPaymentInfo, PdfDocument } from './definitions/buy';
 export { Country } from './definitions/country';
 export { ApiError } from './definitions/error';
 export { Fiat } from './definitions/fiat';
@@ -53,6 +53,7 @@ export {
   PaymentRouteType,
   PaymentRoute,
   PaymentLinkStatus,
+  PaymentLinkMode,
   PaymentLinkPaymentStatus,
   PaymentLink,
   PaymentLinkRecipient,
@@ -73,7 +74,7 @@ export {
 export { InfoBanner } from './definitions/settings';
 export { PriceStep } from './definitions/price-step';
 export { Language } from './definitions/language';
-export { Jwt } from './definitions/jwt';
+export { Jwt, UserRole } from './definitions/jwt';
 export {
   AccountType,
   KycStatus,
@@ -132,7 +133,7 @@ export {
   GoodsCategory,
   isStepDone,
 } from './definitions/kyc';
-export { Sell, SellPaymentInfo } from './definitions/sell';
+export { Sell, SellPaymentInfo, Beneficiary } from './definitions/sell';
 export { Swap, SwapPaymentInfo } from './definitions/swap';
 export { Session } from './definitions/session';
 export {
@@ -145,7 +146,7 @@ export {
   Volumes,
   VolumeInformation,
 } from './definitions/user';
-export { LnurlAuth, LnurlAuthStatus } from './definitions/auth';
+export { SignIn, LnurlAuth, LnurlAuthStatus } from './definitions/auth';
 export {
   FiatPaymentMethod,
   CryptoPaymentMethod,

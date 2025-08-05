@@ -19,6 +19,12 @@ export enum PaymentLinkStatus {
   INACTIVE = 'Inactive',
 }
 
+export enum PaymentLinkMode {
+  SINGLE = 'Single',
+  MULTIPLE = 'Multiple',
+  PUBLIC = 'Public',
+}
+
 export enum PaymentLinkPaymentStatus {
   PENDING = 'Pending',
   COMPLETED = 'Completed',
@@ -135,6 +141,7 @@ export interface PaymentLink {
   label?: string;
   recipient?: PaymentLinkRecipient;
   status: PaymentLinkStatus;
+  mode: PaymentLinkMode;
   payment?: PaymentLinkPayment;
   config?: PaymentLinkConfig;
   url: string;
@@ -201,6 +208,7 @@ export interface PaymentLinkConfig extends UpdatePaymentLinkConfig {
 
 export interface UpdatePaymentLink {
   status?: PaymentLinkStatus;
+  mode?: PaymentLinkMode;
   label?: string;
   webhookUrl?: string;
   config?: UpdatePaymentLinkConfig;
