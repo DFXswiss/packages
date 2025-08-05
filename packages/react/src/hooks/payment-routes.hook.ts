@@ -51,6 +51,7 @@ export interface PaymentRoutesInterface {
     externalIds?: string,
     ids?: string,
     type?: string,
+    mode?: string,
     language?: string,
   ) => Promise<CustomFile>;
   createPosLink: (linkId?: string, externalLinkId?: string, externalPaymentId?: string) => Promise<PaymentLinkPos>;
@@ -164,12 +165,14 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     externalIds?: string,
     ids?: string,
     type?: string,
+    mode?: string,
     language?: string,
   ): Promise<CustomFile> {
     const params: Record<string, string> = { route };
     if (externalIds) params.externalIds = externalIds;
     if (ids) params.ids = ids;
     if (type) params.type = type;
+    if (mode) params.mode = mode;
     if (language) params.lang = language;
     return call<CustomFile>({
       url: `${PaymentLinksUrl.stickers}?${new URLSearchParams(params).toString()}`,
