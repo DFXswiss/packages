@@ -359,13 +359,14 @@ export enum MerchantCategory {
 }
 
 export interface PaymentData {
-  purpose: string;
+  name: string;
   website?: string;
   registrationNumber: string;
   storeType: StoreType;
   merchantCategory: MerchantCategory;
   goodsType: GoodsType;
   goodsCategory: GoodsCategory;
+  purpose: string;
   contractAccepted: boolean;
 }
 
