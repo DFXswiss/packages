@@ -62,6 +62,7 @@ export {
   CreatePaymentLinkPayment,
   CreatePaymentLink,
   UpdatePaymentLink,
+  AssignPaymentLink,
   PaymentLinkPaymentMode,
   PaymentStandardType,
   PaymentQuoteStatus,

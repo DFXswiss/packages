@@ -7,6 +7,7 @@ export const PaymentLinksUrl = {
   get: 'paymentLink',
   create: 'paymentLink',
   update: 'paymentLink',
+  assign: 'paymentLink/assign',
   payment: 'paymentLink/payment',
   userPaymentLinksConfig: 'paymentLink/config',
   recipient: (route: string) => `paymentLink/recipient?id=${route}`,
@@ -212,6 +213,10 @@ export interface UpdatePaymentLink {
   label?: string;
   webhookUrl?: string;
   config?: UpdatePaymentLinkConfig;
+}
+
+export interface AssignPaymentLink {
+  publicName: string;
 }
 
 export interface PaymentLinkPos {

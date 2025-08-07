@@ -1,5 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
 import {
+  AssignPaymentLink,
   CreatePaymentLink,
   CreatePaymentLinkPayment,
   PaymentLink,
@@ -28,6 +29,7 @@ interface PaymentRoutesInterface {
     externalLinkId?: string,
     externalPaymentId?: string,
   ) => Promise<void>;
+  assignPaymentLink: (request: AssignPaymentLink, linkId?: string, externalLinkId?: string) => Promise<void>;
   updateUserPaymentLinksConfig: (config: UpdatePaymentLinkConfig) => Promise<void>;
   createPaymentLinkPayment: (
     request: CreatePaymentLinkPayment,
@@ -52,6 +54,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     getPaymentLinks,
     createPaymentLink: createPaymentLinkApi,
     updatePaymentLink: updatePaymentLinkApi,
+    assignPaymentLink: assignPaymentLinkApi,
     createPaymentLinkPayment: createPaymentLinkPaymentApi,
     cancelPaymentLinkPayment: cancelPaymentLinkPaymentApi,
     deletePaymentRoute: deletePaymentRouteApi,
@@ -102,6 +105,17 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
 
     setPaymentLinksLoading(true);
     return updatePaymentLinkApi(request, linkId, externalLinkId, externalPaymentId)
+      .then(updatePaymentLinks)
+      .finally(() => setPaymentLinksLoading(false));
+  }
+
+  async function assignPaymentLink(
+    request: AssignPaymentLink,
+    linkId?: string,
+    externalLinkId?: string,
+  ): Promise<void> {
+    setPaymentLinksLoading(true);
+    return assignPaymentLinkApi(request, linkId, externalLinkId)
       .then(updatePaymentLinks)
       .finally(() => setPaymentLinksLoading(false));
   }
@@ -237,6 +251,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       userPaymentLinksConfigLoading,
       createPaymentLink,
       updatePaymentLink,
+      assignPaymentLink,
       updateUserPaymentLinksConfig,
       createPaymentLinkPayment,
       cancelPaymentLinkPayment,
@@ -254,6 +269,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       error,
       createPaymentLink,
       updatePaymentLink,
+      assignPaymentLink,
       updateUserPaymentLinksConfig,
       createPaymentLinkPayment,
       cancelPaymentLinkPayment,

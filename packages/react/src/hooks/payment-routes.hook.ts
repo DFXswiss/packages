@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { ResponseType, useApi } from './api.hook';
 import { Utils } from '../utils';
 import {
+  AssignPaymentLink,
   CreatePaymentLink,
   CreatePaymentLinkPayment,
   PaymentLink,
@@ -32,6 +33,7 @@ export interface PaymentRoutesInterface {
     externalLinkId?: string,
     externalPaymentId?: string,
   ) => Promise<PaymentLink>;
+  assignPaymentLink: (request: AssignPaymentLink, linkId?: string, externalLinkId?: string) => Promise<PaymentLink>;
   getUserPaymentLinksConfig: () => Promise<PaymentLinkConfig>;
   updateUserPaymentLinksConfig: (config: UpdatePaymentLinkConfig) => Promise<void>;
   createPaymentLinkPayment: (
@@ -95,6 +97,20 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
 
     return call<PaymentLink>({
       url: `${PaymentLinksUrl.update}?${queryParams}`,
+      method: 'PUT',
+      data: request,
+    });
+  }
+
+  async function assignPaymentLink(
+    request: AssignPaymentLink,
+    linkId?: string,
+    externalLinkId?: string,
+  ): Promise<PaymentLink> {
+    const queryParams = Utils.buildQueryParams({ linkId, externalLinkId });
+
+    return call<PaymentLink>({
+      url: `${PaymentLinksUrl.assign}?${queryParams}`,
       method: 'PUT',
       data: request,
     });
@@ -187,6 +203,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
       getPaymentLinks,
       createPaymentLink,
       updatePaymentLink,
+      assignPaymentLink,
       getUserPaymentLinksConfig,
       updateUserPaymentLinksConfig,
       createPaymentLinkPayment,
