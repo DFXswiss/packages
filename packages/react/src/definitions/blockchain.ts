@@ -4,6 +4,7 @@ export enum Blockchain {
   MONERO = 'Monero',
   ZANO = 'Zano',
   ETHEREUM = 'Ethereum',
+  SEPOLIA = 'Sepolia',
   BINANCE_SMART_CHAIN = 'BinanceSmartChain',
   OPTIMISM = 'Optimism',
   ARBITRUM = 'Arbitrum',
