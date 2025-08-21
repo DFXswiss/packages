@@ -102,6 +102,7 @@ export enum KycStepName {
   OWNER_DIRECTORY = 'OwnerDirectory',
   NATIONALITY_DATA = 'NationalityData',
   COMMERCIAL_REGISTER = 'CommercialRegister',
+  SOLE_PROPRIETORSHIP_CONFIRMATION = 'SoleProprietorshipConfirmation',
   SIGNATORY_POWER = 'SignatoryPower',
   AUTHORITY = 'Authority',
   BENEFICIAL_OWNER = 'BeneficialOwner',

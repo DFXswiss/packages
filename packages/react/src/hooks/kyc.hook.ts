@@ -50,6 +50,7 @@ export interface KycInterface {
   setPersonalData: (code: string, url: string, data: KycPersonalData) => Promise<KycStepBase>;
   setManualIdentData: (code: string, url: string, data: KycManualIdentData) => Promise<KycStepBase>;
   setLegalEntityData: (code: string, url: string, data: KycLegalEntityData) => Promise<KycStepBase>;
+  setSoleProprietorshipData: (code: string, url: string, data: KycFileData) => Promise<KycStepBase>;
   setNationalityData: (code: string, url: string, data: KycNationalityData) => Promise<KycStepBase>;
   setFileData: (code: string, url: string, data: KycFileData) => Promise<KycStepBase>;
   setSignatoryPowerData: (code: string, url: string, data: KycSignatoryPowerData) => Promise<KycStepBase>;
@@ -129,6 +130,10 @@ export function useKyc(): KycInterface {
   }
 
   function setLegalEntityData(code: string, url: string, data: KycLegalEntityData): Promise<KycStepBase> {
+    return call({ url, code, method: 'PUT', data });
+  }
+
+  function setSoleProprietorshipData(code: string, url: string, data: KycFileData): Promise<KycStepBase> {
     return call({ url, code, method: 'PUT', data });
   }
 
@@ -233,6 +238,7 @@ export function useKyc(): KycInterface {
       setPersonalData,
       setManualIdentData,
       setLegalEntityData,
+      setSoleProprietorshipData,
       setNationalityData,
       setFileData,
       setSignatoryPowerData,

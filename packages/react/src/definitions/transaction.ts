@@ -33,6 +33,7 @@ export enum TransactionError {
   AMOUNT_TOO_LOW = 'AmountTooLow',
   AMOUNT_TOO_HIGH = 'AmountTooHigh',
   BANK_TRANSACTION_MISSING = 'BankTransactionMissing',
+  BANK_TRANSACTION_OR_VIDEO_MISSING = 'BankTransactionOrVideoMissing',
   KYC_REQUIRED = 'KycRequired',
   KYC_DATA_REQUIRED = 'KycDataRequired',
   NAME_REQUIRED = 'NameRequired',
