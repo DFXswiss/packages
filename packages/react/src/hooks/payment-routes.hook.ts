@@ -74,7 +74,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     const queryParams = Utils.buildQueryParams({ linkId, externalLinkId, externalPaymentId });
 
     return call<PaymentLink | PaymentLink[]>({
-      url: `${PaymentLinksUrl.get}?${queryParams}`,
+      url: queryParams ? `${PaymentLinksUrl.get}?${queryParams}` : PaymentLinksUrl.get,
       method: 'GET',
     });
   }
@@ -96,7 +96,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     const queryParams = Utils.buildQueryParams({ linkId, externalLinkId, externalPaymentId });
 
     return call<PaymentLink>({
-      url: `${PaymentLinksUrl.update}?${queryParams}`,
+      url: queryParams ? `${PaymentLinksUrl.update}?${queryParams}` : PaymentLinksUrl.update,
       method: 'PUT',
       data: request,
     });
@@ -110,7 +110,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     const queryParams = Utils.buildQueryParams({ linkId, externalLinkId });
 
     return call<PaymentLink>({
-      url: `${PaymentLinksUrl.assign}?${queryParams}`,
+      url: queryParams ? `${PaymentLinksUrl.assign}?${queryParams}` : PaymentLinksUrl.assign,
       method: 'PUT',
       data: request,
     });
@@ -136,7 +136,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     const queryParams = Utils.buildQueryParams({ linkId, externalLinkId });
 
     return call<PaymentLink>({
-      url: `${PaymentLinksUrl.payment}?${queryParams}`,
+      url: queryParams ? `${PaymentLinksUrl.payment}?${queryParams}` : PaymentLinksUrl.payment,
       method: 'POST',
       data: request,
     });
@@ -150,7 +150,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     const queryParams = Utils.buildQueryParams({ linkId, externalLinkId, externalPaymentId });
 
     return call<PaymentLink>({
-      url: `${PaymentLinksUrl.payment}?${queryParams}`,
+      url: queryParams ? `${PaymentLinksUrl.payment}?${queryParams}` : PaymentLinksUrl.payment,
       method: 'DELETE',
     });
   }
@@ -166,7 +166,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
   ): Promise<PaymentLinkPos> {
     const queryParams = Utils.buildQueryParams({ linkId, externalLinkId, externalPaymentId });
 
-    return call<PaymentLinkPos>({ url: `${PaymentLinksUrl.pos}?${queryParams}`, method: 'PUT' });
+    return call<PaymentLinkPos>({ url: queryParams ? `${PaymentLinksUrl.pos}?${queryParams}` : PaymentLinksUrl.pos, method: 'PUT' });
   }
 
   async function getPaymentRecipient(route: string): Promise<Sell> {
