@@ -96,6 +96,7 @@ export enum TransactionFailureReason {
   MISSING_LIQUIDITY = 'MissingLiquidity',
   KYC_DATA_NEEDED = 'KycDataNeeded',
   BANK_TX_NEEDED = 'BankTxNeeded',
+  PHONE_VERIFICATION_NEEDED = 'PhoneVerificationNeeded',
 }
 
 export enum ExportType {
