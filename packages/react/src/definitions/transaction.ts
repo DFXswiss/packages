@@ -98,6 +98,7 @@ export enum TransactionFailureReason {
   BANK_TX_NEEDED = 'BankTxNeeded',
   MERGE_INCOMPLETE = 'MergeIncomplete',
   PHONE_VERIFICATION_NEEDED = 'PhoneVerificationNeeded',
+  BANK_RELEASE_PENDING = 'BankReleasePending',
 }
 
 export enum ExportType {
