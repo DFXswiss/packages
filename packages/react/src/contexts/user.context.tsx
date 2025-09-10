@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
-import { ApiKey, UpdateUser, User } from '../definitions/user';
+import { ApiKey, UpdateUser, User, UserAddress } from '../definitions/user';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
 import { Language } from '../definitions/language';
@@ -16,6 +16,10 @@ interface UserInterface {
   updatePhone: (phone: string) => Promise<void>;
   updateLanguage: (language: Language) => Promise<void>;
   updateCurrency: (currency: Fiat) => Promise<void>;
+  hasAddress: boolean;
+  hasCustody: boolean;
+  userAddresses: UserAddress[];
+  custodyAddresses: UserAddress[];
   renameAddress: (address: string, label: string) => Promise<void>;
   changeAddress: (address: string) => Promise<void>;
   deleteAddress: (address: string) => Promise<void>;
@@ -57,6 +61,9 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
 
   const refCode = user?.activeAddress?.refCode;
   const refLink = refCode && `${process.env.REACT_APP_REF_URL ?? 'https://dfx.swiss/app?code='}${refCode}`;
+
+  const userAddresses = user?.addresses.filter((a) => !a.isCustody) ?? [];
+  const custodyAddresses = user?.addresses.filter((a) => a.isCustody) ?? [];
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -192,6 +199,10 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       updatePhone,
       updateLanguage,
       updateCurrency,
+      hasAddress: !!user?.addresses.length,
+      hasCustody: !!custodyAddresses.length,
+      userAddresses,
+      custodyAddresses,
       renameAddress,
       changeAddress,
       deleteAddress,
