@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.188 (2025-09-16)
+
+
+### Features
+
+* Add SPARK blockchain support to React package ([#100](https://github.com/DFXswiss/packages/issues/100)) ([37690dd](https://github.com/DFXswiss/packages/commit/37690dd2b38bea6daab303d82f5d8332b5a883d6))
+
+
+
+
+
 # 1.3.0-beta.187 (2025-09-10)
 
 **Note:** Version bump only for package @dfx.swiss/react
