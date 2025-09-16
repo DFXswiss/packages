@@ -68,6 +68,7 @@ export const PaymentLinkBlockchain = {
   BASE: Blockchain.BASE,
   ETHEREUM: Blockchain.ETHEREUM,
   LIGHTNING: Blockchain.LIGHTNING,
+  SPARK: Blockchain.SPARK,
   BITCOIN: Blockchain.BITCOIN,
   MONERO: Blockchain.MONERO,
   OPTIMISM: Blockchain.OPTIMISM,
