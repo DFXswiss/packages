@@ -172,6 +172,7 @@ export interface TransactionFilter {
 }
 
 export interface RefundFeeData {
+  dfx: number;
   network: number;
   bank: number;
 }
