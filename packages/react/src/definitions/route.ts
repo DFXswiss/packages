@@ -202,6 +202,7 @@ export interface UpdatePaymentLinkConfig {
   displayQr?: boolean;
   recipient?: PaymentLinkRecipient;
   paymentTimeout?: number;
+  cancellable?: boolean;
 }
 
 export interface PaymentLinkConfig extends UpdatePaymentLinkConfig {
