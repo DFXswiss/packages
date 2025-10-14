@@ -116,6 +116,7 @@ export enum KycStepName {
 
   // additional features
   PAYMENT_AGREEMENT = 'PaymentAgreement',
+  RECALL_AGREEMENT = 'RecallAgreement',
 }
 
 export enum KycStepType {
@@ -369,6 +370,10 @@ export interface PaymentData {
   goodsCategory: GoodsCategory;
   purpose: string;
   contractAccepted: boolean;
+}
+
+export interface RecallData {
+  accepted: boolean;
 }
 
 // financial data

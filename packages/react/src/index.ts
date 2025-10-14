@@ -128,6 +128,7 @@ export {
   FileType,
   KycFile,
   PaymentData,
+  RecallData,
   StoreType,
   MerchantCategory,
   GoodsType,
