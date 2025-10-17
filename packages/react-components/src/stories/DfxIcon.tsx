@@ -46,6 +46,7 @@ import {
   MdSouth,
   MdRepeat,
   MdReplay,
+  MdPersonSearch,
 } from 'react-icons/md';
 import { BsSafe2Fill } from 'react-icons/bs';
 import { HiOutlineDocumentSearch } from 'react-icons/hi';
@@ -108,6 +109,7 @@ export enum IconVariant {
   USER_DATA = 'USER_DATA',
   LOADING = 'LOADING',
   KYC = 'KYC',
+  COMPLIANCE = 'COMPLIANCE',
   APPLE = 'APPLE',
   GOOGLE_PLAY = 'GOOGLE_PLAY',
   REPEAT = 'REPEAT',
@@ -169,6 +171,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.TELEGRAM]: <FaTelegramPlane />,
   [IconVariant.LOADING]: <FaHourglassHalf />,
   [IconVariant.KYC]: <FaUserCheck />,
+  [IconVariant.COMPLIANCE]: <MdPersonSearch />,
   [IconVariant.APPLE]: <FaApple />,
   [IconVariant.GOOGLE_PLAY]: <FaGooglePlay />,
   [IconVariant.REPEAT]: <MdRepeat />,
