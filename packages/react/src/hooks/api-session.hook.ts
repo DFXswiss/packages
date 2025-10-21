@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useAuthContext } from '../contexts/auth.context';
 import { Session } from '../definitions/session';
 import { useAuth } from './auth.hook';
+import { AuthWalletType } from '../definitions/auth';
 
 export interface ApiSessionInterface {
   isInitialized: boolean;
@@ -16,6 +17,7 @@ export interface ApiSessionInterface {
     discount?: string,
     wallet?: string,
     ref?: string,
+    walletType?: AuthWalletType,
   ) => Promise<string>;
   createSessionNew: (
     address: string,
@@ -24,6 +26,7 @@ export interface ApiSessionInterface {
     discount?: string,
     wallet?: string,
     ref?: string,
+    walletType?: AuthWalletType,
   ) => Promise<string>;
   updateSession: (token: string) => void;
   deleteSession: () => Promise<void>;
@@ -41,9 +44,12 @@ export function useApiSession(): ApiSessionInterface {
     discount?: string,
     wallet?: string,
     ref?: string,
+    walletType?: AuthWalletType,
   ): Promise<string> {
     return (
-      isSignUp ? signUp(address, signature, key, discount, wallet, ref) : signIn(address, signature, key, discount)
+      isSignUp
+        ? signUp(address, signature, key, discount, wallet, ref, walletType)
+        : signIn(address, signature, key, discount, walletType)
     ).then(({ accessToken }) => {
       setAuthToken(accessToken);
       return accessToken;
@@ -57,8 +63,9 @@ export function useApiSession(): ApiSessionInterface {
     discount?: string,
     wallet?: string,
     ref?: string,
+    walletType?: AuthWalletType,
   ) {
-    return authenticate(address, signature, key, discount, wallet, ref).then(({ accessToken }) => {
+    return authenticate(address, signature, key, discount, wallet, ref, walletType).then(({ accessToken }) => {
       setAuthToken(accessToken);
       return accessToken;
     });
