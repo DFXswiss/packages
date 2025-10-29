@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { AuthUrl, AuthWalletType, LnurlAuth, LnurlAuthStatus, SignIn, SignMessage } from '../definitions/auth';
-import { useApi } from './api.hook';
+import { CallConfig, useApi } from './api.hook';
+import { ApiError } from '../definitions/error';
 
 export interface AuthInterface {
   getSignMessage: (address: string) => Promise<string>;
@@ -64,7 +65,13 @@ export function useAuth(): AuthInterface {
     walletType?: AuthWalletType,
   ): Promise<SignIn> {
     const data = getParams(address, signature, key, specialCode, wallet, usedRef, walletType);
-    return call({ url: AuthUrl.auth, method: 'POST', data, token: false });
+    const config: CallConfig = { url: AuthUrl.auth, method: 'POST', data };
+
+    return call<SignIn>(config).catch((e: ApiError) => {
+      if (e.statusCode === 409) return call<SignIn>({ ...config, token: false });
+
+      throw e;
+    });
   }
 
   async function signIn(
