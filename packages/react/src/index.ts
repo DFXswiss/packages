@@ -158,6 +158,7 @@ export {
   TransactionState,
   TransactionFailureReason,
   UnassignedTransaction,
+  NetworkStartTx,
   Transaction,
   ExportType,
   TransactionHistoryQuery,

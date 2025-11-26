@@ -136,6 +136,14 @@ export interface UnassignedTransaction {
   date: Date;
 }
 
+export interface NetworkStartTx {
+  txId: string;
+  txUrl: string;
+  amount: number;
+  exchangeRate: number;
+  asset: string;
+}
+
 export interface Transaction extends UnassignedTransaction {
   reason: TransactionFailureReason;
   exchangeRate?: number;
@@ -150,6 +158,7 @@ export interface Transaction extends UnassignedTransaction {
   outputTxUrl?: string;
   fees?: Fees;
   externalTransactionId?: string;
+  networkStartTx?: NetworkStartTx;
 }
 
 export interface DetailTransaction extends Transaction {
