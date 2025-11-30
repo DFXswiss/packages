@@ -25,6 +25,7 @@ import {
   KycOperationalData,
   PaymentData,
   RecallData,
+  KycRecommendationData,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 
@@ -53,6 +54,7 @@ export interface KycInterface {
   setLegalEntityData: (code: string, url: string, data: KycLegalEntityData) => Promise<KycStepBase>;
   setSoleProprietorshipData: (code: string, url: string, data: KycFileData) => Promise<KycStepBase>;
   setNationalityData: (code: string, url: string, data: KycNationalityData) => Promise<KycStepBase>;
+  setRecommendationData: (code: string, url: string, data: KycRecommendationData) => Promise<KycStepBase>;
   setFileData: (code: string, url: string, data: KycFileData) => Promise<KycStepBase>;
   setSignatoryPowerData: (code: string, url: string, data: KycSignatoryPowerData) => Promise<KycStepBase>;
   setBeneficialData: (code: string, url: string, data: KycBeneficialData) => Promise<KycStepBase>;
@@ -140,6 +142,10 @@ export function useKyc(): KycInterface {
   }
 
   async function setNationalityData(code: string, url: string, data: KycNationalityData): Promise<KycStepBase> {
+    return call({ url, code, method: 'PUT', data });
+  }
+
+  async function setRecommendationData(code: string, url: string, data: KycRecommendationData): Promise<KycStepBase> {
     return call({ url, code, method: 'PUT', data });
   }
 
@@ -246,6 +252,7 @@ export function useKyc(): KycInterface {
       setLegalEntityData,
       setSoleProprietorshipData,
       setNationalityData,
+      setRecommendationData,
       setFileData,
       setSignatoryPowerData,
       setBeneficialData,

@@ -101,6 +101,7 @@ export enum KycStepName {
   LEGAL_ENTITY = 'LegalEntity',
   OWNER_DIRECTORY = 'OwnerDirectory',
   NATIONALITY_DATA = 'NationalityData',
+  RECOMMENDATION = 'Recommendation',
   COMMERCIAL_REGISTER = 'CommercialRegister',
   SOLE_PROPRIETORSHIP_CONFIRMATION = 'SoleProprietorshipConfirmation',
   SIGNATORY_POWER = 'SignatoryPower',
@@ -215,6 +216,10 @@ export interface KycPersonalData {
 
 export interface KycNationalityData {
   country: Country;
+}
+
+export interface KycRecommendationData {
+  key: string;
 }
 
 export interface KycLegalEntityData extends KycFileData {

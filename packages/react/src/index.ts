@@ -119,6 +119,7 @@ export {
   KycFileData,
   KycLegalEntityData,
   KycNationalityData,
+  KycRecommendationData,
   KycSignatoryPowerData,
   KycBeneficialData,
   ContactPersonData,
