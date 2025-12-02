@@ -12,6 +12,7 @@ import {
   FaFileUpload,
   FaReceipt,
   FaHeadset,
+  FaHandshake,
 } from 'react-icons/fa';
 import {
   MdContentCopy,
@@ -120,6 +121,7 @@ export enum IconVariant {
   REVIEW = 'REVIEW',
   PLUS = 'PLUS',
   OPEN_CRYPTOPAY = 'OPEN_CRYPTOPAY',
+  REFERRAL = 'REFERRAL',
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
@@ -182,6 +184,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.REVIEW]: <HiOutlineDocumentSearch />,
   [IconVariant.PLUS]: <GoPlus />,
   [IconVariant.OPEN_CRYPTOPAY]: <OpenCryptoPayIcon />,
+  [IconVariant.REFERRAL]: <FaHandshake />,
 };
 
 export enum IconSize {
