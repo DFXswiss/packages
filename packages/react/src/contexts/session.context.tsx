@@ -21,6 +21,7 @@ export interface SessionInterface {
     wallet?: string,
     ref?: string,
     walletType?: AuthWalletType,
+    recommendationCode?: string,
   ) => Promise<string>;
   login: (address?: string, signature?: string, discount?: string) => Promise<string | undefined>;
   signUp: (
@@ -110,10 +111,11 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     wallet?: string,
     ref?: string,
     walletType?: AuthWalletType,
+    recommendationCode?: string,
   ): Promise<string> {
     setIsProcessing(true);
-    return createApiSessionNew(address, signature, key, discount, wallet, ref, walletType).finally(() =>
-      setIsProcessing(false),
+    return createApiSessionNew(address, signature, key, discount, wallet, ref, walletType, recommendationCode).finally(
+      () => setIsProcessing(false),
     );
   }
 

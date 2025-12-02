@@ -13,6 +13,7 @@ export interface AuthInterface {
     wallet?: string,
     ref?: string,
     walletType?: AuthWalletType,
+    recommendationCode?: string,
   ) => Promise<SignIn>;
   signIn: (
     address: string,
@@ -29,6 +30,7 @@ export interface AuthInterface {
     wallet?: string,
     ref?: string,
     walletType?: AuthWalletType,
+    recommendationCode?: string,
   ) => Promise<SignIn>;
   signInWithMail: (mail: string, redirectUri?: string) => Promise<void>;
   createLnurlAuth: () => Promise<LnurlAuth>;
@@ -44,6 +46,7 @@ interface SignUpParams {
   wallet?: string;
   usedRef?: string;
   walletType?: AuthWalletType;
+  recommendationCode?: string;
 }
 
 export function useAuth(): AuthInterface {
@@ -63,8 +66,9 @@ export function useAuth(): AuthInterface {
     wallet?: string,
     usedRef?: string,
     walletType?: AuthWalletType,
+    recommendationCode?: string,
   ): Promise<SignIn> {
-    const data = getParams(address, signature, key, specialCode, wallet, usedRef, walletType);
+    const data = getParams(address, signature, key, specialCode, wallet, usedRef, walletType, recommendationCode);
     const config: CallConfig = { url: AuthUrl.auth, method: 'POST', data };
 
     return call<SignIn>(config).catch((e: ApiError) => {
@@ -93,8 +97,9 @@ export function useAuth(): AuthInterface {
     wallet?: string,
     usedRef?: string,
     walletType?: AuthWalletType,
+    recommendationCode?: string,
   ): Promise<SignIn> {
-    const data = getParams(address, signature, key, specialCode, wallet, usedRef, walletType);
+    const data = getParams(address, signature, key, specialCode, wallet, usedRef, walletType, recommendationCode);
     return call({ url: AuthUrl.signUp, method: 'POST', data });
   }
 
@@ -118,8 +123,9 @@ export function useAuth(): AuthInterface {
     wallet?: string,
     usedRef?: string,
     walletType?: AuthWalletType,
+    recommendationCode?: string,
   ): SignUpParams {
-    const params: SignUpParams = { address, signature, key, usedRef, specialCode, walletType };
+    const params: SignUpParams = { address, signature, key, usedRef, specialCode, walletType, recommendationCode };
 
     if (wallet) {
       const walletId = parseInt(wallet);

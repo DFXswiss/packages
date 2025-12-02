@@ -18,6 +18,7 @@ export interface ApiSessionInterface {
     wallet?: string,
     ref?: string,
     walletType?: AuthWalletType,
+    recommendationCode?: string,
   ) => Promise<string>;
   createSessionNew: (
     address: string,
@@ -27,6 +28,7 @@ export interface ApiSessionInterface {
     wallet?: string,
     ref?: string,
     walletType?: AuthWalletType,
+    recommendationCode?: string,
   ) => Promise<string>;
   updateSession: (token: string) => void;
   deleteSession: () => Promise<void>;
@@ -45,10 +47,11 @@ export function useApiSession(): ApiSessionInterface {
     wallet?: string,
     ref?: string,
     walletType?: AuthWalletType,
+    recommendationCode?: string,
   ): Promise<string> {
     return (
       isSignUp
-        ? signUp(address, signature, key, discount, wallet, ref, walletType)
+        ? signUp(address, signature, key, discount, wallet, ref, walletType, recommendationCode)
         : signIn(address, signature, key, discount, walletType)
     ).then(({ accessToken }) => {
       setAuthToken(accessToken);
@@ -64,11 +67,14 @@ export function useApiSession(): ApiSessionInterface {
     wallet?: string,
     ref?: string,
     walletType?: AuthWalletType,
+    recommendationCode?: string,
   ) {
-    return authenticate(address, signature, key, discount, wallet, ref, walletType).then(({ accessToken }) => {
-      setAuthToken(accessToken);
-      return accessToken;
-    });
+    return authenticate(address, signature, key, discount, wallet, ref, walletType, recommendationCode).then(
+      ({ accessToken }) => {
+        setAuthToken(accessToken);
+        return accessToken;
+      },
+    );
   }
 
   function updateSession(token: string) {

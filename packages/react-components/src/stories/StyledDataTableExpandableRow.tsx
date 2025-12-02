@@ -11,6 +11,7 @@ interface ExpansionItem {
   icon?: IconVariant;
   iconColor?: IconColor;
   onClick?: () => void;
+  isCopy?: boolean;
 }
 
 interface StyledDataTableExpandableRowProps extends PropsWithChildren {
@@ -70,12 +71,24 @@ export default function StyledDataTableExpandableRow({
   rowDataClasses += ALIGN_MAPS[theme.alignContent];
 
   const [isExpanded, setIsExpanded] = useState(false);
+  const [copiedItems, setCopiedItems] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (props.isExpanded != null) {
       setIsExpanded(props.isExpanded);
     }
   }, [props.isExpanded]);
+
+  const handleCopy = (label: string) => {
+    setCopiedItems((prev) => new Set(prev).add(label));
+    setTimeout(() => {
+      setCopiedItems((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(label);
+        return newSet;
+      });
+    }, 1000);
+  };
 
   const hasExpansionItems = !!expansionItems?.length;
   const hasExpansionContent = !!expansionContent;
@@ -118,26 +131,41 @@ export default function StyledDataTableExpandableRow({
                 <></>
               )}
               <div className={separatorClasses} />
-              {expansionItems?.map(({ label, text, infoText, icon, iconColor, onClick }) => (
-                <div key={label} className="flex flex-col w-full">
-                  <div className="flex w-full justify-between">
-                    <p className={labelClasses}>{label}</p>
-                    <button className="flex flex-row items-center gap-2" onClick={onClick} disabled={!onClick}>
-                      <p className={rowDataClasses}>{text}</p>
-                      {icon && <DfxIcon icon={icon} color={iconColor} size={IconSize.SM} />}
-                    </button>
+              {expansionItems?.map(({ label, text, infoText, icon, iconColor, onClick, isCopy }) => {
+                const isCopied = copiedItems.has(label);
+                const displayIcon = isCopy ? (isCopied ? IconVariant.CHECK : IconVariant.COPY) : icon;
+                const handleClick = isCopy
+                  ? () => {
+                      handleCopy(label);
+                      onClick?.();
+                    }
+                  : onClick;
+
+                return (
+                  <div key={label} className="flex flex-col w-full">
+                    <div className="flex w-full justify-between">
+                      <p className={labelClasses}>{label}</p>
+                      <button
+                        className="flex flex-row items-center gap-2"
+                        onClick={handleClick}
+                        disabled={!handleClick}
+                      >
+                        <p className={rowDataClasses}>{text}</p>
+                        {displayIcon && <DfxIcon icon={displayIcon} color={iconColor} size={IconSize.SM} />}
+                      </button>
+                    </div>
+                    <div className="flex justify-start text-left my-1">
+                      {infoText && (
+                        <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
+                          {infoText.split('\n').map((line) => (
+                            <div key={line}>{line}</div>
+                          ))}
+                        </StyledInfoText>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex justify-start text-left my-1">
-                    {infoText && (
-                      <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
-                        {infoText.split('\n').map((line) => (
-                          <div key={line}>{line}</div>
-                        ))}
-                      </StyledInfoText>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
               <div className="mt-1">{expansionContent}</div>
             </div>
           )}
