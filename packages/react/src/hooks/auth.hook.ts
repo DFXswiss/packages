@@ -32,7 +32,7 @@ export interface AuthInterface {
     walletType?: AuthWalletType,
     recommendationCode?: string,
   ) => Promise<SignIn>;
-  signInWithMail: (mail: string, redirectUri?: string) => Promise<void>;
+  signInWithMail: (mail: string, redirectUri?: string, recommendationCode?: string) => Promise<void>;
   createLnurlAuth: () => Promise<LnurlAuth>;
   getLnurlAuth: (k1: string) => Promise<LnurlAuthStatus>;
 }
@@ -103,8 +103,8 @@ export function useAuth(): AuthInterface {
     return call({ url: AuthUrl.signUp, method: 'POST', data });
   }
 
-  async function signInWithMail(mail: string, redirectUri?: string): Promise<void> {
-    return call({ url: AuthUrl.signInWithMail, method: 'POST', data: { mail, redirectUri } });
+  async function signInWithMail(mail: string, redirectUri?: string, recommendationCode?: string): Promise<void> {
+    return call({ url: AuthUrl.signInWithMail, method: 'POST', data: { mail, redirectUri, recommendationCode } });
   }
 
   async function createLnurlAuth(): Promise<LnurlAuth> {
