@@ -42,6 +42,7 @@ export enum TransactionError {
   NATIONALITY_NOT_ALLOWED = 'NationalityNotAllowed',
   VIDEO_IDENT_REQUIRED = 'VideoIdentRequired',
   IBAN_CURRENCY_MISMATCH = 'IbanCurrencyMismatch',
+  TRADING_NOT_ALLOWED = 'TradingNotAllowed',
 }
 
 export enum TransactionType {
