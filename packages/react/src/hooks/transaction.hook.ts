@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useApi } from './api.hook';
+import { ResponseType, useApi } from './api.hook';
 import {
   DetailTransaction,
   ExportType,
@@ -64,6 +64,7 @@ export function useTransaction(): TransactionInterface {
     return call<string>({
       url: `${TransactionUrl.csv}?${createFilterParams({ from, to })}`,
       method: 'PUT',
+      responseType: ResponseType.TEXT,
     }).then((key) => `${defaultUrl}/transaction/csv?key=${key}`);
   }
 
