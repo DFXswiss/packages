@@ -43,6 +43,7 @@ export interface Buy {
   paymentLink?: string;
   isValid: boolean;
   error?: TransactionError;
+  isPersonalIban?: boolean;
 }
 
 export interface BuyPaymentInfo {
