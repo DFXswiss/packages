@@ -88,7 +88,7 @@ export function useTransaction(): TransactionInterface {
     return call<string>({
       url: `transaction/${type}?${createFilterParams(queryParams)}`,
       method: 'GET',
-      noJson: true,
+      responseType: ResponseType.TEXT,
     });
   }
 
