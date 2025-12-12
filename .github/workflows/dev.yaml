@@ -7,6 +7,10 @@ on:
 env:
   NODE_VERSION: "16.x"
 
+permissions:
+  id-token: write
+  contents: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -18,10 +22,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-
-      - name: "Setup npm"
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > .npmrc
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install packages
         run: |
@@ -37,4 +38,4 @@ jobs:
           git config user.email "info@dfx.swiss"
 
           npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
-          npx lerna publish from-git --yes --dist-tag beta
+          npx lerna publish from-git --yes --dist-tag beta --provenance
