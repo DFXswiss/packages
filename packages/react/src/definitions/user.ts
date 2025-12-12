@@ -107,11 +107,6 @@ export interface UserAddressInfo {
   country?: Country;
 }
 
-export interface UserOrganization {
-  name?: string;
-  address?: UserAddressInfo;
-}
-
 export interface UserProfile {
   accountType?: AccountType;
   firstName?: string;
@@ -119,5 +114,5 @@ export interface UserProfile {
   mail?: string;
   phone?: string;
   address?: UserAddressInfo;
-  organization?: UserOrganization;
+  organizationName?: string;
 }

@@ -150,7 +150,6 @@ export {
   VolumeInformation,
   UserProfile,
   UserAddressInfo,
-  UserOrganization,
 } from './definitions/user';
 export { SignIn, LnurlAuth, LnurlAuthStatus } from './definitions/auth';
 export {
