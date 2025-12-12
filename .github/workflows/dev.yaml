@@ -1,41 +1,12 @@
-name: Publish packages
+name: Publish packages (DEV)
 on:
   push:
     branches:
       - develop
 
-env:
-  NODE_VERSION: "16.x"
-
-permissions:
-  id-token: write
-  contents: write
-
 jobs:
   publish:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Install packages
-        run: |
-          npm install
-
-      - name: Build code
-        run: |
-          npx lerna run build
-
-      - name: "Version and publish"
-        run: |
-          git config user.name "DFX"
-          git config user.email "info@dfx.swiss"
-
-          npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
-          npx lerna publish from-git --yes --dist-tag beta -- --provenance
+    uses: ./.github/workflows/publish.yaml
+    with:
+      is-prerelease: true
+      dist-tag: beta

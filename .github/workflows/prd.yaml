@@ -1,40 +1,12 @@
-name: Publish packages
+name: Publish packages (PRD)
 on:
   push:
     branches:
       - main
 
-env:
-  NODE_VERSION: "16.x"
-
 jobs:
   publish:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: "Setup npm"
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > .npmrc
-
-      - name: Install packages
-        run: |
-          npm install
-
-      - name: Build code
-        run: |
-          npx lerna run build
-
-      - name: "Version and publish"
-        run: |
-          git config user.name "DFX"
-          git config user.email "info@dfx.swiss"
-
-          npx lerna version --conventional-commits --conventional-graduate --yes
-          npx lerna publish from-git --yes
+    uses: ./.github/workflows/publish.yaml
+    with:
+      is-prerelease: false
+      dist-tag: latest

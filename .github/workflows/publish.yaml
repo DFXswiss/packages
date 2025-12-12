@@ -1,0 +1,58 @@
+name: Reusable Publish Workflow
+on:
+  workflow_call:
+    inputs:
+      is-prerelease:
+        required: true
+        type: boolean
+      dist-tag:
+        required: true
+        type: string
+
+env:
+  NODE_VERSION: "16.x"
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install packages
+        run: |
+          npm install
+
+      - name: Build code
+        run: |
+          npx lerna run build
+
+      - name: "Version and publish (prerelease)"
+        if: ${{ inputs.is-prerelease }}
+        run: |
+          git config user.name "DFX"
+          git config user.email "info@dfx.swiss"
+          npm config set provenance true
+
+          npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
+          npx lerna publish from-git --yes --dist-tag ${{ inputs.dist-tag }}
+
+      - name: "Version and publish (stable)"
+        if: ${{ !inputs.is-prerelease }}
+        run: |
+          git config user.name "DFX"
+          git config user.email "info@dfx.swiss"
+          npm config set provenance true
+
+          npx lerna version --conventional-commits --conventional-graduate --yes
+          npx lerna publish from-git --yes
