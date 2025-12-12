@@ -38,4 +38,4 @@ jobs:
           git config user.email "info@dfx.swiss"
 
           npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
-          npx lerna publish from-git --yes --dist-tag beta --provenance
+          npx lerna publish from-git --yes --dist-tag beta -- --provenance
