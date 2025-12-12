@@ -148,6 +148,8 @@ export {
   Referral,
   Volumes,
   VolumeInformation,
+  UserProfile,
+  UserAddressInfo,
 } from './definitions/user';
 export { SignIn, LnurlAuth, LnurlAuthStatus } from './definitions/auth';
 export {
