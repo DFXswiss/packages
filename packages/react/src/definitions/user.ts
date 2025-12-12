@@ -1,4 +1,5 @@
 import { Blockchain } from './blockchain';
+import { Country } from './country';
 import { Fiat } from './fiat';
 import { AccountType, TradingLimit } from './kyc';
 import { Language } from './language';
@@ -16,6 +17,7 @@ export const UserUrl = {
   apiFilter: 'user/apiFilter',
   changeAddress: 'user/change',
   specialCodes: 'user/specialCodes',
+  profile: 'user/profile',
 };
 
 export enum UserStatus {
@@ -95,4 +97,23 @@ export interface UpdateUser {
 export interface ApiKey {
   key: string;
   secret: string;
+}
+
+export interface UserAddressInfo {
+  street?: string;
+  houseNumber?: string;
+  city?: string;
+  zip?: string;
+  country?: Country;
+}
+
+export interface UserProfile {
+  accountType?: AccountType;
+  firstName?: string;
+  lastName?: string;
+  mail?: string;
+  phone?: string;
+  address?: UserAddressInfo;
+  organizationName?: string;
+  organizationAddress?: UserAddressInfo;
 }

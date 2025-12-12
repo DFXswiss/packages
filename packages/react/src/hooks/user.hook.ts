@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ApiKey, Referral, UpdateUser, User, UserUrl } from '../definitions/user';
+import { ApiKey, Referral, UpdateUser, User, UserProfile, UserUrl } from '../definitions/user';
 import { useApi } from './api.hook';
 import { SignIn } from '../definitions/auth';
 import { TransactionFilter, TransactionFilterKey } from '../definitions/transaction';
@@ -7,6 +7,7 @@ import { TransactionFilter, TransactionFilterKey } from '../definitions/transact
 export interface UserInterface {
   getUser: () => Promise<User | undefined>;
   getRef: () => Promise<Referral | undefined>;
+  getProfile: () => Promise<UserProfile | undefined>;
   updateUser: (user?: Partial<User>, userLinkAction?: () => void) => Promise<User | undefined>;
   updateMail: (mail: string) => Promise<void>;
   verifyMail: (token: string) => Promise<User>;
@@ -29,6 +30,10 @@ export function useUser(): UserInterface {
 
   async function getRef(): Promise<Referral | undefined> {
     return call<Referral>({ url: UserUrl.ref, version: 'v2', method: 'GET' });
+  }
+
+  async function getProfile(): Promise<UserProfile | undefined> {
+    return call<UserProfile>({ url: UserUrl.profile, version: 'v2', method: 'GET' });
   }
 
   async function updateUser(updateUser?: UpdateUser, userLinkAction?: () => void): Promise<User | undefined> {
@@ -118,6 +123,7 @@ export function useUser(): UserInterface {
     () => ({
       getUser,
       getRef,
+      getProfile,
       updateUser,
       updateMail,
       verifyMail,
