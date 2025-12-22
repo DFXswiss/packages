@@ -24,7 +24,7 @@ export interface Buy {
   bic: string;
   sepaInstant: boolean;
   routeId: number;
-  remittanceInfo: string;
+  remittanceInfo?: string;
   fees: Fees;
   minVolume: number;
   maxVolume: number;
