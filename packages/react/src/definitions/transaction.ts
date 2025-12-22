@@ -195,6 +195,14 @@ export interface TransactionRefundData {
   refundAsset: Asset | Fiat;
   inputAmount: number;
   inputAsset: Asset | Fiat;
+  name?: string;
+  address?: string;
+  houseNumber?: string;
+  zip?: string;
+  city?: string;
+  country?: string;
+  iban?: string;
+  bic?: string;
 }
 
 export interface TransactionHistoryQuery {
