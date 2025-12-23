@@ -101,7 +101,9 @@ export enum KycStepName {
   LEGAL_ENTITY = 'LegalEntity',
   OWNER_DIRECTORY = 'OwnerDirectory',
   NATIONALITY_DATA = 'NationalityData',
+  RECOMMENDATION = 'Recommendation',
   COMMERCIAL_REGISTER = 'CommercialRegister',
+  SOLE_PROPRIETORSHIP_CONFIRMATION = 'SoleProprietorshipConfirmation',
   SIGNATORY_POWER = 'SignatoryPower',
   AUTHORITY = 'Authority',
   BENEFICIAL_OWNER = 'BeneficialOwner',
@@ -115,6 +117,7 @@ export enum KycStepName {
 
   // additional features
   PAYMENT_AGREEMENT = 'PaymentAgreement',
+  RECALL_AGREEMENT = 'RecallAgreement',
 }
 
 export enum KycStepType {
@@ -213,6 +216,10 @@ export interface KycPersonalData {
 
 export interface KycNationalityData {
   country: Country;
+}
+
+export interface KycRecommendationData {
+  key: string;
 }
 
 export interface KycLegalEntityData extends KycFileData {
@@ -368,6 +375,10 @@ export interface PaymentData {
   goodsCategory: GoodsCategory;
   purpose: string;
   contractAccepted: boolean;
+}
+
+export interface RecallData {
+  accepted: boolean;
 }
 
 // financial data

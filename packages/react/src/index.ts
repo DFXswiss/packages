@@ -119,6 +119,7 @@ export {
   KycFileData,
   KycLegalEntityData,
   KycNationalityData,
+  KycRecommendationData,
   KycSignatoryPowerData,
   KycBeneficialData,
   ContactPersonData,
@@ -128,6 +129,7 @@ export {
   FileType,
   KycFile,
   PaymentData,
+  RecallData,
   StoreType,
   MerchantCategory,
   GoodsType,
@@ -146,6 +148,8 @@ export {
   Referral,
   Volumes,
   VolumeInformation,
+  UserProfile,
+  UserAddressInfo,
 } from './definitions/user';
 export { SignIn, LnurlAuth, LnurlAuthStatus } from './definitions/auth';
 export {
@@ -157,6 +161,7 @@ export {
   TransactionState,
   TransactionFailureReason,
   UnassignedTransaction,
+  NetworkStartTx,
   Transaction,
   ExportType,
   TransactionHistoryQuery,

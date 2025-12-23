@@ -68,6 +68,7 @@ export const PaymentLinkBlockchain = {
   BASE: Blockchain.BASE,
   ETHEREUM: Blockchain.ETHEREUM,
   LIGHTNING: Blockchain.LIGHTNING,
+  SPARK: Blockchain.SPARK,
   BITCOIN: Blockchain.BITCOIN,
   MONERO: Blockchain.MONERO,
   OPTIMISM: Blockchain.OPTIMISM,
@@ -201,6 +202,7 @@ export interface UpdatePaymentLinkConfig {
   displayQr?: boolean;
   recipient?: PaymentLinkRecipient;
   paymentTimeout?: number;
+  cancellable?: boolean;
 }
 
 export interface PaymentLinkConfig extends UpdatePaymentLinkConfig {

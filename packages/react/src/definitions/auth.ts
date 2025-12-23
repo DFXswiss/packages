@@ -27,3 +27,19 @@ export type LnurlAuthStatus =
       accessToken: string;
     }
   | { isComplete: false };
+
+export enum AuthWalletType {
+  METAMASK = 'MetaMask',
+  RABBY = 'Rabby',
+  WALLET_BROWSER = 'WalletBrowser',
+  TRUST = 'Trust',
+  PHANTOM = 'Phantom',
+  TRON_LINK = 'TronLink',
+  CLI = 'CLI',
+  LEDGER = 'Ledger',
+  BIT_BOX = 'BitBox',
+  TREZOR = 'Trezor',
+  ALBY = 'Alby',
+  WALLET_CONNECT = 'WalletConnect',
+  DFX_TARO = 'DfxTaro',
+}

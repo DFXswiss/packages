@@ -3,6 +3,305 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.214 (2025-12-12)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.213 (2025-12-12)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.212 (2025-12-12)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.211 (2025-12-12)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.210 (2025-12-12)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.209 (2025-12-12)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.208 (2025-12-12)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.207 (2025-12-12)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.206 (2025-12-05)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.205 (2025-12-04)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.204 (2025-12-04)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.203 (2025-12-03)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.202 (2025-12-03)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.201 (2025-12-02)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.200 (2025-12-02)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.199 (2025-11-30)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.198 (2025-11-26)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.197 (2025-10-29)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.196 (2025-10-21)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.195 (2025-10-17)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.194 (2025-10-14)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.193 (2025-10-13)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.192 (2025-09-25)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.191 (2025-09-24)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.190 (2025-09-22)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.189 (2025-09-22)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.188 (2025-09-16)
+
+
+### Features
+
+* Add SPARK blockchain support to React package ([#100](https://github.com/DFXswiss/packages/issues/100)) ([37690dd](https://github.com/DFXswiss/packages/commit/37690dd2b38bea6daab303d82f5d8332b5a883d6))
+
+
+
+
+
+# 1.3.0-beta.187 (2025-09-10)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.186 (2025-09-09)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.185 (2025-09-04)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.184 (2025-09-02)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.183 (2025-08-29)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.182 (2025-08-21)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.181 (2025-08-20)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.180 (2025-08-15)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.179 (2025-08-15)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
+# 1.3.0-beta.178 (2025-08-08)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
+
+
+
+
 # 1.3.0-beta.177 (2025-08-07)
 
 **Note:** Version bump only for package @dfx.swiss/react

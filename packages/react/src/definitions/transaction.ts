@@ -33,6 +33,7 @@ export enum TransactionError {
   AMOUNT_TOO_LOW = 'AmountTooLow',
   AMOUNT_TOO_HIGH = 'AmountTooHigh',
   BANK_TRANSACTION_MISSING = 'BankTransactionMissing',
+  BANK_TRANSACTION_OR_VIDEO_MISSING = 'BankTransactionOrVideoMissing',
   KYC_REQUIRED = 'KycRequired',
   KYC_DATA_REQUIRED = 'KycDataRequired',
   NAME_REQUIRED = 'NameRequired',
@@ -41,6 +42,7 @@ export enum TransactionError {
   NATIONALITY_NOT_ALLOWED = 'NationalityNotAllowed',
   VIDEO_IDENT_REQUIRED = 'VideoIdentRequired',
   IBAN_CURRENCY_MISMATCH = 'IbanCurrencyMismatch',
+  TRADING_NOT_ALLOWED = 'TradingNotAllowed',
 }
 
 export enum TransactionType {
@@ -95,6 +97,10 @@ export enum TransactionFailureReason {
   MISSING_LIQUIDITY = 'MissingLiquidity',
   KYC_DATA_NEEDED = 'KycDataNeeded',
   BANK_TX_NEEDED = 'BankTxNeeded',
+  MERGE_INCOMPLETE = 'MergeIncomplete',
+  PHONE_VERIFICATION_NEEDED = 'PhoneVerificationNeeded',
+  BANK_RELEASE_PENDING = 'BankReleasePending',
+  INPUT_NOT_CONFIRMED = 'InputNotConfirmed',
 }
 
 export enum ExportType {
@@ -131,6 +137,14 @@ export interface UnassignedTransaction {
   date: Date;
 }
 
+export interface NetworkStartTx {
+  txId: string;
+  txUrl: string;
+  amount: number;
+  exchangeRate: number;
+  asset: string;
+}
+
 export interface Transaction extends UnassignedTransaction {
   reason: TransactionFailureReason;
   exchangeRate?: number;
@@ -145,6 +159,7 @@ export interface Transaction extends UnassignedTransaction {
   outputTxUrl?: string;
   fees?: Fees;
   externalTransactionId?: string;
+  networkStartTx?: NetworkStartTx;
 }
 
 export interface DetailTransaction extends Transaction {
@@ -168,6 +183,7 @@ export interface TransactionFilter {
 }
 
 export interface RefundFeeData {
+  dfx: number;
   network: number;
   bank: number;
 }

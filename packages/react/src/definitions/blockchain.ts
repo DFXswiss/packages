@@ -1,9 +1,11 @@
 export enum Blockchain {
   BITCOIN = 'Bitcoin',
   LIGHTNING = 'Lightning',
+  SPARK = 'Spark',
   MONERO = 'Monero',
   ZANO = 'Zano',
   ETHEREUM = 'Ethereum',
+  SEPOLIA = 'Sepolia',
   BINANCE_SMART_CHAIN = 'BinanceSmartChain',
   OPTIMISM = 'Optimism',
   ARBITRUM = 'Arbitrum',
@@ -17,5 +19,7 @@ export enum Blockchain {
   RAILGUN = 'Railgun',
   SOLANA = 'Solana',
   TRON = 'Tron',
+  CITREA_TESTNET = 'CitreaTestnet',
+
   DEFICHAIN = 'DeFiChain',
 }

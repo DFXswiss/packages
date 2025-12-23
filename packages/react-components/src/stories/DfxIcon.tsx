@@ -12,6 +12,7 @@ import {
   FaFileUpload,
   FaReceipt,
   FaHeadset,
+  FaHandshake,
 } from 'react-icons/fa';
 import {
   MdContentCopy,
@@ -46,6 +47,7 @@ import {
   MdSouth,
   MdRepeat,
   MdReplay,
+  MdPersonSearch,
 } from 'react-icons/md';
 import { BsSafe2Fill } from 'react-icons/bs';
 import { HiOutlineDocumentSearch } from 'react-icons/hi';
@@ -108,6 +110,7 @@ export enum IconVariant {
   USER_DATA = 'USER_DATA',
   LOADING = 'LOADING',
   KYC = 'KYC',
+  COMPLIANCE = 'COMPLIANCE',
   APPLE = 'APPLE',
   GOOGLE_PLAY = 'GOOGLE_PLAY',
   REPEAT = 'REPEAT',
@@ -118,6 +121,7 @@ export enum IconVariant {
   REVIEW = 'REVIEW',
   PLUS = 'PLUS',
   OPEN_CRYPTOPAY = 'OPEN_CRYPTOPAY',
+  REFERRAL = 'REFERRAL',
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
@@ -169,6 +173,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.TELEGRAM]: <FaTelegramPlane />,
   [IconVariant.LOADING]: <FaHourglassHalf />,
   [IconVariant.KYC]: <FaUserCheck />,
+  [IconVariant.COMPLIANCE]: <MdPersonSearch />,
   [IconVariant.APPLE]: <FaApple />,
   [IconVariant.GOOGLE_PLAY]: <FaGooglePlay />,
   [IconVariant.REPEAT]: <MdRepeat />,
@@ -179,6 +184,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.REVIEW]: <HiOutlineDocumentSearch />,
   [IconVariant.PLUS]: <GoPlus />,
   [IconVariant.OPEN_CRYPTOPAY]: <OpenCryptoPayIcon />,
+  [IconVariant.REFERRAL]: <FaHandshake />,
 };
 
 export enum IconSize {

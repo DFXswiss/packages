@@ -3,6 +3,7 @@ import { Blockchain } from '../definitions/blockchain';
 import { ApiError } from '../definitions/error';
 import { useApiSession } from '../hooks/api-session.hook';
 import { useAuthContext } from './auth.context';
+import { AuthWalletType } from '../definitions/auth';
 
 export interface SessionInterface {
   address?: string;
@@ -19,6 +20,8 @@ export interface SessionInterface {
     discount?: string,
     wallet?: string,
     ref?: string,
+    walletType?: AuthWalletType,
+    recommendationCode?: string,
   ) => Promise<string>;
   login: (address?: string, signature?: string, discount?: string) => Promise<string | undefined>;
   signUp: (
@@ -107,9 +110,13 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     discount?: string,
     wallet?: string,
     ref?: string,
+    walletType?: AuthWalletType,
+    recommendationCode?: string,
   ): Promise<string> {
     setIsProcessing(true);
-    return createApiSessionNew(address, signature, key, discount, wallet, ref).finally(() => setIsProcessing(false));
+    return createApiSessionNew(address, signature, key, discount, wallet, ref, walletType, recommendationCode).finally(
+      () => setIsProcessing(false),
+    );
   }
 
   async function login(

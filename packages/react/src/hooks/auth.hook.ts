@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { AuthUrl, LnurlAuth, LnurlAuthStatus, SignIn, SignMessage } from '../definitions/auth';
-import { useApi } from './api.hook';
+import { AuthUrl, AuthWalletType, LnurlAuth, LnurlAuthStatus, SignIn, SignMessage } from '../definitions/auth';
+import { CallConfig, useApi } from './api.hook';
+import { ApiError } from '../definitions/error';
 
 export interface AuthInterface {
   getSignMessage: (address: string) => Promise<string>;
@@ -11,8 +12,16 @@ export interface AuthInterface {
     specialCode?: string,
     wallet?: string,
     ref?: string,
+    walletType?: AuthWalletType,
+    recommendationCode?: string,
   ) => Promise<SignIn>;
-  signIn: (address: string, signature: string, key?: string, specialCode?: string) => Promise<SignIn>;
+  signIn: (
+    address: string,
+    signature: string,
+    key?: string,
+    specialCode?: string,
+    walletType?: AuthWalletType,
+  ) => Promise<SignIn>;
   signUp: (
     address: string,
     signature: string,
@@ -20,8 +29,10 @@ export interface AuthInterface {
     specialCode?: string,
     wallet?: string,
     ref?: string,
+    walletType?: AuthWalletType,
+    recommendationCode?: string,
   ) => Promise<SignIn>;
-  signInWithMail: (mail: string, redirectUri?: string) => Promise<void>;
+  signInWithMail: (mail: string, redirectUri?: string, recommendationCode?: string) => Promise<void>;
   createLnurlAuth: () => Promise<LnurlAuth>;
   getLnurlAuth: (k1: string) => Promise<LnurlAuthStatus>;
 }
@@ -34,6 +45,8 @@ interface SignUpParams {
   walletId?: number;
   wallet?: string;
   usedRef?: string;
+  walletType?: AuthWalletType;
+  recommendationCode?: string;
 }
 
 export function useAuth(): AuthInterface {
@@ -52,13 +65,27 @@ export function useAuth(): AuthInterface {
     specialCode?: string,
     wallet?: string,
     usedRef?: string,
+    walletType?: AuthWalletType,
+    recommendationCode?: string,
   ): Promise<SignIn> {
-    const data = getParams(address, signature, key, specialCode, wallet, usedRef);
-    return call({ url: AuthUrl.auth, method: 'POST', data, token: false });
+    const data = getParams(address, signature, key, specialCode, wallet, usedRef, walletType, recommendationCode);
+    const config: CallConfig = { url: AuthUrl.auth, method: 'POST', data };
+
+    return call<SignIn>(config).catch((e: ApiError) => {
+      if (e.statusCode === 409) return call<SignIn>({ ...config, token: false });
+
+      throw e;
+    });
   }
 
-  async function signIn(address: string, signature: string, key?: string, specialCode?: string): Promise<SignIn> {
-    const data = getParams(address, signature, key, specialCode);
+  async function signIn(
+    address: string,
+    signature: string,
+    key?: string,
+    specialCode?: string,
+    walletType?: AuthWalletType,
+  ): Promise<SignIn> {
+    const data = getParams(address, signature, key, specialCode, undefined, undefined, walletType);
     return call({ url: AuthUrl.signIn, method: 'POST', data });
   }
 
@@ -69,13 +96,15 @@ export function useAuth(): AuthInterface {
     specialCode?: string,
     wallet?: string,
     usedRef?: string,
+    walletType?: AuthWalletType,
+    recommendationCode?: string,
   ): Promise<SignIn> {
-    const data = getParams(address, signature, key, specialCode, wallet, usedRef);
+    const data = getParams(address, signature, key, specialCode, wallet, usedRef, walletType, recommendationCode);
     return call({ url: AuthUrl.signUp, method: 'POST', data });
   }
 
-  async function signInWithMail(mail: string, redirectUri?: string): Promise<void> {
-    return call({ url: AuthUrl.signInWithMail, method: 'POST', data: { mail, redirectUri } });
+  async function signInWithMail(mail: string, redirectUri?: string, recommendationCode?: string): Promise<void> {
+    return call({ url: AuthUrl.signInWithMail, method: 'POST', data: { mail, redirectUri, recommendationCode } });
   }
 
   async function createLnurlAuth(): Promise<LnurlAuth> {
@@ -93,8 +122,10 @@ export function useAuth(): AuthInterface {
     specialCode?: string,
     wallet?: string,
     usedRef?: string,
+    walletType?: AuthWalletType,
+    recommendationCode?: string,
   ): SignUpParams {
-    const params: SignUpParams = { address, signature, key, usedRef, specialCode };
+    const params: SignUpParams = { address, signature, key, usedRef, specialCode, walletType, recommendationCode };
 
     if (wallet) {
       const walletId = parseInt(wallet);

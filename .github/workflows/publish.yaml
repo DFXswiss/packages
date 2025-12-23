@@ -3,9 +3,14 @@ on:
   push:
     branches:
       - develop
+      - main
 
 env:
-  NODE_VERSION: "16.x"
+  NODE_VERSION: "18.x"
+
+permissions:
+  id-token: write
+  contents: write
 
 jobs:
   publish:
@@ -18,10 +23,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-
-      - name: "Setup npm"
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > .npmrc
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install packages
         run: |
@@ -31,10 +33,22 @@ jobs:
         run: |
           npx lerna run build
 
-      - name: "Version and publish"
+      - name: "Version and publish (beta)"
+        if: github.ref == 'refs/heads/develop'
         run: |
           git config user.name "DFX"
           git config user.email "info@dfx.swiss"
+          npm config set provenance true
 
           npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
           npx lerna publish from-git --yes --dist-tag beta
+
+      - name: "Version and publish (stable)"
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "DFX"
+          git config user.email "info@dfx.swiss"
+          npm config set provenance true
+
+          npx lerna version --conventional-commits --conventional-graduate --yes
+          npx lerna publish from-git --yes
