@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useAuthContext } from '../contexts/auth.context';
 import { Session } from '../definitions/session';
 import { useAuth } from './auth.hook';
@@ -38,7 +38,7 @@ export function useApiSession(): ApiSessionInterface {
   const { isInitialized, isLoggedIn, session, setAuthToken } = useAuthContext();
   const { getSignMessage, authenticate, signIn, signUp } = useAuth();
 
-  async function createSession(
+  const createSession = useCallback(async (
     isSignUp: boolean,
     address: string,
     signature: string,
@@ -48,7 +48,7 @@ export function useApiSession(): ApiSessionInterface {
     ref?: string,
     walletType?: AuthWalletType,
     recommendationCode?: string,
-  ): Promise<string> {
+  ): Promise<string> => {
     return (
       isSignUp
         ? signUp(address, signature, key, discount, wallet, ref, walletType, recommendationCode)
@@ -57,9 +57,9 @@ export function useApiSession(): ApiSessionInterface {
       setAuthToken(accessToken);
       return accessToken;
     });
-  }
+  }, [signUp, signIn, setAuthToken]);
 
-  async function createSessionNew(
+  const createSessionNew = useCallback(async (
     address: string,
     signature: string,
     key?: string,
@@ -68,22 +68,22 @@ export function useApiSession(): ApiSessionInterface {
     ref?: string,
     walletType?: AuthWalletType,
     recommendationCode?: string,
-  ) {
+  ) => {
     return authenticate(address, signature, key, discount, wallet, ref, walletType, recommendationCode).then(
       ({ accessToken }) => {
         setAuthToken(accessToken);
         return accessToken;
       },
     );
-  }
+  }, [authenticate, setAuthToken]);
 
-  function updateSession(token: string) {
+  const updateSession = useCallback((token: string) => {
     setAuthToken(token);
-  }
+  }, [setAuthToken]);
 
-  async function deleteSession(): Promise<void> {
+  const deleteSession = useCallback(async (): Promise<void> => {
     setAuthToken(undefined);
-  }
+  }, [setAuthToken]);
 
   return useMemo(
     () => ({
@@ -96,6 +96,6 @@ export function useApiSession(): ApiSessionInterface {
       updateSession,
       deleteSession,
     }),
-    [isInitialized, isLoggedIn, session, setAuthToken, getSignMessage, signIn, signUp, authenticate],
+    [isInitialized, isLoggedIn, session, getSignMessage, createSession, createSessionNew, updateSession, deleteSession],
   );
 }

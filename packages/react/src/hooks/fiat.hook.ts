@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Fiat, FiatUrl } from '../definitions/fiat';
 import { useApi } from './api.hook';
 
@@ -14,18 +14,18 @@ export interface FiatInterface {
 export function useFiat(): FiatInterface {
   const { call } = useApi();
 
-  async function getCurrencies(): Promise<Fiat[]> {
+  const getCurrencies = useCallback(async (): Promise<Fiat[]> => {
     return call<Fiat[]>({ url: FiatUrl.get, method: 'GET' });
-  }
+  }, [call]);
 
-  function getCurrency(currencies: Fiat[] = [], identifier?: string): Fiat | undefined {
+  const getCurrency = useCallback((currencies: Fiat[] = [], identifier?: string): Fiat | undefined => {
     if (!identifier) return undefined;
 
     return (
       currencies.find((a) => a.id === +identifier) ??
       currencies.find((a) => a.name.toLowerCase() === identifier.toLowerCase())
     );
-  }
+  }, []);
 
   const definitions = {
     description: {
@@ -42,14 +42,20 @@ export function useFiat(): FiatInterface {
     } as Record<string, string>,
   };
 
+  const getDefaultCurrency = useCallback((currencies: Fiat[] = []) => currencies.find((f) => f.name === 'EUR'), []);
+
+  const toDescription = useCallback((currency: Fiat) => definitions.description[currency.name], []);
+
+  const toSymbol = useCallback((currency: Fiat) => definitions.symbol[currency.name], []);
+
   return useMemo(
     () => ({
       getCurrencies,
       getCurrency,
-      getDefaultCurrency: (currencies: Fiat[] = []) => currencies.find((f) => f.name === 'EUR'),
-      toDescription: (currency: Fiat) => definitions.description[currency.name],
-      toSymbol: (currency: Fiat) => definitions.symbol[currency.name],
+      getDefaultCurrency,
+      toDescription,
+      toSymbol,
     }),
-    [call],
+    [getCurrencies, getCurrency, getDefaultCurrency, toDescription, toSymbol],
   );
 }

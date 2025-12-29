@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useApi } from './api.hook';
 import { Language, LanguageUrl } from '../definitions/language';
 
@@ -10,15 +10,20 @@ export interface LanguageInterface {
 export function useLanguage(): LanguageInterface {
   const { call } = useApi();
 
-  async function getLanguages(): Promise<Language[]> {
+  const getLanguages = useCallback(async (): Promise<Language[]> => {
     return call<Language[]>({ url: LanguageUrl.get, method: 'GET' });
-  }
+  }, [call]);
+
+  const getDefaultLanguage = useCallback(
+    (languages: Language[] = []) => languages.find((f) => f.symbol === 'EN'),
+    [],
+  );
 
   return useMemo(
     () => ({
       getLanguages,
-      getDefaultLanguage: (languages: Language[] = []) => languages.find((f) => f.symbol === 'EN'),
+      getDefaultLanguage,
     }),
-    [call],
+    [getLanguages, getDefaultLanguage],
   );
 }

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useApi } from './api.hook';
 import {
   CreateSupportMessage,
@@ -20,42 +20,57 @@ export interface SupportInterface {
 export function useSupportChat(): SupportInterface {
   const { call } = useApi();
 
-  async function createIssue(request: CreateSupportIssue): Promise<SupportIssue> {
-    return call<SupportIssue>({
-      url: SupportUrl.supportIssue,
-      method: 'POST',
-      data: request,
-    });
-  }
+  const createIssue = useCallback(
+    async (request: CreateSupportIssue): Promise<SupportIssue> => {
+      return call<SupportIssue>({
+        url: SupportUrl.supportIssue,
+        method: 'POST',
+        data: request,
+      });
+    },
+    [call],
+  );
 
-  async function getIssues(): Promise<SupportIssue[]> {
+  const getIssues = useCallback(async (): Promise<SupportIssue[]> => {
     return call<SupportIssue[]>({
       url: SupportUrl.supportIssue,
       method: 'GET',
     });
-  }
+  }, [call]);
 
-  async function getIssue(issueUid: string, fromMessageId?: number): Promise<SupportIssue> {
-    return call<SupportIssue>({
-      url: SupportUrl.getIssue(issueUid, fromMessageId),
-      method: 'GET',
-    });
-  }
+  const getIssue = useCallback(
+    async (issueUid: string, fromMessageId?: number): Promise<SupportIssue> => {
+      return call<SupportIssue>({
+        url: SupportUrl.getIssue(issueUid, fromMessageId),
+        method: 'GET',
+      });
+    },
+    [call],
+  );
 
-  async function createMessage(issueUid: string, message: CreateSupportMessage): Promise<SupportMessage> {
-    return call<SupportMessage>({
-      url: SupportUrl.createMessage(issueUid),
-      method: 'POST',
-      data: message,
-    });
-  }
+  const createMessage = useCallback(
+    async (issueUid: string, message: CreateSupportMessage): Promise<SupportMessage> => {
+      return call<SupportMessage>({
+        url: SupportUrl.createMessage(issueUid),
+        method: 'POST',
+        data: message,
+      });
+    },
+    [call],
+  );
 
-  async function fetchFileData(issueUid: string, messageId: number): Promise<BlobContent> {
-    return call<BlobContent>({
-      url: SupportUrl.fetchFileData(issueUid, messageId),
-      method: 'GET',
-    });
-  }
+  const fetchFileData = useCallback(
+    async (issueUid: string, messageId: number): Promise<BlobContent> => {
+      return call<BlobContent>({
+        url: SupportUrl.fetchFileData(issueUid, messageId),
+        method: 'GET',
+      });
+    },
+    [call],
+  );
 
-  return useMemo(() => ({ createIssue, createMessage, getIssues, getIssue, fetchFileData }), [call]);
+  return useMemo(
+    () => ({ createIssue, createMessage, getIssues, getIssue, fetchFileData }),
+    [createIssue, createMessage, getIssues, getIssue, fetchFileData],
+  );
 }

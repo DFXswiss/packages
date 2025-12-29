@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Country, CountryUrl } from '../definitions/country';
 import { useApi } from './api.hook';
 
@@ -9,9 +9,9 @@ export interface CountryInterface {
 export function useCountry(): CountryInterface {
   const { call } = useApi();
 
-  async function getCountries(): Promise<Country[]> {
+  const getCountries = useCallback(async (): Promise<Country[]> => {
     return call<Country[]>({ url: CountryUrl.get, method: 'GET' });
-  }
+  }, [call]);
 
-  return useMemo(() => ({ getCountries }), [call]);
+  return useMemo(() => ({ getCountries }), [getCountries]);
 }
