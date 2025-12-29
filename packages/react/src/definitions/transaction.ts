@@ -188,13 +188,7 @@ export interface RefundFeeData {
   bank: number;
 }
 
-export interface TransactionRefundData {
-  expiryDate: Date;
-  fee: RefundFeeData;
-  refundAmount: number;
-  refundAsset: Asset | Fiat;
-  inputAmount: number;
-  inputAsset: Asset | Fiat;
+export interface RefundBankDetails {
   name?: string;
   address?: string;
   houseNumber?: string;
@@ -203,6 +197,17 @@ export interface TransactionRefundData {
   country?: string;
   iban?: string;
   bic?: string;
+}
+
+export interface TransactionRefundData {
+  expiryDate: Date;
+  fee: RefundFeeData;
+  refundAmount: number;
+  refundAsset: Asset | Fiat;
+  inputAmount: number;
+  inputAsset: Asset | Fiat;
+  refundTarget?: string;
+  bankDetails?: RefundBankDetails;
 }
 
 export interface TransactionHistoryQuery {
