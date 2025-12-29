@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ResponseType, useApi } from './api.hook';
 import {
   DetailTransaction,
@@ -35,82 +35,134 @@ export function useTransaction(): TransactionInterface {
   const { defaultUrl, call } = useApi();
   const { session } = useAuthContext();
 
-  async function getTransactions(): Promise<Transaction[]> {
+  // --- HELPER FUNCTIONS --- //
+  const createFilterParams = useCallback((query: TransactionHistoryQuery): string => {
+    const params = new URLSearchParams();
+
+    query.from && params.append('from', query.from.toISOString());
+    query.to && params.append('to', query.to.toISOString());
+    query.format && params.append('format', query.format);
+    query.userAddress && params.append('userAddress', query.userAddress);
+
+    ['buy', 'sell', 'staking', 'ref', 'lm'].forEach((key) => {
+      const value = query[key as keyof TransactionHistoryQuery];
+      if (typeof value === 'boolean') {
+        params.append(key, String(value));
+      }
+    });
+
+    return params.toString();
+  }, []);
+
+  const getTransactions = useCallback(async (): Promise<Transaction[]> => {
     if (!session) throw new Error('No active session');
 
     return call<Transaction[]>({ url: `${TransactionUrl.get}?userAddress=${session.address}`, method: 'GET' });
-  }
+  }, [call, session]);
 
-  async function getDetailTransactions(from?: Date, to?: Date): Promise<DetailTransaction[]> {
-    return call<Transaction[]>({
-      url: `${TransactionUrl.detail}?${createFilterParams({ from, to })}`,
-      method: 'GET',
-    });
-  }
+  const getDetailTransactions = useCallback(
+    async (from?: Date, to?: Date): Promise<DetailTransaction[]> => {
+      return call<Transaction[]>({
+        url: `${TransactionUrl.detail}?${createFilterParams({ from, to })}`,
+        method: 'GET',
+      });
+    },
+    [call, createFilterParams],
+  );
 
-  async function getTransactionByUid(uid: string): Promise<Transaction> {
-    return call<Transaction>({ url: `${TransactionUrl.single}?uid=${uid}`, method: 'GET' });
-  }
+  const getTransactionByUid = useCallback(
+    async (uid: string): Promise<Transaction> => {
+      return call<Transaction>({ url: `${TransactionUrl.single}?uid=${uid}`, method: 'GET' });
+    },
+    [call],
+  );
 
-  async function getTransactionByCkoId(ckoId: string): Promise<Transaction> {
-    return call<Transaction>({ url: `${TransactionUrl.single}?cko-id=${ckoId}`, method: 'GET' });
-  }
+  const getTransactionByCkoId = useCallback(
+    async (ckoId: string): Promise<Transaction> => {
+      return call<Transaction>({ url: `${TransactionUrl.single}?cko-id=${ckoId}`, method: 'GET' });
+    },
+    [call],
+  );
 
-  async function getTransactionByRequestId(requestId: number): Promise<Transaction> {
-    return call<Transaction>({ url: `${TransactionUrl.single}?request-id=${requestId}`, method: 'GET' });
-  }
+  const getTransactionByRequestId = useCallback(
+    async (requestId: number): Promise<Transaction> => {
+      return call<Transaction>({ url: `${TransactionUrl.single}?request-id=${requestId}`, method: 'GET' });
+    },
+    [call],
+  );
 
-  async function getTransactionCsv(from?: Date, to?: Date): Promise<string> {
-    return call<string>({
-      url: `${TransactionUrl.csv}?${createFilterParams({ from, to })}`,
-      method: 'PUT',
-      responseType: ResponseType.TEXT,
-    }).then((key) => `${defaultUrl}/transaction/csv?key=${key}`);
-  }
+  const getTransactionCsv = useCallback(
+    async (from?: Date, to?: Date): Promise<string> => {
+      return call<string>({
+        url: `${TransactionUrl.csv}?${createFilterParams({ from, to })}`,
+        method: 'PUT',
+        responseType: ResponseType.TEXT,
+      }).then((key) => `${defaultUrl}/transaction/csv?key=${key}`);
+    },
+    [call, createFilterParams, defaultUrl],
+  );
 
-  async function getTransactionInvoice(id: number): Promise<PdfDocument> {
-    return call<PdfDocument>({
-      url: `${TransactionUrl.invoice(id)}`,
-      method: 'PUT',
-    });
-  }
+  const getTransactionInvoice = useCallback(
+    async (id: number): Promise<PdfDocument> => {
+      return call<PdfDocument>({
+        url: `${TransactionUrl.invoice(id)}`,
+        method: 'PUT',
+      });
+    },
+    [call],
+  );
 
-  async function getTransactionReceipt(id: number): Promise<PdfDocument> {
-    return call<PdfDocument>({
-      url: `${TransactionUrl.receipt(id)}`,
-      method: 'PUT',
-    });
-  }
+  const getTransactionReceipt = useCallback(
+    async (id: number): Promise<PdfDocument> => {
+      return call<PdfDocument>({
+        url: `${TransactionUrl.receipt(id)}`,
+        method: 'PUT',
+      });
+    },
+    [call],
+  );
 
-  async function getTransactionHistory(type: ExportType, queryParams: TransactionHistoryQuery): Promise<string> {
-    if (!queryParams.userAddress) throw new Error('No user address provided');
+  const getTransactionHistory = useCallback(
+    async (type: ExportType, queryParams: TransactionHistoryQuery): Promise<string> => {
+      if (!queryParams.userAddress) throw new Error('No user address provided');
 
-    return call<string>({
-      url: `transaction/${type}?${createFilterParams(queryParams)}`,
-      method: 'GET',
-      responseType: ResponseType.TEXT,
-    });
-  }
+      return call<string>({
+        url: `transaction/${type}?${createFilterParams(queryParams)}`,
+        method: 'GET',
+        responseType: ResponseType.TEXT,
+      });
+    },
+    [call, createFilterParams],
+  );
 
-  async function getUnassignedTransactions(): Promise<UnassignedTransaction[]> {
+  const getUnassignedTransactions = useCallback(async (): Promise<UnassignedTransaction[]> => {
     return call<Transaction[]>({ url: `${TransactionUrl.unassigned}`, method: 'GET' });
-  }
+  }, [call]);
 
-  async function getTransactionTargets(): Promise<TransactionTarget[]> {
+  const getTransactionTargets = useCallback(async (): Promise<TransactionTarget[]> => {
     return call<TransactionTarget[]>({ url: `${TransactionUrl.target}`, method: 'GET' });
-  }
+  }, [call]);
 
-  async function setTransactionTarget(transactionId: number, buyId: number): Promise<void> {
-    return call({ url: `${TransactionUrl.setTarget(transactionId)}?buyId=${buyId}`, method: 'PUT' });
-  }
+  const setTransactionTarget = useCallback(
+    async (transactionId: number, buyId: number): Promise<void> => {
+      return call({ url: `${TransactionUrl.setTarget(transactionId)}?buyId=${buyId}`, method: 'PUT' });
+    },
+    [call],
+  );
 
-  async function getTransactionRefund(id: number): Promise<TransactionRefundData> {
-    return call<TransactionRefundData>({ url: `${TransactionUrl.refund(id)}`, method: 'GET' });
-  }
+  const getTransactionRefund = useCallback(
+    async (id: number): Promise<TransactionRefundData> => {
+      return call<TransactionRefundData>({ url: `${TransactionUrl.refund(id)}`, method: 'GET' });
+    },
+    [call],
+  );
 
-  async function setTransactionRefundTarget(id: number, target: TransactionRefundTarget): Promise<void> {
-    return call<void>({ url: `${TransactionUrl.refund(id)}`, method: 'PUT', data: target });
-  }
+  const setTransactionRefundTarget = useCallback(
+    async (id: number, target: TransactionRefundTarget): Promise<void> => {
+      return call<void>({ url: `${TransactionUrl.refund(id)}`, method: 'PUT', data: target });
+    },
+    [call],
+  );
 
   return useMemo(
     () => ({
@@ -129,26 +181,21 @@ export function useTransaction(): TransactionInterface {
       getTransactionRefund,
       setTransactionRefundTarget,
     }),
-    [call],
+    [
+      getTransactions,
+      getDetailTransactions,
+      getTransactionByUid,
+      getTransactionByCkoId,
+      getTransactionByRequestId,
+      getTransactionCsv,
+      getTransactionInvoice,
+      getTransactionReceipt,
+      getTransactionHistory,
+      getUnassignedTransactions,
+      getTransactionTargets,
+      setTransactionTarget,
+      getTransactionRefund,
+      setTransactionRefundTarget,
+    ],
   );
-
-  // --- HELPER FUNCTIONS --- //
-
-  function createFilterParams(query: TransactionHistoryQuery): string {
-    const params = new URLSearchParams();
-
-    query.from && params.append('from', query.from.toISOString());
-    query.to && params.append('to', query.to.toISOString());
-    query.format && params.append('format', query.format);
-    query.userAddress && params.append('userAddress', query.userAddress);
-
-    ['buy', 'sell', 'staking', 'ref', 'lm'].forEach((key) => {
-      const value = query[key as keyof TransactionHistoryQuery];
-      if (typeof value === 'boolean') {
-        params.append(key, String(value));
-      }
-    });
-
-    return params.toString();
-  }
 }

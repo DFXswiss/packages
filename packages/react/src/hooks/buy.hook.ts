@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useFiatContext } from '../contexts/fiat.context';
 import { Buy, BuyUrl, BuyPaymentInfo, PdfDocument } from '../definitions/buy';
 import { Fiat } from '../definitions/fiat';
@@ -15,17 +15,26 @@ export function useBuy(): BuyInterface {
   const { call } = useApi();
   const { currencies } = useFiatContext();
 
-  async function receiveFor(info: BuyPaymentInfo): Promise<Buy> {
-    return call<Buy>({ url: BuyUrl.receive, method: 'PUT', data: info });
-  }
+  const receiveFor = useCallback(
+    async (info: BuyPaymentInfo): Promise<Buy> => {
+      return call<Buy>({ url: BuyUrl.receive, method: 'PUT', data: info });
+    },
+    [call],
+  );
 
-  async function invoiceFor(txId: number): Promise<PdfDocument> {
-    return call<PdfDocument>({ url: BuyUrl.invoice(txId), method: 'PUT' });
-  }
+  const invoiceFor = useCallback(
+    async (txId: number): Promise<PdfDocument> => {
+      return call<PdfDocument>({ url: BuyUrl.invoice(txId), method: 'PUT' });
+    },
+    [call],
+  );
 
-  async function confirmFor(txId: number): Promise<void> {
-    return call<void>({ url: BuyUrl.confirm(txId), method: 'PUT' });
-  }
+  const confirmFor = useCallback(
+    async (txId: number): Promise<void> => {
+      return call<void>({ url: BuyUrl.confirm(txId), method: 'PUT' });
+    },
+    [call],
+  );
 
   return useMemo(
     () => ({
@@ -34,6 +43,6 @@ export function useBuy(): BuyInterface {
       confirmFor,
       currencies: currencies?.filter((c) => c.sellable || c.cardSellable || c.instantSellable),
     }),
-    [call, currencies],
+    [receiveFor, invoiceFor, confirmFor, currencies],
   );
 }

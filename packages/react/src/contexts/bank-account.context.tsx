@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { CreateBankAccount, UpdateBankAccount, useBankAccount } from '../hooks/bank-account.hook';
 import { BankAccount } from '../definitions/bank-account';
 import { useApiSession } from '../hooks/api-session.hook';
@@ -25,43 +25,7 @@ export function BankAccountContextProvider(props: PropsWithChildren): JSX.Elemen
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      setIsLoading(true);
-      getAccounts()
-        .then((accounts) => setBankAccounts(accounts.filter((a) => a.active)))
-        .catch((e) => {
-          setError(e.message);
-          setBankAccounts(undefined);
-        })
-        .finally(() => setIsLoading(false));
-    }
-  }, [isLoggedIn, session]);
-
-  async function addNewAccount(newAccount: CreateBankAccount): Promise<BankAccount> {
-    setIsLoading(true);
-    return createAccount(newAccount)
-      .then((b) => {
-        setBankAccounts((accounts) => {
-          const exists = accounts?.some((a) => a.active && a.id === b.id);
-          return exists ? accounts : (accounts ?? []).concat(b);
-        });
-        return b;
-      })
-      .finally(() => setIsLoading(false));
-  }
-
-  async function updateExistingAccount(id: number, changedAccount: UpdateBankAccount): Promise<BankAccount> {
-    setIsLoading(true);
-    return updateAccount(id, changedAccount)
-      .then((b) => {
-        setBankAccounts((accounts) => updateLocal(b, accounts));
-        return b;
-      })
-      .finally(() => setIsLoading(false));
-  }
-
-  function updateLocal(account: BankAccount, accounts?: BankAccount[]): BankAccount[] | undefined {
+  const updateLocal = useCallback((account: BankAccount, accounts?: BankAccount[]): BankAccount[] | undefined => {
     const index = accounts?.findIndex((b) => b.id === account.id);
     if (!accounts || index === undefined || index === -1) return undefined;
 
@@ -79,7 +43,43 @@ export function BankAccountContextProvider(props: PropsWithChildren): JSX.Elemen
 
     accounts[index] = account;
     return accounts;
-  }
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      setIsLoading(true);
+      getAccounts()
+        .then((accounts) => setBankAccounts(accounts.filter((a) => a.active)))
+        .catch((e) => {
+          setError(e.message);
+          setBankAccounts(undefined);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [isLoggedIn, getAccounts]);
+
+  const addNewAccount = useCallback(async (newAccount: CreateBankAccount): Promise<BankAccount> => {
+    setIsLoading(true);
+    return createAccount(newAccount)
+      .then((b) => {
+        setBankAccounts((accounts) => {
+          const exists = accounts?.some((a) => a.active && a.id === b.id);
+          return exists ? accounts : (accounts ?? []).concat(b);
+        });
+        return b;
+      })
+      .finally(() => setIsLoading(false));
+  }, [createAccount]);
+
+  const updateExistingAccount = useCallback(async (id: number, changedAccount: UpdateBankAccount): Promise<BankAccount> => {
+    setIsLoading(true);
+    return updateAccount(id, changedAccount)
+      .then((b) => {
+        setBankAccounts((accounts) => updateLocal(b, accounts));
+        return b;
+      })
+      .finally(() => setIsLoading(false));
+  }, [updateAccount, updateLocal]);
 
   const context: BankAccountInterface = useMemo(
     () => ({

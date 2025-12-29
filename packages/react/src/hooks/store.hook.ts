@@ -13,28 +13,14 @@ enum StoreKey {
 }
 
 export function useStore(): StoreInterface {
-  const { localStorage } = window;
-
-  function set(key: StoreKey, value: string) {
-    localStorage.setItem(key, value);
-  }
-
-  function get(key: StoreKey): string | undefined {
-    return localStorage.getItem(key) ?? undefined;
-  }
-
-  function remove(key: StoreKey) {
-    localStorage.removeItem(key);
-  }
-
   return useMemo(
     () => ({
       authTokenStore: {
-        get: () => get(StoreKey.AUTH_TOKEN),
-        set: (value: string) => set(StoreKey.AUTH_TOKEN, value),
-        remove: () => remove(StoreKey.AUTH_TOKEN),
+        get: () => window.localStorage.getItem(StoreKey.AUTH_TOKEN) ?? undefined,
+        set: (value: string) => window.localStorage.setItem(StoreKey.AUTH_TOKEN, value),
+        remove: () => window.localStorage.removeItem(StoreKey.AUTH_TOKEN),
       },
     }),
-    [localStorage],
+    [], // No dependencies - this object should be stable
   );
 }

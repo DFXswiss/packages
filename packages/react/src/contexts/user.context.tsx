@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { ApiKey, UpdateUser, User, UserAddress } from '../definitions/user';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
@@ -65,65 +65,65 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const userAddresses = user?.addresses.filter((a) => !a.isCustody) ?? [];
   const custodyAddresses = user?.addresses.filter((a) => a.isCustody) ?? [];
 
+  const reloadUser = useCallback(async (): Promise<void> => {
+    setIsUserLoading(true);
+    getUser()
+      .then(setUser)
+      .finally(() => setIsUserLoading(false));
+  }, [getUser]);
+
   useEffect(() => {
     if (isLoggedIn) {
       reloadUser();
     } else {
       setUser(undefined);
     }
-  }, [isLoggedIn, session]);
+  }, [isLoggedIn, reloadUser]);
 
-  async function reloadUser(): Promise<void> {
-    setIsUserLoading(true);
-    getUser()
-      .then(setUser)
-      .finally(() => setIsUserLoading(false));
-  }
-
-  async function updateUser(update: UpdateUser, linkAction?: () => void): Promise<void> {
+  const updateUser = useCallback(async (update: UpdateUser, linkAction?: () => void): Promise<void> => {
     if (!user) return;
 
     setIsUserUpdating(true);
     return updateUserApi(update, linkAction)
       .then(setUser)
       .finally(() => setIsUserUpdating(false));
-  }
+  }, [user, updateUserApi]);
 
-  async function updateMail(mail: string): Promise<void> {
+  const updateMail = useCallback(async (mail: string): Promise<void> => {
     return updateMailApi(mail);
-  }
+  }, [updateMailApi]);
 
-  async function verifyMail(token: string): Promise<void> {
+  const verifyMail = useCallback(async (token: string): Promise<void> => {
     if (!user) return;
 
     setIsUserUpdating(true);
     return verifyMailApi(token)
       .then(setUser)
       .finally(() => setIsUserUpdating(false));
-  }
+  }, [user, verifyMailApi]);
 
-  async function updatePhone(phone: string): Promise<void> {
+  const updatePhone = useCallback(async (phone: string): Promise<void> => {
     return updateUser({ phone });
-  }
+  }, [updateUser]);
 
-  async function updateLanguage(language: Language): Promise<void> {
+  const updateLanguage = useCallback(async (language: Language): Promise<void> => {
     return updateUser({ language });
-  }
+  }, [updateUser]);
 
-  async function updateCurrency(currency: Fiat): Promise<void> {
+  const updateCurrency = useCallback(async (currency: Fiat): Promise<void> => {
     return updateUser({ currency });
-  }
+  }, [updateUser]);
 
-  async function renameAddress(address: string, label: string): Promise<void> {
+  const renameAddress = useCallback(async (address: string, label: string): Promise<void> => {
     if (!user) return;
 
     setIsUserUpdating(true);
     return renameUserAddress(address, label)
       .then(setUser)
       .finally(() => setIsUserUpdating(false));
-  }
+  }, [user, renameUserAddress]);
 
-  async function changeAddress(address: string): Promise<void> {
+  const changeAddress = useCallback(async (address: string): Promise<void> => {
     if (!user) return;
 
     setIsUserUpdating(true);
@@ -131,9 +131,9 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       .then(({ accessToken }) => updateSession(accessToken))
       .then(() => setUser({ ...user, activeAddress: user.addresses.find((a) => a.address === address) }))
       .finally(() => setIsUserUpdating(false));
-  }
+  }, [user, changeUserAddress, updateSession]);
 
-  async function deleteAddress(address: string): Promise<void> {
+  const deleteAddress = useCallback(async (address: string): Promise<void> => {
     if (!user) return;
 
     const requiresFallback = address === user.activeAddress?.address;
@@ -149,15 +149,15 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
         reloadUser();
       }
     });
-  }
+  }, [user, deleteUserAddress, changeAddress, deleteSession, reloadUser]);
 
-  async function deleteAccount(): Promise<void> {
+  const deleteAccount = useCallback(async (): Promise<void> => {
     if (!user) return;
 
     return deleteUserAccount().then(deleteSession);
-  }
+  }, [user, deleteUserAccount, deleteSession]);
 
-  async function generateKeyCT(types?: TransactionFilterKey[]): Promise<ApiKey | undefined> {
+  const generateKeyCT = useCallback(async (types?: TransactionFilterKey[]): Promise<ApiKey | undefined> => {
     if (!user) return;
 
     setIsUserUpdating(true);
@@ -168,25 +168,25 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     } finally {
       setIsUserUpdating(false);
     }
-  }
+  }, [user, generateCTApiKey, getUser]);
 
-  async function deleteKeyCT(): Promise<void> {
+  const deleteKeyCT = useCallback(async (): Promise<void> => {
     if (!user) return;
 
     setIsUserUpdating(true);
     deleteCTApiKey()
       .then(() => getUser().then(setUser))
       .finally(() => setIsUserUpdating(false));
-  }
+  }, [user, deleteCTApiKey, getUser]);
 
-  async function updateFilterCT(types?: TransactionFilterKey[]): Promise<void> {
+  const updateFilterCT = useCallback(async (types?: TransactionFilterKey[]): Promise<void> => {
     if (!user) return;
 
     setIsUserUpdating(true);
     updateCTApiFilter(types)
       .then(() => getUser().then(setUser))
       .finally(() => setIsUserUpdating(false));
-  }
+  }, [user, updateCTApiFilter, getUser]);
 
   const context: UserInterface = useMemo(
     () => ({
@@ -215,7 +215,28 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       deleteKeyCT,
       updateFilterCT,
     }),
-    [user, refLink, isUserLoading, isUserUpdating, updateMail, updatePhone, reloadUser],
+    [
+      user,
+      refLink,
+      isUserLoading,
+      isUserUpdating,
+      updateMail,
+      verifyMail,
+      updatePhone,
+      updateLanguage,
+      updateCurrency,
+      userAddresses,
+      custodyAddresses,
+      renameAddress,
+      changeAddress,
+      deleteAddress,
+      deleteAccount,
+      addSpecialCode,
+      reloadUser,
+      generateKeyCT,
+      deleteKeyCT,
+      updateFilterCT,
+    ],
   );
 
   return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;

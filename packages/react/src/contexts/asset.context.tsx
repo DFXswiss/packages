@@ -25,7 +25,7 @@ export interface AssetContextProviderProps extends PropsWithChildren {
 }
 
 export function AssetContextProvider(props: AssetContextProviderProps): JSX.Element {
-  const { session } = useApiSession();
+  const { isLoggedIn } = useApiSession();
   const { getAssets: getApiAssets } = useAsset();
   const [assets, setAssets] = useState<Asset[]>([]);
   const [assetsLoading, setAssetsLoading] = useState<boolean>(false);
@@ -37,7 +37,7 @@ export function AssetContextProvider(props: AssetContextProviderProps): JSX.Elem
     getApiAssets(chains, props.includePrivateAssets ?? false)
       .then(updateAssets)
       .finally(() => setAssetsLoading(false));
-  }, [session]);
+  }, [isLoggedIn]);
 
   function updateAssets(assets: Asset[]) {
     setAssets(

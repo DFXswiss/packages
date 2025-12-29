@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useAuthContext } from '../contexts/auth.context';
 import { ApiError } from '../definitions/error';
 
@@ -35,26 +35,7 @@ export function useApi(): ApiInterface {
   const url = process.env.REACT_APP_API_URL ?? 'https://api.dfx.swiss';
   const defaultVersion = 'v1';
 
-  async function call<T>(config: CallConfig): Promise<T> {
-    config.token ??= getAuthToken();
-
-    return fetchFrom<T>(config).catch((error: ApiError) => {
-      if (error.statusCode === 401) {
-        if (config.token === getAuthToken()) {
-          setAuthToken(undefined);
-        } else {
-          return call<T>({
-            ...config,
-            token: getAuthToken(),
-          });
-        }
-      }
-
-      throw error;
-    });
-  }
-
-  async function fetchFrom<T>(config: CallConfig): Promise<T> {
+  const fetchFrom = useCallback(async function <T>(config: CallConfig): Promise<T> {
     const version = config.version ?? defaultVersion;
     const baseUrl = `${url}/${version}`;
     const responseType = config.responseType ?? ResponseType.JSON;
@@ -86,7 +67,27 @@ export function useApi(): ApiInterface {
         throw body;
       });
     });
-  }
+  }, [url, defaultVersion]);
+
+  const call = useCallback(async function callApi<T>(config: CallConfig): Promise<T> {
+    config.token ??= getAuthToken();
+
+    return fetchFrom<T>(config).catch((error: ApiError) => {
+      if (error.statusCode === 401) {
+        if (config.token === getAuthToken()) {
+          setAuthToken(undefined);
+        } else {
+          // Use named function to avoid stale closure
+          return callApi<T>({
+            ...config,
+            token: getAuthToken(),
+          });
+        }
+      }
+
+      throw error;
+    });
+  }, [getAuthToken, setAuthToken, fetchFrom]);
 
   function buildInit(
     method: 'GET' | 'PUT' | 'POST' | 'DELETE',
@@ -104,5 +105,5 @@ export function useApi(): ApiInterface {
     };
   }
 
-  return useMemo(() => ({ defaultUrl: `${url}/${defaultVersion}`, call }), [getAuthToken]);
+  return useMemo(() => ({ defaultUrl: `${url}/${defaultVersion}`, call }), [url, defaultVersion, call]);
 }

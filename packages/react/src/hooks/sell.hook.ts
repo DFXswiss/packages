@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useFiatContext } from '../contexts/fiat.context';
 import { Fiat } from '../definitions/fiat';
 import { Sell, SellPaymentInfo, SellUrl } from '../definitions/sell';
@@ -13,12 +13,15 @@ export function useSell(): SellInterface {
   const { call } = useApi();
   const { currencies } = useFiatContext();
 
-  async function receiveFor(info: SellPaymentInfo): Promise<Sell> {
-    return call<Sell>({ url: SellUrl.receive, method: 'PUT', data: info });
-  }
+  const receiveFor = useCallback(
+    async (info: SellPaymentInfo): Promise<Sell> => {
+      return call<Sell>({ url: SellUrl.receive, method: 'PUT', data: info });
+    },
+    [call],
+  );
 
   return useMemo(
     () => ({ receiveFor, currencies: currencies?.filter((c) => c.buyable || c.cardBuyable || c.instantBuyable) }),
-    [call, currencies],
+    [receiveFor, currencies],
   );
 }
