@@ -16,7 +16,7 @@ export function useSell(): SellInterface {
 
   const receiveFor = useCallback(
     async (info: SellPaymentInfo): Promise<Sell> => {
-      return call<Sell>({ url: SellUrl.receive, method: 'PUT', data: info });
+      return call<Sell>({ url: `${SellUrl.receive}?includeTx=true`, method: 'PUT', data: info });
     },
     [call],
   );
