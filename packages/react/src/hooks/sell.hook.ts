@@ -21,9 +21,12 @@ export function useSell(): SellInterface {
     [call],
   );
 
-  async function confirmSell(id: number, data: ConfirmSellData): Promise<void> {
-    return call<void>({ url: SellUrl.confirm.replace(':id', id.toString()), method: 'POST', data });
-  }
+  const confirmSell = useCallback(
+    async (id: number, data: ConfirmSellData): Promise<void> => {
+      return call<void>({ url: SellUrl.confirm.replace(':id', id.toString()), method: 'POST', data });
+    },
+    [call],
+  );
 
   return useMemo(
     () => ({ receiveFor, confirmSell, currencies: currencies?.filter((c) => c.buyable || c.cardBuyable || c.instantBuyable) }),
