@@ -1,11 +1,12 @@
 import { useCallback, useMemo } from 'react';
 import { useFiatContext } from '../contexts/fiat.context';
 import { Fiat } from '../definitions/fiat';
-import { Sell, SellPaymentInfo, SellUrl } from '../definitions/sell';
+import { Sell, SellPaymentInfo, SellUrl, ConfirmSellData } from '../definitions/sell';
 import { useApi } from './api.hook';
 
 export interface SellInterface {
   receiveFor: (info: SellPaymentInfo) => Promise<Sell>;
+  confirmSell: (id: number, data: ConfirmSellData) => Promise<void>;
   currencies?: Fiat[];
 }
 
@@ -20,8 +21,12 @@ export function useSell(): SellInterface {
     [call],
   );
 
+  async function confirmSell(id: number, data: ConfirmSellData): Promise<void> {
+    return call<void>({ url: SellUrl.confirm.replace(':id', id.toString()), method: 'POST', data });
+  }
+
   return useMemo(
-    () => ({ receiveFor, currencies: currencies?.filter((c) => c.buyable || c.cardBuyable || c.instantBuyable) }),
-    [receiveFor, currencies],
+    () => ({ receiveFor, confirmSell, currencies: currencies?.filter((c) => c.buyable || c.cardBuyable || c.instantBuyable) }),
+    [receiveFor, confirmSell, currencies],
   );
 }

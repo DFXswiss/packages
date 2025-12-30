@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef } from 'react';
 import { CallConfig, useApi } from './api.hook';
-import { Swap, SwapPaymentInfo, SwapUrl } from '../definitions/swap';
+import { Swap, SwapPaymentInfo, SwapUrl, ConfirmSwapData } from '../definitions/swap';
 import { useUser } from './user.hook';
 import { useUserContext } from '../contexts/user.context';
 import { ApiError } from '../definitions/error';
@@ -8,6 +8,7 @@ import { useSessionContext } from '../contexts/session.context';
 
 export interface SwapInterface {
   receiveFor: (info: SwapPaymentInfo) => Promise<Swap>;
+  confirmSwap: (id: number, data: ConfirmSwapData) => Promise<void>;
 }
 
 export function useSwap(): SwapInterface {
@@ -40,5 +41,12 @@ export function useSwap(): SwapInterface {
     [call, changeUserAddress, tokenStore, user?.activeAddress?.address],
   );
 
-  return useMemo(() => ({ receiveFor }), [receiveFor]);
+  const confirmSwap = useCallback(
+    async (id: number, data: ConfirmSwapData): Promise<void> => {
+      return call<void>({ url: SwapUrl.confirm.replace(':id', id.toString()), method: 'POST', data });
+    },
+    [call],
+  );
+
+  return useMemo(() => ({ receiveFor, confirmSwap }), [receiveFor, confirmSwap]);
 }
