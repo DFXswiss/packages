@@ -5,10 +5,11 @@ import { useUser } from './user.hook';
 import { useUserContext } from '../contexts/user.context';
 import { ApiError } from '../definitions/error';
 import { useSessionContext } from '../contexts/session.context';
+import { Transaction } from '../definitions/transaction';
 
 export interface SwapInterface {
   receiveFor: (info: SwapPaymentInfo) => Promise<Swap>;
-  confirmSwap: (id: number, data: ConfirmSwapData) => Promise<void>;
+  confirmSwap: (id: number, data: ConfirmSwapData) => Promise<Transaction>;
 }
 
 export function useSwap(): SwapInterface {
@@ -42,8 +43,8 @@ export function useSwap(): SwapInterface {
   );
 
   const confirmSwap = useCallback(
-    async (id: number, data: ConfirmSwapData): Promise<void> => {
-      return call<void>({ url: SwapUrl.confirm.replace(':id', id.toString()), method: 'POST', data });
+    async (id: number, data: ConfirmSwapData): Promise<Transaction> => {
+      return call<Transaction>({ url: SwapUrl.confirm.replace(':id', id.toString()), method: 'POST', data });
     },
     [call],
   );
