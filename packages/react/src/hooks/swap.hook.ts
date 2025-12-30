@@ -19,7 +19,7 @@ export function useSwap(): SwapInterface {
 
   const receiveFor = useCallback(
     async (info: SwapPaymentInfo): Promise<Swap> => {
-      const request = { url: SwapUrl.receive, method: 'PUT', data: info } as CallConfig;
+      const request = { url: `${SwapUrl.receive}?includeTx=true`, method: 'PUT', data: info } as CallConfig;
       const { receiverAddress } = info;
 
       if (receiverAddress && user?.activeAddress?.address !== receiverAddress) {
