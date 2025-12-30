@@ -1,9 +1,13 @@
 import { Asset } from './asset';
 import { Fees } from './fees';
 import { PriceStep } from './price-step';
+import { Eip7702DelegationData, UnsignedTx, Eip7702SignedData } from './sell';
 import { TransactionError } from './transaction';
 
-export const SwapUrl = { receive: 'swap/paymentInfos' };
+export const SwapUrl = {
+  receive: 'swap/paymentInfos',
+  confirm: 'swap/paymentInfos/:id/confirm'
+};
 
 export interface Swap {
   id: number;
@@ -26,6 +30,7 @@ export interface Swap {
   exactPrice: boolean;
   estimatedAmount: number;
   paymentRequest?: string;
+  depositTx?: UnsignedTx;
   isValid: boolean;
   error?: TransactionError;
 }
@@ -38,4 +43,9 @@ export interface SwapPaymentInfo {
   receiverAddress?: string;
   externalTransactionId?: string;
   exactPrice?: boolean;
+}
+
+export interface ConfirmSwapData {
+  signedTxHex?: string;
+  eip7702?: Eip7702SignedData;
 }
