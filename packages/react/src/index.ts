@@ -40,7 +40,7 @@ export { Bank } from './definitions/bank';
 export { Blockchain } from './definitions/blockchain';
 export { Buy, BuyPaymentInfo, PdfDocument } from './definitions/buy';
 export { Country } from './definitions/country';
-export { ApiError } from './definitions/error';
+export { ApiError, ApiException } from './definitions/error';
 export { Fiat } from './definitions/fiat';
 export { CustomFile } from './definitions/file';
 export {
