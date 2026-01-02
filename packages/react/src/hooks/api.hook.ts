@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useAuthContext } from '../contexts/auth.context';
-import { ApiError } from '../definitions/error';
+import { ApiError, ApiException } from '../definitions/error';
 
 export interface ApiInterface {
   defaultUrl: string;
@@ -46,10 +46,7 @@ export function useApi(): ApiInterface {
     )
       .catch((error: unknown) => {
         const message = error instanceof Error ? error.message : String(error);
-        throw {
-          statusCode: 0,
-          message: `Network error: ${message}`,
-        } as ApiError;
+        throw new ApiException(0, `Network error: ${message}`);
       })
       .then((response) => {
         if (response.status === config.specialHandling?.statusCode) {
@@ -71,9 +68,14 @@ export function useApi(): ApiInterface {
           }
         }
 
-        return response.json().then((body) => {
-          throw body;
-        });
+        return response.json()
+          .catch(() => null)
+          .then((body: Partial<ApiError> | null) => {
+            throw new ApiException(
+              body?.statusCode ?? response.status,
+              body?.message ?? response.statusText ?? 'Unknown error',
+            );
+          });
       });
   }, [url, defaultVersion]);
 
