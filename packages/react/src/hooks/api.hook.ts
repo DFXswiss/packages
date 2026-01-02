@@ -43,30 +43,38 @@ export function useApi(): ApiInterface {
     return fetch(
       `${baseUrl}/${config.url}`,
       buildInit(config.method, config.token === false ? undefined : config.token, config.data, config.noJson),
-    ).then((response) => {
-      if (response.status === config.specialHandling?.statusCode) {
-        config.specialHandling?.action?.();
-      }
-      if (response.ok) {
-        switch (responseType) {
-          case ResponseType.JSON:
-            return response.json().catch(() => undefined) as Promise<T>;
-          case ResponseType.TEXT:
-            return response.text() as Promise<T>;
-          case ResponseType.BLOB:
-            return response.blob().then((blob) => ({
-              data: blob,
-              headers: Object.fromEntries(response.headers.entries()),
-            })) as Promise<T>;
-          default:
-            throw new Error('Unknown response type');
+    )
+      .catch((error: unknown) => {
+        const message = error instanceof Error ? error.message : String(error);
+        throw {
+          statusCode: 0,
+          message: `Network error: ${message}`,
+        } as ApiError;
+      })
+      .then((response) => {
+        if (response.status === config.specialHandling?.statusCode) {
+          config.specialHandling?.action?.();
         }
-      }
+        if (response.ok) {
+          switch (responseType) {
+            case ResponseType.JSON:
+              return response.json().catch(() => undefined) as Promise<T>;
+            case ResponseType.TEXT:
+              return response.text() as Promise<T>;
+            case ResponseType.BLOB:
+              return response.blob().then((blob) => ({
+                data: blob,
+                headers: Object.fromEntries(response.headers.entries()),
+              })) as Promise<T>;
+            default:
+              throw new Error('Unknown response type');
+          }
+        }
 
-      return response.json().then((body) => {
-        throw body;
+        return response.json().then((body) => {
+          throw body;
+        });
       });
-    });
   }, [url, defaultVersion]);
 
   const call = useCallback(async function callApi<T>(config: CallConfig): Promise<T> {
