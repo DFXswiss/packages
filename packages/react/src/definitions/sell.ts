@@ -44,6 +44,8 @@ export interface UnsignedTx {
   gasPrice: string;
   gasLimit: string;
   eip7702?: Eip7702DelegationData;
+  usePaymaster?: boolean;
+  paymasterUrl?: string;
 }
 
 export interface Sell {
