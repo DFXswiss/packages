@@ -14,6 +14,7 @@ export interface Eip7702DelegationData {
   relayerAddress: string;
   delegationManagerAddress: string;
   delegatorAddress: string;
+  userNonce: number;
   domain: {
     name: string;
     version: string;
