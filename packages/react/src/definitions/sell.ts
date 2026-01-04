@@ -10,28 +10,17 @@ export const SellUrl = {
   confirm: 'sell/paymentInfos/:id/confirm'
 };
 
-export interface Eip7702DelegationData {
-  relayerAddress: string;
-  delegationManagerAddress: string;
-  delegatorAddress: string;
-  userNonce: number;
-  domain: {
-    name: string;
-    version: string;
-    chainId: number;
-    verifyingContract: string;
-  };
-  types: {
-    Delegation: Array<{ name: string; type: string }>;
-    Caveat: Array<{ name: string; type: string }>;
-  };
-  message: {
-    delegate: string;
-    delegator: string;
-    authority: string;
-    caveats: any[];
-    salt: string;
-  };
+// EIP-5792 wallet_sendCalls data for gasless transactions
+export interface Eip5792Call {
+  to: string;
+  data: string;
+  value: string;
+}
+
+export interface Eip5792Data {
+  paymasterUrl: string;
+  chainId: number;
+  calls: Eip5792Call[];
 }
 
 export interface UnsignedTx {
@@ -43,9 +32,7 @@ export interface UnsignedTx {
   nonce: number;
   gasPrice: string;
   gasLimit: string;
-  eip7702?: Eip7702DelegationData;
-  usePaymaster?: boolean;
-  paymasterUrl?: string;
+  eip5792?: Eip5792Data;
 }
 
 export interface Sell {
@@ -91,27 +78,7 @@ export interface SellPaymentInfo {
   exactPrice?: boolean;
 }
 
-export interface Eip7702Authorization {
-  chainId: number | string;
-  address: string;
-  nonce: number | string;
-  r: string;
-  s: string;
-  yParity: number;
-}
-
-export interface Eip7702SignedData {
-  delegation: {
-    delegate: string;
-    delegator: string;
-    authority: string;
-    salt: string;
-    signature: string;
-  };
-  authorization: Eip7702Authorization;
-}
-
 export interface ConfirmSellData {
   signedTxHex?: string;
-  eip7702?: Eip7702SignedData;
+  txHash?: string; // Transaction hash from wallet_sendCalls
 }
