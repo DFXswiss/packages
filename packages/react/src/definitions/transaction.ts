@@ -43,6 +43,8 @@ export enum TransactionError {
   VIDEO_IDENT_REQUIRED = 'VideoIdentRequired',
   IBAN_CURRENCY_MISMATCH = 'IbanCurrencyMismatch',
   TRADING_NOT_ALLOWED = 'TradingNotAllowed',
+  RECOMMENDATION_REQUIRED = 'RecommendationRequired',
+  EMAIL_REQUIRED = 'EmailRequired',
 }
 
 export enum TransactionType {
