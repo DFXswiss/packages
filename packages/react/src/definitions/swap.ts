@@ -1,7 +1,7 @@
 import { Asset } from './asset';
 import { Fees } from './fees';
 import { PriceStep } from './price-step';
-import { Eip7702DelegationData, UnsignedTx, Eip7702SignedData } from './sell';
+import { UnsignedTx } from './sell';
 import { TransactionError } from './transaction';
 
 export const SwapUrl = {
@@ -47,5 +47,5 @@ export interface SwapPaymentInfo {
 
 export interface ConfirmSwapData {
   signedTxHex?: string;
-  eip7702?: Eip7702SignedData;
+  txHash?: string; // Transaction hash from wallet_sendCalls
 }

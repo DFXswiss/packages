@@ -136,7 +136,7 @@ export {
   GoodsCategory,
   isStepDone,
 } from './definitions/kyc';
-export { Sell, SellPaymentInfo, Beneficiary, UnsignedTx, Eip7702DelegationData, Eip7702SignedData, Eip7702Authorization, ConfirmSellData } from './definitions/sell';
+export { Sell, SellPaymentInfo, Beneficiary, UnsignedTx, Eip5792Data, Eip5792Call, ConfirmSellData } from './definitions/sell';
 export { Swap, SwapPaymentInfo, ConfirmSwapData } from './definitions/swap';
 export { Session } from './definitions/session';
 export {
