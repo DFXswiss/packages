@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.228 (2026-01-04)
+
+
+### Features
+
+* add RECOMMENDATION_REQUIRED and EMAIL_REQUIRED transaction errors ([#121](https://github.com/DFXswiss/packages/issues/121)) ([d4eb885](https://github.com/DFXswiss/packages/commit/d4eb885d62053dd146732ee42cb24f6bc116d4b9))
+
+
+
+
+
 # 1.3.0-beta.227 (2026-01-04)
 
 **Note:** Version bump only for package @dfx.swiss/react-components
