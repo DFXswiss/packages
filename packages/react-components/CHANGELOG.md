@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.230 (2026-01-05)
+
+
+### Bug Fixes
+
+* correct bank-refund endpoint URL ([#123](https://github.com/DFXswiss/packages/issues/123)) ([ea3b252](https://github.com/DFXswiss/packages/commit/ea3b2528784cd372954e5387e0404d866710ba21))
+
+
+
+
+
 # 1.3.0-beta.229 (2026-01-05)
 
 
