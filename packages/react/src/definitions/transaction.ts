@@ -6,7 +6,7 @@ export const TransactionUrl = {
   unassigned: 'transaction/unassigned',
   target: 'transaction/target',
   refund: (id: number) => `transaction/${id}/refund`,
-  bankRefund: (id: number) => `transaction/${id}/bank-refund`,
+  bankRefund: (id: number) => `transaction/${id}/refund/bank`,
   setTarget: (id: number) => `transaction/${id}/target`,
   invoice: (id: number) => `transaction/${id}/invoice`,
   receipt: (id: number) => `transaction/${id}/receipt`,
