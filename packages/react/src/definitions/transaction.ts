@@ -6,6 +6,7 @@ export const TransactionUrl = {
   unassigned: 'transaction/unassigned',
   target: 'transaction/target',
   refund: (id: number) => `transaction/${id}/refund`,
+  bankRefund: (id: number) => `transaction/${id}/bank-refund`,
   setTarget: (id: number) => `transaction/${id}/target`,
   invoice: (id: number) => `transaction/${id}/invoice`,
   receipt: (id: number) => `transaction/${id}/receipt`,
@@ -226,6 +227,16 @@ export interface TransactionHistoryQuery {
 
 export interface TransactionRefundTarget {
   refundTarget: string;
+}
+
+export interface BankRefundData {
+  refundTarget: string;
+  name: string;
+  address: string;
+  houseNumber?: string;
+  zip: string;
+  city: string;
+  country: string;
 }
 
 export type TransactionFilterKey = keyof TransactionFilter;

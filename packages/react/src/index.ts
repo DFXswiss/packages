@@ -170,8 +170,10 @@ export {
   TransactionTarget,
   TransactionFilter,
   RefundFeeData,
+  RefundBankDetails,
   TransactionRefundData,
   TransactionRefundTarget,
+  BankRefundData,
   TransactionFilterKey,
 } from './definitions/transaction';
 export { Fees } from './definitions/fees';
