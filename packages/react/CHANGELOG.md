@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.229 (2026-01-05)
+
+
+### Features
+
+* add setTransactionBankRefund for creditor data submission ([#122](https://github.com/DFXswiss/packages/issues/122)) ([0eec49e](https://github.com/DFXswiss/packages/commit/0eec49ea01d80cd95716f2593f6e93d26ead3773))
+
+
+
+
+
 # 1.3.0-beta.228 (2026-01-04)
 
 
