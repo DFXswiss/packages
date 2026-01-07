@@ -41,6 +41,7 @@ export enum TransactionError {
   KYC_REQUIRED_INSTANT = 'KycRequiredInstant',
   LIMIT_EXCEEDED = 'LimitExceeded',
   NATIONALITY_NOT_ALLOWED = 'NationalityNotAllowed',
+  PAYMENT_METHOD_NOT_ALLOWED = 'PaymentMethodNotAllowed',
   VIDEO_IDENT_REQUIRED = 'VideoIdentRequired',
   IBAN_CURRENCY_MISMATCH = 'IbanCurrencyMismatch',
   TRADING_NOT_ALLOWED = 'TradingNotAllowed',
