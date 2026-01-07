@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.231 (2026-01-07)
+
+
+### Features
+
+* Added transaction error ([31b9e8e](https://github.com/DFXswiss/packages/commit/31b9e8eb2c20b750e07aad8471d78b344a3be4bd))
+
+
+
+
+
 # 1.3.0-beta.230 (2026-01-05)
 
 
