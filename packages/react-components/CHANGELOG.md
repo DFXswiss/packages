@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.232 (2026-01-08)
+
+
+### Bug Fixes
+
+* single refund endpoint ([dc9f021](https://github.com/DFXswiss/packages/commit/dc9f021dc151d339857df658b61e9f5b77bdbea7))
+
+
+
+
+
 # 1.3.0-beta.231 (2026-01-07)
 
 
