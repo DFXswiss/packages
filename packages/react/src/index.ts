@@ -136,7 +136,15 @@ export {
   GoodsCategory,
   isStepDone,
 } from './definitions/kyc';
-export { Sell, SellPaymentInfo, Beneficiary, UnsignedTx, Eip5792Data, Eip5792Call, ConfirmSellData } from './definitions/sell';
+export {
+  Sell,
+  SellPaymentInfo,
+  Beneficiary,
+  UnsignedTx,
+  Eip5792Data,
+  Eip5792Call,
+  ConfirmSellData,
+} from './definitions/sell';
 export { Swap, SwapPaymentInfo, ConfirmSwapData } from './definitions/swap';
 export { Session } from './definitions/session';
 export {
@@ -173,7 +181,7 @@ export {
   RefundBankDetails,
   TransactionRefundData,
   TransactionRefundTarget,
-  BankRefundData,
+  CreditorData,
   TransactionFilterKey,
 } from './definitions/transaction';
 export { Fees } from './definitions/fees';

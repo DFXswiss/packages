@@ -226,18 +226,18 @@ export interface TransactionHistoryQuery {
   lm?: boolean;
 }
 
-export interface TransactionRefundTarget {
-  refundTarget: string;
-}
-
-export interface BankRefundData {
-  refundTarget: string;
+export interface CreditorData {
   name: string;
   address: string;
   houseNumber?: string;
   zip: string;
   city: string;
   country: string;
+}
+
+export interface TransactionRefundTarget {
+  refundTarget: string;
+  creditorData?: CreditorData;
 }
 
 export type TransactionFilterKey = keyof TransactionFilter;

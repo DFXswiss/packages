@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { ResponseType, useApi } from './api.hook';
 import {
-  BankRefundData,
   DetailTransaction,
   ExportType,
   Transaction,
@@ -30,7 +29,6 @@ export interface TransactionInterface {
   setTransactionTarget: (transactionId: number, buyId: number) => Promise<void>;
   getTransactionRefund: (id: number) => Promise<TransactionRefundData>;
   setTransactionRefundTarget: (id: number, target: TransactionRefundTarget) => Promise<void>;
-  setTransactionBankRefund: (id: number, data: BankRefundData) => Promise<void>;
 }
 
 export function useTransaction(): TransactionInterface {
@@ -166,13 +164,6 @@ export function useTransaction(): TransactionInterface {
     [call],
   );
 
-  const setTransactionBankRefund = useCallback(
-    async (id: number, data: BankRefundData): Promise<void> => {
-      return call<void>({ url: `${TransactionUrl.bankRefund(id)}`, method: 'PUT', data });
-    },
-    [call],
-  );
-
   return useMemo(
     () => ({
       getTransactions,
@@ -189,7 +180,6 @@ export function useTransaction(): TransactionInterface {
       setTransactionTarget,
       getTransactionRefund,
       setTransactionRefundTarget,
-      setTransactionBankRefund,
     }),
     [
       getTransactions,
@@ -206,7 +196,6 @@ export function useTransaction(): TransactionInterface {
       setTransactionTarget,
       getTransactionRefund,
       setTransactionRefundTarget,
-      setTransactionBankRefund,
     ],
   );
 }
