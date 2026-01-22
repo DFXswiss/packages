@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.234 (2026-01-22)
+
+
+### Features
+
+* juice icon ([5f0b2fa](https://github.com/DFXswiss/packages/commit/5f0b2fa3ba2dd17f55b8087208cfabb98052150e))
+
+
+
+
+
 # 1.3.0-beta.233 (2026-01-19)
 
 **Note:** Version bump only for package @dfx.swiss/react-components
