@@ -19,6 +19,7 @@ export enum Blockchain {
   RAILGUN = 'Railgun',
   SOLANA = 'Solana',
   TRON = 'Tron',
+  CITREA = 'Citrea',
   CITREA_TESTNET = 'CitreaTestnet',
 
   DEFICHAIN = 'DeFiChain',
