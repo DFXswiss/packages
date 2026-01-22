@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.235 (2026-01-22)
+
+
+### Features
+
+* Citrea blockchain ([f3feb1a](https://github.com/DFXswiss/packages/commit/f3feb1a3ba8fdb5c385ead6335b64bdd6a86f69a))
+
+
+
+
+
 # 1.3.0-beta.234 (2026-01-22)
 
 
