@@ -8,7 +8,7 @@ export const TransactionUrl = {
   refund: (id: number) => `transaction/${id}/refund`,
   bankRefund: (id: number) => `transaction/${id}/refund/bank`,
   setTarget: (id: number) => `transaction/${id}/target`,
-  invoice: (id: number) => `transaction/${id}/invoice`,
+  invoice: (id: number | string) => `transaction/${id}/invoice`,
   receipt: (id: number) => `transaction/${id}/receipt`,
 };
 

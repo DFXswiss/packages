@@ -21,7 +21,7 @@ export interface TransactionInterface {
   getTransactionByCkoId: (ckoId: string) => Promise<Transaction>;
   getTransactionByRequestId: (requestId: number) => Promise<Transaction>;
   getTransactionCsv: (from?: Date, to?: Date) => Promise<string>;
-  getTransactionInvoice: (id: number) => Promise<PdfDocument>;
+  getTransactionInvoice: (id: number | string) => Promise<PdfDocument>;
   getTransactionReceipt: (id: number) => Promise<PdfDocument>;
   getTransactionHistory: (type: ExportType, queryParams: TransactionHistoryQuery) => Promise<string>;
   getUnassignedTransactions: () => Promise<UnassignedTransaction[]>;
@@ -103,7 +103,7 @@ export function useTransaction(): TransactionInterface {
   );
 
   const getTransactionInvoice = useCallback(
-    async (id: number): Promise<PdfDocument> => {
+    async (id: number | string): Promise<PdfDocument> => {
       return call<PdfDocument>({
         url: `${TransactionUrl.invoice(id)}`,
         method: 'PUT',
