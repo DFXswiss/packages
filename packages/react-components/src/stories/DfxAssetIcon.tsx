@@ -75,6 +75,7 @@ export enum AssetIconVariant {
   JUSD = 'JUSD',
   JUICE = 'JUICE',
   PRE_JUICE = 'PreJUICE',
+  FIRO = 'FIRO',
 
   EUR = 'EUR',
   USD = 'USD',
@@ -165,6 +166,7 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.JUSD]: ({ forceColor }) => <DfxAssetIconJUSD forceColor={forceColor} />,
   [AssetIconVariant.JUICE]: ({ forceColor }) => <DfxAssetIconJUICE forceColor={forceColor} />,
   [AssetIconVariant.PRE_JUICE]: ({ forceColor }) => <DfxAssetIconJUICE forceColor={forceColor} />,
+  [AssetIconVariant.FIRO]: ({ forceColor }) => <DfxAssetIconFIRO forceColor={forceColor} />,
 
   [AssetIconVariant.EUR]: ({ forceColor }) => <DfxAssetIconEUR forceColor={forceColor} />,
   [AssetIconVariant.USD]: ({ forceColor }) => <DfxAssetIconUSD forceColor={forceColor} />,
@@ -5493,6 +5495,32 @@ function DfxAssetIconJUICE({ forceColor }: BaseAssetIconProps) {
           <stop offset={1} stopColor="#F57F00" />
         </linearGradient>
       </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconFIRO({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 150 150"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <style>{`.firo-color{fill:${forceColor ?? '#9b1c2e'}}`}</style>
+      </defs>
+      <path d="M0 .2h150v150H0Z" style={{ fill: 'none' }} transform="translate(0 -.2)" />
+      <path
+        d="M49 101.45a3.88 3.88 0 0 0 3.46-2.09l9.2-17.47H47.44a3.9 3.9 0 0 1-3.9-3.9v-7.83a3.9 3.9 0 0 1 3.9-3.9h22.49l17.47-33.1a3.94 3.94 0 0 1 3.46-2.09h29.44a62.58 62.58 0 0 0-101.7 70.42H49Z"
+        className="firo-color"
+      />
+      <path
+        d="M100.66 46.66a3.85 3.85 0 0 0-3.45 2.14L88 66.22h14.22a3.9 3.9 0 0 1 3.89 3.9v7.83a3.9 3.9 0 0 1-3.89 3.9H79.73l-17.47 33.09a3.91 3.91 0 0 1-3.46 2.09H29.36a62.58 62.58 0 0 0 101.71-70.41h-30.41Z"
+        className="firo-color"
+      />
     </svg>
   );
 }
