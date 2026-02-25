@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.239 (2026-02-25)
+
+
+### Features
+
+* added FIRO icon ([b0fc8e1](https://github.com/DFXswiss/packages/commit/b0fc8e1cb545849b0e56df7b7d8d550d907e82aa))
+
+
+
+
+
 # 1.3.0-beta.238 (2026-02-25)
 
 
