@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.238 (2026-02-25)
+
+
+### Features
+
+* add Firo blockchain support ([#129](https://github.com/DFXswiss/packages/issues/129)) ([388990d](https://github.com/DFXswiss/packages/commit/388990dc46573abff2e28e131e4aafb146eee7c3))
+
+
+
+
+
 # 1.3.0-beta.237 (2026-02-18)
 
 **Note:** Version bump only for package @dfx.swiss/react-components
