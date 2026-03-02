@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.240 (2026-03-02)
+
+
+### Features
+
+* add Internet Computer (ICP) blockchain support ([#130](https://github.com/DFXswiss/packages/issues/130)) ([9d01c90](https://github.com/DFXswiss/packages/commit/9d01c90187dfccdc57ddc8c54ee5457b52b9e3ff))
+
+
+
+
+
 # 1.3.0-beta.239 (2026-02-25)
 
 
