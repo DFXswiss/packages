@@ -5,6 +5,7 @@ export enum Blockchain {
   FIRO = 'Firo',
   MONERO = 'Monero',
   ZANO = 'Zano',
+  INTERNET_COMPUTER = 'InternetComputer',
   ETHEREUM = 'Ethereum',
   SEPOLIA = 'Sepolia',
   BINANCE_SMART_CHAIN = 'BinanceSmartChain',
