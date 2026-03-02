@@ -76,6 +76,7 @@ export enum AssetIconVariant {
   JUICE = 'JUICE',
   PRE_JUICE = 'PreJUICE',
   FIRO = 'FIRO',
+  ICP = 'ICP',
 
   EUR = 'EUR',
   USD = 'USD',
@@ -167,6 +168,7 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.JUICE]: ({ forceColor }) => <DfxAssetIconJUICE forceColor={forceColor} />,
   [AssetIconVariant.PRE_JUICE]: ({ forceColor }) => <DfxAssetIconJUICE forceColor={forceColor} />,
   [AssetIconVariant.FIRO]: ({ forceColor }) => <DfxAssetIconFIRO forceColor={forceColor} />,
+  [AssetIconVariant.ICP]: ({ forceColor }) => <DfxAssetIconICP forceColor={forceColor} />,
 
   [AssetIconVariant.EUR]: ({ forceColor }) => <DfxAssetIconEUR forceColor={forceColor} />,
   [AssetIconVariant.USD]: ({ forceColor }) => <DfxAssetIconUSD forceColor={forceColor} />,
@@ -5520,6 +5522,42 @@ function DfxAssetIconFIRO({ forceColor }: BaseAssetIconProps) {
       <path
         d="M100.66 46.66a3.85 3.85 0 0 0-3.45 2.14L88 66.22h14.22a3.9 3.9 0 0 1 3.89 3.9v7.83a3.9 3.9 0 0 1-3.89 3.9H79.73l-17.47 33.09a3.91 3.91 0 0 1-3.46 2.09H29.36a62.58 62.58 0 0 0 101.71-70.41h-30.41Z"
         className="firo-color"
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconICP({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 500 500"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="icp_a" x1={314.25} y1={145.37} x2={482.63} y2={318.83} gradientUnits="userSpaceOnUse">
+          <stop offset={0.21} stopColor={forceColor ?? '#F15A24'} />
+          <stop offset={0.68} stopColor={forceColor ?? '#FBB03B'} />
+        </linearGradient>
+        <linearGradient id="icp_b" x1={184.81} y1={354.67} x2={16.43} y2={181.21} gradientUnits="userSpaceOnUse">
+          <stop offset={0.21} stopColor={forceColor ?? '#ED1E79'} />
+          <stop offset={0.89} stopColor={forceColor ?? '#522785'} />
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#icp_a)"
+        d="M378.3,127.2c-28,0-58.5,14.9-90.7,44.3c-15.3,13.8-28.6,28.8-38.4,40.7c0,0,15.7,17.7,32.9,36.6 c9.3-11.5,22.7-27.1,38.2-41.1c28.6-26.2,47.3-31.5,58.1-31.5c40.3,0,72.9,33,72.9,73.9c0,40.5-32.6,73.5-72.9,73.9 c-1.9,0-4.2-0.2-7-0.9c11.7,5.3,24.4,9.2,36.2,9.2c73.8,0,88.2-49.9,89-53.5c2.1-9.2,3.4-18.7,3.4-28.6 C499.8,182.4,445.3,127.2,378.3,127.2z"
+      />
+      <path
+        fill="url(#icp_b)"
+        d="M120.8,372.8c28,0,58.5-14.9,90.7-44.3 c15.3-13.8,28.6-28.8,38.4-40.7c0,0-15.7-17.7-32.9-36.6c-9.3,11.5-22.7,27.1-38.2,41.1c-28.6,26-47.5,31.5-58.1,31.5 c-40.3,0-72.9-33-72.9-73.9c0-40.5,32.6-73.5,72.9-73.9c1.9,0,4.2,0.2,7,0.9c-11.7-5.3-24.4-9.2-36.2-9.2c-73.8,0-88.2,49.9-89,53.5 c-2.1,9.2-3.4,18.7-3.4,28.6C-0.9,317.6,53.6,372.8,120.8,372.8z"
+      />
+      <path
+        fill={forceColor ?? '#29ABE2'}
+        d="M176.9,208.8c-8.1-7.7-47.5-39-85.2-40.1c-67.2-1.7-87,46.2-88.7,52.4c12.9-53.7,60.9-93.7,118-93.9 c46.5,0,93.5,44.7,128.3,85c0.1-0.1,0.1-0.1,0.2-0.2c0,0,15.7,17.7,32.9,36.6c0,0,19.5,22.6,40.3,42.4c8.1,7.7,47.3,38.6,85,39.6 c69.1,1.9,88.2-48.6,89.2-52.4c-12.7,53.9-60.8,94.2-118.1,94.4c-46.5,0-93.6-44.7-128.5-85c-0.1,0.1-0.1,0.2-0.2,0.2 c0,0-15.7-17.7-32.9-36.6C217.1,251.2,197.6,228.6,176.9,208.8z"
       />
     </svg>
   );

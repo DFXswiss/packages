@@ -71,6 +71,7 @@ export const PaymentLinkBlockchain = {
   SPARK: Blockchain.SPARK,
   BITCOIN: Blockchain.BITCOIN,
   FIRO: Blockchain.FIRO,
+  INTERNET_COMPUTER: Blockchain.INTERNET_COMPUTER,
   MONERO: Blockchain.MONERO,
   OPTIMISM: Blockchain.OPTIMISM,
   POLYGON: Blockchain.POLYGON,
