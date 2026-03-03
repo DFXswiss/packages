@@ -8,6 +8,7 @@ interface DfxAssetIconProps {
 
 export enum AssetIconVariant {
   USDT = 'USDT',
+  USDTe = 'USDT.e',
   BNB = 'BNB',
   DFI = 'DFI',
   USDC = 'USDC',
@@ -18,6 +19,7 @@ export enum AssetIconVariant {
   DAI = 'DAI',
   BTC = 'BTC',
   WBTC = 'WBTC',
+  WBTCe = 'WBTC.e',
   BTCB = 'BTCB',
   BBTC = 'BBTC',
   kBTC = 'kBTC',
@@ -100,6 +102,7 @@ const SIZE_MAPS: Record<AssetIconSize, string> = {
 
 const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => ReactElement> = {
   [AssetIconVariant.USDT]: ({ forceColor }) => <DfxAssetIconUSDT forceColor={forceColor} />,
+  [AssetIconVariant.USDTe]: ({ forceColor }) => <DfxAssetIconUSDT forceColor={forceColor} />,
   [AssetIconVariant.BNB]: ({ forceColor }) => <DfxAssetIconBNB forceColor={forceColor} />,
   [AssetIconVariant.DFI]: ({ forceColor }) => <DfxAssetIconDFI forceColor={forceColor} />,
   [AssetIconVariant.USDC]: ({ forceColor }) => <DfxAssetIconUSDC forceColor={forceColor} />,
@@ -110,6 +113,7 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.DAI]: ({ forceColor }) => <DfxAssetIconDAI forceColor={forceColor} />,
   [AssetIconVariant.BTC]: ({ forceColor }) => <DfxAssetIconBTC forceColor={forceColor} />,
   [AssetIconVariant.WBTC]: ({ forceColor }) => <DfxAssetIconWBTC forceColor={forceColor} />,
+  [AssetIconVariant.WBTCe]: ({ forceColor }) => <DfxAssetIconWBTC forceColor={forceColor} />,
   [AssetIconVariant.BTCB]: ({ forceColor }) => <DfxAssetIconBTCB forceColor={forceColor} />,
   [AssetIconVariant.BBTC]: ({ forceColor }) => <DfxAssetIconBTC forceColor={forceColor} />,
   [AssetIconVariant.kBTC]: ({ forceColor }) => <DfxAssetIconKBTC forceColor={forceColor} />,
