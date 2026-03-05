@@ -18,6 +18,7 @@ export const UserUrl = {
   changeAddress: 'user/change',
   specialCodes: 'user/specialCodes',
   profile: 'user/profile',
+  updatePhone: 'user/phone',
 };
 
 export enum UserStatus {
@@ -109,7 +110,6 @@ export interface User {
 }
 
 export interface UpdateUser {
-  phone?: string;
   language?: Language;
   currency?: Fiat;
   preferredPhoneTimes?: PhoneCallPreferredTime[];
