@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.244 (2026-03-06)
+
+
+### Reverts
+
+* Revert "feat: use dedicated PUT /v2/user/phone endpoint for phone updates (#131)" ([2921b27](https://github.com/DFXswiss/packages/commit/2921b27f4a850f49beb6019be4a62a87f75bd8b2)), closes [#131](https://github.com/DFXswiss/packages/issues/131)
+
+
+
+
+
 # 1.3.0-beta.243 (2026-03-06)
 
 **Note:** Version bump only for package @dfx.swiss/react
