@@ -44,7 +44,6 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const {
     getUser,
     updateUser: updateUserApi,
-    updatePhone: updatePhoneApi,
     updateMail: updateMailApi,
     verifyMail: verifyMailApi,
     addSpecialCode,
@@ -104,13 +103,8 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   }, [user, verifyMailApi]);
 
   const updatePhone = useCallback(async (phone: string): Promise<void> => {
-    if (!user) return;
-
-    setIsUserUpdating(true);
-    return updatePhoneApi(phone)
-      .then(setUser)
-      .finally(() => setIsUserUpdating(false));
-  }, [user, updatePhoneApi]);
+    return updateUser({ phone });
+  }, [updateUser]);
 
   const updateLanguage = useCallback(async (language: Language): Promise<void> => {
     return updateUser({ language });

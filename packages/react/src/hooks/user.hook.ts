@@ -9,7 +9,6 @@ export interface UserInterface {
   getRef: () => Promise<Referral | undefined>;
   getProfile: () => Promise<UserProfile | undefined>;
   updateUser: (user?: Partial<User>, userLinkAction?: () => void) => Promise<User | undefined>;
-  updatePhone: (phone: string) => Promise<User | undefined>;
   updateMail: (mail: string) => Promise<void>;
   verifyMail: (token: string) => Promise<User>;
   changeUserAddress: (address: string) => Promise<SignIn>;
@@ -48,15 +47,6 @@ export function useUser(): UserInterface {
         action: userLinkAction,
         statusCode: 202,
       },
-    });
-  }
-
-  async function updatePhone(phone: string): Promise<User | undefined> {
-    return call<User>({
-      url: UserUrl.updatePhone,
-      version: 'v2',
-      method: 'PUT',
-      data: { phone },
     });
   }
 
@@ -135,7 +125,6 @@ export function useUser(): UserInterface {
       getRef,
       getProfile,
       updateUser,
-      updatePhone,
       updateMail,
       verifyMail,
       changeUserAddress,
