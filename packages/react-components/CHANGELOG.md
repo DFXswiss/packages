@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.245 (2026-03-10)
+
+
+### Features
+
+* add asset icons for ckBTC, VEUR and VCHF ([#134](https://github.com/DFXswiss/packages/issues/134)) ([b7a7652](https://github.com/DFXswiss/packages/commit/b7a7652275d577b372c48ddef7c4d7e0ddd35a0d))
+
+
+
+
+
 # 1.3.0-beta.244 (2026-03-06)
 
 
