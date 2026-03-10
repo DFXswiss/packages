@@ -79,6 +79,9 @@ export enum AssetIconVariant {
   PRE_JUICE = 'PreJUICE',
   FIRO = 'FIRO',
   ICP = 'ICP',
+  ckBTC = 'ckBTC',
+  VEUR = 'VEUR',
+  VCHF = 'VCHF',
 
   EUR = 'EUR',
   USD = 'USD',
@@ -173,6 +176,9 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.PRE_JUICE]: ({ forceColor }) => <DfxAssetIconJUICE forceColor={forceColor} />,
   [AssetIconVariant.FIRO]: ({ forceColor }) => <DfxAssetIconFIRO forceColor={forceColor} />,
   [AssetIconVariant.ICP]: ({ forceColor }) => <DfxAssetIconICP forceColor={forceColor} />,
+  [AssetIconVariant.ckBTC]: ({ forceColor }) => <DfxAssetIconCkBTC forceColor={forceColor} />,
+  [AssetIconVariant.VEUR]: ({ forceColor }) => <DfxAssetIconVEUR forceColor={forceColor} />,
+  [AssetIconVariant.VCHF]: ({ forceColor }) => <DfxAssetIconVCHF forceColor={forceColor} />,
 
   [AssetIconVariant.EUR]: ({ forceColor }) => <DfxAssetIconEUR forceColor={forceColor} />,
   [AssetIconVariant.USD]: ({ forceColor }) => <DfxAssetIconUSD forceColor={forceColor} />,
@@ -5623,6 +5629,119 @@ function DfxAssetIconGBP({ forceColor }: BaseAssetIconProps) {
       fill={forceColor ?? '#012479'}
     >
       <path d="M500.496 5C223.572 5 5 229.506 5 500.002c0 276.43 224.506 495.001 495.002 495.001 276.43 0 495.001-224.506 495.001-495.001C995.003 226.539 773.464 5 500.496 5zM275.001 803.135v-73.188h60.33V511.375h-54.396c-6.923 0-5.934.99-5.934-3.956v-56.374c0-4.945-2.967-3.956 4.945-3.956h57.363c0-20.769-.99-37.582-1.978-53.406 0-7.913-.99-14.836-.99-22.748 0-35.604.99-59.34 10.88-96.923 16.813-63.297 58.352-102.858 129.56-122.638 61.32-16.813 138.463-.989 210.66 46.484 3.957 2.967 3.957 2.967-.988 8.9-4.945 5.935-20.77 29.671-43.517 52.419-2.967 2.967.99 3.956-6.923 0-33.626-19.78-68.242-34.616-107.802-33.627-102.858 2.967-98.902 57.363-98.902 217.583l4.945 3.956h161.21v58.352c0 5.934 0 5.934-4.946 5.934h-159.23c-1.979 76.154-1.979 145.385-1.979 216.594 78.132 0 157.253 0 236.375-1.978V628.08c0-6.923-.99-3.956 1.978-3.956h77.143v179.012z"></path>
+    </svg>
+  );
+}
+
+function DfxAssetIconCkBTC({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="16" cy="16" r="16" fill={forceColor ?? '#1B1D36'} />
+      <circle cx="16" cy="16" r="12.5" fill={forceColor ?? '#522785'} />
+      <circle cx="16" cy="16" r="12.5" stroke={forceColor ?? '#6B3FA0'} strokeWidth="1" />
+      <path
+        d="M19.1 11.15L19.55 9.45L18.53 9.17L18.13 10.81C17.85 10.75 17.57 10.69 17.29 10.64L17.69 8.97L16.67 8.7L16.27 10.4C16.01 10.35 15.76 10.29 15.51 10.24L13.1 9.6L12.81 10.73C12.81 10.73 13.6 10.9 13.54 10.9C13.94 11 14.05 11.28 14.04 11.51L12.86 16.14C12.8 16.27 12.69 16.49 12.35 16.38L11.61 16.21L11.1 17.4L13.46 17.97L14.2 18.14L13.75 19.78L14.77 20.06L15.22 18.36C15.5 18.43 15.78 18.5 16.06 18.56L15.61 20.25L16.63 20.53L17.08 18.88C18.83 19.22 20.19 19.11 20.75 17.47C21.21 16.17 20.75 15.43 19.79 14.98C20.47 14.81 20.98 14.36 21.09 13.46C21.26 12.16 20.35 11.48 19.1 11.15ZM18.82 16.85C18.48 18.15 16.33 17.42 15.65 17.25L16.22 14.99C16.9 15.16 19.17 15.49 18.82 16.85ZM19.16 13.52C18.88 14.71 17.07 14.09 16.5 13.94L17.01 11.85C17.58 12 19.45 12.28 19.16 13.52Z"
+        fill="white"
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconVEUR({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="veur_bg" x1="16" y1="0" x2="16" y2="32" gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#D4B44A'} />
+          <stop offset="1" stopColor={forceColor ?? '#B8943A'} />
+        </linearGradient>
+      </defs>
+      <circle cx="16" cy="16" r="16" fill="url(#veur_bg)" />
+      <circle cx="16" cy="16" r="14.5" stroke={forceColor ?? '#C9A840'} strokeWidth="0.5" fill="none" />
+      <text
+        x="16"
+        y="15"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={forceColor ?? '#1A2744'}
+        fontFamily="Arial, Helvetica, sans-serif"
+        fontWeight="bold"
+        fontSize="10"
+      >
+        EUR
+      </text>
+      <text
+        x="16"
+        y="23"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={forceColor ?? '#1A2744'}
+        fontFamily="Arial, Helvetica, sans-serif"
+        fontWeight="bold"
+        fontSize="5.5"
+      >
+        VNX
+      </text>
+    </svg>
+  );
+}
+
+function DfxAssetIconVCHF({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="vchf_bg" x1="16" y1="0" x2="16" y2="32" gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#D4B44A'} />
+          <stop offset="1" stopColor={forceColor ?? '#B8943A'} />
+        </linearGradient>
+      </defs>
+      <circle cx="16" cy="16" r="16" fill="url(#vchf_bg)" />
+      <circle cx="16" cy="16" r="14.5" stroke={forceColor ?? '#C9A840'} strokeWidth="0.5" fill="none" />
+      <text
+        x="16"
+        y="15"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={forceColor ?? '#1A2744'}
+        fontFamily="Arial, Helvetica, sans-serif"
+        fontWeight="bold"
+        fontSize="10"
+      >
+        CHF
+      </text>
+      <text
+        x="16"
+        y="23"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={forceColor ?? '#1A2744'}
+        fontFamily="Arial, Helvetica, sans-serif"
+        fontWeight="bold"
+        fontSize="5.5"
+      >
+        VNX
+      </text>
     </svg>
   );
 }
