@@ -79,6 +79,9 @@ export enum AssetIconVariant {
   PRE_JUICE = 'PreJUICE',
   FIRO = 'FIRO',
   ICP = 'ICP',
+  ckBTC = 'ckBTC',
+  VEUR = 'VEUR',
+  VCHF = 'VCHF',
 
   EUR = 'EUR',
   USD = 'USD',
@@ -173,6 +176,9 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.PRE_JUICE]: ({ forceColor }) => <DfxAssetIconJUICE forceColor={forceColor} />,
   [AssetIconVariant.FIRO]: ({ forceColor }) => <DfxAssetIconFIRO forceColor={forceColor} />,
   [AssetIconVariant.ICP]: ({ forceColor }) => <DfxAssetIconICP forceColor={forceColor} />,
+  [AssetIconVariant.ckBTC]: ({ forceColor }) => <DfxAssetIconCkBTC forceColor={forceColor} />,
+  [AssetIconVariant.VEUR]: ({ forceColor }) => <DfxAssetIconVEUR forceColor={forceColor} />,
+  [AssetIconVariant.VCHF]: ({ forceColor }) => <DfxAssetIconVCHF forceColor={forceColor} />,
 
   [AssetIconVariant.EUR]: ({ forceColor }) => <DfxAssetIconEUR forceColor={forceColor} />,
   [AssetIconVariant.USD]: ({ forceColor }) => <DfxAssetIconUSD forceColor={forceColor} />,
@@ -5623,6 +5629,119 @@ function DfxAssetIconGBP({ forceColor }: BaseAssetIconProps) {
       fill={forceColor ?? '#012479'}
     >
       <path d="M500.496 5C223.572 5 5 229.506 5 500.002c0 276.43 224.506 495.001 495.002 495.001 276.43 0 495.001-224.506 495.001-495.001C995.003 226.539 773.464 5 500.496 5zM275.001 803.135v-73.188h60.33V511.375h-54.396c-6.923 0-5.934.99-5.934-3.956v-56.374c0-4.945-2.967-3.956 4.945-3.956h57.363c0-20.769-.99-37.582-1.978-53.406 0-7.913-.99-14.836-.99-22.748 0-35.604.99-59.34 10.88-96.923 16.813-63.297 58.352-102.858 129.56-122.638 61.32-16.813 138.463-.989 210.66 46.484 3.957 2.967 3.957 2.967-.988 8.9-4.945 5.935-20.77 29.671-43.517 52.419-2.967 2.967.99 3.956-6.923 0-33.626-19.78-68.242-34.616-107.802-33.627-102.858 2.967-98.902 57.363-98.902 217.583l4.945 3.956h161.21v58.352c0 5.934 0 5.934-4.946 5.934h-159.23c-1.979 76.154-1.979 145.385-1.979 216.594 78.132 0 157.253 0 236.375-1.978V628.08c0-6.923-.99-3.956 1.978-3.956h77.143v179.012z"></path>
+    </svg>
+  );
+}
+
+function DfxAssetIconCkBTC({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="16" cy="16" r="16" fill={forceColor ?? '#1B1D36'} />
+      <circle cx="16" cy="16" r="12.5" fill={forceColor ?? '#522785'} />
+      <circle cx="16" cy="16" r="12.5" stroke={forceColor ?? '#6B3FA0'} strokeWidth="1" />
+      <path
+        d="M19.5141 9.30328L20.3141 6.30338L18.5141 5.80339L17.8142 8.7033C17.3142 8.6033 16.8142 8.5033 16.3142 8.40331L17.0142 5.40341L15.1143 5.00342L14.4143 8.00332C14.0143 7.90332 13.6143 7.80333 13.2143 7.70333L10.7144 7.10335L10.2144 9.10328C10.2144 9.10328 11.6144 9.40327 11.5144 9.40327C12.2144 9.60327 12.4143 10.1033 12.4143 10.5032L10.3144 18.703C10.2144 18.903 10.0144 19.303 9.41444 19.103L8.11449 18.803L7.21452 20.9029L9.61444 21.5029L10.9144 21.8029L10.1144 24.8028L11.9144 25.3028L12.7143 22.3029C13.2143 22.4029 13.7143 22.6028 14.2143 22.7028L13.5143 25.7027L15.3143 26.2027L16.1142 23.2028C19.2141 23.8028 21.614 23.6028 22.614 20.7029C23.414 18.403 22.614 17.103 20.9141 16.303C22.114 16.0031 23.014 15.2031 23.214 13.6031C23.514 11.3032 21.914 10.1033 19.5141 9.30328ZM19.0141 19.4029C18.4142 21.7029 14.6143 20.4029 13.4143 20.1029L14.4143 16.1031C15.6142 16.403 19.6141 17.003 19.0141 19.4029ZM19.6141 13.5031C19.1141 15.6031 15.9142 14.5031 14.9143 14.3031L15.8142 10.6032C16.8142 10.8032 20.1141 11.3032 19.6141 13.5031Z"
+        fill="white"
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconVEUR({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="veur_bg" x1="16" y1="0" x2="16" y2="32" gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#D4B44A'} />
+          <stop offset="1" stopColor={forceColor ?? '#B8943A'} />
+        </linearGradient>
+      </defs>
+      <circle cx="16" cy="16" r="16" fill="url(#veur_bg)" />
+      <circle cx="16" cy="16" r="14.5" stroke={forceColor ?? '#C9A840'} strokeWidth="0.5" fill="none" />
+      <text
+        x="16"
+        y="15"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={forceColor ?? '#1A2744'}
+        fontFamily="Arial, Helvetica, sans-serif"
+        fontWeight="bold"
+        fontSize="10"
+      >
+        EUR
+      </text>
+      <text
+        x="16"
+        y="23"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={forceColor ?? '#1A2744'}
+        fontFamily="Arial, Helvetica, sans-serif"
+        fontWeight="bold"
+        fontSize="5.5"
+      >
+        VNX
+      </text>
+    </svg>
+  );
+}
+
+function DfxAssetIconVCHF({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="vchf_bg" x1="16" y1="0" x2="16" y2="32" gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#D4B44A'} />
+          <stop offset="1" stopColor={forceColor ?? '#B8943A'} />
+        </linearGradient>
+      </defs>
+      <circle cx="16" cy="16" r="16" fill="url(#vchf_bg)" />
+      <circle cx="16" cy="16" r="14.5" stroke={forceColor ?? '#C9A840'} strokeWidth="0.5" fill="none" />
+      <text
+        x="16"
+        y="15"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={forceColor ?? '#1A2744'}
+        fontFamily="Arial, Helvetica, sans-serif"
+        fontWeight="bold"
+        fontSize="10"
+      >
+        CHF
+      </text>
+      <text
+        x="16"
+        y="23"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={forceColor ?? '#1A2744'}
+        fontFamily="Arial, Helvetica, sans-serif"
+        fontWeight="bold"
+        fontSize="5.5"
+      >
+        VNX
+      </text>
     </svg>
   );
 }
