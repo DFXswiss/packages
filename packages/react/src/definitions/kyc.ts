@@ -118,6 +118,11 @@ export enum KycStepName {
   // additional features
   PAYMENT_AGREEMENT = 'PaymentAgreement',
   RECALL_AGREEMENT = 'RecallAgreement',
+
+  // profile changes
+  PHONE_CHANGE = 'PhoneChange',
+  ADDRESS_CHANGE = 'AddressChange',
+  NAME_CHANGE = 'NameChange',
 }
 
 export enum KycStepType {
@@ -163,6 +168,8 @@ export enum FileType {
   RESIDENCE_PERMIT = 'ResidencePermit',
   ADDITIONAL_DOCUMENTS = 'AdditionalDocuments',
   AUTHORITY = 'Authority',
+  ADDRESS_CHANGE = 'AddressChange',
+  NAME_CHANGE = 'NameChange',
 }
 
 export interface KycAdditionalInfo {
@@ -275,6 +282,19 @@ export interface KycOperationalData {
 export interface KycFileData {
   file: string;
   fileName?: string;
+}
+
+export interface KycChangeAddressData {
+  file: string;
+  fileName: string;
+  address: KycAddress;
+}
+
+export interface KycChangeNameData {
+  file: string;
+  fileName: string;
+  firstName: string;
+  lastName: string;
 }
 
 export interface KycFile {
