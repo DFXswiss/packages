@@ -118,6 +118,11 @@ export enum KycStepName {
   // additional features
   PAYMENT_AGREEMENT = 'PaymentAgreement',
   RECALL_AGREEMENT = 'RecallAgreement',
+
+  // profile changes
+  PHONE_CHANGE = 'PhoneChange',
+  ADDRESS_CHANGE = 'AddressChange',
+  NAME_CHANGE = 'NameChange',
 }
 
 export enum KycStepType {
