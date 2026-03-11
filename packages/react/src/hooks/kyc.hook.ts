@@ -26,6 +26,8 @@ import {
   PaymentData,
   RecallData,
   KycRecommendationData,
+  KycChangeAddressData,
+  KycChangeNameData,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 
@@ -63,6 +65,8 @@ export interface KycInterface {
   setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycStepBase>;
   setPaymentData: (code: string, url: string, data: PaymentData) => Promise<KycStepBase>;
   setRecallData: (code: string, url: string, data: RecallData) => Promise<KycStepBase>;
+  setAddressChangeData: (code: string, url: string, data: KycChangeAddressData) => Promise<KycStepBase>;
+  setNameChangeData: (code: string, url: string, data: KycChangeNameData) => Promise<KycStepBase>;
   getFile: (kycFileId: string) => Promise<KycFile>;
 
   // 2fa
@@ -256,6 +260,20 @@ export function useKyc(): KycInterface {
     [call],
   );
 
+  const setAddressChangeData = useCallback(
+    async (code: string, url: string, data: KycChangeAddressData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setNameChangeData = useCallback(
+    async (code: string, url: string, data: KycChangeNameData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
   const getFile = useCallback(
     async (kycFileId: string): Promise<KycFile> => {
       return callApi({
@@ -341,6 +359,8 @@ export function useKyc(): KycInterface {
       setFinancialData,
       setPaymentData,
       setRecallData,
+      setAddressChangeData,
+      setNameChangeData,
       check2fa,
       setup2fa,
       verify2fa,
@@ -370,6 +390,8 @@ export function useKyc(): KycInterface {
       setFinancialData,
       setPaymentData,
       setRecallData,
+      setAddressChangeData,
+      setNameChangeData,
       check2fa,
       setup2fa,
       verify2fa,

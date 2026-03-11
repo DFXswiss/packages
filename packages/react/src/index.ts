@@ -130,6 +130,8 @@ export {
   KycFile,
   PaymentData,
   RecallData,
+  KycChangeAddressData,
+  KycChangeNameData,
   StoreType,
   MerchantCategory,
   GoodsType,
