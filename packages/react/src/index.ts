@@ -132,6 +132,7 @@ export {
   RecallData,
   KycChangeAddressData,
   KycChangeNameData,
+  KycChangePhoneData,
   StoreType,
   MerchantCategory,
   GoodsType,

@@ -297,6 +297,10 @@ export interface KycChangeNameData {
   lastName: string;
 }
 
+export interface KycChangePhoneData {
+  phone: string;
+}
+
 export interface KycFile {
   uid: string;
   name: string;
