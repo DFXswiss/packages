@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.250 (2026-03-12)
+
+
+### Bug Fixes
+
+* phone call data ([ad6224c](https://github.com/DFXswiss/packages/commit/ad6224c85607fd5bbd366aab452446665217dba4))
+
+
+
+
+
 # 1.3.0-beta.249 (2026-03-12)
 
 **Note:** Version bump only for package @dfx.swiss/react
