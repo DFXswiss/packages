@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.247 (2026-03-12)
+
+
+### Features
+
+* add KycChangePhoneData interface and setPhoneChangeData hook method ([#136](https://github.com/DFXswiss/packages/issues/136)) ([44c3707](https://github.com/DFXswiss/packages/commit/44c37078514a08c996415e61c224b76aed3f0b4e))
+
+
+
+
+
 # 1.3.0-beta.246 (2026-03-11)
 
 **Note:** Version bump only for package @dfx.swiss/react-components
