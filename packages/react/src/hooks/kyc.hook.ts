@@ -28,6 +28,7 @@ import {
   KycRecommendationData,
   KycChangeAddressData,
   KycChangeNameData,
+  KycChangePhoneData,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
 
@@ -67,6 +68,7 @@ export interface KycInterface {
   setRecallData: (code: string, url: string, data: RecallData) => Promise<KycStepBase>;
   setAddressChangeData: (code: string, url: string, data: KycChangeAddressData) => Promise<KycStepBase>;
   setNameChangeData: (code: string, url: string, data: KycChangeNameData) => Promise<KycStepBase>;
+  setPhoneChangeData: (code: string, url: string, data: KycChangePhoneData) => Promise<KycStepBase>;
   getFile: (kycFileId: string) => Promise<KycFile>;
 
   // 2fa
@@ -274,6 +276,13 @@ export function useKyc(): KycInterface {
     [call],
   );
 
+  const setPhoneChangeData = useCallback(
+    async (code: string, url: string, data: KycChangePhoneData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
   const getFile = useCallback(
     async (kycFileId: string): Promise<KycFile> => {
       return callApi({
@@ -361,6 +370,7 @@ export function useKyc(): KycInterface {
       setRecallData,
       setAddressChangeData,
       setNameChangeData,
+      setPhoneChangeData,
       check2fa,
       setup2fa,
       verify2fa,
@@ -392,6 +402,7 @@ export function useKyc(): KycInterface {
       setRecallData,
       setAddressChangeData,
       setNameChangeData,
+      setPhoneChangeData,
       check2fa,
       setup2fa,
       verify2fa,
