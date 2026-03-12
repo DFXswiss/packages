@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { ApiKey, UpdateUser, User, UserAddress } from '../definitions/user';
+import { ApiKey, PhoneCallTime, UpdateUser, User, UserAddress } from '../definitions/user';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
 import { Language } from '../definitions/language';
@@ -31,6 +31,7 @@ interface UserInterface {
   generateKeyCT: (types?: TransactionFilterKey[]) => Promise<ApiKey | undefined>;
   deleteKeyCT: () => Promise<void>;
   updateFilterCT: (types?: TransactionFilterKey[]) => Promise<void>;
+  updateCallSettings: (preferredPhoneTimes?: PhoneCallTime[], acceptCall?: boolean) => Promise<void>;
 }
 
 const UserContext = createContext<UserInterface>(undefined as any);
@@ -54,6 +55,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     generateCTApiKey,
     deleteCTApiKey,
     updateCTApiFilter,
+    updateCallSettings: updateCallSettingsApi,
   } = useUser();
   const [user, setUser] = useState<User>();
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
@@ -188,6 +190,18 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       .finally(() => setIsUserUpdating(false));
   }, [user, updateCTApiFilter, getUser]);
 
+  const updateCallSettings = useCallback(
+    async (preferredPhoneTimes?: PhoneCallTime[], acceptCall?: boolean): Promise<void> => {
+      if (!user) return;
+
+      setIsUserUpdating(true);
+      return updateCallSettingsApi(preferredPhoneTimes, acceptCall)
+        .then(setUser)
+        .finally(() => setIsUserUpdating(false));
+    },
+    [user, updateCallSettingsApi],
+  );
+
   const context: UserInterface = useMemo(
     () => ({
       user,
@@ -214,6 +228,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       generateKeyCT,
       deleteKeyCT,
       updateFilterCT,
+      updateCallSettings,
     }),
     [
       user,
@@ -236,6 +251,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       generateKeyCT,
       deleteKeyCT,
       updateFilterCT,
+      updateCallSettings,
     ],
   );
 

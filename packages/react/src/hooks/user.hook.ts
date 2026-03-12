@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ApiKey, Referral, UpdateUser, User, UserProfile, UserUrl } from '../definitions/user';
+import { ApiKey, PhoneCallTime, Referral, UpdateUser, User, UserProfile, UserUrl } from '../definitions/user';
 import { useApi } from './api.hook';
 import { SignIn } from '../definitions/auth';
 import { TransactionFilter, TransactionFilterKey } from '../definitions/transaction';
@@ -19,6 +19,7 @@ export interface UserInterface {
   generateCTApiKey: (types?: TransactionFilterKey[]) => Promise<ApiKey>;
   deleteCTApiKey: () => Promise<void>;
   updateCTApiFilter: (types?: TransactionFilterKey[]) => Promise<TransactionFilter[]>;
+  updateCallSettings: (preferredPhoneTimes?: PhoneCallTime[], acceptCall?: boolean) => Promise<User | undefined>;
 }
 
 export function useUser(): UserInterface {
@@ -119,6 +120,18 @@ export function useUser(): UserInterface {
     });
   }
 
+  async function updateCallSettings(
+    preferredPhoneTimes?: PhoneCallTime[],
+    acceptCall?: boolean,
+  ): Promise<User | undefined> {
+    return call<User>({
+      url: UserUrl.update,
+      version: 'v2',
+      method: 'PUT',
+      data: { preferredPhoneTimes, acceptCall },
+    });
+  }
+
   return useMemo(
     () => ({
       getUser,
@@ -135,6 +148,7 @@ export function useUser(): UserInterface {
       generateCTApiKey,
       deleteCTApiKey,
       updateCTApiFilter,
+      updateCallSettings,
     }),
     [call],
   );

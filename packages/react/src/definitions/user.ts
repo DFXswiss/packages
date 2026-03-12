@@ -38,7 +38,7 @@ export enum PhoneCallTime {
 }
 
 export enum PhoneCallStatus {
-  REPEAT = 'Repeat',
+  ACCEPTED = 'Accepted',
   REJECTED = 'Rejected',
   UNAVAILABLE = 'Unavailable',
   COMPLETED = 'Completed',
@@ -114,8 +114,7 @@ export interface UpdateUser {
   language?: Language;
   currency?: Fiat;
   preferredPhoneTimes?: PhoneCallTime[];
-  rejectPhoneCall?: boolean;
-  repeatPhoneCall?: boolean;
+  acceptCall?: boolean;
 }
 
 export interface ApiKey {
