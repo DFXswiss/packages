@@ -83,6 +83,8 @@ export interface UserKyc {
   hash: string;
   level: number;
   dataComplete: boolean;
+  preferredPhoneTimes: PhoneCallTime[];
+  phoneCallStatus?: PhoneCallStatus;
 }
 
 export interface UserPaymentLink {
@@ -105,8 +107,6 @@ export interface User {
   paymentLink: UserPaymentLink;
   apiKeyCT: string;
   apiFilterCT: TransactionFilterKey[];
-  preferredPhoneTimes: PhoneCallTime[];
-  phoneCallStatus: PhoneCallStatus;
 }
 
 export interface UpdateUser {
