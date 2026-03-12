@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.248 (2026-03-12)
+
+
+### Features
+
+* verification call DTO update ([a976897](https://github.com/DFXswiss/packages/commit/a976897715868cac396627ab52f8c62a097243de))
+
+
+
+
+
 # 1.3.0-beta.247 (2026-03-12)
 
 
