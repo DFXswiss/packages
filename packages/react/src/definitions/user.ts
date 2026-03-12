@@ -26,7 +26,7 @@ export enum UserStatus {
   BLOCKED = 'Blocked',
 }
 
-export enum PhoneCallPreferredTime {
+export enum PhoneCallTime {
   H_9_TO_10 = 'H9To10',
   H_10_TO_11 = 'H10To11',
   H_11_TO_12 = 'H11To12',
@@ -41,9 +41,8 @@ export enum PhoneCallStatus {
   REPEAT = 'Repeat',
   REJECTED = 'Rejected',
   UNAVAILABLE = 'Unavailable',
-  FAILED = 'Failed',
   COMPLETED = 'Completed',
-  SUSPICIOUS = 'Suspicious',
+  FAILED = 'Failed',
 }
 
 export interface VolumeInformation {
@@ -106,13 +105,15 @@ export interface User {
   paymentLink: UserPaymentLink;
   apiKeyCT: string;
   apiFilterCT: TransactionFilterKey[];
+  preferredPhoneTimes: PhoneCallTime[];
+  phoneCallStatus: PhoneCallStatus;
 }
 
 export interface UpdateUser {
   phone?: string;
   language?: Language;
   currency?: Fiat;
-  preferredPhoneTimes?: PhoneCallPreferredTime[];
+  preferredPhoneTimes?: PhoneCallTime[];
   rejectPhoneCall?: boolean;
   repeatPhoneCall?: boolean;
 }

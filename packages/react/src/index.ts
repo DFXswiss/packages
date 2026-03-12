@@ -161,6 +161,8 @@ export {
   VolumeInformation,
   UserProfile,
   UserAddressInfo,
+  PhoneCallTime,
+  PhoneCallStatus,
 } from './definitions/user';
 export { SignIn, LnurlAuth, LnurlAuthStatus } from './definitions/auth';
 export {
