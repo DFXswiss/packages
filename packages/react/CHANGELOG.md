@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.251 (2026-03-13)
+
+
+### Features
+
+* add Ark blockchain enum and payment link support ([#137](https://github.com/DFXswiss/packages/issues/137)) ([0b22e33](https://github.com/DFXswiss/packages/commit/0b22e33533f0c4e4c951a7e3bbc3ea0bced45fb5))
+
+
+
+
+
 # 1.3.0-beta.250 (2026-03-12)
 
 
