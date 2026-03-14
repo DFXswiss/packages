@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.252 (2026-03-14)
+
+
+### Features
+
+* add WETH asset icon variant ([#138](https://github.com/DFXswiss/packages/issues/138)) ([fc0269f](https://github.com/DFXswiss/packages/commit/fc0269fb4f8dce9fbd1696eef30170fbc0ac7a26))
+
+
+
+
+
 # 1.3.0-beta.251 (2026-03-13)
 
 
