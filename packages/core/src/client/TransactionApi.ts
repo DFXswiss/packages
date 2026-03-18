@@ -9,7 +9,6 @@ import {
   TransactionHistoryQuery,
 } from '../definitions/transaction';
 import { PdfDocument } from '../definitions/buy';
-import { CustomFile } from '../definitions/file';
 import { DfxHttpClient, ResponseType } from './DfxHttpClient';
 
 export class TransactionApi {

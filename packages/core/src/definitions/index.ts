@@ -1,4 +1,5 @@
-export { Asset, AssetUrl, AssetType, AssetCategory } from './asset';
+export { AssetUrl, AssetType, AssetCategory } from './asset';
+export type { Asset } from './asset';
 export { AuthUrl, AuthWalletType } from './auth';
 export type { SignMessage, SignIn, LnurlAuth, LnurlAuthStatus } from './auth';
 export { BankUrl } from './bank';
