@@ -52,6 +52,7 @@ export interface BuyPaymentInfo {
   amount?: number;
   asset: Asset;
   targetAmount?: number;
+  targetAddress?: string;
   paymentMethod?: FiatPaymentMethod;
   externalTransactionId?: string;
   exactPrice?: boolean;

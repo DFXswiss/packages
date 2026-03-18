@@ -1,4 +1,5 @@
 import { AuthUrl, AuthWalletType, SignMessage, SignIn, LnurlAuth, LnurlAuthStatus } from '../definitions/auth';
+import { ApiException } from '../definitions/error';
 import { DfxHttpClient } from './DfxHttpClient';
 
 export interface AuthenticateParams {
@@ -10,6 +11,18 @@ export interface AuthenticateParams {
   usedRef?: string;
   walletType?: AuthWalletType;
   recommendationCode?: string;
+}
+
+interface SignUpRequest {
+  address: string;
+  signature: string;
+  key?: string;
+  usedRef?: string;
+  specialCode?: string;
+  walletType?: AuthWalletType;
+  recommendationCode?: string;
+  walletId?: number;
+  wallet?: string;
 }
 
 export class AuthApi {
@@ -24,16 +37,20 @@ export class AuthApi {
     return result.message;
   }
 
+  /**
+   * Authenticate with address + signature. Tries combined auth first,
+   * retries without token on 409 (account already exists on different chain).
+   */
   async authenticate(params: AuthenticateParams): Promise<SignIn> {
     const data = this.buildSignUpParams(params);
 
     try {
       return await this.http.request<SignIn>({ url: AuthUrl.auth, method: 'POST', data, token: false });
-    } catch (e: any) {
-      if (e.statusCode === 409) {
+    } catch (error: unknown) {
+      if (error instanceof ApiException && error.statusCode === 409) {
         return this.http.request<SignIn>({ url: AuthUrl.auth, method: 'POST', data, token: false });
       }
-      throw e;
+      throw error;
     }
   }
 
@@ -68,8 +85,8 @@ export class AuthApi {
     });
   }
 
-  private buildSignUpParams(params: AuthenticateParams) {
-    const data: Record<string, any> = {
+  private buildSignUpParams(params: AuthenticateParams): SignUpRequest {
+    const data: SignUpRequest = {
       address: params.address,
       signature: params.signature,
       key: params.key,

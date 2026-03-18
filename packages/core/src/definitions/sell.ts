@@ -70,11 +70,13 @@ export interface Beneficiary {
 }
 
 export interface SellPaymentInfo {
-  iban: string;
+  iban?: string;
   asset: Asset;
   amount?: number;
   currency: Fiat;
   targetAmount?: number;
+  sourceAddress?: string;
+  paymentMethod?: string;
   externalTransactionId?: string;
   exactPrice?: boolean;
 }

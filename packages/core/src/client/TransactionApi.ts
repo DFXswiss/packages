@@ -33,23 +33,28 @@ export class TransactionApi {
     if (params.uid) queryParts.push(`uid=${params.uid}`);
     if (params.ckoId) queryParts.push(`cko-id=${params.ckoId}`);
     if (params.requestId) queryParts.push(`request-id=${params.requestId}`);
+    const queryStr = queryParts.length ? `?${queryParts.join('&')}` : '';
     return this.http.request<Transaction>({
-      url: `${TransactionUrl.single}?${queryParts.join('&')}`,
+      url: `${TransactionUrl.single}${queryStr}`,
       method: 'GET',
     });
   }
 
   async exportCsv(query: TransactionHistoryQuery): Promise<string> {
+    const params = this.buildFilterParams(query);
+    const queryStr = params ? `?${params}` : '';
     return this.http.request<string>({
-      url: `${TransactionUrl.csv}?${this.buildFilterParams(query)}`,
+      url: `${TransactionUrl.csv}${queryStr}`,
       method: 'PUT',
       responseType: ResponseType.TEXT,
     });
   }
 
   async getHistory(type: string, query: TransactionHistoryQuery): Promise<string> {
+    const params = this.buildFilterParams(query);
+    const queryStr = params ? `?${params}` : '';
     return this.http.request<string>({
-      url: `transaction/${type}?${this.buildFilterParams(query)}`,
+      url: `transaction/${type}${queryStr}`,
       method: 'GET',
       responseType: ResponseType.TEXT,
     });
