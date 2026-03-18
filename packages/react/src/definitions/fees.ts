@@ -9,4 +9,5 @@ export interface Fees {
   network: number;
   total: number;
   networkStart?: number;
+  platform: number;
 }
