@@ -16,12 +16,13 @@ import { DfxHttpClient, ResponseType } from './DfxHttpClient';
 export class PaymentLinksApi {
   constructor(private readonly http: DfxHttpClient) {}
 
-  async list(params?: { linkId?: string; externalLinkId?: string }): Promise<PaymentLink[]> {
+  async list(params?: { linkId?: string; externalLinkId?: string; externalPaymentId?: string }): Promise<PaymentLink | PaymentLink[]> {
     const queryParts: string[] = [];
     if (params?.linkId) queryParts.push(`linkId=${params.linkId}`);
     if (params?.externalLinkId) queryParts.push(`externalLinkId=${params.externalLinkId}`);
+    if (params?.externalPaymentId) queryParts.push(`externalPaymentId=${params.externalPaymentId}`);
     const query = queryParts.length ? `?${queryParts.join('&')}` : '';
-    return this.http.request<PaymentLink[]>({ url: `${PaymentLinksUrl.get}${query}`, method: 'GET' });
+    return this.http.request<PaymentLink | PaymentLink[]>({ url: `${PaymentLinksUrl.get}${query}`, method: 'GET' });
   }
 
   async create(data: CreatePaymentLink): Promise<PaymentLink> {

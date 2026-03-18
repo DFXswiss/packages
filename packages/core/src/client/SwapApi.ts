@@ -16,7 +16,7 @@ export class SwapApi {
 
   async confirm(id: number, data: ConfirmSwapData): Promise<Transaction> {
     return this.http.request<Transaction>({
-      url: SwapUrl.confirm.replace(':id', id.toString()),
+      url: SwapUrl.confirm(id),
       method: 'POST',
       data,
     });

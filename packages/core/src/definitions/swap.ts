@@ -7,7 +7,7 @@ import { TransactionError } from './transaction';
 export const SwapUrl = {
   quote: 'swap/quote',
   receive: 'swap/paymentInfos',
-  confirm: 'swap/paymentInfos/:id/confirm',
+  confirm: (id: number) => `swap/paymentInfos/${id}/confirm`,
 };
 
 export interface Swap {

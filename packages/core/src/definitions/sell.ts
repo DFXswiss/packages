@@ -8,7 +8,7 @@ import { TransactionError } from './transaction';
 export const SellUrl = {
   quote: 'sell/quote',
   receive: 'sell/paymentInfos',
-  confirm: 'sell/paymentInfos/:id/confirm',
+  confirm: (id: number) => `sell/paymentInfos/${id}/confirm`,
 };
 
 // EIP-5792 wallet_sendCalls data for gasless transactions

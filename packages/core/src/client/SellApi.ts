@@ -16,7 +16,7 @@ export class SellApi {
 
   async confirm(id: number, data: ConfirmSellData): Promise<Transaction> {
     return this.http.request<Transaction>({
-      url: SellUrl.confirm.replace(':id', id.toString()),
+      url: SellUrl.confirm(id),
       method: 'PUT',
       data,
     });

@@ -44,11 +44,14 @@ export class AuthApi {
   async authenticate(params: AuthenticateParams): Promise<SignIn> {
     const data = this.buildSignUpParams(params);
 
+    const config = { url: AuthUrl.auth, method: 'POST' as const, data };
+
     try {
-      return await this.http.request<SignIn>({ url: AuthUrl.auth, method: 'POST', data, token: false });
+      return await this.http.request<SignIn>(config);
     } catch (error: unknown) {
+      // 409: account exists on different chain — retry without auth token
       if (error instanceof ApiException && error.statusCode === 409) {
-        return this.http.request<SignIn>({ url: AuthUrl.auth, method: 'POST', data, token: false });
+        return this.http.request<SignIn>({ ...config, token: false });
       }
       throw error;
     }
