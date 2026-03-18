@@ -38,8 +38,6 @@ export enum PhoneCallTime {
 }
 
 export enum PhoneCallStatus {
-  ACCEPTED = 'Accepted',
-  REJECTED = 'Rejected',
   UNAVAILABLE = 'Unavailable',
   COMPLETED = 'Completed',
   FAILED = 'Failed',
@@ -84,6 +82,7 @@ export interface UserKyc {
   level: number;
   dataComplete: boolean;
   preferredPhoneTimes: PhoneCallTime[];
+  phoneCallAccepted?: boolean;
   phoneCallStatus?: PhoneCallStatus;
 }
 

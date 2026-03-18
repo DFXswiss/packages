@@ -236,7 +236,7 @@ export interface CreditorData {
 }
 
 export interface TransactionRefundTarget {
-  refundTarget: string;
+  refundTarget?: string;
   creditorData?: CreditorData;
 }
 
