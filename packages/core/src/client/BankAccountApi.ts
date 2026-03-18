@@ -11,6 +11,8 @@ export interface CreateBankAccount {
 export interface UpdateBankAccount {
   label?: string;
   preferredCurrency?: Fiat;
+  active?: boolean;
+  default?: boolean;
 }
 
 export class BankAccountApi {

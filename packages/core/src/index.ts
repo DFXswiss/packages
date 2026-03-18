@@ -2,10 +2,15 @@
 export { DfxApiClient } from './client';
 export type { DfxApiClientConfig } from './client';
 export { DfxHttpClient, ResponseType } from './client';
-export type { DfxHttpClientConfig, RequestConfig } from './client';
+export type { DfxHttpClientConfig, RequestConfig, SpecialHandling } from './client';
 export type { AuthenticateParams } from './client';
 export type { AssetListParams } from './client';
 export type { CreateBankAccount, UpdateBankAccount } from './client';
+
+// Utils & Validations
+export { Utils } from './utils';
+export { default as Validations } from './validations';
+export type { RequiredRule, PatternRule, CustomRule, ValidationRule } from './validations';
 
 // Definitions
 export {

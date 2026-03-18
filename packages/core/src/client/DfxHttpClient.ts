@@ -1,10 +1,14 @@
 import { ApiError, ApiException } from '../definitions/error';
-import { CustomFile } from '../definitions/file';
 
 export enum ResponseType {
   JSON = 'json',
   TEXT = 'text',
   BLOB = 'blob',
+}
+
+export interface SpecialHandling {
+  statusCode: number;
+  action: () => void;
 }
 
 export interface RequestConfig {
@@ -15,6 +19,8 @@ export interface RequestConfig {
   noJson?: boolean;
   responseType?: ResponseType;
   token?: string | false;
+  headers?: Record<string, string>;
+  specialHandling?: SpecialHandling;
 }
 
 export interface DfxHttpClientConfig {
@@ -40,18 +46,44 @@ export class DfxHttpClient {
     return this.authToken;
   }
 
+  /**
+   * Send a request to a versioned API endpoint (e.g. /v1/buy/quote).
+   */
   async request<T>(config: RequestConfig): Promise<T> {
     const version = config.version ?? this.getDefaultVersion();
     const baseUrl = `${this.getBaseUrl()}/${version}`;
+    return this.rawRequest<T>({ ...config, url: `${baseUrl}/${config.url}` });
+  }
+
+  /**
+   * Send a request to an absolute URL (e.g. for KYC endpoints that use full URLs).
+   */
+  async requestAbsolute<T>(config: RequestConfig): Promise<T> {
+    return this.rawRequest<T>(config);
+  }
+
+  getBaseUrl(): string {
+    return this.apiUrl.replace(/\/v\d+\/?$/, '');
+  }
+
+  getApiUrl(): string {
+    return this.apiUrl;
+  }
+
+  private async rawRequest<T>(config: RequestConfig): Promise<T> {
     const responseType = config.responseType ?? ResponseType.JSON;
     const token = config.token === false ? undefined : (config.token ?? this.authToken);
 
     let response: Response;
     try {
-      response = await this.fetchFn(`${baseUrl}/${config.url}`, this.buildInit(config.method, token, config.data, config.noJson));
+      response = await this.fetchFn(config.url, this.buildInit(config.method, token, config.data, config.noJson, config.headers));
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
       throw new ApiException(0, `Network error: ${message}`);
+    }
+
+    if (config.specialHandling && response.status === config.specialHandling.statusCode) {
+      config.specialHandling.action();
     }
 
     if (response.ok) {
@@ -77,14 +109,6 @@ export class DfxHttpClient {
     );
   }
 
-  getBaseUrl(): string {
-    return this.apiUrl.replace(/\/v\d+\/?$/, '');
-  }
-
-  getApiUrl(): string {
-    return this.apiUrl;
-  }
-
   private getDefaultVersion(): string {
     const match = this.apiUrl.match(/\/(v\d+)\/?$/);
     return match ? match[1] : 'v1';
@@ -95,12 +119,14 @@ export class DfxHttpClient {
     accessToken?: string,
     data?: any,
     noJson?: boolean,
+    extraHeaders?: Record<string, string>,
   ): RequestInit {
     return {
       method,
       headers: {
         ...(noJson ? undefined : { 'Content-Type': 'application/json' }),
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+        ...extraHeaders,
       },
       body: data !== undefined ? (noJson ? data : JSON.stringify(data)) : undefined,
     };

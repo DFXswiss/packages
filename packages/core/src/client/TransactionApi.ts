@@ -7,9 +7,9 @@ import {
   TransactionRefundData,
   TransactionRefundTarget,
   TransactionHistoryQuery,
-  ExportFormat,
-  CustomFile,
-} from '../definitions';
+} from '../definitions/transaction';
+import { PdfDocument } from '../definitions/buy';
+import { CustomFile } from '../definitions/file';
 import { DfxHttpClient, ResponseType } from './DfxHttpClient';
 
 export class TransactionApi {
@@ -40,31 +40,19 @@ export class TransactionApi {
   }
 
   async exportCsv(query: TransactionHistoryQuery): Promise<string> {
-    const params: string[] = [];
-    if (query.from) params.push(`from=${query.from}`);
-    if (query.to) params.push(`to=${query.to}`);
-    if (query.buy !== undefined) params.push(`buy=${query.buy}`);
-    if (query.sell !== undefined) params.push(`sell=${query.sell}`);
-    if (query.staking !== undefined) params.push(`staking=${query.staking}`);
-    if (query.ref !== undefined) params.push(`ref=${query.ref}`);
-    if (query.lm !== undefined) params.push(`lm=${query.lm}`);
-    const queryStr = params.length ? `?${params.join('&')}` : '';
-    return this.http.request<string>({ url: `${TransactionUrl.csv}${queryStr}`, method: 'PUT' });
+    return this.http.request<string>({
+      url: `${TransactionUrl.csv}?${this.buildFilterParams(query)}`,
+      method: 'PUT',
+      responseType: ResponseType.TEXT,
+    });
   }
 
-  async getHistory(type: string, query: TransactionHistoryQuery): Promise<Transaction[]> {
-    const params: string[] = [];
-    if (query.userAddress) params.push(`userAddress=${encodeURIComponent(query.userAddress)}`);
-    if (query.from) params.push(`from=${query.from}`);
-    if (query.to) params.push(`to=${query.to}`);
-    if (query.format) params.push(`format=${query.format}`);
-    if (query.buy !== undefined) params.push(`buy=${query.buy}`);
-    if (query.sell !== undefined) params.push(`sell=${query.sell}`);
-    if (query.staking !== undefined) params.push(`staking=${query.staking}`);
-    if (query.ref !== undefined) params.push(`ref=${query.ref}`);
-    if (query.lm !== undefined) params.push(`lm=${query.lm}`);
-    const queryStr = params.length ? `?${params.join('&')}` : '';
-    return this.http.request<Transaction[]>({ url: `transaction/${type}${queryStr}`, method: 'GET' });
+  async getHistory(type: string, query: TransactionHistoryQuery): Promise<string> {
+    return this.http.request<string>({
+      url: `transaction/${type}?${this.buildFilterParams(query)}`,
+      method: 'GET',
+      responseType: ResponseType.TEXT,
+    });
   }
 
   async getUnassigned(): Promise<UnassignedTransaction[]> {
@@ -79,20 +67,12 @@ export class TransactionApi {
     return this.http.request({ url: `${TransactionUrl.setTarget(id)}?buyId=${buyId}`, method: 'PUT' });
   }
 
-  async getInvoice(id: number | string): Promise<CustomFile> {
-    return this.http.request<CustomFile>({
-      url: TransactionUrl.invoice(id),
-      method: 'PUT',
-      responseType: ResponseType.BLOB,
-    });
+  async getInvoice(id: number | string): Promise<PdfDocument> {
+    return this.http.request<PdfDocument>({ url: TransactionUrl.invoice(id), method: 'PUT' });
   }
 
-  async getReceipt(id: number): Promise<CustomFile> {
-    return this.http.request<CustomFile>({
-      url: TransactionUrl.receipt(id),
-      method: 'PUT',
-      responseType: ResponseType.BLOB,
-    });
+  async getReceipt(id: number): Promise<PdfDocument> {
+    return this.http.request<PdfDocument>({ url: TransactionUrl.receipt(id), method: 'PUT' });
   }
 
   async getRefund(id: number): Promise<TransactionRefundData> {
@@ -101,5 +81,19 @@ export class TransactionApi {
 
   async setRefundTarget(id: number, data: TransactionRefundTarget): Promise<void> {
     return this.http.request({ url: TransactionUrl.refund(id), method: 'PUT', data });
+  }
+
+  private buildFilterParams(query: TransactionHistoryQuery): string {
+    const params: string[] = [];
+    if (query.userAddress) params.push(`userAddress=${encodeURIComponent(query.userAddress)}`);
+    if (query.from) params.push(`from=${query.from instanceof Date ? query.from.toISOString() : query.from}`);
+    if (query.to) params.push(`to=${query.to instanceof Date ? query.to.toISOString() : query.to}`);
+    if (query.format) params.push(`format=${query.format}`);
+    if (query.buy !== undefined) params.push(`buy=${query.buy}`);
+    if (query.sell !== undefined) params.push(`sell=${query.sell}`);
+    if (query.staking !== undefined) params.push(`staking=${query.staking}`);
+    if (query.ref !== undefined) params.push(`ref=${query.ref}`);
+    if (query.lm !== undefined) params.push(`lm=${query.lm}`);
+    return params.join('&');
   }
 }

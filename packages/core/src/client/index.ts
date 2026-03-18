@@ -1,7 +1,7 @@
 export { DfxApiClient } from './DfxApiClient';
 export type { DfxApiClientConfig } from './DfxApiClient';
 export { DfxHttpClient, ResponseType } from './DfxHttpClient';
-export type { DfxHttpClientConfig, RequestConfig } from './DfxHttpClient';
+export type { DfxHttpClientConfig, RequestConfig, SpecialHandling } from './DfxHttpClient';
 export { AuthApi } from './AuthApi';
 export type { AuthenticateParams } from './AuthApi';
 export { AssetApi } from './AssetApi';
