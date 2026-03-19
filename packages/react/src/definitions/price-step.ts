@@ -1,7 +1,1 @@
-export interface PriceStep {
-  source: string;
-  from: string;
-  to: string;
-  price: number;
-  timestamp: Date;
-}
+export type { PriceStep } from '@dfx.swiss/core';

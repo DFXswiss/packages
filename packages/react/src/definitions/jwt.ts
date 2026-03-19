@@ -1,24 +1,2 @@
-import { Blockchain } from './blockchain';
-
-export enum UserRole {
-  ACCOUNT = 'Account',
-  USER = 'User',
-  VIP = 'VIP',
-  BETA = 'Beta',
-  ADMIN = 'Admin',
-  SUPPORT = 'Support',
-  COMPLIANCE = 'Compliance',
-  KYC_CLIENT_COMPANY = 'KycClientCompany',
-  CUSTODY = 'Custody',
-  REALUNIT = 'RealUnit',
-}
-
-export interface Jwt {
-  exp: number;
-  iat: number;
-  address: string;
-  user: number;
-  account: number;
-  role: UserRole;
-  blockchains: Blockchain[];
-}
+export { UserRole } from '@dfx.swiss/core';
+export type { Jwt } from '@dfx.swiss/core';
