@@ -5,7 +5,7 @@ export interface Fees {
   dfx: number;
   bank: number;
   bankFixed?: number;
-  bankPercent?: number;
+  bankVariable?: number;
   network: number;
   total: number;
   networkStart?: number;
