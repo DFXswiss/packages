@@ -29,6 +29,7 @@ export {
   KycState,
   LimitPeriod,
   KycStepName,
+  KycStepCancelable,
   KycStepType,
   KycStepStatus,
   UrlType,

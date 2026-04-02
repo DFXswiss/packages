@@ -125,6 +125,8 @@ export enum KycStepName {
   NAME_CHANGE = 'NameChange',
 }
 
+export const KycStepCancelable = [KycStepName.ADDRESS_CHANGE, KycStepName.PHONE_CHANGE, KycStepName.NAME_CHANGE];
+
 export enum KycStepType {
   // ident
   AUTO = 'Auto',
