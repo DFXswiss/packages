@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.263 (2026-04-02)
+
+
+### Features
+
+* cancel KYC step ([d3b2142](https://github.com/DFXswiss/packages/commit/d3b21420e7737fd42dbfb96ccd01c3c1f0735d51))
+
+
+
+
+
 # 1.3.0-beta.262 (2026-03-27)
 
 **Note:** Version bump only for package @dfx.swiss/react-components
