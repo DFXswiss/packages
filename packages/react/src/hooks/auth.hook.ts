@@ -34,7 +34,7 @@ export interface AuthInterface {
     recommendationCode?: string,
     language?: string,
   ) => Promise<SignIn>;
-  signInWithMail: (mail: string, redirectUri?: string, recommendationCode?: string) => Promise<void>;
+  signInWithMail: (mail: string, redirectUri?: string, recommendationCode?: string, wallet?: string) => Promise<void>;
   createLnurlAuth: () => Promise<LnurlAuth>;
   getLnurlAuth: (k1: string) => Promise<LnurlAuthStatus>;
 }
@@ -178,8 +178,12 @@ export function useAuth(): AuthInterface {
   );
 
   const signInWithMail = useCallback(
-    async (mail: string, redirectUri?: string, recommendationCode?: string): Promise<void> => {
-      return call({ url: AuthUrl.signInWithMail, method: 'POST', data: { mail, redirectUri, recommendationCode } });
+    async (mail: string, redirectUri?: string, recommendationCode?: string, wallet?: string): Promise<void> => {
+      return call({
+        url: AuthUrl.signInWithMail,
+        method: 'POST',
+        data: { mail, redirectUri, recommendationCode, wallet },
+      });
     },
     [call],
   );
