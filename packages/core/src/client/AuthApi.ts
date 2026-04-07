@@ -67,11 +67,11 @@ export class AuthApi {
     return this.http.request<SignIn>({ url: AuthUrl.signUp, method: 'POST', data, token: false });
   }
 
-  async signInWithMail(mail: string, redirectUri?: string, recommendationCode?: string): Promise<void> {
+  async signInWithMail(mail: string, redirectUri?: string, recommendationCode?: string, wallet?: string): Promise<void> {
     return this.http.request({
       url: AuthUrl.signInWithMail,
       method: 'POST',
-      data: { mail, redirectUri, recommendationCode },
+      data: { mail, redirectUri, recommendationCode, wallet },
       token: false,
     });
   }
