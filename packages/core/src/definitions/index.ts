@@ -140,7 +140,9 @@ export {
   SupportIssueType,
   SupportIssueReason,
   SupportIssueState,
+  SupportIssueInternalState,
   SupportMessageStatus,
+  Department,
 } from './support';
 export type {
   Reaction,

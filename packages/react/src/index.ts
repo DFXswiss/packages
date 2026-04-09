@@ -205,7 +205,9 @@ export {
   BlobContent,
   DataFile,
   SupportIssueState,
+  SupportIssueInternalState,
   SupportMessageStatus,
+  Department,
   Reaction,
 } from './definitions/support';
 
