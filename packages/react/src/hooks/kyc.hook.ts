@@ -84,7 +84,7 @@ export interface KycInterface {
   removeTransferClient: (code: string, client: string) => Promise<void>;
 
   // cancel step
-  cancelStep: (code: string, stepId: number) => Promise<void>;
+  cancelStep: (code: string, url: string) => Promise<void>;
 }
 
 export function useKyc(): KycInterface {
@@ -349,8 +349,8 @@ export function useKyc(): KycInterface {
   );
 
   const cancelStep = useCallback(
-    async (code: string, stepId: number): Promise<void> => {
-      return call({ url: `${KycUrl.base}/${stepId}`, code, method: 'DELETE' });
+    async (code: string, url: string): Promise<void> => {
+      return call({ url, code, method: 'DELETE' });
     },
     [call],
   );
