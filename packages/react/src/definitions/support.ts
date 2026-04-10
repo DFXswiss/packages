@@ -47,6 +47,21 @@ export enum SupportIssueState {
   CANCELED = 'Canceled',
 }
 
+export enum SupportIssueInternalState {
+  CREATED = 'Created',
+  PENDING = 'Pending',
+  COMPLETED = 'Completed',
+  CANCELED = 'Canceled',
+  ON_HOLD = 'OnHold',
+}
+
+export enum Department {
+  SUPPORT = 'Support',
+  COMPLIANCE = 'Compliance',
+  MARKETING = 'Marketing',
+  COOPERATION = 'Cooperation',
+}
+
 export enum SupportMessageStatus {
   SENT = 'Sent',
   RECEIVED = 'Received',
