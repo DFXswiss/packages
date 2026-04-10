@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 0.2.0-beta.4 (2026-04-10)
+
+
+### Features
+
+* add SupportIssueInternalState, Department enums and Marketing role ([#144](https://github.com/DFXswiss/packages/issues/144)) ([4e02dcd](https://github.com/DFXswiss/packages/commit/4e02dcd93962f094351627d05ea197d3fa2ae9b3))
+
+
+
+
+
 # 0.2.0-beta.3 (2026-04-09)
 
 
