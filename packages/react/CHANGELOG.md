@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.268 (2026-04-15)
+
+
+### Features
+
+* add STOPPED transaction state ([#145](https://github.com/DFXswiss/packages/issues/145)) ([86afa52](https://github.com/DFXswiss/packages/commit/86afa525465640a30fc35d362b99a1460e5c4d52))
+
+
+
+
+
 # 1.3.0-beta.267 (2026-04-10)
 
 
