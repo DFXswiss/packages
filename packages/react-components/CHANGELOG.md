@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.269 (2026-04-17)
+
+
+### Features
+
+* add CheckStatus and AmlReason enums ([#146](https://github.com/DFXswiss/packages/issues/146)) ([b803869](https://github.com/DFXswiss/packages/commit/b803869ae9d103982f6cf845dc22cc925ce48d21))
+
+
+
+
+
 # 1.3.0-beta.268 (2026-04-15)
 
 
