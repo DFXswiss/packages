@@ -34,6 +34,7 @@ export { useSwap } from './hooks/swap.hook';
 export { useSupportChat } from './hooks/support.hook';
 
 // Definitions
+export { CheckStatus, AmlReason } from './definitions/aml';
 export { Asset, AssetType, AssetCategory } from './definitions/asset';
 export { BankAccount } from './definitions/bank-account';
 export { Bank } from './definitions/bank';
