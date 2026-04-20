@@ -125,7 +125,7 @@ export function useKyc(): KycInterface {
         data,
       });
     },
-    [callApi],
+    [callApi, kycUrl],
   );
 
   const setData = useCallback(
@@ -136,14 +136,14 @@ export function useKyc(): KycInterface {
         data,
       });
     },
-    [callApi],
+    [callApi, kycUrl],
   );
 
   const getKycInfo = useCallback(
     async (code: string): Promise<KycInfo> => {
       return call({ url: kycUrl.base, code, method: 'GET' });
     },
-    [call],
+    [call, kycUrl],
   );
 
   const continueKyc = useCallback(
@@ -151,7 +151,7 @@ export function useKyc(): KycInterface {
       const url = `${kycUrl.base}?autoStep=${autoStep.toString()}`;
       return call({ url, code, method: 'PUT' });
     },
-    [call],
+    [call, kycUrl],
   );
 
   const startStep = useCallback(
@@ -164,7 +164,7 @@ export function useKyc(): KycInterface {
 
       return call({ url, code, method: 'GET' });
     },
-    [call],
+    [call, kycUrl],
   );
 
   const setContactData = useCallback(
@@ -295,7 +295,7 @@ export function useKyc(): KycInterface {
         version: 'v2',
       });
     },
-    [callApi],
+    [callApi, kycUrl],
   );
 
   const setFinancialData = useCallback(
@@ -310,7 +310,7 @@ export function useKyc(): KycInterface {
       const url = level ? `${kycUrl.checkTfa}?level=${level}` : kycUrl.checkTfa;
       return callApi({ url, version: 'v2', method: 'GET' });
     },
-    [callApi],
+    [callApi, kycUrl],
   );
 
   const setup2fa = useCallback(
@@ -318,35 +318,35 @@ export function useKyc(): KycInterface {
       const url = level ? `${kycUrl.tfa}?level=${level}` : kycUrl.tfa;
       return call({ url, code, method: 'POST' });
     },
-    [call],
+    [call, kycUrl],
   );
 
   const verify2fa = useCallback(
     async (code: string, token: string): Promise<void> => {
       return call({ url: `${kycUrl.tfa}/verify`, code, method: 'POST', data: { token } });
     },
-    [call],
+    [call, kycUrl],
   );
 
   const increaseLimit = useCallback(
     async (code: string, request: LimitRequest): Promise<void> => {
       return call({ url: kycUrl.limit, code, method: 'POST', data: request });
     },
-    [call],
+    [call, kycUrl],
   );
 
   const addTransferClient = useCallback(
     async (code: string, client: string): Promise<void> => {
       return call({ url: kycUrl.transfer(client), code, method: 'POST' });
     },
-    [call],
+    [call, kycUrl],
   );
 
   const removeTransferClient = useCallback(
     async (code: string, client: string): Promise<void> => {
       return call({ url: kycUrl.transfer(client), code, method: 'DELETE' });
     },
-    [call],
+    [call, kycUrl],
   );
 
   const cancelStep = useCallback(
