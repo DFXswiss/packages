@@ -3,6 +3,8 @@ export {
   SupportIssueType,
   SupportIssueReason,
   SupportIssueState,
+  SupportIssueInternalState,
+  Department,
   SupportMessageStatus,
 } from '@dfx.swiss/core';
 

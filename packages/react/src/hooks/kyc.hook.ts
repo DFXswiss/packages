@@ -82,6 +82,9 @@ export interface KycInterface {
   // transfer
   addTransferClient: (code: string, client: string) => Promise<void>;
   removeTransferClient: (code: string, client: string) => Promise<void>;
+
+  // cancel step
+  cancelStep: (code: string, url: string) => Promise<void>;
 }
 
 export function useKyc(): KycInterface {
@@ -346,6 +349,13 @@ export function useKyc(): KycInterface {
     [call],
   );
 
+  const cancelStep = useCallback(
+    async (code: string, url: string): Promise<void> => {
+      return call({ url, code, method: 'DELETE' });
+    },
+    [call],
+  );
+
   return useMemo(
     () => ({
       setName,
@@ -378,6 +388,7 @@ export function useKyc(): KycInterface {
       increaseLimit,
       addTransferClient,
       removeTransferClient,
+      cancelStep,
     }),
     [
       setName,
@@ -410,6 +421,7 @@ export function useKyc(): KycInterface {
       increaseLimit,
       addTransferClient,
       removeTransferClient,
+      cancelStep,
     ],
   );
 }

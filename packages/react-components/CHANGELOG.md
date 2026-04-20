@@ -3,6 +3,117 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0-beta.270 (2026-04-20)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.269 (2026-04-17)
+
+
+### Features
+
+* add CheckStatus and AmlReason enums ([#146](https://github.com/DFXswiss/packages/issues/146)) ([b803869](https://github.com/DFXswiss/packages/commit/b803869ae9d103982f6cf845dc22cc925ce48d21))
+
+
+
+
+
+# 1.3.0-beta.268 (2026-04-15)
+
+
+### Features
+
+* add STOPPED transaction state ([#145](https://github.com/DFXswiss/packages/issues/145)) ([86afa52](https://github.com/DFXswiss/packages/commit/86afa525465640a30fc35d362b99a1460e5c4d52))
+
+
+
+
+
+# 1.3.0-beta.267 (2026-04-10)
+
+
+### Features
+
+* add SupportIssueInternalState, Department enums and Marketing role ([#144](https://github.com/DFXswiss/packages/issues/144)) ([4e02dcd](https://github.com/DFXswiss/packages/commit/4e02dcd93962f094351627d05ea197d3fa2ae9b3))
+
+
+
+
+
+# 1.3.0-beta.266 (2026-04-09)
+
+
+### Features
+
+* updated KYC step cancel ([c5d6a7c](https://github.com/DFXswiss/packages/commit/c5d6a7cbd07d528c6b0dce8a8bb5b6c6e37793bf))
+
+
+
+
+
+# 1.3.0-beta.265 (2026-04-07)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.264 (2026-04-07)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.263 (2026-04-02)
+
+
+### Features
+
+* cancel KYC step ([d3b2142](https://github.com/DFXswiss/packages/commit/d3b21420e7737fd42dbfb96ccd01c3c1f0735d51))
+
+
+
+
+
+# 1.3.0-beta.262 (2026-03-27)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.261 (2026-03-20)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.260 (2026-03-20)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
+# 1.3.0-beta.259 (2026-03-20)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
+
+
+
+
 # 1.3.0-beta.258 (2026-03-19)
 
 

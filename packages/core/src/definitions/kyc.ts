@@ -36,6 +36,13 @@ export enum LegalEntity {
   ASSOCIATION = 'Association',
   FOUNDATION = 'Foundation',
   LIFE_INSURANCE = 'LifeInsurance',
+  PUBLIC_INSTITUTION = 'PublicInstitution',
+  OHG = 'OHG',
+  KG = 'KG',
+  GMBH_CO_KG = 'GmbHCoKG',
+  COOPERATIVE = 'Cooperative',
+  COLLECTIVE_COMPANY = 'CollectiveCompany',
+  LISTED_AG = 'ListedAG',
   TRUST = 'Trust',
   OTHER = 'Other',
 }
@@ -129,6 +136,8 @@ export enum KycStepName {
   ADDRESS_CHANGE = 'AddressChange',
   NAME_CHANGE = 'NameChange',
 }
+
+export const KycStepCancelable = [KycStepName.ADDRESS_CHANGE, KycStepName.PHONE_CHANGE, KycStepName.NAME_CHANGE];
 
 export enum KycStepType {
   // ident

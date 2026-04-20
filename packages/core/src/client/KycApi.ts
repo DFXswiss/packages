@@ -173,6 +173,10 @@ export class KycApi {
     });
   }
 
+  async cancelStep(code: string, url: string): Promise<void> {
+    return this.kycRequest(code, { url, method: 'DELETE' });
+  }
+
   // --- URL builders ---
 
   buildKycUrl(): ReturnType<typeof buildKycUrl> {
