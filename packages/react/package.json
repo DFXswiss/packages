@@ -21,7 +21,7 @@
     "pack": "npm pack"
   },
   "dependencies": {
-    "@dfx.swiss/core": "^0.1.1-beta.1",
+    "@dfx.swiss/core": "^0.2.0-beta.7",
     "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
     "typescript": "^4.9.3"
