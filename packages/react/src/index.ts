@@ -35,14 +35,14 @@ export { useSupportChat } from './hooks/support.hook';
 
 // Definitions
 export { CheckStatus, AmlReason } from './definitions/aml';
-export { Asset, AssetType, AssetCategory } from './definitions/asset';
-export { BankAccount } from './definitions/bank-account';
-export { Bank } from './definitions/bank';
+export { Asset, AssetType, AssetCategory, AssetUrl } from './definitions/asset';
+export { BankAccount, BankAccountUrl } from './definitions/bank-account';
+export { Bank, BankUrl } from './definitions/bank';
 export { Blockchain } from './definitions/blockchain';
-export { Buy, BuyPaymentInfo, PdfDocument } from './definitions/buy';
-export { Country } from './definitions/country';
+export { Buy, BuyPaymentInfo, PdfDocument, BuyUrl } from './definitions/buy';
+export { Country, CountryUrl } from './definitions/country';
 export { ApiError, ApiException } from './definitions/error';
-export { Fiat } from './definitions/fiat';
+export { Fiat, FiatUrl } from './definitions/fiat';
 export { CustomFile } from './definitions/file';
 export {
   MinAmount,
@@ -72,10 +72,12 @@ export {
   PaymentLinkConfig,
   UpdatePaymentLinkConfig,
   PaymentLinkPos,
+  PaymentRoutesUrl,
+  PaymentLinksUrl,
 } from './definitions/route';
-export { InfoBanner } from './definitions/settings';
+export { InfoBanner, SettingsUrl } from './definitions/settings';
 export { PriceStep } from './definitions/price-step';
-export { Language } from './definitions/language';
+export { Language, LanguageUrl } from './definitions/language';
 export { Jwt, UserRole } from './definitions/jwt';
 export {
   AccountType,
@@ -140,6 +142,7 @@ export {
   GoodsType,
   GoodsCategory,
   isStepDone,
+  buildKycUrl,
 } from './definitions/kyc';
 export {
   Sell,
@@ -149,8 +152,9 @@ export {
   Eip5792Data,
   Eip5792Call,
   ConfirmSellData,
+  SellUrl,
 } from './definitions/sell';
-export { Swap, SwapPaymentInfo, ConfirmSwapData } from './definitions/swap';
+export { Swap, SwapPaymentInfo, ConfirmSwapData, SwapUrl } from './definitions/swap';
 export { Session } from './definitions/session';
 export {
   User,
@@ -165,8 +169,11 @@ export {
   UserAddressInfo,
   PhoneCallTime,
   PhoneCallStatus,
+  UserUrl,
+  UpdateUser,
+  ApiKey,
 } from './definitions/user';
-export { SignIn, LnurlAuth, LnurlAuthStatus } from './definitions/auth';
+export { SignIn, LnurlAuth, LnurlAuthStatus, AuthUrl, AuthWalletType, SignMessage } from './definitions/auth';
 export {
   FiatPaymentMethod,
   CryptoPaymentMethod,
@@ -190,6 +197,7 @@ export {
   TransactionRefundTarget,
   CreditorData,
   TransactionFilterKey,
+  TransactionUrl,
 } from './definitions/transaction';
 export { Fees } from './definitions/fees';
 export {
@@ -210,6 +218,7 @@ export {
   SupportMessageStatus,
   Department,
   Reaction,
+  SupportUrl,
 } from './definitions/support';
 
 // Utils & Validations
