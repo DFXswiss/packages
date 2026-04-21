@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react-components@1.3.1-beta.0...@dfx.swiss/react-components@1.3.1) (2026-04-21)
+
+**Note:** Version bump only for package @dfx.swiss/react-components
+
 ## [1.3.1-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react-components@1.3.0-beta.277...@dfx.swiss/react-components@1.3.1-beta.0) (2026-04-21)
 
 **Note:** Version bump only for package @dfx.swiss/react-components
