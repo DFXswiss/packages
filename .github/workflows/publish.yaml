@@ -9,7 +9,6 @@ env:
   NODE_VERSION: "18.x"
 
 permissions:
-  id-token: write
   contents: write
 
 jobs:
@@ -35,20 +34,22 @@ jobs:
 
       - name: "Version and publish (beta)"
         if: github.ref == 'refs/heads/develop'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
         run: |
           git config user.name "DFX"
           git config user.email "info@dfx.swiss"
-          npm config set provenance true
 
           npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
           npx lerna publish from-git --yes --dist-tag beta
 
       - name: "Version and publish (stable)"
         if: github.ref == 'refs/heads/main'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
         run: |
           git config user.name "DFX"
           git config user.email "info@dfx.swiss"
-          npm config set provenance true
 
           npx lerna version --conventional-commits --conventional-graduate --yes
           npx lerna publish from-git --yes
