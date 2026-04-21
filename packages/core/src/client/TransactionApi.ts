@@ -87,8 +87,8 @@ export class TransactionApi {
   private buildFilterQuery(query: TransactionHistoryQuery): string {
     return Utils.buildQuery({
       userAddress: query.userAddress,
-      from: query.from instanceof Date ? query.from : query.from,
-      to: query.to instanceof Date ? query.to : query.to,
+      from: query.from,
+      to: query.to,
       format: query.format,
       buy: query.buy,
       sell: query.sell,
