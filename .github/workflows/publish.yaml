@@ -38,7 +38,6 @@ jobs:
         run: |
           git config user.name "DFX"
           git config user.email "info@dfx.swiss"
-          npm config set provenance true
 
           npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
           npx lerna publish from-git --yes --dist-tag beta
@@ -48,7 +47,6 @@ jobs:
         run: |
           git config user.name "DFX"
           git config user.email "info@dfx.swiss"
-          npm config set provenance true
 
           npx lerna version --conventional-commits --conventional-graduate --yes
           npx lerna publish from-git --yes
