@@ -21,18 +21,24 @@ export function useAsset(): AssetInterface {
     );
   }, []);
 
-  const getAssets = useCallback(async (blockchains: Blockchain[], includePrivate: boolean): Promise<Asset[]> => {
-    return call<Asset[]>({
-      url: `${AssetUrl.get}?blockchains=${blockchains.join(',')}&includePrivate=${includePrivate}`,
-      method: 'GET',
-    });
-  }, [call]);
+  const getAssets = useCallback(
+    async (blockchains: Blockchain[], includePrivate: boolean): Promise<Asset[]> => {
+      return call<Asset[]>({
+        url: `${AssetUrl.get}?blockchains=${blockchains.join(',')}&includePrivate=${includePrivate}`,
+        method: 'GET',
+      });
+    },
+    [call],
+  );
 
-  const getAsset = useCallback((assets: Asset[] = [], identifier?: string): Asset | undefined => {
-    if (!identifier) return undefined;
+  const getAsset = useCallback(
+    (assets: Asset[] = [], identifier?: string): Asset | undefined => {
+      if (!identifier) return undefined;
 
-    return assets.find((a) => isSameAsset(a, identifier));
-  }, [isSameAsset]);
+      return assets.find((a) => isSameAsset(a, identifier));
+    },
+    [isSameAsset],
+  );
 
   return useMemo(() => ({ getAssets, getAsset, isSameAsset }), [getAssets, getAsset, isSameAsset]);
 }

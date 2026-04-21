@@ -1,7 +1,7 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { useForm } from "react-hook-form";
-import Form from "./Form";
-import StyledSearchDropdown from "./StyledSearchDropdown";
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { useForm } from 'react-hook-form';
+import Form from './Form';
+import StyledSearchDropdown from './StyledSearchDropdown';
 
 interface Country {
   symbol: string;
@@ -9,7 +9,7 @@ interface Country {
 }
 
 export default {
-  title: "Forms/StyledSearchDropdown",
+  title: 'Forms/StyledSearchDropdown',
   component: StyledSearchDropdown,
 } as ComponentMeta<typeof StyledSearchDropdown>;
 
@@ -31,11 +31,11 @@ export const CountrySelect: ComponentStory<typeof StyledSearchDropdown<Country>>
   );
 };
 CountrySelect.args = {
-  label: "Country",
-  placeholder: "Select...",
+  label: 'Country',
+  placeholder: 'Select...',
   items: [
-    { symbol: "CH", name: "Switzerland" },
-    { symbol: "DE", name: "Germany" },
+    { symbol: 'CH', name: 'Switzerland' },
+    { symbol: 'DE', name: 'Germany' },
   ],
   labelFunc: (i) => i.name,
   descriptionFunc: (i) => i.symbol,

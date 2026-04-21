@@ -16,7 +16,7 @@ export const DefaultInput: ComponentStory<typeof StyledDateAndTimePicker> = (arg
   } = useForm<{ test: string }>();
 
   const onSubmit = handleSubmit((data) => console.log(data));
-  let whiteBG = 'p-10 max-w-xl';
+  const whiteBG = 'p-10 max-w-xl';
   return (
     <div className={whiteBG}>
       <Form control={control} errors={errors} onSubmit={onSubmit}>

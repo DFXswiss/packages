@@ -35,69 +35,76 @@ export function useApi(): ApiInterface {
   const url = process.env.REACT_APP_API_URL ?? 'https://api.dfx.swiss';
   const defaultVersion = 'v1';
 
-  const fetchFrom = useCallback(async function <T>(config: CallConfig): Promise<T> {
-    const version = config.version ?? defaultVersion;
-    const baseUrl = `${url}/${version}`;
-    const responseType = config.responseType ?? ResponseType.JSON;
+  const fetchFrom = useCallback(
+    async function <T>(config: CallConfig): Promise<T> {
+      const version = config.version ?? defaultVersion;
+      const baseUrl = `${url}/${version}`;
+      const responseType = config.responseType ?? ResponseType.JSON;
 
-    return fetch(
-      `${baseUrl}/${config.url}`,
-      buildInit(config.method, config.token === false ? undefined : config.token, config.data, config.noJson),
-    )
-      .catch((error: unknown) => {
-        const message = error instanceof Error ? error.message : String(error);
-        throw new ApiException(0, `Network error: ${message}`);
-      })
-      .then((response) => {
-        if (response.status === config.specialHandling?.statusCode) {
-          config.specialHandling?.action?.();
-        }
-        if (response.ok) {
-          switch (responseType) {
-            case ResponseType.JSON:
-              return response.json().catch(() => undefined) as Promise<T>;
-            case ResponseType.TEXT:
-              return response.text() as Promise<T>;
-            case ResponseType.BLOB:
-              return response.blob().then((blob) => ({
-                data: blob,
-                headers: Object.fromEntries(response.headers.entries()),
-              })) as Promise<T>;
-            default:
-              throw new Error('Unknown response type');
+      return fetch(
+        `${baseUrl}/${config.url}`,
+        buildInit(config.method, config.token === false ? undefined : config.token, config.data, config.noJson),
+      )
+        .catch((error: unknown) => {
+          const message = error instanceof Error ? error.message : String(error);
+          throw new ApiException(0, `Network error: ${message}`);
+        })
+        .then((response) => {
+          if (response.status === config.specialHandling?.statusCode) {
+            config.specialHandling?.action?.();
+          }
+          if (response.ok) {
+            switch (responseType) {
+              case ResponseType.JSON:
+                return response.json().catch(() => undefined) as Promise<T>;
+              case ResponseType.TEXT:
+                return response.text() as Promise<T>;
+              case ResponseType.BLOB:
+                return response.blob().then((blob) => ({
+                  data: blob,
+                  headers: Object.fromEntries(response.headers.entries()),
+                })) as Promise<T>;
+              default:
+                throw new Error('Unknown response type');
+            }
+          }
+
+          return response
+            .json()
+            .catch(() => null)
+            .then((body: Partial<ApiError> | null) => {
+              throw new ApiException(
+                body?.statusCode ?? response.status,
+                body?.message ?? response.statusText ?? 'Unknown error',
+              );
+            });
+        });
+    },
+    [url, defaultVersion],
+  );
+
+  const call = useCallback(
+    async function callApi<T>(config: CallConfig): Promise<T> {
+      config.token ??= getAuthToken();
+
+      return fetchFrom<T>(config).catch((error: ApiError) => {
+        if (error.statusCode === 401) {
+          if (config.token === getAuthToken()) {
+            setAuthToken(undefined);
+          } else {
+            // Use named function to avoid stale closure
+            return callApi<T>({
+              ...config,
+              token: getAuthToken(),
+            });
           }
         }
 
-        return response.json()
-          .catch(() => null)
-          .then((body: Partial<ApiError> | null) => {
-            throw new ApiException(
-              body?.statusCode ?? response.status,
-              body?.message ?? response.statusText ?? 'Unknown error',
-            );
-          });
+        throw error;
       });
-  }, [url, defaultVersion]);
-
-  const call = useCallback(async function callApi<T>(config: CallConfig): Promise<T> {
-    config.token ??= getAuthToken();
-
-    return fetchFrom<T>(config).catch((error: ApiError) => {
-      if (error.statusCode === 401) {
-        if (config.token === getAuthToken()) {
-          setAuthToken(undefined);
-        } else {
-          // Use named function to avoid stale closure
-          return callApi<T>({
-            ...config,
-            token: getAuthToken(),
-          });
-        }
-      }
-
-      throw error;
-    });
-  }, [getAuthToken, setAuthToken, fetchFrom]);
+    },
+    [getAuthToken, setAuthToken, fetchFrom],
+  );
 
   function buildInit(
     method: 'GET' | 'PUT' | 'POST' | 'DELETE',

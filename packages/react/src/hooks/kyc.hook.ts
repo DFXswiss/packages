@@ -104,7 +104,7 @@ export function useKyc(): KycInterface {
   }, []);
 
   const call = useCallback(
-    async <T,>(config: CallConfig): Promise<T> => {
+    async <T>(config: CallConfig): Promise<T> => {
       return fetch(config.url, buildInit(config)).then((response) => {
         if (response.ok) {
           return response.json().catch(() => undefined);
