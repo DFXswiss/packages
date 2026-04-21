@@ -3577,8 +3577,8 @@ export function DfxAssetIconZCHF({ forceColor }: BaseAssetIconProps) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_216_23463)">
-        <g clip-path="url(#clip1_216_23463)">
+      <g clipPath="url(#clip0_216_23463)">
+        <g clipPath="url(#clip1_216_23463)">
           <path d="M80 124H76V128H80V124Z" fill={forceColor ?? '#707280'} />
           <path d="M76 124H72V128H76V124Z" fill={forceColor ?? '#717381'} />
           <path d="M72 124H68V128H72V124Z" fill={forceColor ?? '#727482'} />

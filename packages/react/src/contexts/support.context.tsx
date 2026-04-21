@@ -114,7 +114,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
 
     if (!hasText && !hasFiles) return;
 
-    const modFiles = files?.length !== 1 && hasText ? [...(files ?? []), undefined] : files ?? [];
+    const modFiles = files?.length !== 1 && hasText ? [...(files ?? []), undefined] : (files ?? []);
     modFiles.forEach(async (file: File | undefined, index) => {
       const dataFile = file && (await mapFileToDataFile(file));
       const messageId = getNextUnsettledMessageId();

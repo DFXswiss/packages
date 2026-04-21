@@ -31,7 +31,11 @@ export function useSell(): SellInterface {
   );
 
   return useMemo(
-    () => ({ receiveFor, confirmSell, currencies: currencies?.filter((c) => c.buyable || c.cardBuyable || c.instantBuyable) }),
+    () => ({
+      receiveFor,
+      confirmSell,
+      currencies: currencies?.filter((c) => c.buyable || c.cardBuyable || c.instantBuyable),
+    }),
     [receiveFor, confirmSell, currencies],
   );
 }

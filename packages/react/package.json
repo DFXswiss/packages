@@ -18,6 +18,8 @@
   "scripts": {
     "build": "tsc -b ./tsconfig.build.json",
     "clean": "rm -rf ./dist/ && rm -rf ./tsconfig.build.tsbuildinfo",
+    "lint": "eslint src --ext .ts,.tsx",
+    "format:check": "prettier --check src",
     "pack": "npm pack"
   },
   "dependencies": {

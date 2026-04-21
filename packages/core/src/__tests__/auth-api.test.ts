@@ -49,9 +49,7 @@ describe('AuthApi', () => {
     });
 
     it('throws non-409 errors without retry', async () => {
-      const mockHttp = createMockHttpClient([
-        { reject: new ApiException(401, 'Unauthorized') },
-      ]);
+      const mockHttp = createMockHttpClient([{ reject: new ApiException(401, 'Unauthorized') }]);
       const api = new AuthApi(mockHttp);
 
       await expect(api.authenticate(params)).rejects.toThrow('Unauthorized');

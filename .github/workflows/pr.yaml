@@ -38,3 +38,7 @@ jobs:
       - name: Run linter
         run: |
           npx lerna run lint
+
+      - name: Check formatting
+        run: |
+          npx lerna run format:check

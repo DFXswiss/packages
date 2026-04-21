@@ -1,7 +1,15 @@
 import { DfxHttpClient, ResponseType } from '../client/DfxHttpClient';
 import { ApiException } from '../definitions/error';
 
-function createMockFetch(response: { ok: boolean; status: number; statusText?: string; json?: jest.Mock; text?: jest.Mock; blob?: jest.Mock; headers?: any }) {
+function createMockFetch(response: {
+  ok: boolean;
+  status: number;
+  statusText?: string;
+  json?: jest.Mock;
+  text?: jest.Mock;
+  blob?: jest.Mock;
+  headers?: any;
+}) {
   return jest.fn().mockResolvedValue({
     ok: response.ok,
     status: response.status,
@@ -68,10 +76,7 @@ describe('DfxHttpClient', () => {
 
       await client.request({ url: 'user', method: 'GET', version: 'v2' });
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.dfx.swiss/v2/user',
-        expect.anything(),
-      );
+      expect(mockFetch).toHaveBeenCalledWith('https://api.dfx.swiss/v2/user', expect.anything());
     });
 
     it('sends Authorization header when token is set', async () => {

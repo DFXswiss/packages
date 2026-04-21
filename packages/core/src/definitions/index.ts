@@ -124,15 +124,7 @@ export type {
   PaymentLinkPos,
 } from './route';
 export { SellUrl } from './sell';
-export type {
-  Eip5792Call,
-  Eip5792Data,
-  UnsignedTx,
-  Sell,
-  Beneficiary,
-  SellPaymentInfo,
-  ConfirmSellData,
-} from './sell';
+export type { Eip5792Call, Eip5792Data, UnsignedTx, Sell, Beneficiary, SellPaymentInfo, ConfirmSellData } from './sell';
 export type { Session } from './session';
 export { SettingsUrl } from './settings';
 export type { InfoBanner } from './settings';
