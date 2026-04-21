@@ -11,7 +11,7 @@ npm install @dfx.swiss/core
 ## Usage
 
 ```typescript
-import { DfxApiClient } from '@dfx.swiss/core';
+import { DfxApiClient, Blockchain } from '@dfx.swiss/core';
 
 const client = new DfxApiClient({
   apiUrl: 'https://api.dfx.swiss/v1', // optional, this is the default
@@ -23,7 +23,7 @@ const signIn = await client.auth.authenticate({ address, signature });
 client.setToken(signIn.accessToken);
 
 // Use API
-const assets = await client.asset.list({ blockchains: ['Ethereum'] });
+const assets = await client.asset.list({ blockchains: [Blockchain.ETHEREUM] });
 const user = await client.user.get();
 ```
 

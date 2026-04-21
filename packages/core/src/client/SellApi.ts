@@ -1,5 +1,6 @@
 import { Sell, SellUrl, SellPaymentInfo, ConfirmSellData } from '../definitions/sell';
 import { Transaction } from '../definitions/transaction';
+import { Utils } from '../utils';
 import { DfxHttpClient } from './DfxHttpClient';
 
 export class SellApi {
@@ -10,7 +11,8 @@ export class SellApi {
   }
 
   async createPaymentInfo(info: SellPaymentInfo, includeTx = false): Promise<Sell> {
-    const url = includeTx ? `${SellUrl.receive}?includeTx=true` : SellUrl.receive;
+    const query = Utils.buildQuery({ includeTx: includeTx || undefined });
+    const url = `${SellUrl.receive}${query}`;
     return this.http.request<Sell>({ url, method: 'PUT', data: info });
   }
 

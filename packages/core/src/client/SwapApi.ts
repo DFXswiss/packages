@@ -1,5 +1,6 @@
 import { Swap, SwapUrl, SwapPaymentInfo, ConfirmSwapData } from '../definitions/swap';
 import { Transaction } from '../definitions/transaction';
+import { Utils } from '../utils';
 import { DfxHttpClient } from './DfxHttpClient';
 
 export class SwapApi {
@@ -10,7 +11,8 @@ export class SwapApi {
   }
 
   async createPaymentInfo(info: SwapPaymentInfo, includeTx = false): Promise<Swap> {
-    const url = includeTx ? `${SwapUrl.receive}?includeTx=true` : SwapUrl.receive;
+    const query = Utils.buildQuery({ includeTx: includeTx || undefined });
+    const url = `${SwapUrl.receive}${query}`;
     return this.http.request<Swap>({ url, method: 'PUT', data: info });
   }
 
