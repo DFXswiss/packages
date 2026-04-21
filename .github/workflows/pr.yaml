@@ -12,7 +12,7 @@ env:
 
 jobs:
   build:
-    name: Build, test and lint
+    name: Lint, build and test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,14 +27,6 @@ jobs:
         run: |
           npm install
 
-      - name: Build code
-        run: |
-          npx lerna run build
-
-      - name: Run tests
-        run: |
-          npx lerna run test
-
       - name: Run linter
         run: |
           npx lerna run lint
@@ -42,3 +34,11 @@ jobs:
       - name: Check formatting
         run: |
           npx lerna run format:check
+
+      - name: Build code
+        run: |
+          npx lerna run build
+
+      - name: Run tests
+        run: |
+          npx lerna run test
