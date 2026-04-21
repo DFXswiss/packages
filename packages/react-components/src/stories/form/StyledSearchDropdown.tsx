@@ -20,6 +20,7 @@ interface StyledSearchDropdownProps<T> extends ControlProps {
   assetIconFunc?: (item: T) => AssetIconVariant;
   rootRef?: RefObject<HTMLElement>;
   forceEnable?: boolean;
+  hideBalanceWhenClosed?: boolean;
   autocomplete?: string;
 }
 
@@ -43,6 +44,7 @@ function StyledSearchDropdown<T>({
   assetIconFunc,
   rootRef,
   forceEnable,
+  hideBalanceWhenClosed,
   autocomplete,
   ...props
 }: StyledSearchDropdownProps<T>) {
@@ -161,7 +163,9 @@ function StyledSearchDropdown<T>({
                         </span>
                       )}
                     </div>
-                    {!largeInput && balanceFunc && <div className="font-semibold">{balanceFunc(value)}</div>}
+                    {!largeInput && balanceFunc && !hideBalanceWhenClosed && (
+                      <div className="font-semibold">{balanceFunc(value)}</div>
+                    )}
                   </div>
                 </div>
               </div>

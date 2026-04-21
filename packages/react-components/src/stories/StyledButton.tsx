@@ -4,6 +4,7 @@ import DfxIcon, { IconColor, IconSize, IconVariant } from './DfxIcon';
 export enum StyledButtonSize {
   BIG = 'BIG',
   SMALL = 'SMALL',
+  DOUBLE = 'DOUBLE',
 }
 
 export enum StyledButtonWidth {
@@ -16,6 +17,7 @@ export enum StyledButtonWidth {
 export enum StyledButtonColor {
   RED = 'RED',
   BLUE = 'BLUE',
+  GREEN = 'GREEN',
   GRAY = 'GRAY',
   GRAY_OUTLINE = 'GRAY_OUTLINE',
   PALE_WHITE = 'PALE_WHITE',
@@ -57,6 +59,11 @@ const SIZE_MAPS: Record<StyledButtonSize, SizeMapProps> = {
     loadingSpinnerSize: SpinnerSize.SM,
     iconSize: IconSize.XS,
   },
+  [StyledButtonSize.DOUBLE]: {
+    buttonClasses: 'font-bold text-base rounded px-7 py-8 gap-4 ',
+    loadingSpinnerSize: SpinnerSize.MD,
+    iconSize: IconSize.MD,
+  },
 };
 
 type ColorMapProps = {
@@ -73,6 +80,11 @@ const COLOR_MAPS: Record<StyledButtonColor, ColorMapProps> = {
   [StyledButtonColor.BLUE]: {
     buttonColorClasses:
       'bg-primary-blue text-white hover:bg-dfxBlue-600 focus:bg-dfxBlue-600 active:bg-dfxBlue-800 hover:shadow-lg',
+    iconColor: IconColor.WHITE,
+  },
+  [StyledButtonColor.GREEN]: {
+    buttonColorClasses:
+      'bg-dfxGreen-100 text-white hover:bg-dfxGreen-150 focus:bg-dfxGreen-150 active:bg-dfxGreen-200 hover:shadow-lg',
     iconColor: IconColor.WHITE,
   },
   [StyledButtonColor.GRAY]: {

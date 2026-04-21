@@ -2,7 +2,7 @@ import { ControlProps } from './Form';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import DfxIcon, { IconColor, IconSize, IconVariant } from '../DfxIcon';
 import { Controller } from 'react-hook-form';
-import DfxAssetIcon, { AssetIconVariant } from '../DfxAssetIcon';
+import DfxAssetIcon, { AssetIconSize, AssetIconVariant } from '../DfxAssetIcon';
 import { Utils } from '../../utils';
 
 export interface StyledDropdownProps<T> extends ControlProps {
@@ -18,6 +18,7 @@ export interface StyledDropdownProps<T> extends ControlProps {
   assetIconFunc?: (item: T) => AssetIconVariant;
   rootRef?: RefObject<HTMLElement>;
   forceEnable?: boolean;
+  hideBalanceWhenClosed?: boolean;
 }
 
 export default function StyledDropdown<T>({
@@ -38,6 +39,7 @@ export default function StyledDropdown<T>({
   assetIconFunc,
   rootRef,
   forceEnable,
+  hideBalanceWhenClosed,
   error,
   ...props
 }: StyledDropdownProps<T>) {
@@ -101,9 +103,9 @@ export default function StyledDropdown<T>({
             disabled={isDisabled}
             {...props}
           >
-            <div className="flex flex-row gap-2 items-center w-full h-full">
-              {value && assetIconFunc && <DfxAssetIcon asset={assetIconFunc(value)} />}
-              <div className="flex flex-col gap-1 justify-between text-left w-full">
+            <div className="flex flex-row gap-3 items-center w-full h-full">
+              {value != null && assetIconFunc && <DfxAssetIcon asset={assetIconFunc(value)} />}
+              <div className="flex flex-col gap-1 justify-between text-left w-full pt-0.5">
                 {value === undefined ? (
                   <p className="text-dfxGray-600 drop-shadow-none py-[0.25rem]">{placeholder}</p>
                 ) : (
@@ -115,12 +117,12 @@ export default function StyledDropdown<T>({
                         !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
                       }`}
                     >
-                      {labelFunc(value)}
-                      {balanceFunc && <p>{balanceFunc(value)}</p>}
+                      <p className="line-clamp-1 pb-0.5">{labelFunc(value)}</p>
+                      {balanceFunc && !hideBalanceWhenClosed && <p>{balanceFunc(value)}</p>}
                     </span>
                     {descriptionFunc && (
-                      <span className="text-dfxGray-800 text-xs h-min leading-none flex justify-between">
-                        {descriptionFunc(value)}
+                      <span className="text-dfxGray-800 text-xs h-min leading-tight flex justify-between">
+                        <p className="pb-0.5 line-clamp-1 leading-tight">{descriptionFunc(value)}</p>
                         {priceFunc && <p>{priceFunc(value)}</p>}
                       </span>
                     )}
@@ -141,37 +143,43 @@ export default function StyledDropdown<T>({
               ref={dropdownRef}
               className="absolute bg-white rounded-b border-x border-b border-dfxGray-500 w-full z-10 overflow-y-auto max-h-[15rem]"
             >
-              {items.map((item, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  onClick={() => {
-                    onChange(item);
-                    setIsOpen(false);
-                  }}
-                  className="flex flex-col gap-2 justify-between text-left w-full hover:bg-dfxGray-400/50 px-3.5 py-2.5"
-                >
-                  <div className="flex flex-row gap-2 items-center w-full">
-                    {assetIconFunc && <DfxAssetIcon asset={assetIconFunc(item)} />}
-                    <div className="flex flex-col gap-1 justify-between text-left w-full">
-                      <span
-                        className={`text-dfxBlue-800 leading-none font-semibold flex justify-between ${
-                          !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
-                        }`}
-                      >
-                        {labelFunc(item)}
-                        {balanceFunc && <p>{balanceFunc(item)}</p>}
-                      </span>
-                      {descriptionFunc && (
-                        <span className="text-dfxGray-800 text-xs h-min leading-none flex justify-between">
-                          {descriptionFunc(item)}
-                          {priceFunc && <p>{priceFunc(item)}</p>}
+              {items.map((item, index) => {
+                const isSelected = value !== undefined && JSON.stringify(value) === JSON.stringify(item);
+
+                return (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => {
+                      onChange(item);
+                      setIsOpen(false);
+                    }}
+                    className={`flex flex-col gap-2 justify-between text-left w-full hover:bg-dfxGray-400 px-3.5 py-2.5 ${
+                      isSelected ? 'bg-dfxGray-400/50' : ''
+                    }`}
+                  >
+                    <div className="flex flex-row gap-3 items-center w-full">
+                      {assetIconFunc && <DfxAssetIcon asset={assetIconFunc(item)} />}
+                      <div className="flex flex-col gap-1 justify-between text-left w-full">
+                        <span
+                          className={`text-dfxBlue-800 leading-none font-semibold flex justify-between ${
+                            !descriptionFunc && !assetIconFunc ? 'py-[0.25rem]' : ''
+                          }`}
+                        >
+                          {labelFunc(item)}
+                          {balanceFunc && <p>{balanceFunc(item)}</p>}
                         </span>
-                      )}
+                        {descriptionFunc && (
+                          <span className="text-dfxGray-800 text-xs h-min leading-none flex justify-between">
+                            {descriptionFunc(item)}
+                            {priceFunc && <p>{priceFunc(item)}</p>}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                );
+              })}
             </div>
           )}
 

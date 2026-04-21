@@ -1,7 +1,2 @@
-export const CountryUrl = { get: 'kyc/countries' };
-
-export interface Country {
-  id: number;
-  symbol: string;
-  name: string;
-}
+export { CountryUrl } from '@dfx.swiss/core';
+export type { Country } from '@dfx.swiss/core';

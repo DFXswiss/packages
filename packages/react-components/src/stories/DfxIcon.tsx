@@ -11,6 +11,8 @@ import {
   FaGooglePlay,
   FaFileUpload,
   FaReceipt,
+  FaHeadset,
+  FaHandshake,
 } from 'react-icons/fa';
 import {
   MdContentCopy,
@@ -44,7 +46,12 @@ import {
   MdNorth,
   MdSouth,
   MdRepeat,
+  MdReplay,
+  MdPersonSearch,
 } from 'react-icons/md';
+import { BsSafe2Fill } from 'react-icons/bs';
+import { HiOutlineDocumentSearch } from 'react-icons/hi';
+import { GoPlus } from 'react-icons/go';
 import { VscArrowSwap } from 'react-icons/vsc';
 import { ReactElement, useContext } from 'react';
 
@@ -82,6 +89,7 @@ export enum IconVariant {
   INFO_OUTLINE = 'INFO_OUTLINE',
   MENU = 'MENU',
   PROCESS_DONE = 'PROCESS_DONE',
+  PROCESS_FAILED = 'PROCESS_FAILED',
   SEPA_INSTANT = 'SEPA_INSTANT',
   SETTINGS = 'SETTINGS',
   UNFOLD_LESS = 'UNFOLD_LESS',
@@ -102,10 +110,18 @@ export enum IconVariant {
   USER_DATA = 'USER_DATA',
   LOADING = 'LOADING',
   KYC = 'KYC',
+  COMPLIANCE = 'COMPLIANCE',
   APPLE = 'APPLE',
   GOOGLE_PLAY = 'GOOGLE_PLAY',
   REPEAT = 'REPEAT',
   TRANSACTIONS = 'TRANSACTIONS',
+  RELOAD = 'RELOAD',
+  SUPPORT = 'SUPPORT',
+  SAFE = 'SAFE',
+  REVIEW = 'REVIEW',
+  PLUS = 'PLUS',
+  OPEN_CRYPTOPAY = 'OPEN_CRYPTOPAY',
+  REFERRAL = 'REFERRAL',
 }
 
 export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
@@ -139,6 +155,7 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.HOME]: <MdHome />,
   [IconVariant.SEPA_INSTANT]: <DfxSepaInstantAvailable />,
   [IconVariant.PROCESS_DONE]: <DfxProcessDoneIcon />,
+  [IconVariant.PROCESS_FAILED]: <DfxProcessFailedIcon />,
   [IconVariant.EDIT]: <MdEdit />,
   [IconVariant.HELP]: <MdHelpOutline />,
   [IconVariant.DELETE]: <MdDelete />,
@@ -156,10 +173,18 @@ export const VARIANT_MAPS: Record<IconVariant, ReactElement<IconType>> = {
   [IconVariant.TELEGRAM]: <FaTelegramPlane />,
   [IconVariant.LOADING]: <FaHourglassHalf />,
   [IconVariant.KYC]: <FaUserCheck />,
+  [IconVariant.COMPLIANCE]: <MdPersonSearch />,
   [IconVariant.APPLE]: <FaApple />,
   [IconVariant.GOOGLE_PLAY]: <FaGooglePlay />,
   [IconVariant.REPEAT]: <MdRepeat />,
   [IconVariant.TRANSACTIONS]: <FaReceipt />,
+  [IconVariant.RELOAD]: <MdReplay />,
+  [IconVariant.SUPPORT]: <FaHeadset />,
+  [IconVariant.SAFE]: <BsSafe2Fill />,
+  [IconVariant.REVIEW]: <HiOutlineDocumentSearch />,
+  [IconVariant.PLUS]: <GoPlus />,
+  [IconVariant.OPEN_CRYPTOPAY]: <OpenCryptoPayIcon />,
+  [IconVariant.REFERRAL]: <FaHandshake />,
 };
 
 export enum IconSize {
@@ -270,6 +295,87 @@ function DfxSepaInstantAvailable() {
       </svg>
       <span> SEPA INSTANT AVAILABLE</span>
     </div>
+  );
+}
+
+function DfxProcessFailedIcon() {
+  const icContext = useContext(IconContext);
+  let iconSize: string | undefined;
+  icContext.size === '32px' ? (iconSize = '170px') : (iconSize = icContext.size);
+  const checkMarkColor = icContext.color === '#072440' ? icContext.color : 'white';
+
+  return (
+    <svg width={iconSize} height={iconSize} viewBox="0 0 170 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g
+        clipPath={checkMarkColor === 'white' ? 'url(#clip0_885_9990)' : undefined}
+        filter={checkMarkColor === 'white' ? 'url(#filter0_d_885_9990)' : undefined}
+      >
+        <path
+          opacity="0.18"
+          d="M25.9308 118.563C23.2492 114.352 21.02 109.851 19.2969 105.188L29.3985 101.461C30.8523 105.414 32.7369 109.215 35.0092 112.769L25.9308 118.552V118.563Z"
+          fill={checkMarkColor}
+        />
+        <path
+          opacity="0.14"
+          d="M15.6677 90.703C15.1292 86.826 14.9139 82.8522 15.0323 78.9107C15.0646 77.866 15.1185 76.8322 15.1939 75.7983L25.9308 76.5953C25.8662 77.4676 25.8231 78.3507 25.7908 79.2337C25.6939 82.583 25.8662 85.943 26.3292 89.2276L15.6677 90.7137V90.703Z"
+          fill={checkMarkColor}
+        />
+        <path
+          opacity="0.09"
+          d="M28.1923 64.1678L17.8646 61.1201C19.2754 56.3385 21.2139 51.7078 23.6154 47.3354L33.0492 52.5262C31.0139 56.2201 29.3877 60.1401 28.1923 64.1785V64.1678Z"
+          fill={checkMarkColor}
+        />
+        <path
+          opacity="0.06"
+          d="M40.2862 42.1553L32.1554 35.0907C35.4185 31.3322 39.1015 27.9184 43.0862 24.9353L49.5369 33.5615C46.1662 36.0922 43.0539 38.9784 40.2862 42.1661V42.1553Z"
+          fill={checkMarkColor}
+        />
+        <path
+          opacity="0.04"
+          d="M60.3923 27.1109L55.9123 17.3217C60.4461 15.2432 65.2061 13.6601 70.0738 12.6047L72.3569 23.1263C68.2431 24.0201 64.2154 25.3663 60.3815 27.1217L60.3923 27.1109Z"
+          fill={checkMarkColor}
+        />
+        <path
+          opacity="0.2"
+          d="M101.143 12.8738C98.3216 12.2062 95.4354 11.7108 92.5385 11.4092C90.04 11.14 87.4877 11 84.9785 11V21.7692C87.1 21.7692 89.2754 21.8877 91.3862 22.1138C93.8308 22.3723 96.2862 22.7923 98.6662 23.3523C125.891 29.7815 145.038 54.7662 144.198 82.7662C143.218 115.408 115.865 141.178 83.2231 140.198C70.0954 139.811 57.797 135.234 47.6416 126.963C45.9939 125.617 44.3893 124.163 42.8923 122.655L35.2354 130.226C37.0016 132.014 38.897 133.726 40.8462 135.32C52.8539 145.098 67.4031 150.505 82.9108 150.968C121.497 152.12 153.815 121.675 154.968 83.0892C155.958 49.9954 133.322 20.4662 101.143 12.8738Z"
+          fill={checkMarkColor}
+        />
+        <path
+          d="M102.857 108.516 84.236 89.895l-18.624 18.621-8.496-8.493L75.74 81.399 57.116 62.778l8.496-8.496 18.624 18.621 18.621-18.621 8.496 8.496-18.621 18.621 18.621 18.624z"
+          fill={checkMarkColor}
+        />
+      </g>
+      {checkMarkColor === 'white' && (
+        <defs>
+          <filter
+            id="filter0_d_885_9990"
+            x="0"
+            y="0"
+            width="170"
+            height="170"
+            filterUnits="userSpaceOnUse"
+            colorInterpolationFilters="sRGB"
+          >
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
+            <feColorMatrix
+              in="SourceAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+              result="hardAlpha"
+            />
+            <feOffset dy="4" />
+            <feGaussianBlur stdDeviation="7.5" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" />
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_885_9990" />
+            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_885_9990" result="shape" />
+          </filter>
+          <clipPath id="clip0_885_9990">
+            <rect width="140" height="140" fill="white" transform="translate(15 11)" />
+          </clipPath>
+        </defs>
+      )}
+    </svg>
   );
 }
 
@@ -549,6 +655,35 @@ function DfxUserData() {
         d="M48.1445 38.9303H43.4896V34.2754H41.2997V38.9303H36.6448V41.1202H41.2997V45.7751H43.4896V41.1202H48.1445V38.9303Z"
         fill={icContext.color}
       />
+    </svg>
+  );
+}
+
+function OpenCryptoPayIcon() {
+  const icContext = useContext(IconContext);
+  return (
+    <svg
+      width={icContext.size}
+      height={icContext.size}
+      viewBox="0 0 170 129"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#clip0_4021_8643)">
+        <path
+          d="M119.754 114.608L168.013 66.3482C169.26 65.102 169.26 63.0791 168.013 61.8149L110.326 4.14533L88.7788 25.6924L124.919 61.8329C126.166 63.0791 126.166 65.102 124.919 66.3663L98.2249 93.0608L119.772 114.608H119.754Z"
+          fill={icContext.color}
+        />
+        <path
+          d="M106.28 128.1L44.5468 66.3663C43.3006 65.1201 43.3006 63.0972 44.5468 61.8329L106.28 0.0996094H64.5045C63.6556 0.0996094 62.8429 0.442773 62.2469 1.03879L1.43467 61.8329C0.188444 63.0791 0.188444 65.102 1.43467 66.3663L62.2288 127.16C62.8248 127.756 63.6376 128.1 64.4865 128.1H106.28Z"
+          fill={icContext.color}
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_4021_8643">
+          <rect width="169" height="128" fill="white" transform="translate(0.5 0.0996094)" />
+        </clipPath>
+      </defs>
     </svg>
   );
 }

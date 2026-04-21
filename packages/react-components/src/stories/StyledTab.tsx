@@ -8,6 +8,9 @@ interface StyledTabProps extends PropsWithChildren {
   icon?: IconVariant;
   flagWord1?: string;
   flagWord2?: string;
+  darkTheme?: boolean;
+  spread?: boolean;
+  small?: boolean;
 }
 
 export default function StyledTab({
@@ -18,16 +21,28 @@ export default function StyledTab({
   icon,
   flagWord1,
   flagWord2,
+  darkTheme,
+  spread,
+  small,
 }: StyledTabProps) {
-  let tabClasses = 'text-2xl font-black px-12 py-2 rounded-t-lg block flex gap-2 ';
+  let tabClasses = 'font-black rounded-t-lg block flex items-center gap-2 w-full h-full ';
+  tabClasses += small ? 'px-4 py-2 ' : 'text-2xl px-12 py-2 ';
   if (!deactivated) {
-    active ? (tabClasses += 'bg-white') : (tabClasses += 'hover:bg-white/10 focus:bg-white/10');
+    if (active) {
+      tabClasses += darkTheme ? 'bg-dfxGray-500' : 'bg-white';
+    } else {
+      tabClasses += darkTheme
+        ? 'hover:bg-dfxGray-500/30 focus:bg-dfxGray-500/30'
+        : 'hover:bg-white/10 focus:bg-white/10';
+    }
   } else {
     tabClasses += 'cursor-default text-dfxBlue-800/70';
   }
 
+  spread && (tabClasses += ' justify-center');
+
   return (
-    <li className="flex-none text-center ">
+    <li className={`flex-${spread ? '1' : 'none'} text-center`}>
       <a
         className={tabClasses}
         onClick={(e) => {

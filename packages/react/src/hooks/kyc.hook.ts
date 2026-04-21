@@ -1,22 +1,36 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
+  buildKycUrl,
+  KycFileData,
   KycContactData,
   KycFinancialQuestions,
   KycFinancialResponses,
   KycInfo,
+  KycLegalEntityData,
+  KycNationalityData,
   KycPersonalData,
-  KycResult,
   KycSession,
   KycStepName,
   KycStepType,
-  KycUrl,
   LimitRequest,
   TfaSetup,
   UserData,
   UserName,
+  KycSignatoryPowerData,
+  KycManualIdentData,
+  TfaLevel,
+  KycFile,
+  KycStepBase,
+  KycBeneficialData,
+  KycOperationalData,
+  PaymentData,
+  RecallData,
+  KycRecommendationData,
+  KycChangeAddressData,
+  KycChangeNameData,
+  KycChangePhoneData,
 } from '../definitions/kyc';
 import { useApi } from './api.hook';
-import { Country } from '../definitions/country';
 
 export interface CallConfig {
   url: string;
@@ -35,111 +49,50 @@ export interface KycInterface {
   getKycInfo: (code: string) => Promise<KycInfo>;
   continueKyc: (code: string, autoStep?: boolean) => Promise<KycSession>;
   startStep: (code: string, name: KycStepName, type?: KycStepType, sequence?: number) => Promise<KycSession>;
-  getCountries: (code: string) => Promise<Country[]>;
 
   // updates
-  setContactData: (code: string, url: string, data: KycContactData) => Promise<KycResult>;
-  setPersonalData: (code: string, url: string, data: KycPersonalData) => Promise<KycResult>;
+  setContactData: (code: string, url: string, data: KycContactData) => Promise<KycStepBase>;
+  setPersonalData: (code: string, url: string, data: KycPersonalData) => Promise<KycStepBase>;
+  setManualIdentData: (code: string, url: string, data: KycManualIdentData) => Promise<KycStepBase>;
+  setLegalEntityData: (code: string, url: string, data: KycLegalEntityData) => Promise<KycStepBase>;
+  setSoleProprietorshipData: (code: string, url: string, data: KycFileData) => Promise<KycStepBase>;
+  setNationalityData: (code: string, url: string, data: KycNationalityData) => Promise<KycStepBase>;
+  setRecommendationData: (code: string, url: string, data: KycRecommendationData) => Promise<KycStepBase>;
+  setFileData: (code: string, url: string, data: KycFileData) => Promise<KycStepBase>;
+  setSignatoryPowerData: (code: string, url: string, data: KycSignatoryPowerData) => Promise<KycStepBase>;
+  setBeneficialData: (code: string, url: string, data: KycBeneficialData) => Promise<KycStepBase>;
+  setOperationalData: (code: string, url: string, data: KycOperationalData) => Promise<KycStepBase>;
   getFinancialData: (code: string, url: string, lang?: string) => Promise<KycFinancialQuestions>;
-  setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycResult>;
+  setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycStepBase>;
+  setPaymentData: (code: string, url: string, data: PaymentData) => Promise<KycStepBase>;
+  setRecallData: (code: string, url: string, data: RecallData) => Promise<KycStepBase>;
+  setAddressChangeData: (code: string, url: string, data: KycChangeAddressData) => Promise<KycStepBase>;
+  setNameChangeData: (code: string, url: string, data: KycChangeNameData) => Promise<KycStepBase>;
+  setPhoneChangeData: (code: string, url: string, data: KycChangePhoneData) => Promise<KycStepBase>;
+  getFile: (kycFileId: string) => Promise<KycFile>;
 
   // 2fa
-  setup2fa: (code: string) => Promise<TfaSetup>;
+  check2fa: (level?: TfaLevel) => Promise<TfaSetup>;
+  setup2fa: (code: string, level?: TfaLevel) => Promise<TfaSetup>;
   verify2fa: (code: string, token: string) => Promise<void>;
 
   // limit
   increaseLimit: (code: string, request: LimitRequest) => Promise<void>;
+
+  // transfer
+  addTransferClient: (code: string, client: string) => Promise<void>;
+  removeTransferClient: (code: string, client: string) => Promise<void>;
+
+  // cancel step
+  cancelStep: (code: string, url: string) => Promise<void>;
 }
 
 export function useKyc(): KycInterface {
-  const { call: callApi } = useApi();
-
-  async function setName(data: UserName): Promise<void> {
-    return callApi({
-      url: KycUrl.setName,
-      method: 'PUT',
-      data,
-    });
-  }
-
-  async function setData(data: UserData): Promise<void> {
-    return callApi({
-      url: KycUrl.setData,
-      method: 'POST',
-      data,
-    });
-  }
-
-  async function getKycInfo(code: string): Promise<KycInfo> {
-    return call({ url: KycUrl.base, code, method: 'GET' });
-  }
-
-  async function continueKyc(code: string, autoStep = true): Promise<KycSession> {
-    const url = `${KycUrl.base}?autoStep=${autoStep.toString()}`;
-    return call({ url, code, method: 'PUT' });
-  }
-
-  async function startStep(
-    code: string,
-    name: KycStepName,
-    type?: KycStepType,
-    sequence?: number,
-  ): Promise<KycSession> {
-    const params = new URLSearchParams();
-    type && params.set('type', type);
-    sequence != null && params.set('sequence', `${sequence}`);
-
-    const url = `${KycUrl.base}/${name}?${params.toString()}`;
-
-    return call({ url, code, method: 'GET' });
-  }
-
-  async function getCountries(code: string): Promise<Country[]> {
-    return call({ url: `${KycUrl.base}/countries`, code, method: 'GET' });
-  }
-
-  async function setContactData(code: string, url: string, data: KycContactData): Promise<KycResult> {
-    return call({ url, code, method: 'PUT', data });
-  }
-
-  async function setPersonalData(code: string, url: string, data: KycPersonalData): Promise<KycResult> {
-    return call({ url, code, method: 'PUT', data });
-  }
-
-  async function getFinancialData(code: string, url: string, lang?: string): Promise<KycFinancialQuestions> {
-    lang && (url += `?lang=${lang}`);
-    return call({ url, code, method: 'GET' });
-  }
-
-  async function setFinancialData(code: string, url: string, data: KycFinancialResponses): Promise<KycResult> {
-    return call({ url, code, method: 'PUT', data });
-  }
-
-  async function setup2fa(code: string): Promise<TfaSetup> {
-    return call({ url: KycUrl.tfa, code, method: 'POST' });
-  }
-
-  async function verify2fa(code: string, token: string): Promise<void> {
-    return call({ url: `${KycUrl.tfa}/verify`, code, method: 'POST', data: { token } });
-  }
-
-  async function increaseLimit(code: string, request: LimitRequest): Promise<void> {
-    return call({ url: KycUrl.limit, code, method: 'POST', data: request });
-  }
+  const { call: callApi, defaultUrl } = useApi();
+  const kycUrl = useMemo(() => buildKycUrl(defaultUrl), [defaultUrl]);
 
   // --- HELPER METHODS --- //
-  async function call<T>(config: CallConfig): Promise<T> {
-    return fetch(config.url, buildInit(config)).then((response) => {
-      if (response.ok) {
-        return response.json().catch(() => undefined);
-      }
-      return response.json().then((body) => {
-        throw body;
-      });
-    });
-  }
-
-  function buildInit({ code, method, data, noJson }: CallConfig): RequestInit {
+  const buildInit = useCallback(({ code, method, data, noJson }: CallConfig): RequestInit => {
     return {
       method: method,
       headers: {
@@ -148,7 +101,260 @@ export function useKyc(): KycInterface {
       },
       body: noJson ? data : JSON.stringify(data),
     };
-  }
+  }, []);
+
+  const call = useCallback(
+    async <T,>(config: CallConfig): Promise<T> => {
+      return fetch(config.url, buildInit(config)).then((response) => {
+        if (response.ok) {
+          return response.json().catch(() => undefined);
+        }
+        return response.json().then((body) => {
+          throw body;
+        });
+      });
+    },
+    [buildInit],
+  );
+
+  const setName = useCallback(
+    async (data: UserName): Promise<void> => {
+      return callApi({
+        url: kycUrl.setName,
+        method: 'PUT',
+        data,
+      });
+    },
+    [callApi, kycUrl],
+  );
+
+  const setData = useCallback(
+    async (data: UserData): Promise<void> => {
+      return callApi({
+        url: kycUrl.setData,
+        method: 'POST',
+        data,
+      });
+    },
+    [callApi, kycUrl],
+  );
+
+  const getKycInfo = useCallback(
+    async (code: string): Promise<KycInfo> => {
+      return call({ url: kycUrl.base, code, method: 'GET' });
+    },
+    [call, kycUrl],
+  );
+
+  const continueKyc = useCallback(
+    async (code: string, autoStep = true): Promise<KycSession> => {
+      const url = `${kycUrl.base}?autoStep=${autoStep.toString()}`;
+      return call({ url, code, method: 'PUT' });
+    },
+    [call, kycUrl],
+  );
+
+  const startStep = useCallback(
+    async (code: string, name: KycStepName, type?: KycStepType, sequence?: number): Promise<KycSession> => {
+      const params = new URLSearchParams();
+      type && params.set('type', type);
+      sequence != null && params.set('sequence', `${sequence}`);
+
+      const url = `${kycUrl.base}/${name}?${params.toString()}`;
+
+      return call({ url, code, method: 'GET' });
+    },
+    [call, kycUrl],
+  );
+
+  const setContactData = useCallback(
+    async (code: string, url: string, data: KycContactData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setPersonalData = useCallback(
+    async (code: string, url: string, data: KycPersonalData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setManualIdentData = useCallback(
+    async (code: string, url: string, data: KycManualIdentData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setLegalEntityData = useCallback(
+    (code: string, url: string, data: KycLegalEntityData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setSoleProprietorshipData = useCallback(
+    (code: string, url: string, data: KycFileData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setNationalityData = useCallback(
+    async (code: string, url: string, data: KycNationalityData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setRecommendationData = useCallback(
+    async (code: string, url: string, data: KycRecommendationData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setFileData = useCallback(
+    async (code: string, url: string, data: KycFileData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setSignatoryPowerData = useCallback(
+    (code: string, url: string, data: KycSignatoryPowerData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setBeneficialData = useCallback(
+    (code: string, url: string, data: KycBeneficialData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setOperationalData = useCallback(
+    (code: string, url: string, data: KycOperationalData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const getFinancialData = useCallback(
+    async (code: string, url: string, lang?: string): Promise<KycFinancialQuestions> => {
+      lang && (url += `?lang=${lang}`);
+      return call({ url, code, method: 'GET' });
+    },
+    [call],
+  );
+
+  const setPaymentData = useCallback(
+    async (code: string, url: string, data: PaymentData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setRecallData = useCallback(
+    async (code: string, url: string, data: RecallData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setAddressChangeData = useCallback(
+    async (code: string, url: string, data: KycChangeAddressData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setNameChangeData = useCallback(
+    async (code: string, url: string, data: KycChangeNameData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const setPhoneChangeData = useCallback(
+    async (code: string, url: string, data: KycChangePhoneData): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const getFile = useCallback(
+    async (kycFileId: string): Promise<KycFile> => {
+      return callApi({
+        url: `${kycUrl.file}/${kycFileId}`,
+        method: 'GET',
+        version: 'v2',
+      });
+    },
+    [callApi, kycUrl],
+  );
+
+  const setFinancialData = useCallback(
+    async (code: string, url: string, data: KycFinancialResponses): Promise<KycStepBase> => {
+      return call({ url, code, method: 'PUT', data });
+    },
+    [call],
+  );
+
+  const check2fa = useCallback(
+    async (level?: TfaLevel): Promise<TfaSetup> => {
+      const url = level ? `${kycUrl.checkTfa}?level=${level}` : kycUrl.checkTfa;
+      return callApi({ url, version: 'v2', method: 'GET' });
+    },
+    [callApi, kycUrl],
+  );
+
+  const setup2fa = useCallback(
+    async (code: string, level?: TfaLevel): Promise<TfaSetup> => {
+      const url = level ? `${kycUrl.tfa}?level=${level}` : kycUrl.tfa;
+      return call({ url, code, method: 'POST' });
+    },
+    [call, kycUrl],
+  );
+
+  const verify2fa = useCallback(
+    async (code: string, token: string): Promise<void> => {
+      return call({ url: `${kycUrl.tfa}/verify`, code, method: 'POST', data: { token } });
+    },
+    [call, kycUrl],
+  );
+
+  const increaseLimit = useCallback(
+    async (code: string, request: LimitRequest): Promise<void> => {
+      return call({ url: kycUrl.limit, code, method: 'POST', data: request });
+    },
+    [call, kycUrl],
+  );
+
+  const addTransferClient = useCallback(
+    async (code: string, client: string): Promise<void> => {
+      return call({ url: kycUrl.transfer(client), code, method: 'POST' });
+    },
+    [call, kycUrl],
+  );
+
+  const removeTransferClient = useCallback(
+    async (code: string, client: string): Promise<void> => {
+      return call({ url: kycUrl.transfer(client), code, method: 'DELETE' });
+    },
+    [call, kycUrl],
+  );
+
+  const cancelStep = useCallback(
+    async (code: string, url: string): Promise<void> => {
+      return call({ url, code, method: 'DELETE' });
+    },
+    [call],
+  );
 
   return useMemo(
     () => ({
@@ -157,15 +363,65 @@ export function useKyc(): KycInterface {
       getKycInfo,
       continueKyc,
       startStep,
-      getCountries,
       setContactData,
       setPersonalData,
+      setManualIdentData,
+      setLegalEntityData,
+      setSoleProprietorshipData,
+      setNationalityData,
+      setRecommendationData,
+      setFileData,
+      setSignatoryPowerData,
+      setBeneficialData,
+      setOperationalData,
       getFinancialData,
+      getFile,
       setFinancialData,
+      setPaymentData,
+      setRecallData,
+      setAddressChangeData,
+      setNameChangeData,
+      setPhoneChangeData,
+      check2fa,
       setup2fa,
       verify2fa,
       increaseLimit,
+      addTransferClient,
+      removeTransferClient,
+      cancelStep,
     }),
-    [callApi],
+    [
+      setName,
+      setData,
+      getKycInfo,
+      continueKyc,
+      startStep,
+      setContactData,
+      setPersonalData,
+      setManualIdentData,
+      setLegalEntityData,
+      setSoleProprietorshipData,
+      setNationalityData,
+      setRecommendationData,
+      setFileData,
+      setSignatoryPowerData,
+      setBeneficialData,
+      setOperationalData,
+      getFinancialData,
+      getFile,
+      setFinancialData,
+      setPaymentData,
+      setRecallData,
+      setAddressChangeData,
+      setNameChangeData,
+      setPhoneChangeData,
+      check2fa,
+      setup2fa,
+      verify2fa,
+      increaseLimit,
+      addTransferClient,
+      removeTransferClient,
+      cancelStep,
+    ],
   );
 }

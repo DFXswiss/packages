@@ -1,22 +1,37 @@
-import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
-import { Country } from '../definitions/country';
-import { User } from '../definitions/user';
-import { useCountry } from '../hooks/country.hook';
+import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { ApiKey, PhoneCallTime, UpdateUser, User, UserAddress } from '../definitions/user';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
 import { Language } from '../definitions/language';
+import { Fiat } from '../definitions/fiat';
+import { TransactionFilterKey } from '../definitions/transaction';
 
 interface UserInterface {
   user?: User;
   refLink?: string;
-  countries: Country[];
   isUserLoading: boolean;
   isUserUpdating: boolean;
-  changeMail: (mail: string) => Promise<void>;
-  changeLanguage: (language: Language) => Promise<void>;
-  addDiscountCode: (code: string) => Promise<void>;
-  register: (userLink: () => void) => void;
+  updateMail: (mail: string) => Promise<void>;
+  verifyMail: (token: string) => Promise<void>;
+  updatePhone: (phone: string) => Promise<void>;
+  updateLanguage: (language: Language) => Promise<void>;
+  updateCurrency: (currency: Fiat) => Promise<void>;
+  hasAddress: boolean;
+  hasCustody: boolean;
+  userAddresses: UserAddress[];
+  custodyAddresses: UserAddress[];
+  renameAddress: (address: string, label: string) => Promise<void>;
+  changeAddress: (address: string) => Promise<void>;
+  deleteAddress: (address: string) => Promise<void>;
+  deleteAccount: () => Promise<void>;
+  addSpecialCode: (code: string) => Promise<void>;
   reloadUser: () => Promise<void>;
+  filterCT?: TransactionFilterKey[];
+  keyCT?: string;
+  generateKeyCT: (types?: TransactionFilterKey[]) => Promise<ApiKey | undefined>;
+  deleteKeyCT: () => Promise<void>;
+  updateFilterCT: (types?: TransactionFilterKey[]) => Promise<void>;
+  updateCallSettings: (preferredPhoneTimes?: PhoneCallTime[], acceptCall?: boolean) => Promise<void>;
 }
 
 const UserContext = createContext<UserInterface>(undefined as any);
@@ -26,72 +41,218 @@ export function useUserContext(): UserInterface {
 }
 
 export function UserContextProvider(props: PropsWithChildren): JSX.Element {
-  const { isLoggedIn, session } = useApiSession();
-  const { getUser, changeUser, addDiscountCode } = useUser();
-  const { getCountries } = useCountry();
+  const { isLoggedIn, session, updateSession, deleteSession } = useApiSession();
+  const {
+    getUser,
+    updateUser: updateUserApi,
+    updateMail: updateMailApi,
+    verifyMail: verifyMailApi,
+    addSpecialCode,
+    renameUserAddress,
+    changeUserAddress,
+    deleteUserAddress,
+    deleteUserAccount,
+    generateCTApiKey,
+    deleteCTApiKey,
+    updateCTApiFilter,
+    updateCallSettings: updateCallSettingsApi,
+  } = useUser();
   const [user, setUser] = useState<User>();
-  const [countries, setCountries] = useState<Country[]>([]);
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
   const [isUserUpdating, setIsUserUpdating] = useState<boolean>(false);
 
-  const refLink = user?.ref && `${process.env.REACT_APP_REF_URL ?? 'https://dfx.swiss/app?code='}${user.ref}`;
-  let userLinkAction: () => void | undefined;
+  const refCode = user?.activeAddress?.refCode;
+  const refLink = refCode && `${process.env.REACT_APP_REF_URL ?? 'https://dfx.swiss/app?code='}${refCode}`;
+
+  const userAddresses = user?.addresses.filter((a) => !a.isCustody) ?? [];
+  const custodyAddresses = user?.addresses.filter((a) => a.isCustody) ?? [];
+
+  const reloadUser = useCallback(async (): Promise<void> => {
+    setIsUserLoading(true);
+    getUser()
+      .then(setUser)
+      .finally(() => setIsUserLoading(false));
+  }, [getUser]);
 
   useEffect(() => {
     if (isLoggedIn) {
       reloadUser();
-
-      getCountries().then((c) => setCountries(c.sort((a, b) => (a.name > b.name ? 1 : -1))));
     } else {
       setUser(undefined);
-      setCountries([]);
     }
-  }, [isLoggedIn, session]);
+  }, [isLoggedIn, reloadUser]);
 
-  async function reloadUser(): Promise<void> {
-    setIsUserLoading(true);
-    getUser()
-      .then(setUser)
-      .catch(console.error) // TODO: (Krysh) add real error handling
-      .finally(() => setIsUserLoading(false));
-  }
-
-  async function updateUser(update: Partial<User>, linkAction?: () => void): Promise<void> {
-    if (!user) return; // TODO: (Krysh) add real error handling
+  const updateUser = useCallback(async (update: UpdateUser, linkAction?: () => void): Promise<void> => {
+    if (!user) return;
 
     setIsUserUpdating(true);
-    return changeUser(update, linkAction)
+    return updateUserApi(update, linkAction)
       .then(setUser)
-      .catch(console.error) // TODO: (Krysh) add real error handling
       .finally(() => setIsUserUpdating(false));
-  }
+  }, [user, updateUserApi]);
 
-  async function changeMail(mail: string): Promise<void> {
-    return updateUser({ mail }, userLinkAction);
-  }
+  const updateMail = useCallback(async (mail: string): Promise<void> => {
+    return updateMailApi(mail);
+  }, [updateMailApi]);
 
-  async function changeLanguage(language: Language): Promise<void> {
+  const verifyMail = useCallback(async (token: string): Promise<void> => {
+    if (!user) return;
+
+    setIsUserUpdating(true);
+    return verifyMailApi(token)
+      .then(setUser)
+      .finally(() => setIsUserUpdating(false));
+  }, [user, verifyMailApi]);
+
+  const updatePhone = useCallback(async (phone: string): Promise<void> => {
+    return updateUser({ phone });
+  }, [updateUser]);
+
+  const updateLanguage = useCallback(async (language: Language): Promise<void> => {
     return updateUser({ language });
-  }
+  }, [updateUser]);
 
-  function register(userLink: () => void) {
-    userLinkAction = userLink;
-  }
+  const updateCurrency = useCallback(async (currency: Fiat): Promise<void> => {
+    return updateUser({ currency });
+  }, [updateUser]);
+
+  const renameAddress = useCallback(async (address: string, label: string): Promise<void> => {
+    if (!user) return;
+
+    setIsUserUpdating(true);
+    return renameUserAddress(address, label)
+      .then(setUser)
+      .finally(() => setIsUserUpdating(false));
+  }, [user, renameUserAddress]);
+
+  const changeAddress = useCallback(async (address: string): Promise<void> => {
+    if (!user) return;
+
+    setIsUserUpdating(true);
+    return changeUserAddress(address)
+      .then(({ accessToken }) => updateSession(accessToken))
+      .then(() => setUser({ ...user, activeAddress: user.addresses.find((a) => a.address === address) }))
+      .finally(() => setIsUserUpdating(false));
+  }, [user, changeUserAddress, updateSession]);
+
+  const deleteAddress = useCallback(async (address: string): Promise<void> => {
+    if (!user) return;
+
+    const requiresFallback = address === user.activeAddress?.address;
+    const fallbackAddress =
+      requiresFallback && user.addresses.length > 1
+        ? user.addresses.find((a) => a.address !== address)?.address
+        : undefined;
+
+    return deleteUserAddress(address).then(() => {
+      if (requiresFallback) {
+        fallbackAddress ? changeAddress(fallbackAddress) : deleteSession();
+      } else {
+        reloadUser();
+      }
+    });
+  }, [user, deleteUserAddress, changeAddress, deleteSession, reloadUser]);
+
+  const deleteAccount = useCallback(async (): Promise<void> => {
+    if (!user) return;
+
+    return deleteUserAccount().then(deleteSession);
+  }, [user, deleteUserAccount, deleteSession]);
+
+  const generateKeyCT = useCallback(async (types?: TransactionFilterKey[]): Promise<ApiKey | undefined> => {
+    if (!user) return;
+
+    setIsUserUpdating(true);
+    try {
+      const key = await generateCTApiKey(types);
+      await getUser().then(setUser);
+      return key;
+    } finally {
+      setIsUserUpdating(false);
+    }
+  }, [user, generateCTApiKey, getUser]);
+
+  const deleteKeyCT = useCallback(async (): Promise<void> => {
+    if (!user) return;
+
+    setIsUserUpdating(true);
+    deleteCTApiKey()
+      .then(() => getUser().then(setUser))
+      .finally(() => setIsUserUpdating(false));
+  }, [user, deleteCTApiKey, getUser]);
+
+  const updateFilterCT = useCallback(async (types?: TransactionFilterKey[]): Promise<void> => {
+    if (!user) return;
+
+    setIsUserUpdating(true);
+    updateCTApiFilter(types)
+      .then(() => getUser().then(setUser))
+      .finally(() => setIsUserUpdating(false));
+  }, [user, updateCTApiFilter, getUser]);
+
+  const updateCallSettings = useCallback(
+    async (preferredPhoneTimes?: PhoneCallTime[], acceptCall?: boolean): Promise<void> => {
+      if (!user) return;
+
+      setIsUserUpdating(true);
+      return updateCallSettingsApi(preferredPhoneTimes, acceptCall)
+        .then(setUser)
+        .finally(() => setIsUserUpdating(false));
+    },
+    [user, updateCallSettingsApi],
+  );
 
   const context: UserInterface = useMemo(
     () => ({
       user,
       refLink,
-      countries,
       isUserLoading,
       isUserUpdating,
-      changeMail,
-      changeLanguage,
-      addDiscountCode,
-      register,
+      updateMail,
+      verifyMail,
+      updatePhone,
+      updateLanguage,
+      updateCurrency,
+      hasAddress: !!user?.addresses.length,
+      hasCustody: !!custodyAddresses.length,
+      userAddresses,
+      custodyAddresses,
+      renameAddress,
+      changeAddress,
+      deleteAddress,
+      deleteAccount,
+      addSpecialCode,
       reloadUser,
+      filterCT: user?.apiFilterCT ?? user?.activeAddress?.apiFilterCT,
+      keyCT: user?.apiKeyCT ?? user?.activeAddress?.apiKeyCT,
+      generateKeyCT,
+      deleteKeyCT,
+      updateFilterCT,
+      updateCallSettings,
     }),
-    [user, refLink, countries, isUserLoading, isUserUpdating, changeMail, register, reloadUser],
+    [
+      user,
+      refLink,
+      isUserLoading,
+      isUserUpdating,
+      updateMail,
+      verifyMail,
+      updatePhone,
+      updateLanguage,
+      updateCurrency,
+      userAddresses,
+      custodyAddresses,
+      renameAddress,
+      changeAddress,
+      deleteAddress,
+      deleteAccount,
+      addSpecialCode,
+      reloadUser,
+      generateKeyCT,
+      deleteKeyCT,
+      updateFilterCT,
+      updateCallSettings,
+    ],
   );
 
   return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;

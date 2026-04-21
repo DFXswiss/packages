@@ -35,7 +35,7 @@ export const PaymentData: ComponentStory<typeof StyledDataTable> = (args) => {
   return (
     <div className={whiteBG}>
       <StyledDataTable {...args}>
-        <StyledDataTableRow label="IBAN">
+        <StyledDataTableRow label="IBAN" onClick={() => console.log('clicked')}>
           LU11 6060 0020 0000 5040
           <StyledIconButton
             icon={IconVariant.COPY}

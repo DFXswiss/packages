@@ -1,8 +1,1 @@
-export interface Fees {
-  rate: number;
-  fixed: number;
-  min: number;
-  dfx: number;
-  network: number;
-  total: number;
-}
+export type { Fees } from '@dfx.swiss/core';

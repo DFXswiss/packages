@@ -10,6 +10,7 @@ interface StyledDataTableRowProps extends PropsWithChildren {
   isLoading?: boolean;
   infoText?: string;
   noPadding?: boolean;
+  onClick?: () => void;
 }
 
 const ALIGN_MAPS: Record<AlignContent, string> = {
@@ -25,6 +26,7 @@ export default function StyledDataTableRow({
   isLoading,
   infoText,
   noPadding,
+  onClick,
 }: StyledDataTableRowProps) {
   const theme = useContext(ThemeContext);
 
@@ -49,10 +51,14 @@ export default function StyledDataTableRow({
     wrapperClasses += ' border-dfxGray-400';
   }
 
+  if (onClick) {
+    wrapperClasses += ' cursor-pointer hover:bg-dfxGray-400';
+  }
+
   rowDataClasses += ALIGN_MAPS[theme.alignContent];
 
   return (
-    <div className={wrapperClasses}>
+    <div className={wrapperClasses} onClick={onClick}>
       <div className="flex">
         {label && (
           <div className={`flex-none ${theme.minWidth ? 'w-48' : ''}`}>
@@ -61,13 +67,24 @@ export default function StyledDataTableRow({
         )}
 
         <div className={rowDataClasses}>
-          {isLoading ? <StyledLoadingSpinner size={SpinnerSize.SM} variant={SpinnerVariant.PALE} /> : children}
+          {isLoading ? (
+            <StyledLoadingSpinner
+              size={SpinnerSize.SM}
+              variant={theme.darkTheme ? SpinnerVariant.DARK_MODE : SpinnerVariant.LIGHT_MODE}
+            />
+          ) : (
+            children
+          )}
         </div>
       </div>
-      {infoText && (
-        <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
-          {infoText}
-        </StyledInfoText>
+      {infoText ? (
+        <div className="flex justify-start text-left">
+          <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
+            {infoText}
+          </StyledInfoText>
+        </div>
+      ) : (
+        <></>
       )}
     </div>
   );

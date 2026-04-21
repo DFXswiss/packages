@@ -8,17 +8,25 @@ interface DfxAssetIconProps {
 
 export enum AssetIconVariant {
   USDT = 'USDT',
+  USDTe = 'USDT.e',
   BNB = 'BNB',
   DFI = 'DFI',
   USDC = 'USDC',
   USDCe = 'USDC.e',
+  USDbC = 'USDbC',
   BUSD = 'BUSD',
   ETH = 'ETH',
+  WETH = 'WETH',
   DAI = 'DAI',
   BTC = 'BTC',
   WBTC = 'WBTC',
+  WBTCe = 'WBTC.e',
   BTCB = 'BTCB',
+  BBTC = 'BBTC',
+  kBTC = 'kBTC',
+  cBTC = 'cBTC',
   MATIC = 'MATIC',
+  POL = 'POL',
   GMX = 'GMX',
   CHZ = 'CHZ',
   RPL = 'RPL',
@@ -52,6 +60,29 @@ export enum AssetIconVariant {
   ISLM = 'ISLM',
   MKX = 'MKX',
   TGT = 'TGT',
+  EURS = 'EURS',
+  EURT = 'EURt',
+  EDLC = 'EDLC',
+  dEURO = 'dEURO',
+  DEPS = 'DEPS',
+  nDEPS = 'nDEPS',
+  dEURO_PRESALE = 'dEUROPresale',
+  DEPS_PRESALE = 'DEPSPresale',
+  SOL = 'SOL',
+  xDAI = 'xDAI',
+  TRX = 'TRX',
+  ZANO = 'ZANO',
+  FUSD = 'fUSD',
+  ONDO = 'ONDO',
+  ADA = 'ADA',
+  JUSD = 'JUSD',
+  JUICE = 'JUICE',
+  PRE_JUICE = 'PreJUICE',
+  FIRO = 'FIRO',
+  ICP = 'ICP',
+  ckBTC = 'ckBTC',
+  VEUR = 'VEUR',
+  VCHF = 'VCHF',
 
   EUR = 'EUR',
   USD = 'USD',
@@ -75,17 +106,25 @@ const SIZE_MAPS: Record<AssetIconSize, string> = {
 
 const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => ReactElement> = {
   [AssetIconVariant.USDT]: ({ forceColor }) => <DfxAssetIconUSDT forceColor={forceColor} />,
+  [AssetIconVariant.USDTe]: ({ forceColor }) => <DfxAssetIconUSDT forceColor={forceColor} />,
   [AssetIconVariant.BNB]: ({ forceColor }) => <DfxAssetIconBNB forceColor={forceColor} />,
   [AssetIconVariant.DFI]: ({ forceColor }) => <DfxAssetIconDFI forceColor={forceColor} />,
   [AssetIconVariant.USDC]: ({ forceColor }) => <DfxAssetIconUSDC forceColor={forceColor} />,
   [AssetIconVariant.USDCe]: ({ forceColor }) => <DfxAssetIconUSDC forceColor={forceColor} />,
+  [AssetIconVariant.USDbC]: ({ forceColor }) => <DfxAssetIconUSDC forceColor={forceColor} />,
   [AssetIconVariant.BUSD]: ({ forceColor }) => <DfxAssetIconBUSD forceColor={forceColor} />,
   [AssetIconVariant.ETH]: ({ forceColor }) => <DfxAssetIconETH forceColor={forceColor} />,
+  [AssetIconVariant.WETH]: ({ forceColor }) => <DfxAssetIconETH forceColor={forceColor} />,
   [AssetIconVariant.DAI]: ({ forceColor }) => <DfxAssetIconDAI forceColor={forceColor} />,
   [AssetIconVariant.BTC]: ({ forceColor }) => <DfxAssetIconBTC forceColor={forceColor} />,
   [AssetIconVariant.WBTC]: ({ forceColor }) => <DfxAssetIconWBTC forceColor={forceColor} />,
+  [AssetIconVariant.WBTCe]: ({ forceColor }) => <DfxAssetIconWBTC forceColor={forceColor} />,
   [AssetIconVariant.BTCB]: ({ forceColor }) => <DfxAssetIconBTCB forceColor={forceColor} />,
-  [AssetIconVariant.MATIC]: ({ forceColor }) => <DfxAssetIconMATIC forceColor={forceColor} />,
+  [AssetIconVariant.BBTC]: ({ forceColor }) => <DfxAssetIconBTC forceColor={forceColor} />,
+  [AssetIconVariant.kBTC]: ({ forceColor }) => <DfxAssetIconKBTC forceColor={forceColor} />,
+  [AssetIconVariant.cBTC]: ({ forceColor }) => <DfxAssetIconBTC forceColor={forceColor} />,
+  [AssetIconVariant.MATIC]: ({ forceColor }) => <DfxAssetIconPOL forceColor={forceColor} />,
+  [AssetIconVariant.POL]: ({ forceColor }) => <DfxAssetIconPOL forceColor={forceColor} />,
   [AssetIconVariant.GMX]: ({ forceColor }) => <DfxAssetIconGMX forceColor={forceColor} />,
   [AssetIconVariant.CHZ]: ({ forceColor }) => <DfxAssetIconCHZ forceColor={forceColor} />,
   [AssetIconVariant.RPL]: ({ forceColor }) => <DfxAssetIconRPL forceColor={forceColor} />,
@@ -119,6 +158,29 @@ const VARIANT_MAPS: Record<AssetIconVariant, (props: BaseAssetIconProps) => Reac
   [AssetIconVariant.ISLM]: ({ forceColor }) => <DfxAssetIconISLM forceColor={forceColor} />,
   [AssetIconVariant.MKX]: ({ forceColor }) => <DfxAssetIconMKX forceColor={forceColor} />,
   [AssetIconVariant.TGT]: ({ forceColor }) => <DfxAssetIconTGT forceColor={forceColor} />,
+  [AssetIconVariant.EURS]: ({ forceColor }) => <DfxAssetIconEURS forceColor={forceColor} />,
+  [AssetIconVariant.EURT]: ({ forceColor }) => <DfxAssetIconEURt forceColor={forceColor} />,
+  [AssetIconVariant.EDLC]: ({ forceColor }) => <DfxAssetIconEDLC forceColor={forceColor} />,
+  [AssetIconVariant.dEURO]: ({ forceColor }) => <DfxAssetIconDEURO forceColor={forceColor} />,
+  [AssetIconVariant.DEPS]: ({ forceColor }) => <DfxAssetIconDEPS forceColor={forceColor} />,
+  [AssetIconVariant.nDEPS]: ({ forceColor }) => <DfxAssetIconNDEPS forceColor={forceColor} />,
+  [AssetIconVariant.dEURO_PRESALE]: ({ forceColor }) => <DfxAssetIconDEURO forceColor={forceColor} />,
+  [AssetIconVariant.DEPS_PRESALE]: ({ forceColor }) => <DfxAssetIconDEPS forceColor={forceColor} />,
+  [AssetIconVariant.SOL]: ({ forceColor }) => <DfxAssetIconSOL forceColor={forceColor} />,
+  [AssetIconVariant.xDAI]: ({ forceColor }) => <DfxAssetIconXDAI forceColor={forceColor} />,
+  [AssetIconVariant.TRX]: ({ forceColor }) => <DfxAssetIconTRX forceColor={forceColor} />,
+  [AssetIconVariant.ZANO]: ({ forceColor }) => <DfxAssetIconZANO forceColor={forceColor} />,
+  [AssetIconVariant.FUSD]: ({ forceColor }) => <DfxAssetIconFUSD forceColor={forceColor} />,
+  [AssetIconVariant.ONDO]: ({ forceColor }) => <DfxAssetIconONDO forceColor={forceColor} />,
+  [AssetIconVariant.ADA]: ({ forceColor }) => <DfxAssetIconADA forceColor={forceColor} />,
+  [AssetIconVariant.JUSD]: ({ forceColor }) => <DfxAssetIconJUSD forceColor={forceColor} />,
+  [AssetIconVariant.JUICE]: ({ forceColor }) => <DfxAssetIconJUICE forceColor={forceColor} />,
+  [AssetIconVariant.PRE_JUICE]: ({ forceColor }) => <DfxAssetIconJUICE forceColor={forceColor} />,
+  [AssetIconVariant.FIRO]: ({ forceColor }) => <DfxAssetIconFIRO forceColor={forceColor} />,
+  [AssetIconVariant.ICP]: ({ forceColor }) => <DfxAssetIconICP forceColor={forceColor} />,
+  [AssetIconVariant.ckBTC]: ({ forceColor }) => <DfxAssetIconCkBTC forceColor={forceColor} />,
+  [AssetIconVariant.VEUR]: ({ forceColor }) => <DfxAssetIconVEUR forceColor={forceColor} />,
+  [AssetIconVariant.VCHF]: ({ forceColor }) => <DfxAssetIconVCHF forceColor={forceColor} />,
 
   [AssetIconVariant.EUR]: ({ forceColor }) => <DfxAssetIconEUR forceColor={forceColor} />,
   [AssetIconVariant.USD]: ({ forceColor }) => <DfxAssetIconUSD forceColor={forceColor} />,
@@ -365,7 +427,7 @@ function DfxAssetIconBNB({ forceColor }: BaseAssetIconProps) {
   );
 }
 
-function DfxAssetIconMATIC({ forceColor }: BaseAssetIconProps) {
+function DfxAssetIconPOL({ forceColor }: BaseAssetIconProps) {
   const sizeContext = useContext(SizeContext);
   return (
     <svg
@@ -433,6 +495,25 @@ function DfxAssetIconBTCB({ forceColor }: BaseAssetIconProps) {
           <rect width="21" height="21" fill="white" transform="translate(1.5 1.5)" />
         </clipPath>
       </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconKBTC({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="16" cy="16" r="16" fill={forceColor ?? '#7132F5'} />
+      <path
+        d="M19.5141 9.30328L20.3141 6.30338L18.5141 5.80339L17.8142 8.7033C17.3142 8.6033 16.8142 8.5033 16.3142 8.40331L17.0142 5.40341L15.1143 5.00342L14.4143 8.00332C14.0143 7.90332 13.6143 7.80333 13.2143 7.70333L10.7144 7.10335L10.2144 9.10328C10.2144 9.10328 11.6144 9.40327 11.5144 9.40327C12.2144 9.60327 12.4143 10.1033 12.4143 10.5032L10.3144 18.703C10.2144 18.903 10.0144 19.303 9.41444 19.103L8.11449 18.803L7.21452 20.9029L9.61444 21.5029L10.9144 21.8029L10.1144 24.8028L11.9144 25.3028L12.7143 22.3029C13.2143 22.4029 13.7143 22.6028 14.2143 22.7028L13.5143 25.7027L15.3143 26.2027L16.1142 23.2028C19.2141 23.8028 21.614 23.6028 22.614 20.7029C23.414 18.403 22.614 17.103 20.9141 16.303C22.114 16.0031 23.014 15.2031 23.214 13.6031C23.514 11.3032 21.914 10.1033 19.5141 9.30328ZM19.0141 19.4029C18.4142 21.7029 14.6143 20.4029 13.4143 20.1029L14.4143 16.1031C15.6142 16.403 19.6141 17.003 19.0141 19.4029ZM19.6141 13.5031C19.1141 15.6031 15.9142 14.5031 14.9143 14.3031L15.8142 10.6032C16.8142 10.8032 20.1141 11.3032 19.6141 13.5031Z"
+        fill="white"
+      />
     </svg>
   );
 }
@@ -3488,922 +3569,878 @@ function DfxAssetIconXMR({ forceColor }: BaseAssetIconProps) {
 
 export function DfxAssetIconZCHF({ forceColor }: BaseAssetIconProps) {
   const sizeContext = useContext(SizeContext);
-  const cls = `cls-${forceColor?.replace('#', '')}`;
   return (
     <svg
       width={SIZE_MAPS[sizeContext]}
       height={SIZE_MAPS[sizeContext]}
-      viewBox="0 0 246.22 238.68"
+      viewBox="0 0 128 128"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <g clip-path="url(#clip0_216_23463)">
+        <g clip-path="url(#clip1_216_23463)">
+          <path d="M80 124H76V128H80V124Z" fill={forceColor ?? '#707280'} />
+          <path d="M76 124H72V128H76V124Z" fill={forceColor ?? '#717381'} />
+          <path d="M72 124H68V128H72V124Z" fill={forceColor ?? '#727482'} />
+          <path d="M68 124H64V128H68V124Z" fill={forceColor ?? '#737483'} />
+          <path d="M64 124H60V128H64V124Z" fill={forceColor ?? '#747584'} />
+          <path d="M60 124H56V128H60V124Z" fill={forceColor ?? '#757685'} />
+          <path d="M56 124H52V128H56V124Z" fill={forceColor ?? '#767786'} />
+          <path d="M52 124H48V128H52V124Z" fill={forceColor ?? '#777987'} />
+          <path d="M92 120H88V124H92V120Z" fill={forceColor ?? '#707280'} />
+          <path d="M88 120H84V124H88V120Z" fill={forceColor ?? '#717381'} />
+          <path d="M84 120H80V124H84V120Z" fill={forceColor ?? '#727382'} />
+          <path d="M80 120H76V124H80V120Z" fill={forceColor ?? '#424756'} />
+          <path d="M76 120H72V124H76V120Z" fill={forceColor ?? '#424756'} />
+          <path d="M72 120H68V124H72V120Z" fill={forceColor ?? '#424756'} />
+          <path d="M68 120H64V124H68V120Z" fill={forceColor ?? '#424756'} />
+          <path d="M64 120H60V124H64V120Z" fill={forceColor ?? '#424756'} />
+          <path d="M60 120H56V124H60V120Z" fill={forceColor ?? '#424756'} />
+          <path d="M56 120H52V124H56V120Z" fill={forceColor ?? '#424756'} />
+          <path d="M52 120H48V124H52V120Z" fill={forceColor ?? '#424756'} />
+          <path d="M48 120H44V124H48V120Z" fill={forceColor ?? '#7B7D8B'} />
+          <path d="M44 120H40V124H44V120Z" fill={forceColor ?? '#7C7E8C'} />
+          <path d="M40 120H36V124H40V120Z" fill={forceColor ?? '#7D7F8D'} />
+          <path d="M100 116H96V120H100V116Z" fill={forceColor ?? '#717281'} />
+          <path d="M96 116H92V120H96V116Z" fill={forceColor ?? '#727381'} />
+          <path d="M92 116H88V120H92V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M88 116H84V120H88V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M84 116H80V120H84V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M80 116H76V120H80V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M76 116H72V120H76V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M72 116H68V120H72V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M68 116H64V120H68V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M64 116H60V120H64V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M60 116H56V120H60V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M56 116H52V120H56V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M52 116H48V120H52V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M48 116H44V120H48V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M44 116H40V120H44V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M40 116H36V120H40V116Z" fill={forceColor ?? '#444957'} />
+          <path d="M36 116H32V120H36V116Z" fill={forceColor ?? '#818392'} />
+          <path d="M32 116H28V120H32V116Z" fill={forceColor ?? '#828493'} />
+          <path d="M104 112H100V116H104V112Z" fill={forceColor ?? '#737482'} />
+          <path d="M100 112H96V116H100V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M96 112H92V116H96V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M92 112H88V116H92V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M88 112H84V116H88V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M84 112H80V116H84V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M80 112H76V116H80V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M76 112H72V116H76V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M72 112H68V116H72V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M68 112H64V116H68V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M64 112H60V116H64V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M60 112H56V116H60V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M56 112H52V116H56V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M52 112H48V116H52V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M48 112H44V116H48V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M44 112H40V116H44V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M40 112H36V116H40V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M36 112H32V116H36V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M32 112H28V116H32V112Z" fill={forceColor ?? '#454B59'} />
+          <path d="M28 112H24V116H28V112Z" fill={forceColor ?? '#878998'} />
+          <path d="M108 108H104V112H108V108Z" fill={forceColor ?? '#757684'} />
+          <path d="M104 108H100V112H104V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M100 108H96V112H100V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M96 108H92V112H96V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M92 108H88V112H92V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M88 108H84V112H88V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M84 108H80V112H84V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M80 108H76V112H80V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M76 108H72V112H76V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M72 108H68V112H72V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M68 108H64V112H68V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M64 108H60V112H64V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M60 108H56V112H60V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M56 108H52V112H56V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M52 108H48V112H52V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M48 108H44V112H48V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M44 108H40V112H44V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M40 108H36V112H40V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M36 108H32V112H36V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M32 108H28V112H32V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M28 108H24V112H28V108Z" fill={forceColor ?? '#474C5B'} />
+          <path d="M24 108H20V112H24V108Z" fill={forceColor ?? '#8B8D9C'} />
+          <path d="M112 104H108V108H112V104Z" fill={forceColor ?? '#777886'} />
+          <path d="M108 104H104V108H108V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M104 104H100V108H104V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M100 104H96V108H100V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M96 104H92V108H96V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M92 104H88V108H92V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M88 104H84V108H88V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M84 104H80V108H84V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M80 104H76V108H80V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M76 104H72V108H76V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M72 104H68V108H72V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M68 104H64V108H68V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M64 104H60V108H64V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M60 104H56V108H60V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M56 104H52V108H56V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M52 104H48V108H52V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M48 104H44V108H48V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M44 104H40V108H44V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M40 104H36V108H40V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M36 104H32V108H36V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M32 104H28V108H32V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M28 104H24V108H28V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M24 104H20V108H24V104Z" fill={forceColor ?? '#484D5D'} />
+          <path d="M20 104H16V108H20V104Z" fill={forceColor ?? '#8F92A0'} />
+          <path d="M116 100H112V104H116V100Z" fill={forceColor ?? '#787A88'} />
+          <path d="M112 100H108V104H112V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M108 100H104V104H108V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M104 100H100V104H104V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M100 100H96V104H100V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M96 100H92V104H96V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M92 100H88V104H92V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M88 100H84V104H88V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M84 100H80V104H84V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M80 100H76V104H80V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M76 100H72V104H76V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M72 100H68V104H72V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M68 100H64V104H68V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M64 100H60V104H64V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M60 100H56V104H60V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M56 100H52V104H56V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M52 100H48V104H52V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M48 100H44V104H48V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M44 100H40V104H44V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M40 100H36V104H40V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M36 100H32V104H36V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M32 100H28V104H32V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M28 100H24V104H28V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M24 100H20V104H24V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M20 100H16V104H20V100Z" fill={forceColor ?? '#4A4F5F'} />
+          <path d="M16 100H12V104H16V100Z" fill={forceColor ?? '#9396A5'} />
+          <path d="M120 96H116V100H120V96Z" fill={forceColor ?? '#7A7C8A'} />
+          <path d="M116 96H112V100H116V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M112 96H108V100H112V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M108 96H104V100H108V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M104 96H100V100H104V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M100 96H96V100H100V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M96 96H92V100H96V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M92 96H88V100H92V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M88 96H84V100H88V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M84 96H80V100H84V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M80 96H76V100H80V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M76 96H72V100H76V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M72 96H68V100H72V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M68 96H64V100H68V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M64 96H60V100H64V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M60 96H56V100H60V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M56 96H52V100H56V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M52 96H48V100H52V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M48 96H44V100H48V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M44 96H40V100H44V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M40 96H36V100H40V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M36 96H32V100H36V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M32 96H28V100H32V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M28 96H24V100H28V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M24 96H20V100H24V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M20 96H16V100H20V96Z" fill={forceColor ?? '#4C5161'} />
+          <path d="M16 96H12V100H16V96Z" fill={forceColor ?? '#464B59'} />
+          <path d="M12 96H8V100H12V96Z" fill={forceColor ?? '#979AA9'} />
+          <path d="M120 92H116V96H120V92Z" fill={forceColor ?? '#7E7F8E'} />
+          <path d="M116 92H112V96H116V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M112 92H108V96H112V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M108 92H104V96H108V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M104 92H100V96H104V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M100 92H96V96H100V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M96 92H92V96H96V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M92 92H88V96H92V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M88 92H84V96H88V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M84 92H80V96H84V92Z" fill={forceColor ?? '#C1C2C8'} />
+          <path d="M80 92H76V96H80V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M76 92H72V96H76V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M72 92H68V96H72V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M68 92H64V96H68V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M64 92H60V96H64V92Z" fill={forceColor ?? '#DADBDE'} />
+          <path d="M60 92H56V96H60V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M56 92H52V96H56V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M52 92H48V96H52V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M48 92H44V96H48V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M44 92H40V96H44V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M40 92H36V96H40V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M36 92H32V96H36V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M32 92H28V96H32V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M28 92H24V96H28V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M24 92H20V96H24V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M20 92H16V96H20V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M16 92H12V96H16V92Z" fill={forceColor ?? '#4E5363'} />
+          <path d="M12 92H8V96H12V92Z" fill={forceColor ?? '#9B9EAD'} />
+          <path d="M124 88H120V92H124V88Z" fill={forceColor ?? '#808290'} />
+          <path d="M120 88H116V92H120V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M116 88H112V92H116V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M112 88H108V92H112V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M108 88H104V92H108V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M104 88H100V92H104V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M100 88H96V92H100V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M96 88H92V92H96V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M92 88H88V92H92V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M88 88H84V92H88V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M84 88H80V92H84V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M80 88H76V92H80V88Z" fill={forceColor ?? '#595E69'} />
+          <path d="M76 88H72V92H76V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M72 88H68V92H72V88Z" fill={forceColor ?? '#626775'} />
+          <path d="M68 88H64V92H68V88Z" fill={forceColor ?? '#E9EAEC'} />
+          <path d="M64 88H60V92H64V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M60 88H56V92H60V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M56 88H52V92H56V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M52 88H48V92H52V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M48 88H44V92H48V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M44 88H40V92H44V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M40 88H36V92H40V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M36 88H32V92H36V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M32 88H28V92H32V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M28 88H24V92H28V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M24 88H20V92H24V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M20 88H16V92H20V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M16 88H12V92H16V88Z" fill={forceColor ?? '#505665'} />
+          <path d="M12 88H8V92H12V88Z" fill={forceColor ?? '#4A4F5D'} />
+          <path d="M8 88H4V92H8V88Z" fill={forceColor ?? '#9FA2B1'} />
+          <path d="M124 84H120V88H124V84Z" fill={forceColor ?? '#838593'} />
+          <path d="M120 84H116V88H120V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M116 84H112V88H116V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M112 84H108V88H112V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M108 84H104V88H108V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M104 84H100V88H104V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M100 84H96V88H100V84Z" fill={forceColor ?? '#686C7A'} />
+          <path d="M96 84H92V88H96V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M92 84H88V88H92V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M88 84H84V88H88V84Z" fill={forceColor ?? '#686C7A'} />
+          <path d="M84 84H80V88H84V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M80 84H76V88H80V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M76 84H72V88H76V84Z" fill={forceColor ?? '#747885'} />
+          <path d="M72 84H68V88H72V84Z" fill={forceColor ?? '#E5E6E8'} />
+          <path d="M68 84H64V88H68V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M64 84H60V88H64V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M60 84H56V88H60V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M56 84H52V88H56V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M52 84H48V88H52V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M48 84H44V88H48V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M44 84H40V88H44V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M40 84H36V88H40V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M36 84H32V88H36V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M32 84H28V88H32V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M28 84H24V88H28V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M24 84H20V88H24V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M20 84H16V88H20V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M16 84H12V88H16V84Z" fill={forceColor ?? '#535868'} />
+          <path d="M12 84H8V88H12V84Z" fill={forceColor ?? '#4C5160'} />
+          <path d="M8 84H4V88H8V84Z" fill={forceColor ?? '#A2A6B5'} />
+          <path d="M124 80H120V84H124V80Z" fill={forceColor ?? '#868897'} />
+          <path d="M120 80H116V84H120V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M116 80H112V84H116V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M112 80H108V84H112V80Z" fill={forceColor ?? '#C5C7CD'} />
+          <path d="M108 80H104V84H108V80Z" fill={forceColor ?? '#676C7A'} />
+          <path d="M104 80H100V84H104V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M100 80H96V84H100V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M96 80H92V84H96V80Z" fill={forceColor ?? '#D9DADD'} />
+          <path d="M92 80H88V84H92V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M88 80H84V84H88V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M84 80H80V84H84V80Z" fill={forceColor ?? '#676C7A'} />
+          <path d="M80 80H76V84H80V80Z" fill={forceColor ?? '#767B87'} />
+          <path d="M76 80H72V84H76V80Z" fill={forceColor ?? '#E6E7E9'} />
+          <path d="M72 80H68V84H72V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M68 80H64V84H68V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M64 80H60V84H64V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M60 80H56V84H60V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M56 80H52V84H56V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M52 80H48V84H52V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M48 80H44V84H48V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M44 80H40V84H44V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M40 80H36V84H40V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M36 80H32V84H36V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M32 80H28V84H32V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M28 80H24V84H28V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M24 80H20V84H24V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M20 80H16V84H20V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M16 80H12V84H16V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M12 80H8V84H12V80Z" fill={forceColor ?? '#565B6B'} />
+          <path d="M8 80H4V84H8V80Z" fill={forceColor ?? '#A6A9B8'} />
+          <path d="M128 76H124V80H128V76Z" fill={forceColor ?? '#888A99'} />
+          <path d="M124 76H120V80H124V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M120 76H116V80H120V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M116 76H112V80H116V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M112 76H108V80H112V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M108 76H104V80H108V76Z" fill={forceColor ?? '#F4F4F5'} />
+          <path d="M104 76H100V80H104V76Z" fill="white" />
+          <path d="M100 76H96V80H100V76Z" fill={forceColor ?? '#6A6F7E'} />
+          <path d="M96 76H92V80H96V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M92 76H88V80H92V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M88 76H84V80H88V76Z" fill="white" />
+          <path d="M84 76H80V80H84V76Z" fill={forceColor ?? '#878B97'} />
+          <path d="M80 76H76V80H80V76Z" fill={forceColor ?? '#E6E7EA'} />
+          <path d="M76 76H72V80H76V76Z" fill="white" />
+          <path d="M72 76H68V80H72V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M68 76H64V80H68V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M64 76H60V80H64V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M60 76H56V80H60V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M56 76H52V80H56V76Z" fill="white" />
+          <path d="M52 76H48V80H52V76Z" fill={forceColor ?? '#6A6F7E'} />
+          <path d="M48 76H44V80H48V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M44 76H40V80H44V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M40 76H36V80H40V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M36 76H32V80H36V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M32 76H28V80H32V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M28 76H24V80H28V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M24 76H20V80H24V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M20 76H16V80H20V76Z" fill={forceColor ?? '#595F6F'} />
+          <path d="M16 76H12V80H16V76Z" fill={forceColor ?? '#6A6F7E'} />
+          <path d="M12 76H8V80H12V76Z" fill={forceColor ?? '#7F8490'} />
+          <path d="M8 76H4V80H8V76Z" fill={forceColor ?? '#525866'} />
+          <path d="M4 76H0V80H4V76Z" fill={forceColor ?? '#AAAEBD'} />
+          <path d="M128 72H124V76H128V72Z" fill={forceColor ?? '#8B8E9C'} />
+          <path d="M124 72H120V76H124V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M120 72H116V76H120V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M116 72H112V76H116V72Z" fill={forceColor ?? '#717684'} />
+          <path d="M112 72H108V76H112V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M108 72H104V76H108V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M104 72H100V76H104V72Z" fill={forceColor ?? '#F2F3F4'} />
+          <path d="M100 72H96V76H100V72Z" fill="white" />
+          <path d="M96 72H92V76H96V72Z" fill={forceColor ?? '#F2F3F4'} />
+          <path d="M92 72H88V76H92V72Z" fill={forceColor ?? '#6E7381'} />
+          <path d="M88 72H84V76H88V72Z" fill={forceColor ?? '#898E99'} />
+          <path d="M84 72H80V76H84V72Z" fill={forceColor ?? '#DCDDE1'} />
+          <path d="M80 72H76V76H80V72Z" fill="white" />
+          <path d="M76 72H72V76H76V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M72 72H68V76H72V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M68 72H64V76H68V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M64 72H60V76H64V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M60 72H56V76H60V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M56 72H52V76H56V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M52 72H48V76H52V72Z" fill="white" />
+          <path d="M48 72H44V76H48V72Z" fill={forceColor ?? '#E3E4E7'} />
+          <path d="M44 72H40V76H44V72Z" fill={forceColor ?? '#6E7381'} />
+          <path d="M40 72H36V76H40V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M36 72H32V76H36V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M32 72H28V76H32V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M28 72H24V76H28V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M24 72H20V76H24V72Z" fill={forceColor ?? '#6E7381'} />
+          <path d="M20 72H16V76H20V72Z" fill={forceColor ?? '#C5C7CC'} />
+          <path d="M16 72H12V76H16V72Z" fill={forceColor ?? '#A2A5AE'} />
+          <path d="M12 72H8V76H12V72Z" fill={forceColor ?? '#5D6373'} />
+          <path d="M8 72H4V76H8V72Z" fill={forceColor ?? '#565B6A'} />
+          <path d="M4 72H0V76H4V72Z" fill={forceColor ?? '#ADB1C0'} />
+          <path d="M128 68H124V72H128V68Z" fill={forceColor ?? '#8E919F'} />
+          <path d="M124 68H120V72H124V68Z" fill={forceColor ?? '#7E8290'} />
+          <path d="M120 68H116V72H120V68Z" fill="white" />
+          <path d="M116 68H112V72H116V68Z" fill={forceColor ?? '#717685'} />
+          <path d="M112 68H108V72H112V68Z" fill="white" />
+          <path d="M108 68H104V72H108V68Z" fill={forceColor ?? '#717685'} />
+          <path d="M104 68H100V72H104V68Z" fill={forceColor ?? '#8C919C'} />
+          <path d="M100 68H96V72H100V68Z" fill="white" />
+          <path d="M96 68H92V72H96V68Z" fill={forceColor ?? '#8C919C'} />
+          <path d="M92 68H88V72H92V68Z" fill="white" />
+          <path d="M88 68H84V72H88V68Z" fill="white" />
+          <path d="M84 68H80V72H84V68Z" fill="white" />
+          <path d="M80 68H76V72H80V68Z" fill={forceColor ?? '#616777'} />
+          <path d="M76 68H72V72H76V68Z" fill={forceColor ?? '#616777'} />
+          <path d="M72 68H68V72H72V68Z" fill={forceColor ?? '#616777'} />
+          <path d="M68 68H64V72H68V68Z" fill={forceColor ?? '#616777'} />
+          <path d="M64 68H60V72H64V68Z" fill={forceColor ?? '#616777'} />
+          <path d="M60 68H56V72H60V68Z" fill={forceColor ?? '#616777'} />
+          <path d="M56 68H52V72H56V68Z" fill={forceColor ?? '#616777'} />
+          <path d="M52 68H48V72H52V68Z" fill={forceColor ?? '#616777'} />
+          <path d="M48 68H44V72H48V68Z" fill="white" />
+          <path d="M44 68H40V72H44V68Z" fill="white" />
+          <path d="M40 68H36V72H40V68Z" fill={forceColor ?? '#E4E5E8'} />
+          <path d="M36 68H32V72H36V68Z" fill={forceColor ?? '#717685'} />
+          <path d="M32 68H28V72H32V68Z" fill={forceColor ?? '#616777'} />
+          <path d="M28 68H24V72H28V68Z" fill={forceColor ?? '#717685'} />
+          <path d="M24 68H20V72H24V68Z" fill={forceColor ?? '#C8CAD0'} />
+          <path d="M20 68H16V72H20V68Z" fill={forceColor ?? '#616777'} />
+          <path d="M16 68H12V72H16V68Z" fill={forceColor ?? '#616777'} />
+          <path d="M12 68H8V72H12V68Z" fill={forceColor ?? '#616777'} />
+          <path d="M8 68H4V72H8V68Z" fill={forceColor ?? '#595F6E'} />
+          <path d="M4 68H0V72H4V68Z" fill={forceColor ?? '#B0B4C3'} />
+          <path d="M128 64H124V68H128V64Z" fill={forceColor ?? '#9194A3'} />
+          <path d="M124 64H120V68H124V64Z" fill={forceColor ?? '#656B7B'} />
+          <path d="M120 64H116V68H120V64Z" fill={forceColor ?? '#7F8491'} />
+          <path d="M116 64H112V68H116V64Z" fill={forceColor ?? '#C5C7CD'} />
+          <path d="M112 64H108V68H112V64Z" fill={forceColor ?? '#E2E3E6'} />
+          <path d="M108 64H104V68H108V64Z" fill={forceColor ?? '#F4F4F5'} />
+          <path d="M104 64H100V68H104V64Z" fill="white" />
+          <path d="M100 64H96V68H100V64Z" fill="white" />
+          <path d="M96 64H92V68H96V64Z" fill="white" />
+          <path d="M92 64H88V68H92V64Z" fill="white" />
+          <path d="M88 64H84V68H88V64Z" fill={forceColor ?? '#EBECEE'} />
+          <path d="M84 64H80V68H84V64Z" fill={forceColor ?? '#757A88'} />
+          <path d="M80 64H76V68H80V64Z" fill={forceColor ?? '#656B7B'} />
+          <path d="M76 64H72V68H76V64Z" fill={forceColor ?? '#656B7B'} />
+          <path d="M72 64H68V68H72V64Z" fill={forceColor ?? '#656B7B'} />
+          <path d="M68 64H64V68H68V64Z" fill={forceColor ?? '#656B7B'} />
+          <path d="M64 64H60V68H64V64Z" fill={forceColor ?? '#656B7B'} />
+          <path d="M60 64H56V68H60V64Z" fill={forceColor ?? '#656B7B'} />
+          <path d="M56 64H52V68H56V64Z" fill={forceColor ?? '#656B7B'} />
+          <path d="M52 64H48V68H52V64Z" fill={forceColor ?? '#B7BAC1'} />
+          <path d="M48 64H44V68H48V64Z" fill={forceColor ?? '#656B7B'} />
+          <path d="M44 64H40V68H44V64Z" fill="white" />
+          <path d="M40 64H36V68H40V64Z" fill="white" />
+          <path d="M36 64H32V68H36V64Z" fill={forceColor ?? '#EFEFF1'} />
+          <path d="M32 64H28V68H32V64Z" fill={forceColor ?? '#D5D7DB'} />
+          <path d="M28 64H24V68H28V64Z" fill={forceColor ?? '#E4E5E8'} />
+          <path d="M24 64H20V68H24V64Z" fill={forceColor ?? '#656B7B'} />
+          <path d="M20 64H16V68H20V64Z" fill={forceColor ?? '#656B7B'} />
+          <path d="M16 64H12V68H16V64Z" fill={forceColor ?? '#656B7B'} />
+          <path d="M12 64H8V68H12V64Z" fill={forceColor ?? '#656B7B'} />
+          <path d="M8 64H4V68H8V64Z" fill={forceColor ?? '#5D6371'} />
+          <path d="M4 64H0V68H4V64Z" fill={forceColor ?? '#B2B6C6'} />
+          <path d="M128 60H124V64H128V60Z" fill={forceColor ?? '#9497A6'} />
+          <path d="M124 60H120V64H124V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M120 60H116V64H120V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M116 60H112V64H116V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M112 60H108V64H112V60Z" fill={forceColor ?? '#7B818F'} />
+          <path d="M108 60H104V64H108V60Z" fill={forceColor ?? '#CBCDD2'} />
+          <path d="M104 60H100V64H104V60Z" fill={forceColor ?? '#E7E8EA'} />
+          <path d="M100 60H96V64H100V60Z" fill={forceColor ?? '#F7F8F8'} />
+          <path d="M96 60H92V64H96V60Z" fill="white" />
+          <path d="M92 60H88V64H92V60Z" fill="white" />
+          <path d="M88 60H84V64H88V60Z" fill="white" />
+          <path d="M84 60H80V64H84V60Z" fill={forceColor ?? '#F9F9FA'} />
+          <path d="M80 60H76V64H80V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M76 60H72V64H76V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M72 60H68V64H72V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M68 60H64V64H68V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M64 60H60V64H64V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M60 60H56V64H60V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M56 60H52V64H56V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M52 60H48V64H52V60Z" fill="white" />
+          <path d="M48 60H44V64H48V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M44 60H40V64H44V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M40 60H36V64H40V60Z" fill="white" />
+          <path d="M36 60H32V64H36V60Z" fill="white" />
+          <path d="M32 60H28V64H32V60Z" fill={forceColor ?? '#FEFEFE'} />
+          <path d="M28 60H24V64H28V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M24 60H20V64H24V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M20 60H16V64H20V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M16 60H12V64H16V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M12 60H8V64H12V60Z" fill={forceColor ?? '#696F7F'} />
+          <path d="M8 60H4V64H8V60Z" fill={forceColor ?? '#616675'} />
+          <path d="M4 60H0V64H4V60Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M128 56H124V60H128V56Z" fill={forceColor ?? '#989AA9'} />
+          <path d="M124 56H120V60H124V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M120 56H116V60H120V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M116 56H112V60H116V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M112 56H108V60H112V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M108 56H104V60H108V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M104 56H100V60H104V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M100 56H96V60H100V56Z" fill={forceColor ?? '#E2E4E7'} />
+          <path d="M96 56H92V60H96V56Z" fill={forceColor ?? '#F1F1F3'} />
+          <path d="M92 56H88V60H92V56Z" fill="white" />
+          <path d="M88 56H84V60H88V56Z" fill="white" />
+          <path d="M84 56H80V60H84V56Z" fill="white" />
+          <path d="M80 56H76V60H80V56Z" fill={forceColor ?? '#7A808F'} />
+          <path d="M76 56H72V60H76V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M72 56H68V60H72V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M68 56H64V60H68V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M64 56H60V60H64V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M60 56H56V60H60V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M56 56H52V60H56V56Z" fill={forceColor ?? '#CDCFD5'} />
+          <path d="M52 56H48V60H52V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M48 56H44V60H48V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M44 56H40V60H44V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M40 56H36V60H40V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M36 56H32V60H36V56Z" fill="white" />
+          <path d="M32 56H28V60H32V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M28 56H24V60H28V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M24 56H20V60H24V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M20 56H16V60H20V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M16 56H12V60H16V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M12 56H8V60H12V56Z" fill={forceColor ?? '#6D7384'} />
+          <path d="M8 56H4V60H8V56Z" fill={forceColor ?? '#646A7A'} />
+          <path d="M4 56H0V60H4V56Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M128 52H124V56H128V52Z" fill={forceColor ?? '#9B9EAD'} />
+          <path d="M124 52H120V56H124V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M120 52H116V56H120V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M116 52H112V56H116V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M112 52H108V56H112V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M108 52H104V56H108V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M104 52H100V56H104V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M100 52H96V56H100V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M96 52H92V56H96V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M92 52H88V56H92V52Z" fill={forceColor ?? '#F6F6F8'} />
+          <path d="M88 52H84V56H88V52Z" fill="white" />
+          <path d="M84 52H80V56H84V52Z" fill="white" />
+          <path d="M80 52H76V56H80V52Z" fill="white" />
+          <path d="M76 52H72V56H76V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M72 52H68V56H72V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M68 52H64V56H68V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M64 52H60V56H64V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M60 52H56V56H60V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M56 52H52V56H56V52Z" fill="white" />
+          <path d="M52 52H48V56H52V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M48 52H44V56H48V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M44 52H40V56H44V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M40 52H36V56H40V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M36 52H32V56H36V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M32 52H28V56H32V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M28 52H24V56H28V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M24 52H20V56H24V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M20 52H16V56H20V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M16 52H12V56H16V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M12 52H8V56H12V52Z" fill={forceColor ?? '#717788'} />
+          <path d="M8 52H4V56H8V52Z" fill={forceColor ?? '#686E7D'} />
+          <path d="M4 52H0V56H4V52Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M128 48H124V52H128V48Z" fill={forceColor ?? '#9EA1B0'} />
+          <path d="M124 48H120V52H124V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M120 48H116V52H120V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M116 48H112V52H116V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M112 48H108V52H112V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M108 48H104V52H108V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M104 48H100V52H104V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M100 48H96V52H100V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M96 48H92V52H96V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M92 48H88V52H92V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M88 48H84V52H88V48Z" fill={forceColor ?? '#FEFEFF'} />
+          <path d="M84 48H80V52H84V48Z" fill="white" />
+          <path d="M80 48H76V52H80V48Z" fill="white" />
+          <path d="M76 48H72V52H76V48Z" fill={forceColor ?? '#898F9E'} />
+          <path d="M72 48H68V52H72V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M68 48H64V52H68V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M64 48H60V52H64V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M60 48H56V52H60V48Z" fill={forceColor ?? '#D0D2D8'} />
+          <path d="M56 48H52V52H56V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M52 48H48V52H52V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M48 48H44V52H48V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M44 48H40V52H44V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M40 48H36V52H40V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M36 48H32V52H36V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M32 48H28V52H32V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M28 48H24V52H28V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M24 48H20V52H24V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M20 48H16V52H20V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M16 48H12V52H16V48Z" fill={forceColor ?? '#747B8C'} />
+          <path d="M12 48H8V52H12V48Z" fill={forceColor ?? '#6B7181'} />
+          <path d="M8 48H4V52H8V48Z" fill={forceColor ?? '#6B7181'} />
+          <path d="M4 48H0V52H4V48Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M124 44H120V48H124V44Z" fill={forceColor ?? '#A3A6B5'} />
+          <path d="M120 44H116V48H120V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M116 44H112V48H116V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M112 44H108V48H112V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M108 44H104V48H108V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M104 44H100V48H104V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M100 44H96V48H100V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M96 44H92V48H96V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M92 44H88V48H92V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M88 44H84V48H88V44Z" fill={forceColor ?? '#F0F1F3'} />
+          <path d="M84 44H80V48H84V44Z" fill="white" />
+          <path d="M80 44H76V48H80V44Z" fill="white" />
+          <path d="M76 44H72V48H76V44Z" fill="white" />
+          <path d="M72 44H68V48H72V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M68 44H64V48H68V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M64 44H60V48H64V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M60 44H56V48H60V44Z" fill="white" />
+          <path d="M56 44H52V48H56V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M52 44H48V48H52V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M48 44H44V48H48V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M44 44H40V48H44V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M40 44H36V48H40V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M36 44H32V48H36V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M32 44H28V48H32V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M28 44H24V48H28V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M24 44H20V48H24V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M20 44H16V48H20V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M16 44H12V48H16V44Z" fill={forceColor ?? '#787E8F'} />
+          <path d="M12 44H8V48H12V44Z" fill={forceColor ?? '#6F7484'} />
+          <path d="M8 44H4V48H8V44Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M124 40H120V44H124V40Z" fill={forceColor ?? '#A6A9B8'} />
+          <path d="M120 40H116V44H120V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M116 40H112V44H116V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M112 40H108V44H112V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M108 40H104V44H108V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M104 40H100V44H104V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M100 40H96V44H100V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M96 40H92V44H96V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M92 40H88V44H92V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M88 40H84V44H88V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M84 40H80V44H84V40Z" fill={forceColor ?? '#EDEEF0'} />
+          <path d="M80 40H76V44H80V40Z" fill={forceColor ?? '#FEFFFF'} />
+          <path d="M76 40H72V44H76V40Z" fill="white" />
+          <path d="M72 40H68V44H72V40Z" fill={forceColor ?? '#9196A5'} />
+          <path d="M68 40H64V44H68V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M64 40H60V44H64V40Z" fill={forceColor ?? '#D2D4DA'} />
+          <path d="M60 40H56V44H60V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M56 40H52V44H56V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M52 40H48V44H52V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M48 40H44V44H48V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M44 40H40V44H44V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M40 40H36V44H40V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M36 40H32V44H36V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M32 40H28V44H32V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M28 40H24V44H28V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M24 40H20V44H24V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M20 40H16V44H20V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M16 40H12V44H16V40Z" fill={forceColor ?? '#7A8092'} />
+          <path d="M12 40H8V44H12V40Z" fill={forceColor ?? '#707687'} />
+          <path d="M8 40H4V44H8V40Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M124 36H120V40H124V36Z" fill={forceColor ?? '#A9ADBC'} />
+          <path d="M120 36H116V40H120V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M116 36H112V40H116V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M112 36H108V40H112V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M108 36H104V40H108V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M104 36H100V40H104V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M100 36H96V40H100V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M96 36H92V40H96V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M92 36H88V40H92V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M88 36H84V40H88V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M84 36H80V40H84V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M80 36H76V40H80V36Z" fill={forceColor ?? '#EFF0F2'} />
+          <path d="M76 36H72V40H76V36Z" fill="white" />
+          <path d="M72 36H68V40H72V36Z" fill="white" />
+          <path d="M68 36H64V40H68V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M64 36H60V40H64V36Z" fill="white" />
+          <path d="M60 36H56V40H60V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M56 36H52V40H56V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M52 36H48V40H52V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M48 36H44V40H48V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M44 36H40V40H44V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M40 36H36V40H40V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M36 36H32V40H36V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M32 36H28V40H32V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M28 36H24V40H28V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M24 36H20V40H24V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M20 36H16V40H20V36Z" fill={forceColor ?? '#7C8294'} />
+          <path d="M16 36H12V40H16V36Z" fill={forceColor ?? '#727888'} />
+          <path d="M12 36H8V40H12V36Z" fill={forceColor ?? '#727888'} />
+          <path d="M8 36H4V40H8V36Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M120 32H116V36H120V32Z" fill={forceColor ?? '#ADB1C0'} />
+          <path d="M116 32H112V36H116V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M112 32H108V36H112V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M108 32H104V36H108V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M104 32H100V36H104V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M100 32H96V36H100V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M96 32H92V36H96V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M92 32H88V36H92V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M88 32H84V36H88V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M84 32H80V36H84V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M80 32H76V36H80V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M76 32H72V36H76V32Z" fill={forceColor ?? '#E8E9EC'} />
+          <path d="M72 32H68V36H72V32Z" fill="white" />
+          <path d="M68 32H64V36H68V32Z" fill="white" />
+          <path d="M64 32H60V36H64V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M60 32H56V36H60V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M56 32H52V36H56V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M52 32H48V36H52V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M48 32H44V36H48V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M44 32H40V36H44V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M40 32H36V36H40V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M36 32H32V36H36V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M32 32H28V36H32V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M28 32H24V36H28V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M24 32H20V36H24V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M20 32H16V36H20V32Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M16 32H12V36H16V32Z" fill={forceColor ?? '#727988'} />
+          <path d="M12 32H8V36H12V32Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M120 28H116V32H120V28Z" fill={forceColor ?? '#B0B4C3'} />
+          <path d="M116 28H112V32H116V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M112 28H108V32H112V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M108 28H104V32H108V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M104 28H100V32H104V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M100 28H96V32H100V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M96 28H92V32H96V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M92 28H88V32H92V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M88 28H84V32H88V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M84 28H80V32H84V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M80 28H76V32H80V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M76 28H72V32H76V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M72 28H68V32H72V28Z" fill={forceColor ?? '#EAECEE'} />
+          <path d="M68 28H64V32H68V28Z" fill="white" />
+          <path d="M64 28H60V32H64V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M60 28H56V32H60V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M56 28H52V32H56V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M52 28H48V32H52V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M48 28H44V32H48V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M44 28H40V32H44V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M40 28H36V32H40V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M36 28H32V32H36V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M32 28H28V32H32V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M28 28H24V32H28V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M24 28H20V32H24V28Z" fill={forceColor ?? '#7C8394'} />
+          <path d="M20 28H16V32H20V28Z" fill={forceColor ?? '#727988'} />
+          <path d="M16 28H12V32H16V28Z" fill={forceColor ?? '#727988'} />
+          <path d="M12 28H8V32H12V28Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M116 24H112V28H116V24Z" fill={forceColor ?? '#B3B7C6'} />
+          <path d="M112 24H108V28H112V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M108 24H104V28H108V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M104 24H100V28H104V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M100 24H96V28H100V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M96 24H92V28H96V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M92 24H88V28H92V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M88 24H84V28H88V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M84 24H80V28H84V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M80 24H76V28H80V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M76 24H72V28H76V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M72 24H68V28H72V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M68 24H64V28H68V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M64 24H60V28H64V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M60 24H56V28H60V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M56 24H52V28H56V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M52 24H48V28H52V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M48 24H44V28H48V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M44 24H40V28H44V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M40 24H36V28H40V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M36 24H32V28H36V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M32 24H28V28H32V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M28 24H24V28H28V24Z" fill={forceColor ?? '#7B8192'} />
+          <path d="M24 24H20V28H24V24Z" fill={forceColor ?? '#717787'} />
+          <path d="M20 24H16V28H20V24Z" fill={forceColor ?? '#717787'} />
+          <path d="M16 24H12V28H16V24Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M112 20H108V24H112V20Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M108 20H104V24H108V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M104 20H100V24H104V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M100 20H96V24H100V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M96 20H92V24H96V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M92 20H88V24H92V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M88 20H84V24H88V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M84 20H80V24H84V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M80 20H76V24H80V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M76 20H72V24H76V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M72 20H68V24H72V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M68 20H64V24H68V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M64 20H60V24H64V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M60 20H56V24H60V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M56 20H52V24H56V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M52 20H48V24H52V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M48 20H44V24H48V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M44 20H40V24H44V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M40 20H36V24H40V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M36 20H32V24H36V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M32 20H28V24H32V20Z" fill={forceColor ?? '#797F8F'} />
+          <path d="M28 20H24V24H28V20Z" fill={forceColor ?? '#707584'} />
+          <path d="M24 20H20V24H24V20Z" fill={forceColor ?? '#707584'} />
+          <path d="M20 20H16V24H20V20Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M108 16H104V20H108V16Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M104 16H100V20H104V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M100 16H96V20H100V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M96 16H92V20H96V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M92 16H88V20H92V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M88 16H84V20H88V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M84 16H80V20H84V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M80 16H76V20H80V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M76 16H72V20H76V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M72 16H68V20H72V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M68 16H64V20H68V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M64 16H60V20H64V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M60 16H56V20H60V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M56 16H52V20H56V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M52 16H48V20H52V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M48 16H44V20H48V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M44 16H40V20H44V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M40 16H36V20H40V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M36 16H32V20H36V16Z" fill={forceColor ?? '#767C8D'} />
+          <path d="M32 16H28V20H32V16Z" fill={forceColor ?? '#6D7282'} />
+          <path d="M28 16H24V20H28V16Z" fill={forceColor ?? '#6D7282'} />
+          <path d="M24 16H20V20H24V16Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M104 12H100V16H104V12Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M100 12H96V16H100V12Z" fill={forceColor ?? '#6B707F'} />
+          <path d="M96 12H92V16H96V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M92 12H88V16H92V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M88 12H84V16H88V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M84 12H80V16H84V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M80 12H76V16H80V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M76 12H72V16H76V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M72 12H68V16H72V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M68 12H64V16H68V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M64 12H60V16H64V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M60 12H56V16H60V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M56 12H52V16H56V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M52 12H48V16H52V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M48 12H44V16H48V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M44 12H40V16H44V12Z" fill={forceColor ?? '#74798A'} />
+          <path d="M40 12H36V16H40V12Z" fill={forceColor ?? '#6B707F'} />
+          <path d="M36 12H32V16H36V12Z" fill={forceColor ?? '#6B707F'} />
+          <path d="M32 12H28V16H32V12Z" fill={forceColor ?? '#6B707F'} />
+          <path d="M28 12H24V16H28V12Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M100 8H96V12H100V8Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M96 8H92V12H96V8Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M92 8H88V12H92V8Z" fill={forceColor ?? '#686E7C'} />
+          <path d="M88 8H84V12H88V8Z" fill={forceColor ?? '#686E7C'} />
+          <path d="M84 8H80V12H84V8Z" fill={forceColor ?? '#717787'} />
+          <path d="M80 8H76V12H80V8Z" fill={forceColor ?? '#717787'} />
+          <path d="M76 8H72V12H76V8Z" fill={forceColor ?? '#717787'} />
+          <path d="M72 8H68V12H72V8Z" fill={forceColor ?? '#717787'} />
+          <path d="M68 8H64V12H68V8Z" fill={forceColor ?? '#717787'} />
+          <path d="M64 8H60V12H64V8Z" fill={forceColor ?? '#717787'} />
+          <path d="M60 8H56V12H60V8Z" fill={forceColor ?? '#717787'} />
+          <path d="M56 8H52V12H56V8Z" fill={forceColor ?? '#717787'} />
+          <path d="M52 8H48V12H52V8Z" fill={forceColor ?? '#686E7C'} />
+          <path d="M48 8H44V12H48V8Z" fill={forceColor ?? '#686E7C'} />
+          <path d="M44 8H40V12H44V8Z" fill={forceColor ?? '#686E7C'} />
+          <path d="M40 8H36V12H40V8Z" fill={forceColor ?? '#686E7C'} />
+          <path d="M36 8H32V12H36V8Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M32 8H28V12H32V8Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M92 4H88V8H92V4Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M88 4H84V8H88V4Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M84 4H80V8H84V4Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M80 4H76V8H80V4Z" fill={forceColor ?? '#666C7B'} />
+          <path d="M76 4H72V8H76V4Z" fill={forceColor ?? '#666C7B'} />
+          <path d="M72 4H68V8H72V4Z" fill={forceColor ?? '#666C7B'} />
+          <path d="M68 4H64V8H68V4Z" fill={forceColor ?? '#666C7B'} />
+          <path d="M64 4H60V8H64V4Z" fill={forceColor ?? '#666C7B'} />
+          <path d="M60 4H56V8H60V4Z" fill={forceColor ?? '#666C7B'} />
+          <path d="M56 4H52V8H56V4Z" fill={forceColor ?? '#666C7B'} />
+          <path d="M52 4H48V8H52V4Z" fill={forceColor ?? '#666C7B'} />
+          <path d="M48 4H44V8H48V4Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M44 4H40V8H44V4Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M40 4H36V8H40V4Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M80 0H76V4H80V0Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M76 0H72V4H76V0Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M72 0H68V4H72V0Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M68 0H64V4H68V0Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M64 0H60V4H64V0Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M60 0H56V4H60V0Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M56 0H52V4H56V0Z" fill={forceColor ?? '#B3B8C7'} />
+          <path d="M52 0H48V4H52V0Z" fill={forceColor ?? '#B3B8C7'} />
+          <g opacity="0.4">
+            <path d="M84 124H80V128H84V124Z" fill={forceColor ?? '#808290'} />
+            <path d="M48 124H44V128H48V124Z" fill={forceColor ?? '#808290'} />
+            <path d="M96 120H92V124H96V120Z" fill={forceColor ?? '#808290'} />
+            <path d="M36 120H32V124H36V120Z" fill={forceColor ?? '#808290'} />
+            <path d="M104 116H100V120H104V116Z" fill={forceColor ?? '#808290'} />
+            <path d="M28 116H24V120H28V116Z" fill={forceColor ?? '#808290'} />
+            <path d="M108 112H104V116H108V112Z" fill={forceColor ?? '#808290'} />
+            <path d="M24 112H20V116H24V112Z" fill={forceColor ?? '#808290'} />
+            <path d="M112 108H108V112H112V108Z" fill={forceColor ?? '#808290'} />
+            <path d="M20 108H16V112H20V108Z" fill={forceColor ?? '#808290'} />
+            <path d="M116 104H112V108H116V104Z" fill={forceColor ?? '#808290'} />
+            <path d="M16 104H12V108H16V104Z" fill={forceColor ?? '#808290'} />
+            <path d="M120 100H116V104H120V100Z" fill={forceColor ?? '#808290'} />
+            <path d="M12 100H8V104H12V100Z" fill={forceColor ?? '#808290'} />
+            <path d="M124 92H120V96H124V92Z" fill={forceColor ?? '#808290'} />
+            <path d="M8 92H4V96H8V92Z" fill={forceColor ?? '#808290'} />
+            <path d="M128 80H124V84H128V80Z" fill={forceColor ?? '#808290'} />
+            <path d="M4 80H0V84H4V80Z" fill={forceColor ?? '#808290'} />
+          </g>
+          <g opacity="0.36">
+            <path d="M128 44H124V48H128V44Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M124 32H120V36H124V32Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M4 44H0V48H4V44Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M8 32H4V36H8V32Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M120 24H116V28H120V24Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M12 24H8V28H12V24Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M116 20H112V24H116V20Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M16 20H12V24H16V20Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M112 16H108V20H112V16Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M20 16H16V20H20V16Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M108 12H104V16H108V12Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M24 12H20V16H24V12Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M104 8H100V12H104V8Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M28 8H24V12H28V8Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M96 4H92V8H96V4Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M36 4H32V8H36V4Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M84 0H80V4H84V0Z" fill={forceColor ?? '#B3B8C7'} />
+            <path d="M48 0H44V4H48V0Z" fill={forceColor ?? '#B3B8C7'} />
+          </g>
+        </g>
+      </g>
       <defs>
-        <style>
-          {`.${cls}-2{fill:${forceColor ?? '#f6f8f9'};}.${cls}-3{fill:${forceColor ?? '#6a7979'};}.${cls}-4{fill:${
-            forceColor ?? '#040404'
-          };}.${cls}-6{fill:${forceColor ?? '#e3e2ea'};}.${cls}-7{fill:${forceColor ?? '#e8e9ea'};}.${cls}-8{fill:${
-            forceColor ?? '#fff'
-          };}.${cls}-9{fill:${forceColor ?? '#f1f1f4'};}.${cls}-11{fill:${forceColor ?? '#fbfbfc'};}.${cls}-12{fill:${
-            forceColor ?? '#e5e6f0'
-          };}.${cls}-13{fill:${forceColor ? '#ffffff' : '#993c4d'};}.${cls}-15{fill:${
-            forceColor ? '#ffffff' : '#b75868'
-          };}.${cls}-16{fill:${forceColor ?? '#b8b8d2'};}.${cls}-18{fill:${forceColor ?? '#c2c5c9'};}.${cls}-19{fill:${
-            forceColor ? '#ffffff' : '#913648'
-          };}.${cls}-20{fill:${forceColor ?? '#babad4'};}.${cls}-23{fill:${forceColor ?? '#8d8f92'};}.${cls}-25{fill:${
-            forceColor ?? '#313c3d'
-          };}.${cls}-26{fill:${forceColor ? '#ffffff' : '#8d3748'};}.${cls}-27{fill:${
-            forceColor ?? '#cdced1'
-          };}.${cls}-28{fill:${forceColor ?? '#b1b5b8'};}.${cls}-32{fill:${forceColor ?? '#d8d8db'};}.${cls}-33{fill:${
-            forceColor ?? '#bbbbc2'
-          };}.${cls}-35{fill:${forceColor ?? '#c7c8cb'};}.${cls}-36{fill:${forceColor ?? '#dcdbe0'};}.${cls}-37{fill:${
-            forceColor ?? '#dbdadf'
-          };}.${cls}-38{fill:${forceColor ?? '#d3d3d6'};}.${cls}-39{fill:${forceColor ?? '#c8cacf'};}.${cls}-40{fill:${
-            forceColor ?? '#d5d7d9'
-          };}.${cls}-41{fill:${forceColor ?? '#172222'};}.${cls}-44{fill:${forceColor ?? '#1e292a'};}.${cls}-45{fill:${
-            forceColor ?? '#131919'
-          };}.${cls}-47{fill:${forceColor ?? '#43524e'};}.${cls}-48{fill:${forceColor ?? '#434f52'};}.${cls}-49{fill:${
-            forceColor ?? '#090a0a'
-          };}.${cls}-50{fill:${forceColor ?? '#080808'};}.${cls}-52{fill:${forceColor ?? '#1c252e'};}.${cls}-54{fill:${
-            forceColor ?? '#374543'
-          };}.${cls}-56{fill:${forceColor ?? '#445150'};}.${cls}-57{fill:${forceColor ?? '#0a0a0a'};}.${cls}-58{fill:${
-            forceColor ?? '#707980'
-          };}.${cls}-60{fill:${forceColor ?? '#565f62'};}.${cls}-61{fill:${forceColor ?? '#293334'};}.${cls}-62{fill:${
-            forceColor ?? '#263234'
-          };}.${cls}-63{fill:${forceColor ?? '#2e403b'};}.${cls}-65{fill:${forceColor ?? '#591e29'};}.${cls}-66{fill:${
-            forceColor ?? '#828990'
-          };}.${cls}-67{fill:${forceColor ?? '#4d5856'};}.${cls}-68{fill:${forceColor ?? '#757b83'};}.${cls}-69{fill:${
-            forceColor ?? '#4e6360'
-          };}`}
-        </style>
+        <clipPath id="clip0_216_23463">
+          <rect width="128" height="128" fill="white" />
+        </clipPath>
+        <clipPath id="clip1_216_23463">
+          <rect width="128" height="128" fill="white" />
+        </clipPath>
       </defs>
-      <path d="M100.5 0h-6.28v7.54h6.28V0Zm7.54 0h-7.54v7.54h7.54V0Z" className={`${cls}-50`} />
-      <path d="M115.57 0h-7.54v7.54h7.54V0Zm7.54 0h-7.54v7.54h7.54V0Z" className={`${cls}-50`} />
-      <path d="M129.39 0h-6.28v7.54h7.54V0h-1.26Z" className={`${cls}-50`} />
-      <path d="M136.93 0h-7.54v7.54h7.54V0Zm7.54 0h-7.54v7.54h7.54V0Z" className={`${cls}-50`} />
-      <path d="M152 0h-7.54v7.54H152V0Z" className={`${cls}-50`} />
-      <path
-        d="M158.28 0h-7.54v7.54h7.54V0ZM79.14 7.54H71.6v7.54h7.54V7.54Zm7.54 0h-7.54v7.54h7.54V7.54Z"
-        className={`${cls}-50`}
-      />
-      <path
-        d="M94.22 7.54h-7.54v7.54h7.54V7.54Z"
-        style={{
-          fill: forceColor ?? '#1c2525',
-        }}
-      />
-      <path d="M100.5 7.54h-6.28v7.54h6.28V7.54Zm7.54 0h-7.54v7.54h7.54V7.54Z" className={`${cls}-60`} />
-      <path d="M115.57 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-3`} />
-      <path d="M123.11 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-66`} />
-      <path d="M129.39 7.54h-6.28v7.54h7.54V7.54h-1.26Z" className={`${cls}-66`} />
-      <path d="M136.93 7.54h-7.54v7.54h7.54V7.54Zm7.54 0h-7.54v7.54h7.54V7.54Z" className={`${cls}-66`} />
-      <path d="M152 7.54h-7.54v7.54H152V7.54Z" className={`${cls}-66`} />
-      <path d="M158.28 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-66`} />
-      <path d="M165.82 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-50`} />
-      <path d="M173.36 7.54h-7.54v7.54h7.54V7.54Z" className={`${cls}-4`} />
-      <path d="M65.32 15.07h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-50`} />
-      <path d="M79.14 15.07H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-60`} />
-      <path d="M94.22 15.07h-7.54v7.54h7.54v-7.54Z" className={`${cls}-48`} />
-      <path d="M100.5 15.07h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-28`} />
-      <path d="M115.57 15.07h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
-      <path d="M129.39 15.07h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-39`} />
-      <path d="M136.93 15.07h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
-      <path d="M152 15.07h-7.54v7.54H152v-7.54Z" className={`${cls}-39`} />
-      <path d="M158.28 15.07h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
-      <path d="M165.82 15.07h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-3`} />
-      <path d="M180.9 15.07h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M187.18 15.07h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M65.32 21.36h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-58`} />
-      <path d="M79.14 21.36H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-56`} />
-      <path
-        d="M94.22 21.36h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-39`}
-      />
-      <path d="M115.57 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
-      <path d="M123.11 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M129.39 21.36h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
-      <path d="M136.93 21.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M152 21.36h-7.54v7.54H152v-7.54Z" className={`${cls}-4`} />
-      <path d="M158.28 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path
-        d="M165.82 21.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-39`}
-      />
-      <path d="M187.18 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
-      <path d="M194.72 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
-      <path d="M202.25 21.36h-7.54v7.54h7.54v-7.54ZM42.71 28.89h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-50`} />
-      <path d="M50.25 28.89h-7.54v7.54h7.54v-7.54Z" className={`${cls}-44`} />
-      <path d="M65.32 28.89h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-67`} />
-      <path d="M79.14 28.89H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-11`} />
-      <path
-        d="M94.22 28.89h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-57`}
-      />
-      <path d="M115.57 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M129.39 28.89h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-19`} />
-      <path d="M136.93 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M152 28.89h-7.54v7.54H152v-7.54Z" className={`${cls}-19`} />
-      <path d="M158.28 28.89h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path
-        d="M165.82 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-4`}
-      />
-      <path d="M187.18 28.89h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
-      <path d="M202.25 28.89h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
-      <path d="M209.79 28.89h-7.54v7.54h7.54v-7.54ZM36.43 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
-      <path d="M42.71 36.43h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-66`} />
-      <path d="M50.25 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
-      <path d="M65.32 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-38`} />
-      <path d="M71.6 36.43h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-11`} />
-      <path d="M79.14 36.43H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-57`} />
-      <path
-        d="M94.22 36.43h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-19`}
-      />
-      <path d="M115.57 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M129.39 36.43h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-15`} />
-      <path d="M136.93 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M152 36.43h-7.54v7.54H152v-7.54Z" className={`${cls}-15`} />
-      <path d="M158.28 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M165.82 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M173.36 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M187.18 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M194.72 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M202.25 36.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
-      <path d="M216.07 36.43h-7.54v7.54h7.54v-7.54ZM28.89 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-50`} />
-      <path d="M36.43 43.97h-7.54v6.28h7.54v-6.28Zm6.28 0h-6.28v6.28h7.54v-6.28h-1.26Z" className={`${cls}-35`} />
-      <path d="M50.25 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-56`} />
-      <path d="M65.32 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-27`} />
-      <path d="M71.6 43.97h-6.28v6.28h7.54v-6.28H71.6Z" className={`${cls}-57`} />
-      <path d="M79.14 43.97H71.6v6.28h7.54v-6.28Z" className={`${cls}-19`} />
-      <path d="M86.68 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-15`} />
-      <path
-        d="M94.22 43.97h-7.54v6.28h7.54v-6.28Zm6.28 0h-6.28v6.28h6.28v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 43.97h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z" className={`${cls}-15`} />
-      <path d="M129.39 43.97h-6.28v6.28h7.54v-6.28h-1.26Z" className={`${cls}-15`} />
-      <path d="M136.93 43.97h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z" className={`${cls}-15`} />
-      <path d="M152 43.97h-7.54v6.28H152v-6.28Z" className={`${cls}-15`} />
-      <path
-        d="M158.28 43.97h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Zm7.54 0h-7.54v6.28h7.54v-6.28Z"
-        className={`${cls}-15`}
-      />
-      <path d="M187.18 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-15`} />
-      <path d="M194.72 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-19`} />
-      <path d="M202.25 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-4`} />
-      <path d="M209.79 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-39`} />
-      <path d="M216.07 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-39`} />
-      <path d="M223.61 43.97h-7.54v6.28h7.54v-6.28ZM28.89 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
-      <path d="M36.43 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
-      <path
-        d="M42.71 50.25h-6.28v7.54h7.54v-7.54h-1.26Z"
-        style={{
-          fill: forceColor ?? '#384544',
-        }}
-      />
-      <path d="M50.25 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-38`} />
-      <path d="M65.32 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
-      <path d="M71.6 50.25h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-19`} />
-      <path d="M79.14 50.25H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M94.22 50.25h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 50.25h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 50.25h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path d="M158.28 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M165.82 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M187.18 50.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M202.25 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M209.79 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M216.07 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-39`} />
-      <path
-        d="M223.61 50.25h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#313b3c',
-        }}
-      />
-      <path d="M21.36 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
-      <path d="M28.89 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
-      <path d="M36.43 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-69`} />
-      <path d="M42.71 57.79h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
-      <path d="M50.25 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-37`} />
-      <path d="M65.32 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M71.6 57.79h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
-      <path d="M79.14 57.79H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M94.22 57.79h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 57.79h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 57.79h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path d="M158.28 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M165.82 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M187.18 57.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M202.25 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M209.79 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M216.07 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-47`} />
-      <path d="M223.61 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-6`} />
-      <path d="M231.15 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
-      <path d="M21.36 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-45`} />
-      <path d="M28.89 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
-      <path d="M36.43 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-69`} />
-      <path d="M42.71 65.32h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
-      <path d="M50.25 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-37`} />
-      <path d="M65.32 65.32h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
-      <path d="M79.14 65.32H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M94.22 65.32h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 65.32h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 65.32h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path d="M158.28 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M165.82 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M187.18 65.32h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M202.25 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M209.79 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M216.07 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-47`} />
-      <path d="M223.61 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-6`} />
-      <path d="M231.15 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-49`} />
-      <path d="M21.36 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-45`} />
-      <path d="M28.89 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
-      <path
-        d="M36.43 72.86h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#364b47',
-        }}
-      />
-      <path d="M42.71 72.86h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
-      <path d="M50.25 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-57`} />
-      <path d="M65.32 72.86h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
-      <path d="M79.14 72.86H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M94.22 72.86h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 72.86h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 72.86h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path d="M158.28 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M165.82 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M187.18 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M202.25 72.86h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M216.07 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M223.61 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-48`} />
-      <path d="M231.15 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-27`} />
-      <path d="M238.68 72.86h-7.54v7.54h7.54v-7.54ZM13.82 79.14H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-50`} />
-      <path d="M21.36 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
-      <path d="M28.89 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-69`} />
-      <path
-        d="M36.43 79.14h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#f3f3f5',
-        }}
-      />
-      <path d="M42.71 79.14h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
-      <path d="M50.25 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M65.32 79.14h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
-      <path d="M79.14 79.14H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M94.22 79.14h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 79.14h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 79.14h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path d="M158.28 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M165.82 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M187.18 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M202.25 79.14h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M216.07 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M223.61 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-48`} />
-      <path d="M231.15 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-27`} />
-      <path d="M238.68 79.14h-7.54v7.54h7.54v-7.54Z" className={`${cls}-44`} />
-      <path d="M13.82 86.68H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-50`} />
-      <path d="M21.36 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-28`} />
-      <path
-        d="M28.89 86.68h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#374c4a',
-        }}
-      />
-      <path d="M36.43 86.68h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-37`} />
-      <path d="M50.25 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M65.32 86.68h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
-      <path d="M79.14 86.68H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M94.22 86.68h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
-      <path d="M123.11 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 86.68h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 86.68h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path d="M158.28 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M165.82 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M187.18 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M202.25 86.68h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M216.07 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M223.61 86.68h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#323e40',
-        }}
-      />
-      <path d="M231.15 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-27`} />
-      <path d="M238.68 86.68h-7.54v7.54h7.54v-7.54Z" className={`${cls}-44`} />
-      <path d="M7.54 94.22H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M13.82 94.22H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-68`} />
-      <path d="M21.36 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-63`} />
-      <path d="M28.89 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
-      <path d="M42.71 94.22h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
-      <path d="M50.25 94.22h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M71.6 94.22h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
-      <path d="M79.14 94.22H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
-      <path
-        d="M94.22 94.22h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-8`}
-      />
-      <path d="M115.57 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
-      <path d="M123.11 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 94.22h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 94.22h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path d="M158.28 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M165.82 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-8`}
-      />
-      <path d="M187.18 94.22h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
-      <path d="M202.25 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M209.79 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M216.07 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M223.61 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-26`} />
-      <path d="M231.15 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
-      <path d="M238.68 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
-      <path d="M244.96 94.22h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 101.75H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M13.82 101.75H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
-      <path d="M21.36 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-54`} />
-      <path d="M28.89 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
-      <path d="M42.71 101.75h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
-      <path d="M50.25 101.75h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M71.6 101.75h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
-      <path d="M79.14 101.75H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M94.22 101.75h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-12`}
-      />
-      <path d="M115.57 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 101.75h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 101.75h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M158.28 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-12`}
-      />
-      <path d="M187.18 101.75h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M202.25 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M209.79 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M216.07 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M223.61 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-26`} />
-      <path d="M231.15 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
-      <path d="M238.68 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
-      <path d="M244.96 101.75h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 108.04H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M13.82 108.04H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
-      <path d="M21.36 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-54`} />
-      <path d="M28.89 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
-      <path d="M42.71 108.04h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
-      <path d="M50.25 108.04h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M71.6 108.04h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
-      <path d="M79.14 108.04H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M94.22 108.04h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-12`}
-      />
-      <path d="M115.57 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 108.04h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 108.04h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M158.28 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-12`}
-      />
-      <path d="M187.18 108.04h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M202.25 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M209.79 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M216.07 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M223.61 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-26`} />
-      <path d="M231.15 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
-      <path d="M238.68 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
-      <path d="M244.96 108.04h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 115.57H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M13.82 115.57H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
-      <path d="M21.36 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-54`} />
-      <path d="M28.89 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
-      <path d="M42.71 115.57h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
-      <path d="M50.25 115.57h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M71.6 115.57h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
-      <path d="M79.14 115.57H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M94.22 115.57h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-12`}
-      />
-      <path d="M115.57 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 115.57h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 115.57h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M158.28 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-12`}
-      />
-      <path d="M187.18 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M202.25 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M209.79 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M216.07 115.57h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M231.15 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
-      <path d="M238.68 115.57h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
-      <path d="M244.96 115.57h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 123.11H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M13.82 123.11H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
-      <path d="M21.36 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-54`} />
-      <path d="M28.89 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
-      <path d="M42.71 123.11h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
-      <path d="M50.25 123.11h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M71.6 123.11h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
-      <path d="M79.14 123.11H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M94.22 123.11h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-12`}
-      />
-      <path d="M115.57 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 123.11h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 123.11h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M158.28 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-12`}
-      />
-      <path d="M187.18 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M202.25 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M209.79 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M216.07 123.11h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M231.15 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
-      <path d="M238.68 123.11h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
-      <path d="M244.96 123.11h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 130.65H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M13.82 130.65H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-18`} />
-      <path d="M21.36 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-63`} />
-      <path d="M28.89 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
-      <path d="M42.71 130.65h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
-      <path d="M50.25 130.65h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M71.6 130.65h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-8`} />
-      <path d="M79.14 130.65H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M94.22 130.65h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-12`}
-      />
-      <path d="M115.57 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 130.65h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 130.65h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path d="M158.28 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M165.82 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-16`}
-      />
-      <path d="M187.18 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path d="M202.25 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path d="M209.79 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M216.07 130.65h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M231.15 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
-      <path d="M238.68 130.65h-7.54v7.54h7.54v-7.54Z" className={`${cls}-36`} />
-      <path d="M244.96 130.65h-6.28v7.54h7.54v-7.54h-1.26ZM7.54 136.93H0v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M13.82 136.93H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-68`} />
-      <path d="M21.36 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-63`} />
-      <path
-        d="M28.89 136.93h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#bdbad5',
-        }}
-      />
-      <path d="M36.43 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
-      <path d="M42.71 136.93h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
-      <path d="M50.25 136.93h-7.54v7.54h7.54v-7.54Zm15.07 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M71.6 136.93h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-20`} />
-      <path d="M79.14 136.93H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-20`} />
-      <path
-        d="M94.22 136.93h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-20`}
-      />
-      <path d="M115.57 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-20`} />
-      <path d="M123.11 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 136.93h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 136.93h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path
-        d="M158.28 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-16`}
-      />
-      <path d="M187.18 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path d="M202.25 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path d="M209.79 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M216.07 136.93h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M231.15 136.93h-7.54v7.54h7.54v-7.54Z" className={`${cls}-52`} />
-      <path
-        d="M238.68 136.93h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#b8b8d4',
-        }}
-      />
-      <path
-        d="M244.96 136.93h-6.28v7.54h7.54v-7.54h-1.26Zm-231.14 7.54H7.54v7.54h7.54v-7.54h-1.26Z"
-        className={`${cls}-4`}
-      />
-      <path
-        d="M21.36 144.47h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#6c747c',
-        }}
-      />
-      <path d="M28.89 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-49`} />
-      <path d="M36.43 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
-      <path d="M42.71 144.47h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-8`} />
-      <path d="M50.25 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M65.32 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M71.6 144.47h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-19`} />
-      <path d="M79.14 144.47H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path
-        d="M94.22 144.47h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-19`}
-      />
-      <path d="M115.57 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-20`} />
-      <path d="M123.11 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 144.47h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 144.47h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 144.47h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path d="M158.28 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path
-        d="M165.82 144.47h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-19`}
-      />
-      <path d="M187.18 144.47h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M202.25 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M209.79 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M216.07 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M223.61 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M231.15 144.47h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
-      <path
-        d="M238.68 144.47h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#303c3d',
-        }}
-      />
-      <path d="M13.82 152H7.54v7.54h7.54V152h-1.26Z" className={`${cls}-4`} />
-      <path d="M21.36 152h-7.54v7.54h7.54V152Z" className={`${cls}-66`} />
-      <path d="M28.89 152h-7.54v7.54h7.54V152Z" className={`${cls}-25`} />
-      <path d="M36.43 152h-7.54v7.54h7.54V152Z" className={`${cls}-9`} />
-      <path d="M42.71 152h-6.28v7.54h7.54V152h-1.26Z" className={`${cls}-8`} />
-      <path d="M50.25 152h-7.54v7.54h7.54V152Z" className={`${cls}-4`} />
-      <path d="M65.32 152h-7.54v7.54h7.54V152Zm6.28 0h-6.28v7.54h7.54V152H71.6Z" className={`${cls}-15`} />
-      <path d="M79.14 152H71.6v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
-      <path
-        d="M94.22 152h-7.54v7.54h7.54V152Zm6.28 0h-6.28v7.54h6.28V152Zm7.54 0h-7.54v7.54h7.54V152Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 152h-7.54v7.54h7.54V152Z" className={`${cls}-8`} />
-      <path d="M123.11 152h-7.54v7.54h7.54V152Z" className={`${cls}-12`} />
-      <path d="M129.39 152h-6.28v7.54h7.54V152h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-12`} />
-      <path d="M152 152h-7.54v7.54H152V152Z" className={`${cls}-12`} />
-      <path d="M158.28 152h-7.54v7.54h7.54V152Z" className={`${cls}-16`} />
-      <path d="M165.82 152h-7.54v7.54h7.54V152Z" className={`${cls}-19`} />
-      <path d="M173.36 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
-      <path d="M187.18 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
-      <path d="M202.25 152h-7.54v7.54h7.54V152Zm7.54 0h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
-      <path d="M216.07 152h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
-      <path d="M223.61 152h-7.54v7.54h7.54V152Z" className={`${cls}-19`} />
-      <path d="M231.15 152h-7.54v7.54h7.54V152Z" className={`${cls}-8`} />
-      <path
-        d="M238.68 152h-7.54v7.54h7.54V152Z"
-        style={{
-          fill: forceColor ?? '#2b3739',
-        }}
-      />
-      <path d="M13.82 159.54H7.54v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
-      <path
-        d="M21.36 159.54h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#b2b6bd',
-        }}
-      />
-      <path d="M28.89 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
-      <path d="M36.43 159.54h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-8`} />
-      <path d="M50.25 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M65.32 159.54h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
-      <path d="M79.14 159.54H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M94.22 159.54h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 159.54h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M152 159.54h-7.54v7.54H152v-7.54Z" className={`${cls}-12`} />
-      <path d="M158.28 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path d="M165.82 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M173.36 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M187.18 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M202.25 159.54h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M216.07 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M223.61 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M231.15 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
-      <path
-        d="M238.68 159.54h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#1f2c2c',
-        }}
-      />
-      <path d="M21.36 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M28.89 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-23`} />
-      <path d="M36.43 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
-      <path d="M42.71 165.82h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-32`} />
-      <path d="M50.25 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-9`} />
-      <path d="M65.32 165.82h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
-      <path d="M79.14 165.82H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M94.22 165.82h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M129.39 165.82h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-12`} />
-      <path d="M136.93 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M144.47 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path d="M152 165.82h-7.54v7.54H152v-7.54Z" className={`${cls}-16`} />
-      <path d="M158.28 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path d="M165.82 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M173.36 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M187.18 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M202.25 165.82h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M216.07 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-65`} />
-      <path d="M223.61 165.82h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
-      <path
-        d="M231.15 165.82h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#252e2f',
-        }}
-      />
-      <path d="M21.36 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M28.89 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-58`} />
-      <path d="M36.43 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
-      <path d="M42.71 173.36h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-32`} />
-      <path d="M50.25 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-8`} />
-      <path d="M65.32 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M71.6 173.36h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
-      <path d="M79.14 173.36H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M94.22 173.36h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-12`} />
-      <path d="M123.11 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path d="M129.39 173.36h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-16`} />
-      <path d="M136.93 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path d="M152 173.36h-7.54v7.54H152v-7.54Z" className={`${cls}-16`} />
-      <path d="M158.28 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path d="M165.82 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M173.36 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M187.18 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M202.25 173.36h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M216.07 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-65`} />
-      <path d="M223.61 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
-      <path d="M231.15 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
-      <path d="M28.89 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M36.43 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-23`} />
-      <path d="M42.71 180.9h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-25`} />
-      <path d="M50.25 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-32`} />
-      <path d="M65.32 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M71.6 180.9h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-15`} />
-      <path d="M79.14 180.9H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M94.22 180.9h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path d="M129.39 180.9h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-16`} />
-      <path d="M136.93 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path d="M152 180.9h-7.54v7.54H152v-7.54Z" className={`${cls}-16`} />
-      <path d="M158.28 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-16`} />
-      <path d="M165.82 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M173.36 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M187.18 180.9h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M202.25 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M209.79 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-13`} />
-      <path d="M216.07 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
-      <path d="M223.61 180.9h-7.54v7.54h7.54v-7.54Z" className={`${cls}-62`} />
-      <path d="M28.89 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M36.43 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-58`} />
-      <path d="M42.71 188.43h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-23`} />
-      <path d="M50.25 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
-      <path d="M65.32 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M71.6 188.43h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-19`} />
-      <path d="M79.14 188.43H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M94.22 188.43h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M129.39 188.43h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-19`} />
-      <path d="M136.93 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M152 188.43h-7.54v7.54H152v-7.54Z" className={`${cls}-19`} />
-      <path d="M158.28 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path
-        d="M165.82 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M187.18 188.43h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M202.25 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-13`} />
-      <path d="M209.79 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
-      <path d="M216.07 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-40`} />
-      <path d="M223.61 188.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-62`} />
-      <path d="M36.43 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M42.71 194.72h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-58`} />
-      <path d="M50.25 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-23`} />
-      <path d="M65.32 194.72h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-38`} />
-      <path d="M79.14 194.72H71.6v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M86.68 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path
-        d="M94.22 194.72h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M115.57 194.72h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M129.39 194.72h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-15`} />
-      <path d="M136.93 194.72h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M152 194.72h-7.54v7.54H152v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M158.28 194.72h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M187.18 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-13`} />
-      <path
-        d="M194.72 194.72h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#aa495a',
-        }}
-      />
-      <path d="M202.25 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
-      <path d="M209.79 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-40`} />
-      <path d="M216.07 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-62`} />
-      <path d="M42.71 202.25h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-41`} />
-      <path d="M50.25 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-58`} />
-      <path d="M65.32 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
-      <path d="M71.6 202.25h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-38`} />
-      <path d="M79.14 202.25H71.6v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-38`} />
-      <path
-        d="M94.22 202.25h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-19`}
-      />
-      <path d="M115.57 202.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M129.39 202.25h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-15`} />
-      <path d="M136.93 202.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M152 202.25h-7.54v7.54H152v-7.54Z" className={`${cls}-15`} />
-      <path d="M158.28 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M165.82 202.25h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-13`}
-      />
-      <path d="M187.18 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-2`} />
-      <path d="M194.72 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
-      <path d="M202.25 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
-      <path d="M209.79 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-62`} />
-      <path d="M50.25 209.79h-7.54v7.54h7.54v-7.54Zm15.07 7.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-41`} />
-      <path d="M57.79 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-41`} />
-      <path d="M65.32 217.33v-7.54h-7.54v7.54h7.54Z" className={`${cls}-23`} />
-      <path d="M71.6 209.79h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-25`} />
-      <path d="M79.14 209.79H71.6v7.54h7.54v-7.54Z" className={`${cls}-25`} />
-      <path d="M86.68 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-32`} />
-      <path
-        d="M94.22 209.79h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-38`}
-      />
-      <path d="M115.57 209.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M129.39 209.79h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-19`} />
-      <path d="M136.93 209.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path d="M152 209.79h-7.54v7.54H152v-7.54Z" className={`${cls}-19`} />
-      <path d="M158.28 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path
-        d="M165.82 209.79h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-2`}
-      />
-      <path d="M187.18 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-40`} />
-      <path d="M194.72 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-61`} />
-      <path d="M202.25 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
-      <path d="M71.6 217.33h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-58`} />
-      <path d="M79.14 217.33H71.6v7.54h7.54v-7.54Z" className={`${cls}-58`} />
-      <path d="M86.68 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
-      <path
-        d="M94.22 217.33h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-38`}
-      />
-      <path d="M115.57 217.33h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
-      <path d="M129.39 217.33h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-7`} />
-      <path d="M136.93 217.33h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
-      <path d="M152 217.33h-7.54v7.54H152v-7.54Z" className={`${cls}-7`} />
-      <path d="M158.28 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-7`} />
-      <path d="M165.82 217.33h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-40`} />
-      <path d="M180.9 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
-      <path d="M187.18 217.33h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
-      <path d="M71.6 223.61h-6.28v7.54h7.54v-7.54H71.6Z" className={`${cls}-41`} />
-      <path d="M79.14 223.61H71.6v7.54h7.54v-7.54Z" className={`${cls}-41`} />
-      <path d="M86.68 223.61h-7.54v7.54h7.54v-7.54Z" className={`${cls}-60`} />
-      <path d="M94.22 223.61h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Z" className={`${cls}-60`} />
-      <path d="M108.04 223.61h-7.54v7.54h7.54v-7.54Z" className={`${cls}-66`} />
-      <path
-        d="M115.57 223.61h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#a4a5a9',
-        }}
-      />
-      <path d="M129.39 223.61h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-33`} />
-      <path d="M136.93 223.61h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-33`} />
-      <path d="M152 223.61h-7.54v7.54H152v-7.54Z" className={`${cls}-33`} />
-      <path d="M158.28 223.61h-7.54v7.54h7.54v-7.54Z" className={`${cls}-33`} />
-      <path d="M165.82 223.61h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-61`} />
-      <path d="M86.68 231.15h-7.54v7.54h7.54v-7.54Z" className={`${cls}-41`} />
-      <path
-        d="M94.22 231.15h-7.54v7.54h7.54v-7.54Zm6.28 0h-6.28v7.54h6.28v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-41`}
-      />
-      <path d="M115.57 231.15h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M129.39 231.15h-6.28v7.54h7.54v-7.54h-1.26Z" className={`${cls}-4`} />
-      <path d="M136.93 231.15h-7.54v7.54h7.54v-7.54Zm7.54 0h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M152 231.15h-7.54v7.54H152v-7.54Z" className={`${cls}-4`} />
-      <path d="M158.28 231.15h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path d="M57.79 21.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-50`} />
-      <path d="M57.79 28.89h-7.54v7.54h7.54v-7.54Z" className={`${cls}-35`} />
-      <path d="M57.79 36.43h-7.54v7.54h7.54v-7.54Z" className={`${cls}-67`} />
-      <path d="M57.79 43.97h-7.54v6.28h7.54v-6.28Z" className={`${cls}-11`} />
-      <path d="M57.79 50.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-27`} />
-      <path d="M57.79 57.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-57`} />
-      <path d="M57.79 65.32h-7.54v7.54h7.54v-7.54Z" className={`${cls}-57`} />
-      <path d="M57.79 72.86h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M57.79 79.14h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M57.79 94.22h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M57.79 101.75h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M57.79 108.04h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path
-        d="M57.79 115.57h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Z"
-        className={`${cls}-15`}
-      />
-      <path d="M57.79 136.93h-7.54v7.54h7.54v-7.54Zm0 7.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-15`} />
-      <path d="M57.79 152h-7.54v7.54h7.54V152Z" className={`${cls}-15`} />
-      <path d="M57.79 159.54h-7.54v7.54h7.54v-7.54Z" className={`${cls}-19`} />
-      <path
-        d="M57.79 165.82h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#212a29',
-        }}
-      />
-      <path d="M57.79 173.36h-7.54v7.54h7.54v-7.54Z" className={`${cls}-4`} />
-      <path
-        d="M57.79 180.9h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#f1f2f4',
-        }}
-      />
-      <path
-        d="M57.79 188.43h-7.54v7.54h7.54v-7.54Z"
-        style={{
-          fill: forceColor ?? '#e6e7e9',
-        }}
-      />
-      <path d="M57.79 194.72h-7.54v7.54h7.54v-7.54Z" className={`${cls}-25`} />
-      <path d="M57.79 202.25h-7.54v7.54h7.54v-7.54Z" className={`${cls}-23`} />
-      <path d="M57.79 209.79h-7.54v7.54h7.54v-7.54Z" className={`${cls}-58`} />
     </svg>
   );
 }
@@ -4564,6 +4601,980 @@ function DfxAssetIconTGT({ forceColor }: BaseAssetIconProps) {
   );
 }
 
+function DfxAssetIconEURS({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 2500 2500"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <linearGradient
+        id="eurs-a"
+        x1={807.865}
+        x2={1255.864}
+        y1={1219.284}
+        y2={1716.284}
+        gradientTransform="matrix(3.7369 0 0 -3.7369 -2605.549 6734.046)"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop
+          offset={0}
+          style={{
+            stopColor: '#15bcff',
+          }}
+        />
+        <stop
+          offset={0.361}
+          style={{
+            stopColor: '#219bf6',
+          }}
+        />
+        <stop
+          offset={0.502}
+          style={{
+            stopColor: '#2d79ed',
+          }}
+        />
+        <stop
+          offset={0.722}
+          style={{
+            stopColor: '#725ded',
+          }}
+        />
+        <stop
+          offset={1}
+          style={{
+            stopColor: '#b741ee',
+          }}
+        />
+      </linearGradient>
+      <path
+        d="M1251.9 2500C560.5 2500 0 1939.5 0 1248.1S560.5-3.7 1251.9-3.7c93.4 0 183.1 11.2 269.1 29.9-183.1 63.5-343.8 160.7-478.3 287.7s-243 280.3-306.5 455.9H467.1l-130.8 299h325.1c-3.7 41.1-7.5 82.2-7.5 123.3 0 67.3 7.5 134.5 18.7 198.1H429.7l-112.1 299H766c67.3 142 160.7 269.1 276.5 377.4 183.1 171.9 418.5 295.2 683.9 340.1-145.7 59.7-306.4 93.3-474.5 93.3zm646.5-2324.4C2264.6 384.9 2500 833.3 2500 1251.9c0 366.2-164.4 710-437.2 952.9-310.2 63.5-594.2-85.9-818.4-310.2-44.8-44.8-82.2-119.6-119.6-179.4-3.7-7.5-11.2-14.9-14.9-22.4h728.7l108.4-287.7H979.1c-11.2-48.6-18.7-100.9-22.4-153.2 0-18.7-3.7-37.4-3.7-56.1v-7.4c0-44.8 3.7-89.7 7.5-130.8h1121.1l115.8-284h-1136c48.6-93.4 108.4-213 183.1-287.7 179.4-179.4 399.9-321.4 650.2-310.2h3.7z"
+        style={{
+          fillRule: 'evenodd',
+          clipRule: 'evenodd',
+          fill: forceColor ?? 'url(#eurs-a)',
+        }}
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconEURt({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 1000 1000"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill={forceColor ?? '#000'}
+        d="M543.792 420.282v-44.911h129.854v-64.78H327.71v64.78h129.858v44.911c-91.202 4.799-159.623 24.515-160.133 48.143v49.255c.507 23.628 68.931 43.34 160.133 48.139V676.04h86.225V565.819c91.198-4.799 159.623-24.511 160.129-48.139l.004-49.255c-.51-23.628-68.935-43.344-160.133-48.143Zm155.472 72.769c-19.909 22.26-101.26 38.928-198.587 38.928S322 515.31 302.09 493.051c16.883-18.877 77.948-33.729 155.476-37.813v47.027c13.895.728 28.317 1.116 43.11 1.116s29.219-.388 43.114-1.116v-47.027c77.524 4.083 138.59 18.936 155.472 37.813ZM500 0C223.858 0 0 223.858 0 500s223.858 500 500 500 500-223.858 500-500S776.142 0 500 0Zm21.121 851.707c-11.842 11.703-30.893 11.703-42.735 0L113.32 490.91c-10.05-9.935-11.933-25.488-4.542-37.536l141.961-231.359a30.408 30.408 0 0 1 25.911-14.501h455.853a30.402 30.402 0 0 1 26.351 15.241l132.809 230.872c6.884 11.972 4.839 27.086-4.985 36.796L521.121 851.706Z"
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconEDLC({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 425.198 425.198"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <radialGradient
+          id="edlc-a"
+          cx={0}
+          cy={0}
+          r={608.933}
+          gradientTransform="matrix(0 -1 1.11019 0 43.592 381.75)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset={0} stopColor="#dd7cf3" />
+          <stop offset={1} stopColor="#0064be" />
+        </radialGradient>
+      </defs>
+      <g fill="none">
+        <path
+          fill={forceColor ?? 'url(#edlc-a)'}
+          stroke="none"
+          d="M63.241 62.916C49.99 76.076 43.322 93.473 43.412 110.87v68.072c-.09 17.397 6.587 34.794 19.847 47.954 13.178 13.251 30.593 19.919 48.008 19.829l270.519-.361c.09-17.397-6.587-34.794-19.847-47.954-13.178-13.246-30.593-19.558-48.008-19.468l-169.007-.216c-32.908.216-33.923-25.09-33.837-33.838.077-8.531.113-33.968 33.837-33.837h169.079c17.397.09 34.794-6.398 47.954-19.649 13.251-13.16 19.919-30.557 19.829-47.954H111.195c-17.397-.09-34.794 6.222-47.954 19.468Zm0 299.186c13.16 13.25 30.557 19.738 47.954 19.648l270.591-.181c.09-17.397-6.578-34.793-19.829-47.954-13.16-13.246-30.557-19.558-47.954-19.468H43.412c-.09 17.397 6.578 34.794 19.829 47.955Z"
+          transform="matrix(1 0 0 -1 0 425.198)"
+        />
+      </g>
+    </svg>
+  );
+}
+
+function DfxAssetIconDEURO({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 96 97"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#deuro_a)">
+        <path fill="url(#deuro_b)" d="M48 96.6c26.51 0 48-21.49 48-48S74.51.6 48 .6 0 22.09 0 48.6s21.49 48 48 48Z" />
+        <path fill="url(#deuro_c)" d="M48 96.6c26.51 0 48-21.49 48-48S74.51.6 48 .6 0 22.09 0 48.6s21.49 48 48 48Z" />
+        <path
+          fill="url(#deuro_d)"
+          d="M48 3.6c24.81 0 45 20.19 45 45s-20.19 45-45 45-45-20.19-45-45 20.19-45 45-45Zm0-3C21.48.6 0 22.08 0 48.6s21.48 48 48 48 48-21.48 48-48S74.52.6 48 .6Z"
+        />
+        <path
+          fill={forceColor ?? '#272B38'}
+          fillOpacity={0.45}
+          d="M60 78.6v-6H36v6h24ZM66 66.6h-6v6h6v-6ZM36 66.6h-6v6h6v-6ZM72 60.6h-6v6h6v-6ZM72 36.6h-6v6h6v-6ZM24 42.6h-6v6h6v6h-6v6h6v6h6v-6h24v-6H30v-6h30v-6H30v-6h-6v6ZM66 30.6h-6v6h6v-6Z"
+        />
+        <path fill={forceColor ?? '#272B38'} fillOpacity={0.45} d="M36 30.6h-6v6h6v-6ZM36 24.6v6h24v-6H36Z" />
+        <path fill="url(#deuro_e)" d="M60 75.6v-6H36v6h24Z" />
+        <path fill="url(#deuro_f)" d="M66 63.6h-6v6h6v-6Z" />
+        <path fill="url(#deuro_g)" d="M36 63.6h-6v6h6v-6Z" />
+        <path fill="url(#deuro_h)" d="M72 57.6h-6v6h6v-6Z" />
+        <path fill="url(#deuro_i)" d="M72 33.6h-6v6h6v-6Z" />
+        <path fill="url(#deuro_j)" d="M24 39.6h-6v6h6v6h-6v6h6v6h6v-6h24v-6H30v-6h30v-6H30v-6h-6v6Z" />
+        <path fill="url(#deuro_k)" d="M66 27.6h-6v6h6v-6Z" />
+        <path fill="url(#deuro_l)" d="M36 27.6h-6v6h6v-6Z" />
+        <path fill="url(#deuro_m)" d="M36 21.6v6h24v-6H36Z" />
+      </g>
+      <defs>
+        <linearGradient id="deuro_b" x1={48} x2={48} y1={96.6} y2={0.6} gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#424756'} />
+          <stop offset={0.31} stopColor={forceColor ?? '#505565'} />
+          <stop offset={0.42} stopColor={forceColor ?? '#5F6475'} />
+          <stop offset={0.61} stopColor={forceColor ?? '#747A8B'} />
+          <stop offset={0.73} stopColor={forceColor ?? '#7C8394'} />
+          <stop offset={0.88} stopColor={forceColor ?? '#757C8C'} />
+          <stop offset={1} stopColor={forceColor ?? '#6E7484'} />
+        </linearGradient>
+        <linearGradient id="deuro_d" x1={48} x2={48} y1={96.6} y2={0.6} gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#6D6E7C'} />
+          <stop offset={0.17} stopColor={forceColor ?? '#7A7C8A'} />
+          <stop offset={0.51} stopColor={forceColor ?? '#9EA2B1'} />
+          <stop offset={0.67} stopColor={forceColor ?? '#B3B8C7'} />
+        </linearGradient>
+        <linearGradient id="deuro_e" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_f" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_g" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_h" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_i" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_j" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_k" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_l" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deuro_m" x1={45} x2={45} y1={24.6} y2={72.1} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.54} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.84} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <radialGradient
+          id="deuro_c"
+          cx={0}
+          cy={0}
+          r={1}
+          gradientTransform="matrix(0 48 -48 0 48 48.6)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset={0.802} stopColor={forceColor ?? '#272B38'} stopOpacity={0} />
+          <stop offset={0.848} stopColor={forceColor ?? '#272B38'} stopOpacity={0.042} />
+          <stop offset={0.883} stopColor={forceColor ?? '#272B38'} stopOpacity={0.095} />
+          <stop offset={0.914} stopColor={forceColor ?? '#272B38'} stopOpacity={0.15} />
+          <stop offset={0.957} stopColor={forceColor ?? '#272B38'} stopOpacity={0.34} />
+        </radialGradient>
+        <clipPath id="deuro_a">
+          <path fill="#fff" d="M0 .6h96v96H0z" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconDEPS({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 96 97"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#deps_a)">
+        <path fill="url(#deps_b)" d="M48 96.6c26.51 0 48-21.49 48-48S74.51.6 48 .6 0 22.09 0 48.6s21.49 48 48 48Z" />
+        <path fill="url(#deps_c)" d="M48 96.6c26.51 0 48-21.49 48-48S74.51.6 48 .6 0 22.09 0 48.6s21.49 48 48 48Z" />
+        <path
+          fill="url(#deps_d)"
+          d="M48 3.6c24.81 0 45 20.19 45 45s-20.19 45-45 45-45-20.19-45-45 20.19-45 45-45Zm0-3C21.48.6 0 22.08 0 48.6s21.48 48 48 48 48-21.48 48-48S74.52.6 48 .6Z"
+        />
+        <path
+          fill={forceColor ?? '#272B38'}
+          fillOpacity={0.45}
+          d="M28.1 75v3.6h39.6V75H28.1ZM28.1 60.6h-3.6V75h3.6V60.6ZM67.7 75h3.6V60.6h-3.6V75ZM49.7 49.8v-3.6h3.6v-3.6h-3.6v-7.2h-3.6v10.8H35.3v3.6h10.8v14.4h-3.6v3.6h-3.6v3.6h18v-3.6h-3.6v-3.6h-3.6V53.4h14.4v-3.6H49.7ZM67.7 46.2h-3.6v3.6h3.6v-3.6ZM35.3 42.6h-3.6v3.6h3.6v-3.6Z"
+        />
+        <path
+          fill={forceColor ?? '#272B38'}
+          fillOpacity={0.45}
+          d="M56.9 39h-3.6v3.6h3.6V39ZM31.7 39h-3.6v3.6h3.6V39ZM56.9 35.4V39h10.8v7.2h3.6V35.4H56.9ZM46.1 31.8h-3.6v3.6h3.6v-3.6ZM28.1 28.2h10.8v-3.6H24.5V39h3.6V28.2Z"
+        />
+        <path fill={forceColor ?? '#272B38'} fillOpacity={0.45} d="M42.5 28.2h-3.6v3.6h3.6v-3.6Z" />
+        <path fill="url(#deps_e)" d="M28.1 72v3.6h39.6V72H28.1Z" />
+        <path fill="url(#deps_f)" d="M28.1 57.6h-3.6V72h3.6V57.6Z" />
+        <path fill="url(#deps_g)" d="M67.7 72h3.6V57.6h-3.6V72Z" />
+        <path
+          fill="url(#deps_h)"
+          d="M49.7 46.8v-3.6h3.6v-3.6h-3.6v-7.2h-3.6v10.8H35.3v3.6h10.8v14.4h-3.6v3.6h-3.6v3.6h18v-3.6h-3.6v-3.6h-3.6V50.4h14.4v-3.6H49.7Z"
+        />
+        <path fill="url(#deps_i)" d="M67.7 43.2h-3.6v3.6h3.6v-3.6Z" />
+        <path fill="url(#deps_j)" d="M35.3 39.6h-3.6v3.6h3.6v-3.6Z" />
+        <path fill="url(#deps_k)" d="M56.9 36h-3.6v3.6h3.6V36Z" />
+        <path fill="url(#deps_l)" d="M31.7 36h-3.6v3.6h3.6V36Z" />
+        <path fill="url(#deps_m)" d="M56.9 32.4V36h10.8v7.2h3.6V32.4H56.9Z" />
+        <path fill="url(#deps_n)" d="M46.1 28.8h-3.6v3.6h3.6v-3.6Z" />
+        <path fill="url(#deps_o)" d="M28.1 25.2h10.8v-3.6H24.5V36h3.6V25.2Z" />
+        <path fill="url(#deps_p)" d="M42.5 25.2h-3.6v3.6h3.6v-3.6Z" />
+      </g>
+      <defs>
+        <linearGradient id="deps_b" x1={48} x2={48} y1={96.6} y2={0.6} gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#424756'} />
+          <stop offset={0.31} stopColor={forceColor ?? '#505565'} />
+          <stop offset={0.42} stopColor={forceColor ?? '#5F6475'} />
+          <stop offset={0.61} stopColor={forceColor ?? '#747A8B'} />
+          <stop offset={0.73} stopColor={forceColor ?? '#7C8394'} />
+          <stop offset={0.88} stopColor={forceColor ?? '#757C8C'} />
+          <stop offset={1} stopColor={forceColor ?? '#6E7484'} />
+        </linearGradient>
+        <linearGradient id="deps_d" x1={48} x2={48} y1={96.6} y2={0.6} gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#6D6E7C'} />
+          <stop offset={0.17} stopColor={forceColor ?? '#7A7C8A'} />
+          <stop offset={0.51} stopColor={forceColor ?? '#9EA2B1'} />
+          <stop offset={0.67} stopColor={forceColor ?? '#B3B8C7'} />
+        </linearGradient>
+        <linearGradient id="deps_e" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_f" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_g" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_h" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_i" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_j" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_k" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_l" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_m" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_n" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_o" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="deps_p" x1={47.9} x2={47.9} y1={30.24} y2={75.6} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.675} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.865} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <radialGradient
+          id="deps_c"
+          cx={0}
+          cy={0}
+          r={1}
+          gradientTransform="matrix(0 48 -48 0 48 48.6)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset={0.802} stopColor={forceColor ?? '#272B38'} stopOpacity={0} />
+          <stop offset={0.848} stopColor={forceColor ?? '#272B38'} stopOpacity={0.042} />
+          <stop offset={0.883} stopColor={forceColor ?? '#272B38'} stopOpacity={0.095} />
+          <stop offset={0.914} stopColor={forceColor ?? '#272B38'} stopOpacity={0.15} />
+          <stop offset={0.957} stopColor={forceColor ?? '#272B38'} stopOpacity={0.34} />
+        </radialGradient>
+        <clipPath id="deps_a">
+          <path fill="#fff" d="M0 .6h96v96H0z" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconNDEPS({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 96 97"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#ndeps_a)">
+        <path fill="url(#ndeps_b)" d="M48 96.6c26.51 0 48-21.49 48-48S74.51.6 48 .6 0 22.09 0 48.6s21.49 48 48 48Z" />
+        <path fill="url(#ndeps_c)" d="M48 96.6c26.51 0 48-21.49 48-48S74.51.6 48 .6 0 22.09 0 48.6s21.49 48 48 48Z" />
+        <path
+          fill="url(#ndeps_d)"
+          d="M48 3.6c24.81 0 45 20.19 45 45s-20.19 45-45 45-45-20.19-45-45 20.19-45 45-45Zm0-3C21.48.6 0 22.08 0 48.6s21.48 48 48 48 48-21.48 48-48S74.52.6 48 .6Z"
+        />
+        <path
+          fill={forceColor ?? '#272B38'}
+          fillOpacity={0.45}
+          d="M49.923 55.523v-3.846h3.846v-3.846h-3.846v-7.692h-3.846v11.538H30.693v3.846h15.384v15.384H42.23v3.847h-3.846V78.6h19.23v-3.846h-3.846v-3.847h-3.846V59.37h15.384v-3.846H49.923ZM69.153 51.677h-3.846v3.846h3.846v-3.846ZM73 47.83h-3.847v3.846H73V47.83ZM30.692 47.83h-3.846v3.846l3.846.001V47.83Z"
+        />
+        <path
+          fill={forceColor ?? '#272B38'}
+          fillOpacity={0.45}
+          d="M57.615 43.984H53.77v3.847l3.846-.001v-3.846ZM26.846 43.984H23v3.846h3.846v-3.846ZM61.461 40.139h-3.846v3.845h3.846V40.14ZM61.461 36.292v3.847L73 40.138v7.692h3.847V36.292H61.46ZM46.077 36.292H42.23v3.846h3.846v-3.846ZM23 32.446h15.385V28.6h-19.23v15.384H23V32.446Z"
+        />
+        <path fill={forceColor ?? '#272B38'} fillOpacity={0.45} d="M42.23 32.447h-3.845v3.846h3.846v-3.846Z" />
+        <path
+          fill="url(#ndeps_e)"
+          d="M49.923 52.523v-3.846h3.846v-3.846h-3.846v-7.692h-3.846v11.538H30.693v3.846h15.384v15.384H42.23v3.847h-3.846V75.6h19.23v-3.846h-3.846v-3.847h-3.846V56.37h15.384v-3.846H49.923Z"
+        />
+        <path fill="url(#ndeps_f)" d="M69.153 48.677h-3.846v3.846h3.846v-3.846Z" />
+        <path fill="url(#ndeps_g)" d="M73 44.83h-3.847v3.846H73V44.83Z" />
+        <path fill="url(#ndeps_h)" d="M30.692 44.83h-3.846v3.846l3.846.001V44.83Z" />
+        <path fill="url(#ndeps_i)" d="M57.615 40.984H53.77v3.847l3.846-.001v-3.846Z" />
+        <path fill="url(#ndeps_j)" d="M26.846 40.984H23v3.846h3.846v-3.846Z" />
+        <path fill="url(#ndeps_k)" d="M61.461 37.139h-3.846v3.845h3.846V37.14Z" />
+        <path fill="url(#ndeps_l)" d="M61.461 33.292v3.847L73 37.138v7.692h3.847V33.292H61.46Z" />
+        <path fill="url(#ndeps_m)" d="M46.077 33.292H42.23v3.846h3.846v-3.846Z" />
+        <path fill="url(#ndeps_n)" d="M23 29.446h15.385V25.6h-19.23v15.384H23V29.446Z" />
+        <path fill="url(#ndeps_o)" d="M42.23 29.447h-3.845v3.846h3.846v-3.846Z" />
+      </g>
+      <defs>
+        <linearGradient id="ndeps_b" x1={48} x2={48} y1={96.6} y2={0.6} gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#424756'} />
+          <stop offset={0.31} stopColor={forceColor ?? '#505565'} />
+          <stop offset={0.42} stopColor={forceColor ?? '#5F6475'} />
+          <stop offset={0.61} stopColor={forceColor ?? '#747A8B'} />
+          <stop offset={0.73} stopColor={forceColor ?? '#7C8394'} />
+          <stop offset={0.88} stopColor={forceColor ?? '#757C8C'} />
+          <stop offset={1} stopColor={forceColor ?? '#6E7484'} />
+        </linearGradient>
+        <linearGradient id="ndeps_d" x1={48} x2={48} y1={96.6} y2={0.6} gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#6D6E7C'} />
+          <stop offset={0.17} stopColor={forceColor ?? '#7A7C8A'} />
+          <stop offset={0.51} stopColor={forceColor ?? '#9EA2B1'} />
+          <stop offset={0.67} stopColor={forceColor ?? '#B3B8C7'} />
+        </linearGradient>
+        <linearGradient id="ndeps_e" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_f" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_g" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_h" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_i" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_j" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_k" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_l" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_m" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_n" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <linearGradient id="ndeps_o" x1={48} x2={48} y1={27.363} y2={78.09} gradientUnits="userSpaceOnUse">
+          <stop offset={0.4} stopColor="#fff" />
+          <stop offset={0.655} stopColor={forceColor ? '#fff' : '#EAEAEC'} />
+          <stop offset={0.85} stopColor={forceColor ? '#fff' : '#C4C6CB'} />
+          <stop offset={0.99} stopColor={forceColor ? '#fff' : '#B6B8BF'} />
+        </linearGradient>
+        <radialGradient
+          id="ndeps_c"
+          cx={0}
+          cy={0}
+          r={1}
+          gradientTransform="matrix(0 48 -48 0 48 48.6)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset={0.802} stopColor={forceColor ?? '#272B38'} stopOpacity={0} />
+          <stop offset={0.848} stopColor={forceColor ?? '#272B38'} stopOpacity={0.042} />
+          <stop offset={0.883} stopColor={forceColor ?? '#272B38'} stopOpacity={0.095} />
+          <stop offset={0.914} stopColor={forceColor ?? '#272B38'} stopOpacity={0.15} />
+          <stop offset={0.957} stopColor={forceColor ?? '#272B38'} stopOpacity={0.34} />
+        </radialGradient>
+        <clipPath id="ndeps_a">
+          <path fill="#fff" d="M0 .6h96v96H0z" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconSOL({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 397.7 311.7"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <linearGradient
+        id="sol_a"
+        x1={360.879}
+        x2={141.213}
+        y1={351.455}
+        y2={-69.294}
+        gradientTransform="matrix(1 0 0 -1 0 314)"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop offset={0} style={{ stopColor: '#00ffa3' }} />
+        <stop offset={1} style={{ stopColor: '#dc1fff' }} />
+      </linearGradient>
+      <path
+        d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1l62.7-62.7z"
+        style={{ fill: forceColor ?? 'url(#sol_a)' }}
+      />
+
+      <linearGradient
+        id="sol_b"
+        x1={264.829}
+        x2={45.163}
+        y1={401.601}
+        y2={-19.148}
+        gradientTransform="matrix(1 0 0 -1 0 314)"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop offset={0} style={{ stopColor: '#00ffa3' }} />
+        <stop offset={1} style={{ stopColor: '#dc1fff' }} />
+      </linearGradient>
+      <path
+        d="M64.6 3.8C67.1 1.4 70.4 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1L64.6 3.8z"
+        style={{ fill: forceColor ?? 'url(#sol_b)' }}
+      />
+
+      <linearGradient
+        id="sol_c"
+        x1={312.548}
+        x2={92.882}
+        y1={376.688}
+        y2={-44.061}
+        gradientTransform="matrix(1 0 0 -1 0 314)"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop offset={0} style={{ stopColor: '#00ffa3' }} />
+        <stop offset={1} style={{ stopColor: '#dc1fff' }} />
+      </linearGradient>
+      <path
+        d="M333.1 120.1c-2.4-2.4-5.7-3.8-9.2-3.8H6.5c-5.8 0-8.7 7-4.6 11.1l62.7 62.7c2.4 2.4 5.7 3.8 9.2 3.8h317.4c5.8 0 8.7-7 4.6-11.1l-62.7-62.7z"
+        style={{ fill: forceColor ?? 'url(#sol_c)' }}
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconXDAI({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="60 60 260 260"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill={forceColor ?? '#09E23A'}
+        d="M129 87c6.96 5.588 13.2 12.088 19.454 18.44 1.486 1.508 2.976 3.012 4.467 4.514a5312.89 5312.89 0 0 1 12.673 12.812c2.599 2.636 5.205 5.265 7.816 7.89.987.995 1.972 1.993 2.954 2.994a765.055 765.055 0 0 0 4.118 4.157l2.358 2.387c2.735 2.381 2.735 2.381 6.16 2.806 1.98-1.524 3.548-2.967 5.252-4.764l1.55-1.571a492.835 492.835 0 0 0 3.316-3.407 679.63 679.63 0 0 1 5.277-5.397c4.39-4.459 8.755-8.943 13.12-13.427 3.68-3.78 7.37-7.548 11.074-11.303a812.575 812.575 0 0 0 5.147-5.306c6.81-6.968 13.27-12.869 23.205-14.454 11.194.205 18.12 2.163 26.336 9.84 5.859 6.084 7.78 12.298 8.098 20.602-.218 10.254-4.28 17.062-11.375 24.187l-2.056 2.07c-3.116 3.116-6.276 6.187-9.431 9.263-3.51 3.43-7.004 6.876-10.498 10.322a1327.982 1327.982 0 0 1-5.552 5.429 1286.434 1286.434 0 0 0-8.01 7.877l-2.522 2.428c-3.41 3.408-5.644 5.725-7.147 10.363.383 5.756 3.775 9.05 7.776 12.94l2.792 2.733 1.486 1.441a928.078 928.078 0 0 1 4.63 4.535c4.376 4.309 8.759 8.61 13.164 12.888 2.7 2.625 5.386 5.265 8.063 7.915 1.014.997 2.033 1.99 3.058 2.976 7.583 7.3 13.974 14.945 15.938 25.554-.453 10.597-2.817 18.943-10.878 26.391-8.385 6.722-16.164 7.86-26.813 6.875-11.394-1.8-20.263-14.125-27.953-21.89l-4.144-4.161c-2.386-2.398-4.77-4.798-7.153-7.199-3.773-3.8-7.55-7.596-11.328-11.39l-2.595-2.62c-4.124-4.141-8.25-8.105-12.827-11.74-3.826 1.574-6.195 3.984-9.069 6.921l-1.49 1.514a1173.042 1173.042 0 0 0-3.188 3.254 1247.79 1247.79 0 0 1-5.076 5.159c-4.82 4.878-9.63 9.765-14.426 14.668a1855.292 1855.292 0 0 1-8.845 8.974 559.1 559.1 0 0 0-3.34 3.412c-7.16 7.372-13.93 13.888-24.402 15.797-9.996-.033-17.73-1.904-25.355-8.633-5.71-6.115-8.602-12.831-8.934-21.23l.125-3.461.063-3.414c2.028-12.374 14.384-21.905 22.874-30.211 1.347-1.335 2.693-2.671 4.038-4.008 11.342-11.236 11.342-11.236 17.432-16.375 8.286-6.965 8.286-6.965 11.936-16.7-.424-4.53-1.536-5.7-4.762-8.833l-1.424-1.412c-1.55-1.531-3.125-3.036-4.7-4.543a1416.156 1416.156 0 0 1-3.26-3.208 1355.17 1355.17 0 0 0-8.62-8.4 2598.844 2598.844 0 0 1-13.746-13.428 862.646 862.646 0 0 0-4.794-4.645c-8.83-8.58-14.793-16.178-15.537-28.886.173-8.14 3.295-14.647 8.621-20.738C102.075 83.138 116.486 80.258 129 87Z"
+      />
+      <path
+        fill={forceColor ?? '#0CB40A'}
+        d="M212 169c4.782 4 9.328 8.164 13.758 12.55l1.925 1.894c2.079 2.05 4.154 4.103 6.227 6.158l2.165 2.144a9316.21 9316.21 0 0 1 11.322 11.246 2535.04 2535.04 0 0 0 9.337 9.234c3.788 3.728 7.562 7.471 11.325 11.225a816.7 816.7 0 0 0 4.298 4.24c17.053 16.722 17.053 16.722 19.334 29.043-.453 10.597-2.817 18.943-10.878 26.391-8.385 6.722-16.164 7.86-26.813 6.875-11.394-1.8-20.263-14.125-27.953-21.89l-4.144-4.161c-2.386-2.398-4.77-4.798-7.153-7.199-3.773-3.8-7.55-7.596-11.328-11.39l-2.595-2.62c-4.124-4.141-8.25-8.105-12.827-11.74 1.51-3.584 3.596-5.777 6.395-8.45l2.646-2.571c1.832-1.763 3.668-3.52 5.508-5.274 8.194-7.989 14.32-16.249 14.826-28.018-.085-5.677-1.8-9.724-4.375-14.687l-1-3Z"
+      />
+      <path
+        fill={forceColor ? '#fff' : '#04795A'}
+        d="M272.938 85.563c7.843 4.188 13.993 10.265 17.312 18.562 1.787 9.233 1.521 17.602-3.25 25.875-2.139 2.884-4.469 5.458-7 8l-2.056 2.07c-3.116 3.116-6.276 6.187-9.431 9.263-3.51 3.43-7.004 6.876-10.498 10.322a1327.982 1327.982 0 0 1-5.552 5.429 1286.434 1286.434 0 0 0-8.01 7.877l-2.522 2.428c-4.507 4.504-6.859 7.151-6.931 13.611l-1 2-47-47 1.366-1.144c5.648-4.828 10.871-10.026 16.064-15.333 2.068-2.111 4.147-4.212 6.225-6.315a3094.65 3094.65 0 0 0 11.522-11.708c2.683-2.742 5.378-5.471 8.081-8.193a474.742 474.742 0 0 0 3.04-3.103c11.014-11.337 23.417-19.097 39.64-12.641Z"
+      />
+      <path
+        fill={forceColor ?? '#09E13A'}
+        d="M277 88c7.177 5.312 12.26 11.01 14 20 .951 10.188-.712 18.256-7.188 26.313-5.185 5.52-11.65 9.177-19.222 9.925-9.045.253-16.786-1.665-23.965-7.363-5.593-5.318-9.206-12.686-9.828-20.39-.153-8.925 1.616-15.389 7.203-22.485 10.448-10.63 25.656-14.922 39-6Z"
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconTRX({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 64 64"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M61.55 19.28c-3-2.77-7.15-7-10.53-10l-.2-.14a3.82 3.82 0 0 0-1.11-.62C41.56 7 3.63-.09 2.89 0a1.4 1.4 0 0 0-.58.22l-.19.15a2.23 2.23 0 0 0-.52.84l-.05.13v.82C5.82 14.05 22.68 53 26 62.14c.2.62.58 1.8 1.29 1.86h.16c.38 0 2-2.14 2-2.14S58.41 26.74 61.34 23a9.46 9.46 0 0 0 1-1.48 2.41 2.41 0 0 0-.79-2.24Zm-24.67 4.09 12.36-10.25 7.25 6.68Zm-4.8-.67L10.8 5.26l34.43 6.35ZM34 27.27l21.78-3.51-24.9 30ZM7.91 7 30.3 26l-3.24 27.78Z"
+        style={{ fill: forceColor ?? '#ff060a' }}
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconZANO({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 512 512"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#zano_url_a)">
+        <rect width={512} height={512} fill={forceColor ?? '#0C0C3A'} rx={115} />
+        <path
+          fill={forceColor ? '#ffffff' : 'url(#zano_url_b)'}
+          fillRule="evenodd"
+          d="M286.571 80h40.587c13.901 0 25.598 0 35.172.79 10.015.827 19.555 2.624 28.616 7.29 13.803 7.108 25.026 18.45 32.059 32.4 4.617 9.158 6.395 18.799 7.213 28.92.783 9.676.782 21.497.782 35.547v38.905c0 14.05.001 25.871-.782 35.547-.818 10.122-2.596 19.763-7.213 28.921-7.033 13.949-18.256 25.291-32.059 32.399-9.061 4.666-18.601 6.463-28.616 7.29-9.574.791-21.271.791-35.173.79H205.955c-8.513 0-16.196-5.162-19.49-13.096-3.294-7.934-1.557-17.09 4.407-23.23l100.089-103.038 30.166 29.929-64.802 66.712h69.986c14.972 0 24.929-.017 32.577-.648 7.4-.611 10.758-1.69 12.867-2.776a31.252 31.252 0 0 0 13.583-13.728c1.075-2.132 2.142-5.524 2.747-13.004.625-7.729.641-17.792.641-32.923v-37.195c0-15.131-.016-25.194-.641-32.923-.605-7.479-1.672-10.872-2.747-13.004a31.257 31.257 0 0 0-13.583-13.728c-2.109-1.086-5.467-2.165-12.867-2.776-7.648-.631-17.605-.648-32.577-.648h-38.886c-15.136 0-25.21.017-32.942.658-7.487.622-10.872 1.719-12.988 2.818a31.26 31.26 0 0 0-13.602 13.916c-1.062 2.152-2.106 5.586-2.63 13.16-.54 7.821-.434 18.001-.25 33.297l.212 17.567-42.27.521-.222-18.429c-.172-14.207-.317-26.153.359-35.933.707-10.224 2.393-19.976 6.972-29.253 6.97-14.121 18.216-25.626 32.102-32.84 9.123-4.742 18.751-6.565 28.858-7.403 9.668-.803 21.489-.802 35.547-.802Z"
+          clipRule="evenodd"
+        />
+        <path
+          fill={forceColor ? '#ffffff' : 'url(#zano_url_c)'}
+          fillRule="evenodd"
+          d="M286.571 80h40.587c13.901 0 25.598 0 35.172.79 10.015.827 19.555 2.624 28.616 7.29 13.803 7.108 25.026 18.45 32.059 32.4 4.617 9.158 6.395 18.799 7.213 28.92.783 9.676.782 21.497.782 35.547v38.905c0 14.05.001 25.871-.782 35.547-.818 10.122-2.596 19.763-7.213 28.921-7.033 13.949-18.256 25.291-32.059 32.399-9.061 4.666-18.601 6.463-28.616 7.29-9.574.791-21.271.791-35.173.79H205.955c-8.513 0-16.196-5.162-19.49-13.096-3.294-7.934-1.557-17.09 4.407-23.23l100.089-103.038 30.166 29.929-64.802 66.712h69.986c14.972 0 24.929-.017 32.577-.648 7.4-.611 10.758-1.69 12.867-2.776a31.252 31.252 0 0 0 13.583-13.728c1.075-2.132 2.142-5.524 2.747-13.004.625-7.729.641-17.792.641-32.923v-37.195c0-15.131-.016-25.194-.641-32.923-.605-7.479-1.672-10.872-2.747-13.004a31.257 31.257 0 0 0-13.583-13.728c-2.109-1.086-5.467-2.165-12.867-2.776-7.648-.631-17.605-.648-32.577-.648h-38.886c-15.136 0-25.21.017-32.942.658-7.487.622-10.872 1.719-12.988 2.818a31.26 31.26 0 0 0-13.602 13.916c-1.062 2.152-2.106 5.586-2.63 13.16-.54 7.821-.434 18.001-.25 33.297l.212 17.567-42.27.521-.222-18.429c-.172-14.207-.317-26.153.359-35.933.707-10.224 2.393-19.976 6.972-29.253 6.97-14.121 18.216-25.626 32.102-32.84 9.123-4.742 18.751-6.565 28.858-7.403 9.668-.803 21.489-.802 35.547-.802Z"
+          clipRule="evenodd"
+        />
+        <path
+          fill={forceColor ? '#ffffff' : 'url(#zano_url_d)'}
+          fillRule="evenodd"
+          d="M286.571 80h40.587c13.901 0 25.598 0 35.172.79 10.015.827 19.555 2.624 28.616 7.29 13.803 7.108 25.026 18.45 32.059 32.4 4.617 9.158 6.395 18.799 7.213 28.92.783 9.676.782 21.497.782 35.547v38.905c0 14.05.001 25.871-.782 35.547-.818 10.122-2.596 19.763-7.213 28.921-7.033 13.949-18.256 25.291-32.059 32.399-9.061 4.666-18.601 6.463-28.616 7.29-9.574.791-21.271.791-35.173.79H205.955c-8.513 0-16.196-5.162-19.49-13.096-3.294-7.934-1.557-17.09 4.407-23.23l100.089-103.038 30.166 29.929-64.802 66.712h69.986c14.972 0 24.929-.017 32.577-.648 7.4-.611 10.758-1.69 12.867-2.776a31.252 31.252 0 0 0 13.583-13.728c1.075-2.132 2.142-5.524 2.747-13.004.625-7.729.641-17.792.641-32.923v-37.195c0-15.131-.016-25.194-.641-32.923-.605-7.479-1.672-10.872-2.747-13.004a31.257 31.257 0 0 0-13.583-13.728c-2.109-1.086-5.467-2.165-12.867-2.776-7.648-.631-17.605-.648-32.577-.648h-38.886c-15.136 0-25.21.017-32.942.658-7.487.622-10.872 1.719-12.988 2.818a31.26 31.26 0 0 0-13.602 13.916c-1.062 2.152-2.106 5.586-2.63 13.16-.54 7.821-.434 18.001-.25 33.297l.212 17.567-42.27.521-.222-18.429c-.172-14.207-.317-26.153.359-35.933.707-10.224 2.393-19.976 6.972-29.253 6.97-14.121 18.216-25.626 32.102-32.84 9.123-4.742 18.751-6.565 28.858-7.403 9.668-.803 21.489-.802 35.547-.802Z"
+          clipRule="evenodd"
+        />
+        <path
+          fill={forceColor ? '#ffffff' : 'url(#zano_url_e)'}
+          fillRule="evenodd"
+          d="M286.571 80h40.587c13.901 0 25.598 0 35.172.79 10.015.827 19.555 2.624 28.616 7.29 13.803 7.108 25.026 18.45 32.059 32.4 4.617 9.158 6.395 18.799 7.213 28.92.783 9.676.782 21.497.782 35.547v38.905c0 14.05.001 25.871-.782 35.547-.818 10.122-2.596 19.763-7.213 28.921-7.033 13.949-18.256 25.291-32.059 32.399-9.061 4.666-18.601 6.463-28.616 7.29-9.574.791-21.271.791-35.173.79H205.955c-8.513 0-16.196-5.162-19.49-13.096-3.294-7.934-1.557-17.09 4.407-23.23l100.089-103.038 30.166 29.929-64.802 66.712h69.986c14.972 0 24.929-.017 32.577-.648 7.4-.611 10.758-1.69 12.867-2.776a31.252 31.252 0 0 0 13.583-13.728c1.075-2.132 2.142-5.524 2.747-13.004.625-7.729.641-17.792.641-32.923v-37.195c0-15.131-.016-25.194-.641-32.923-.605-7.479-1.672-10.872-2.747-13.004a31.257 31.257 0 0 0-13.583-13.728c-2.109-1.086-5.467-2.165-12.867-2.776-7.648-.631-17.605-.648-32.577-.648h-38.886c-15.136 0-25.21.017-32.942.658-7.487.622-10.872 1.719-12.988 2.818a31.26 31.26 0 0 0-13.602 13.916c-1.062 2.152-2.106 5.586-2.63 13.16-.54 7.821-.434 18.001-.25 33.297l.212 17.567-42.27.521-.222-18.429c-.172-14.207-.317-26.153.359-35.933.707-10.224 2.393-19.976 6.972-29.253 6.97-14.121 18.216-25.626 32.102-32.84 9.123-4.742 18.751-6.565 28.858-7.403 9.668-.803 21.489-.802 35.547-.802Z"
+          clipRule="evenodd"
+        />
+        <path
+          fill={forceColor ? '#ffffff' : 'url(#zano_url_f)'}
+          fillRule="evenodd"
+          d="M153.112 388.466c7.648.632 17.605.648 32.577.648h39.539c13.651 0 22.731-.014 29.724-.541 6.778-.512 9.886-1.417 11.833-2.32 6.763-3.135 12.189-8.619 15.292-15.454.893-1.968 1.789-5.109 2.295-11.959.522-7.068.536-16.244.536-30.041h42.273l.001.78c0 12.812 0 23.593-.654 32.442-.683 9.245-2.164 18.081-6.028 26.591-7.322 16.132-20.127 29.073-36.089 36.473-8.421 3.904-17.163 5.402-26.312 6.092-8.755.661-19.422.661-32.1.66h-41.157c-13.902.001-25.598.001-35.172-.79-10.015-.827-19.555-2.624-28.616-7.29-13.803-7.108-25.026-18.449-32.059-32.399-4.617-9.158-6.395-18.799-7.213-28.921-.783-9.676-.782-21.497-.782-35.547v-38.905c0-14.05 0-25.87.782-35.547.818-10.121 2.596-19.762 7.213-28.92 7.033-13.95 18.256-25.292 32.059-32.399 9.061-4.667 18.601-6.464 28.616-7.291 9.574-.79 21.271-.79 35.173-.79h121.202c11.673 0 21.136 9.564 21.136 21.362 0 11.797-9.463 21.361-21.136 21.361H185.689c-14.972 0-24.929.017-32.577.648-7.4.611-10.758 1.69-12.867 2.776a31.261 31.261 0 0 0-13.584 13.729c-1.074 2.131-2.142 5.524-2.746 13.003-.625 7.729-.641 17.793-.641 32.924v37.194c0 15.131.016 25.194.641 32.923.604 7.48 1.672 10.873 2.746 13.004a31.254 31.254 0 0 0 13.584 13.728c2.109 1.086 5.467 2.165 12.867 2.776Z"
+          clipRule="evenodd"
+        />
+        <path
+          fill={forceColor ? '#ffffff' : 'url(#zano_url_g)'}
+          fillRule="evenodd"
+          d="M153.112 388.466c7.648.632 17.605.648 32.577.648h39.539c13.651 0 22.731-.014 29.724-.541 6.778-.512 9.886-1.417 11.833-2.32 6.763-3.135 12.189-8.619 15.292-15.454.893-1.968 1.789-5.109 2.295-11.959.522-7.068.536-16.244.536-30.041h42.273l.001.78c0 12.812 0 23.593-.654 32.442-.683 9.245-2.164 18.081-6.028 26.591-7.322 16.132-20.127 29.073-36.089 36.473-8.421 3.904-17.163 5.402-26.312 6.092-8.755.661-19.422.661-32.1.66h-41.157c-13.902.001-25.598.001-35.172-.79-10.015-.827-19.555-2.624-28.616-7.29-13.803-7.108-25.026-18.449-32.059-32.399-4.617-9.158-6.395-18.799-7.213-28.921-.783-9.676-.782-21.497-.782-35.547v-38.905c0-14.05 0-25.87.782-35.547.818-10.121 2.596-19.762 7.213-28.92 7.033-13.95 18.256-25.292 32.059-32.399 9.061-4.667 18.601-6.464 28.616-7.291 9.574-.79 21.271-.79 35.173-.79h121.202c11.673 0 21.136 9.564 21.136 21.362 0 11.797-9.463 21.361-21.136 21.361H185.689c-14.972 0-24.929.017-32.577.648-7.4.611-10.758 1.69-12.867 2.776a31.261 31.261 0 0 0-13.584 13.729c-1.074 2.131-2.142 5.524-2.746 13.003-.625 7.729-.641 17.793-.641 32.924v37.194c0 15.131.016 25.194.641 32.923.604 7.48 1.672 10.873 2.746 13.004a31.254 31.254 0 0 0 13.584 13.728c2.109 1.086 5.467 2.165 12.867 2.776Z"
+          clipRule="evenodd"
+        />
+      </g>
+      <defs>
+        <radialGradient
+          id="zano_url_c"
+          cx={0}
+          cy={0}
+          r={1}
+          gradientTransform="rotate(-15.573 657.807 -579.272) scale(159.744 159.494)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#18CFD7" />
+          <stop offset={1} stopColor="#18CFD7" stopOpacity={0} />
+        </radialGradient>
+        <radialGradient
+          id="zano_url_d"
+          cx={0}
+          cy={0}
+          r={1}
+          gradientTransform="matrix(-52.97493 27.7488 -27.7055 -52.89228 272.994 225.963)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#4990FE" />
+          <stop offset={0.354} stopColor="#4990FE" />
+          <stop offset={1} stopColor="#4990FE" stopOpacity={0} />
+        </radialGradient>
+        <radialGradient
+          id="zano_url_e"
+          cx={0}
+          cy={0}
+          r={1}
+          gradientTransform="rotate(-45.939 461.706 -82.4) scale(108.824 108.654)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#4990FE" />
+          <stop offset={0.406} stopColor="#4990FE" />
+          <stop offset={1} stopColor="#4990FE" stopOpacity={0} />
+        </radialGradient>
+        <radialGradient
+          id="zano_url_g"
+          cx={0}
+          cy={0}
+          r={1}
+          gradientTransform="matrix(-68.10983 83.24656 -82.3712 -67.39365 328.491 326.867)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset={0.337} stopColor="#2950FF" />
+          <stop offset={0.792} stopColor="#2950FF" stopOpacity={0} />
+        </radialGradient>
+        <linearGradient
+          id="zano_url_b"
+          x1={247.767}
+          x2={250.596}
+          y1={326.867}
+          y2={79.683}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset={0.431} stopColor="#498FFD" />
+          <stop offset={1} stopColor="#16D1D6" />
+        </linearGradient>
+        <linearGradient
+          id="zano_url_f"
+          x1={328.491}
+          x2={329.401}
+          y1={432.817}
+          y2={180.559}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#2950FF" />
+          <stop offset={0.822} stopColor="#498FFD" />
+        </linearGradient>
+        <clipPath id="zano_url_a">
+          <path fill="#fff" d="M0 0h512v512H0z" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconFUSD({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 400 402.01"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g fillRule="evenodd">
+        <path
+          fill={forceColor ?? '#24b2dc'}
+          d="M173.632.286c-.062.944-1.821 1.418-6.583 1.773-3.113.232-5.146.575-5.749.97-.513.336-2.431.781-4.263.989-1.832.208-4.014.664-4.85 1.013-.835.349-2.524.797-3.754.995-1.23.198-2.948.723-3.819 1.167-.871.444-2.04.809-2.599.811-.558.002-1.915.446-3.015.987-1.1.541-2.54.99-3.2.998-.66.008-1.797.378-2.526.822-.729.445-2.245 1.006-3.369 1.247-1.124.241-2.597.776-3.274 1.189-.677.412-1.511.751-1.853.752-.343 0-1.233.451-1.978 1.001-.745.55-1.81 1-2.367 1-.817 0-8.353 3.347-10.833 4.811-.33.195-2.31 1.205-4.4 2.243-2.09 1.039-4.679 2.577-5.752 3.417-1.074.841-2.154 1.534-2.4 1.54-.42.01-4.46 2.537-10.964 6.858-1.547 1.028-3.504 2.488-4.348 3.245-.845.758-2.166 1.697-2.936 2.088-1.271.645-5.593 4.288-9.195 7.749-.773.743-2.395 2.071-3.605 2.951-2.885 2.099-12.189 11.257-13.497 13.286-.564.874-1.693 2.314-2.51 3.2-4.904 5.319-7.334 8.177-8 9.412-.416.77-1.77 2.57-3.01 4-1.239 1.43-2.401 2.974-2.582 3.431-.181.457-1.245 2.042-2.365 3.521-1.12 1.48-2.036 2.895-2.036 3.144 0 .25-.785 1.455-1.744 2.679-.959 1.224-1.88 2.675-2.046 3.225-.166.55-.616 1.36-1.001 1.8-.384.44-.893 1.383-1.131 2.096-.238.712-.972 1.972-1.631 2.8-1.36 1.709-5.798 10.245-6.221 11.967-.154.625-.741 2.127-1.305 3.337-.564 1.21-1.477 3.19-2.028 4.4-.552 1.21-1.323 2.84-1.715 3.622-.392.783-.837 2.133-.99 3-.152.868-.616 2.172-1.031 2.898-.415.727-.866 2.077-1.002 3-.136.924-.577 2.257-.978 2.963-.402.706-.914 2.277-1.138 3.491-.225 1.214-.673 2.617-.995 3.117-.323.5-.762 2.187-.975 3.75-.213 1.562-.667 3.381-1.008 4.041-.342.661-.801 2.623-1.02 4.36-.22 1.737-.687 3.968-1.038 4.958-.483 1.364-1.277 8.012-1.394 11.684-.005.157-.403.652-.884 1.1-.665.619-.728.816-.262.816 1.554 0 2.012-1.37 2.232-6.677.168-4.038.383-5.462 1.018-6.723.526-1.045.891-2.801 1.051-5.063.183-2.587.435-3.673.999-4.296.539-.596.836-1.752 1.037-4.041.19-2.158.507-3.455.971-3.968.378-.418.824-1.764.991-2.99.166-1.226.616-2.576 1-3 .383-.424.833-1.774 1-3 .166-1.226.608-2.567.982-2.98.374-.413.846-1.772 1.049-3.02.203-1.247.738-2.736 1.188-3.309.451-.572.819-1.439.819-1.925s.35-1.201.777-1.587c.428-.387.897-1.27 1.043-1.962.147-.693.634-1.864 1.083-2.603.449-.739.967-2.147 1.15-3.128.183-.982.684-2.23 1.113-2.775.428-.545.895-1.52 1.037-2.167.142-.647.44-1.289.661-1.425.221-.137.751-1.064 1.178-2.059.427-.995 1.492-2.709 2.367-3.808.875-1.099 1.591-2.307 1.591-2.684 0-.377.45-1.209 1-1.848.549-.639.999-1.454 1-1.811 0-.357.9-1.775 2-3.151s2-2.74 2-3.03c0-.291.869-1.573 1.932-2.85 1.062-1.276 2.048-2.77 2.19-3.32.143-.55 1.081-1.9 2.085-3 2.386-2.614 3.479-4.056 4.054-5.347.257-.579 1.324-1.953 2.369-3.053 6.404-6.738 7.37-7.847 7.37-8.456 0-.974 9.728-10.681 12.8-12.773 1.43-.974 4.76-3.834 7.4-6.357 2.64-2.522 5.25-4.687 5.8-4.811.55-.123 1.889-1.042 2.976-2.041 1.088-.998 2.348-2.007 2.8-2.242 1.65-.853 4.624-2.862 4.624-3.123 0-.148.495-.491 1.1-.762.605-.271 2.283-1.29 3.729-2.264 1.446-.974 2.825-1.771 3.064-1.771.238 0 1.395-.779 2.57-1.732 1.175-.952 2.73-1.936 3.456-2.186.725-.249 1.784-.82 2.354-1.268.569-.448 1.336-.814 1.703-.814.368 0 1.279-.45 2.024-1 .745-.55 1.645-1 2-1s1.255-.45 2-1c.745-.55 1.656-1 2.024-1 .367 0 1.139-.37 1.714-.823.576-.452 1.962-.967 3.081-1.144 1.119-.177 2.517-.677 3.108-1.112.59-.434 1.599-.92 2.241-1.08.643-.16 1.612-.639 2.154-1.066.575-.452 1.607-.775 2.476-.775.905 0 2.035-.369 2.876-.94.761-.517 2.245-1.037 3.297-1.156 1.052-.118 2.39-.568 2.973-.999.596-.441 1.981-.873 3.162-.986 1.235-.119 2.436-.504 2.91-.934.493-.446 1.81-.852 3.377-1.04 1.413-.17 3.253-.654 4.088-1.075.941-.475 2.699-.839 4.621-.958 2.271-.141 3.324-.392 3.928-.939.679-.614 1.748-.792 6.032-1.005 5.405-.268 7.212-.931 6.617-2.426-.145-.364-.226-.382-.247-.056M226 .538c0 1.483 1.472 1.969 6.766 2.231 4.258.212 5.326.39 6.004 1.004.602.545 1.664.801 3.923.946 2.189.14 3.403.424 4.136.966.684.506 2.075.866 4.081 1.058 2.001.191 3.306.529 3.812.986.422.383 1.738.81 2.923.949 1.185.139 2.631.603 3.213 1.032.582.428 1.919.876 2.971.994 1.052.119 2.536.639 3.297 1.156.841.571 1.971.94 2.876.94.869 0 1.901.323 2.476.775.542.427 1.499.904 2.127 1.062.628.158 1.764.709 2.524 1.225.829.562 1.97.938 2.849.938.936 0 1.957.362 2.822 1 .745.55 1.645 1 2 1s1.255.45 2 1c.745.55 1.645 1 2 1s1.255.45 2 1c.745.55 1.656 1 2.024 1 .367 0 1.134.366 1.703.814.57.448 1.629 1.019 2.354 1.268.726.25 2.281 1.234 3.456 2.186 1.175.953 2.452 1.732 2.838 1.732.385 0 1.028.362 1.428.803.4.442 1.391 1.003 2.203 1.246.837.251 2.583 1.474 4.035 2.828 1.407 1.312 3.279 2.71 4.159 3.105.88.395 2.425 1.45 3.434 2.344 1.008.894 2.294 1.741 2.857 1.882.563.142 3.697 2.842 6.966 6 3.303 3.192 6.396 5.849 6.963 5.982 1.276.298 11.361 10.411 11.835 11.869.19.582 2.392 3.177 4.894 5.767 2.501 2.59 4.814 5.346 5.139 6.123.325.778 1.677 2.593 3.005 4.033 1.327 1.44 2.666 3.214 2.976 3.943.309.729 1.366 2.311 2.347 3.516.981 1.204 1.784 2.424 1.784 2.709 0 .285.9 1.64 2 3.011 1.1 1.371 2 2.769 2 3.108 0 .338.45 1.15 1 1.804.55.654 1 1.518 1 1.921s.779 1.694 1.732 2.869c.952 1.175 1.936 2.73 2.186 3.456.249.725.82 1.784 1.268 2.354.448.569.814 1.336.814 1.703 0 .368.45 1.279 1 2.024.55.745 1 1.656 1 2.024 0 .367.37 1.139.823 1.714.452.576.967 1.962 1.144 3.081.177 1.119.707 2.555 1.177 3.191.471.637.856 1.49.856 1.896 0 .406.45 1.349 1 2.094.624.845 1.001 1.891 1.001 2.778.001.782.393 2.052.87 2.822.478.77 1.004 2.361 1.169 3.536.165 1.174.615 2.482.998 2.906.384.424.834 1.774 1 3 .167 1.226.626 2.586 1.02 3.022.498.55.802 1.774.993 3.992.193 2.25.492 3.439 1.008 4.009.525.58.8 1.71.966 3.962.169 2.308.436 3.377.997 3.997.64.708.803 1.689.993 5.993.235 5.317.731 6.783 2.291 6.783.404 0 .319-.214-.277-.7-.748-.609-.912-1.343-1.259-5.647-.244-3.03-.646-5.427-1.038-6.185-.352-.68-.798-2.648-.991-4.374-.193-1.725-.634-3.57-.981-4.099-.347-.53-.79-2.227-.984-3.771-.194-1.545-.718-3.525-1.164-4.401-.447-.875-.818-2.093-.825-2.707-.006-.614-.455-2.016-.996-3.116-.541-1.1-.985-2.451-.987-3.003-.002-.552-.454-1.849-1.004-2.882-.55-1.033-1-2.31-1-2.837 0-.527-.42-1.751-.933-2.718-.514-.968-1.068-2.3-1.232-2.96-.163-.66-.57-1.502-.902-1.871-.333-.37-.772-1.414-.976-2.322-.52-2.316-6.893-15.162-8.564-17.265-.762-.958-1.39-2.012-1.396-2.342-.007-.33-.548-1.392-1.204-2.36-.656-.968-1.193-1.93-1.193-2.138 0-.207-.79-1.416-1.756-2.686-.966-1.271-1.877-2.691-2.025-3.157-.148-.466-1.028-1.795-1.955-2.953-.928-1.158-1.886-2.556-2.13-3.106-.244-.55-1.633-2.389-3.088-4.086-1.456-1.698-2.646-3.238-2.646-3.422 0-.61-1.944-2.987-5.9-7.216-2.145-2.293-4.2-4.733-4.567-5.423-.786-1.478-11.182-11.853-11.876-11.853-.262 0-2.167-1.592-4.234-3.537-5.523-5.2-8.662-7.876-10.092-8.605-.698-.356-1.868-1.208-2.6-1.895s-1.963-1.544-2.735-1.906c-.772-.361-2.733-1.737-4.358-3.057-2.834-2.303-4.077-3.081-8.038-5.036-.99-.489-2.452-1.412-3.248-2.051-1.227-.986-6.006-3.607-10.552-5.789-.66-.316-1.56-.777-2-1.023-.44-.247-1.34-.692-2-.991a57.1 57.1 0 0 1-2.661-1.316c-.804-.425-2.313-.964-3.355-1.198-1.041-.233-2.343-.778-2.893-1.21-.549-.432-1.253-.786-1.563-.786-.311 0-1.41-.45-2.443-1-1.033-.55-2.331-1-2.885-1-.554 0-1.852-.45-2.885-1-1.033-.55-2.383-1-3-1s-1.967-.45-3-1-2.389-1-3.012-1c-.624 0-1.847-.367-2.718-.816-.872-.449-2.921-.988-4.553-1.199-1.633-.21-3.395-.662-3.916-1.003-.521-.341-2.373-.783-4.116-.982-1.743-.199-3.581-.628-4.085-.953-.503-.325-2.265-.7-3.915-.833-6.35-.513-7.263-.677-8.033-1.447-.529-.529-.767-.6-.767-.229m-39.393 11.499c-3.517.174-8.074.603-10.128.953-2.054.35-5.117.808-6.807 1.018-3.462.43-10.434 1.911-17.872 3.796-6.097 1.545-16.904 5.144-22.2 7.394-.99.42-3.15 1.332-4.8 2.026C82.979 44.82 45.211 82.745 27.233 125.2c-.699 1.65-1.619 3.81-2.045 4.8-.848 1.969-1.145 2.788-3.488 9.6-1.818 5.285-3.564 10.944-3.826 12.4-.099.55-.546 2.44-.994 4.2-1.465 5.757-2.484 10.74-2.906 14.2-.228 1.87-.679 4.93-1.003 6.8-1.357 7.839-1.698 32.73-.587 42.8.621 5.621 2.05 14.992 2.806 18.4.415 1.87.923 4.21 1.129 5.2.932 4.486 3.377 13.192 4.887 17.4.394 1.1.99 2.81 1.322 3.8 13.966 41.567 45.331 78.656 86.388 102.156 2.907 1.664 12.501 6.383 15.884 7.813l4.8 2.033c3.003 1.276 6.8 2.673 10.8 3.973l5.8 1.886c31.352 10.196 75.202 10.176 107.8-.051 6.905-2.166 12.448-4.129 16.4-5.808.99-.42 3.15-1.332 4.8-2.026 40.655-17.105 76.682-52.496 95.869-94.176 3.091-6.714 4.067-9.149 6.898-17.2 9.291-26.429 12.909-61.987 8.87-87.2-.423-2.64-.889-5.79-1.036-7-.148-1.21-.53-3.242-.849-4.515-.32-1.273-.824-3.613-1.119-5.2-1.169-6.271-4.806-18.545-7.641-25.788-.538-1.376-1.449-3.716-2.023-5.2-15.582-40.284-50.571-77.531-91.969-97.906-7.285-3.586-8.768-4.241-14.6-6.45-6.773-2.565-13.967-4.933-18-5.923l-5.4-1.329c-4.761-1.174-10.587-2.422-12.4-2.657-.88-.114-3.973-.576-6.873-1.027-9.095-1.415-24.088-1.872-38.32-1.168M337.658 91.5c1.045 2.62-.57 14.078-3.087 21.9-6.257 19.449-23.431 36.392-44.371 43.773-5.311 1.872-10.779 3.627-11.301 3.627-.304 0-2.476.439-4.826.976-4.551 1.04-12.575 2.501-21.073 3.836-6.716 1.055-21.888 2.227-35.8 2.763-20.442.789-29.391 2.195-40.8 6.409-1.87.69-4.316 1.587-5.435 1.992-1.12.405-2.38.925-2.8 1.155-.421.231-2.295 1.172-4.165 2.092-14.375 7.072-27.17 17.304-37.983 30.377-5.881 7.11-7.015 6.574-3.171-1.497 12.272-25.762 31.604-44.923 54.854-54.369a2328.83 2328.83 0 0 0 4.8-1.957c9.972-4.079 28.143-8.84 44.3-11.606 1.87-.32 5.38-.941 7.8-1.38 4.701-.852 9.395-1.663 15.2-2.628 1.98-.329 5.04-.942 6.8-1.362 1.76-.42 4.46-1.041 6-1.38 6.39-1.405 17.414-4.873 21.6-6.795 21.554-9.897 38.896-21.802 49.2-33.773 3.045-3.539 3.595-3.817 4.258-2.153m-162.682 2.357c5.424 1.616 6.146 3.074 3.193 6.45-2.086 2.385-2.517 2.475-5.983 1.25-11.462-4.049-24.767 10.218-32.306 34.643-.923 2.99-1.652 5.319-3.906 12.479-1.326 4.212-1.692 4.041 9.033 4.194 11.712.166 11.867.387 4.878 6.963-4.326 4.069-4.597 4.164-11.843 4.164-5.882 0-5.997.017-6.758.985-.88 1.118-2.368 5.111-4.479 12.015-.403 1.32-1.021 3.21-1.373 4.2-.764 2.15-3.662 11.08-6.817 21-1.259 3.96-2.616 8.19-3.015 9.4-.4 1.21-1.276 4-1.947 6.2-3.437 11.267-4.904 15.53-6.477 18.826-.427.895-.776 1.739-.776 1.877 0 .138-.996 2.346-2.214 4.908-9.183 19.322-25.861 34.717-41.186 38.017-6.633 1.429-11 1.586-11 .397 0-.585 1.518-2.006 2.525-2.363 7.632-2.701 17.673-12.923 22.654-23.062.919-1.87 1.839-3.712 2.045-4.093.206-.381.752-1.641 1.214-2.8l2.032-5.107c1.702-4.284 5.093-13.778 5.928-16.6.391-1.32.895-2.85 1.119-3.4.225-.55.977-2.89 1.673-5.2 1.199-3.982 1.819-6.048 4.197-14 .559-1.87 1.016-3.614 1.015-3.875-.001-.262.426-1.882.95-3.6a262.407 262.407 0 0 0 2.018-7.125c1.023-3.837 3.847-12.952 6.278-20.264 2.135-6.42 2.242-6.336-8.103-6.336-11.384 0-11.681-.338-5.668-6.459 4.627-4.709 4.698-4.736 12.553-4.739 7.101-.002 6.798.221 8.943-6.602.83-2.64 1.825-5.7 2.211-6.8.387-1.1 1.306-3.89 2.043-6.2 8.841-27.704 35.359-45.896 57.349-39.343m146.548 61.045c.544 4.578-11.512 20.187-22.324 28.902-2.902 2.34-10.368 7.396-10.92 7.396-.196 0-.834.325-1.418.723-1.334.908-8.8 4.345-11.462 5.276-8.458 2.959-15.16 4.887-19.6 5.641-11.842 2.009-12.581 2.072-24.2 2.065-6.27-.003-13.65-.212-16.4-.464-9.084-.831-20.941-2.014-24.8-2.475-8.323-.994-23.227 1.028-34.2 4.64-9.375 3.086-18.014 7.85-29.294 16.153-8.805 6.481-.138-5.826 10.607-15.062 16.367-14.069 33.745-21.836 55.687-24.89 2.97-.413 6.57-.939 8-1.168 1.43-.229 5.93-.606 10-.839 4.07-.232 10.01-.682 13.2-1 3.19-.318 8.165-.75 11.056-.959 5.214-.377 14.657-1.514 22.344-2.691 2.2-.337 5.62-.858 7.6-1.158 16.124-2.443 34.943-9.107 47.928-16.971l5.8-3.514c1.758-1.067 2.231-.989 2.396.395m-74.066 63.526c8.009 1.526 12.88 4.173 12.3 6.684-.281 1.216-1.598 4.439-3.59 8.788-1.57 3.427-1.816 3.493-5.168 1.379-10.995-6.934-26.306-4.9-28.242 3.752-1.263 5.643.645 7.445 11.842 11.179 9.272 3.093 12.772 4.826 15.473 7.663 6.869 7.216 4.389 22.357-5.134 31.341-9.708 9.158-29.622 11.041-44.001 4.161-5.909-2.827-6.048-3.229-3.305-9.512 3.483-7.977 3.277-7.84 7.716-5.117 14.876 9.122 33.127 5.827 32.163-5.807-.319-3.837-2.705-5.644-11.037-8.355-17.302-5.632-21.519-10.537-19.708-22.926 2.505-17.126 20.079-27.159 40.691-23.23m-93.066 1.558c.315.587.175 1.927-.551 5.3-2.056 9.551-2.362 11.027-3.05 14.714-.391 2.09-1.013 5.24-1.383 7-4.408 20.969-4.746 22.938-4.446 25.937.73 7.309 4.6 10.463 12.838 10.463 12.633 0 17.865-6.576 21.214-26.662.317-1.905.742-3.895.943-4.424.201-.529.573-2.391.827-4.138.254-1.747.643-3.754.865-4.46.221-.705.743-3.135 1.159-5.4 2.323-12.632 3.526-17.732 4.36-18.487.611-.553 1.664-.633 7.075-.539l6.357.11.123 1.92c.067 1.055-.146 2.855-.473 4-.328 1.144-.793 3.25-1.035 4.68-.241 1.43-.792 4.22-1.224 6.2-.433 1.98-1.076 5.04-1.43 6.8a2363.568 2363.568 0 0 0-3.132 15.8c-4.998 25.952-15.396 37.259-35.429 38.529-23.171 1.469-32.582-11.407-26.406-36.129.412-1.65.869-3.9 1.017-5 .147-1.1.597-3.35 1-5 .402-1.65.852-3.9.999-5 .146-1.1.526-3.042.843-4.316.318-1.274.931-4.154 1.364-6.4a866.18 866.18 0 0 1 1.395-7.084c.335-1.65.816-4.066 1.068-5.369.732-3.78.842-3.831 8.306-3.831 5.938 0 6.415.055 6.806.786m157.608.505c16.709 4.976 23.226 20.828 16.818 40.909a99.133 99.133 0 0 0-1.231 4.19c-1.943 7.463-9.421 17.978-15.871 22.316-9.908 6.664-16.669 8.067-38.956 8.085-15.294.012-15.157.057-14.185-4.693.304-1.484 1.033-5.128 1.622-8.098.588-2.97 1.501-7.47 2.029-10 1.573-7.538 2.227-10.794 2.975-14.8.39-2.09.983-5.06 1.317-6.6.335-1.54 1.089-5.23 1.676-8.2.587-2.97 1.496-7.38 2.02-9.8.524-2.42 1.077-5.3 1.228-6.4.363-2.64 1.599-6.927 2.209-7.661.97-1.17 34.076-.521 38.349.752M.725 226.816c.481.448.879.943.884 1.1.139 4.164.869 9.874 1.391 10.884.362.701.836 3.012 1.052 5.137.216 2.125.654 4.263.973 4.753.319.489.772 2.289 1.006 4 .235 1.71.69 3.519 1.013 4.019.323.5.77 1.903.995 3.117.224 1.214.736 2.785 1.138 3.491.401.706.842 2.039.978 2.963.136.923.587 2.273 1.002 3 .415.726.879 2.03 1.031 2.898.153.867.612 2.217 1.022 3 1.741 3.328 2.79 5.644 2.79 6.161 0 .304.382 1.038.848 1.631.466.593 1.014 1.817 1.217 2.721.518 2.306 2.879 7.075 4.533 9.155.767.965 1.396 2.034 1.398 2.376.002.343.445 1.22.983 1.95.539.729 1.092 1.842 1.231 2.473.138.63.42 1.25.626 1.378.207.127.756.984 1.221 1.904.465.92 1.632 2.726 2.594 4.013.962 1.286 1.751 2.546 1.753 2.8.002.253.902 1.617 2 3.032 1.098 1.415 1.996 2.743 1.996 2.951 0 .209 1.261 1.876 2.802 3.706 1.54 1.83 2.964 3.742 3.162 4.249.199.507 2.621 3.399 5.383 6.427 2.762 3.028 5.554 6.268 6.205 7.2 1.372 1.965 7.217 7.744 9.211 9.108.75.512 3.89 3.239 6.977 6.059 3.088 2.821 5.837 5.128 6.11 5.128.273 0 1.994 1.277 3.823 2.838 1.83 1.56 3.777 3.038 4.327 3.283.55.245 1.837 1.13 2.86 1.966 1.023.836 2.521 1.796 3.328 2.134.808.337 1.771 1.151 2.141 1.808.498.886 1.196 1.348 2.706 1.792 1.12.329 2.64 1.044 3.378 1.589.738.544 1.576.99 1.861.99.286 0 1.3.596 2.255 1.325 2.284 1.744 15.19 8.14 17.4 8.624.95.209 2.03.642 2.4.964.369.322 1.316.793 2.104 1.045.788.253 2.131.816 2.984 1.251.854.435 1.955.791 2.446.791.492 0 1.741.45 2.775 1 1.035.55 2.349 1.006 2.922 1.013.572.006 1.94.455 3.04.996 1.1.541 2.54.986 3.2.989.66.003 1.78.359 2.489.791.725.442 2.613.95 4.314 1.161 1.663.207 3.475.671 4.026 1.032.551.361 2.427.819 4.168 1.018 1.742.198 3.694.633 4.338.966.681.353 3.238.772 6.118 1.004 4.304.347 5.038.511 5.647 1.259.486.596.7.681.7.277 0-1.529-1.43-2.011-6.766-2.275-4.194-.208-5.331-.395-5.979-.981-.558-.506-1.768-.808-3.999-.999-2.233-.192-3.441-.494-4-1-.56-.507-1.767-.809-4-1-2.273-.196-3.438-.491-4.023-1.022-.492-.444-1.673-.827-2.927-.948-1.181-.113-2.566-.545-3.162-.986-.583-.431-1.921-.881-2.973-.999-1.052-.119-2.536-.639-3.297-1.156-.831-.564-1.972-.94-2.852-.94-.936 0-1.957-.362-2.822-1-.745-.55-1.688-1-2.094-1-.406 0-1.259-.385-1.896-.856-.636-.47-2.072-1-3.191-1.177-1.119-.177-2.505-.692-3.081-1.144-.575-.453-1.347-.823-1.714-.823-.368 0-1.279-.45-2.024-1-.745-.55-1.656-1-2.024-1-.367 0-1.134-.366-1.703-.814-.57-.448-1.629-1.019-2.354-1.268-.726-.25-2.281-1.234-3.456-2.186-1.175-.953-2.466-1.732-2.869-1.732s-1.267-.45-1.921-1c-.654-.55-1.433-1.001-1.731-1.002-1.817-.008-3.491-.877-3.89-2.021-.291-.833-.887-1.396-1.936-1.828-.834-.342-2.34-1.311-3.347-2.152-1.008-.841-2.448-1.789-3.2-2.106-.753-.318-2.629-1.745-4.169-3.171-1.54-1.426-3.268-2.708-3.84-2.849-.572-.141-3.243-2.374-5.936-4.964-2.694-2.589-5.916-5.394-7.161-6.234-3.086-2.083-7.345-6.334-9.491-9.473-.977-1.43-3.855-4.76-6.396-7.4-2.54-2.64-4.714-5.25-4.83-5.8-.117-.55-1.464-2.35-2.995-4-1.532-1.65-2.897-3.45-3.036-4-.138-.55-1.121-2.044-2.183-3.32-1.063-1.277-1.932-2.559-1.932-2.85 0-.29-.9-1.654-2-3.03s-2-2.83-2-3.23c0-.401-.45-1.214-1-1.808-.55-.593-1-1.378-1-1.743 0-.365-.45-1.274-1-2.019-.55-.745-1-1.664-1-2.041s-.779-1.647-1.732-2.822c-.952-1.175-1.945-2.755-2.205-3.511-.26-.756-.748-1.678-1.085-2.05-.337-.372-.709-1.374-.828-2.226-.272-1.949-.941-3.75-1.393-3.75-.19 0-.547-.799-.793-1.775-.245-.977-.788-2.085-1.205-2.462-.418-.378-.759-1.085-.759-1.571s-.368-1.353-.819-1.925c-.45-.573-.985-2.062-1.188-3.309-.203-1.248-.675-2.607-1.049-3.02-.374-.413-.816-1.754-.982-2.98-.167-1.226-.617-2.576-1-3-.384-.424-.834-1.774-1-3-.167-1.226-.608-2.567-.981-2.979-.443-.489-.793-1.882-1.007-4.008-.224-2.221-.558-3.512-1.05-4.055-.553-.611-.782-1.762-.977-4.911-.198-3.204-.434-4.366-1.065-5.259-.678-.958-.841-1.952-.99-6.052-.185-5.09-.667-6.494-2.229-6.494-.466 0-.403.197.262.816m397.458 2.002c-.61.674-.781 1.728-.968 5.965-.186 4.211-.36 5.294-.958 5.955-.514.566-.814 1.761-1.006 4.006-.192 2.233-.494 3.441-1 4-.507.56-.809 1.767-1 4-.191 2.218-.495 3.442-.993 3.992-.394.436-.853 1.754-1.018 2.928-.165 1.175-.691 2.766-1.169 3.536-.477.77-.869 2.051-.87 2.846 0 .859-.34 1.877-.837 2.508-.461.587-.965 2.018-1.125 3.196-.165 1.22-.664 2.61-1.164 3.246-.481.611-.875 1.44-.875 1.84 0 .401-.45 1.392-1 2.202-.55.811-1 1.774-1 2.14 0 .367-.45 1.277-1 2.022-.632.856-1 1.887-1 2.8 0 .913-.368 1.944-1 2.8-.55.745-1 1.656-1 2.024 0 .367-.366 1.134-.814 1.703-.448.57-1.019 1.629-1.268 2.354-.25.726-1.234 2.281-2.186 3.456-.953 1.175-1.732 2.466-1.732 2.869s-.45 1.267-1 1.921c-.55.654-1 1.461-1 1.794 0 .333-.795 1.581-1.766 2.773-.971 1.193-2.027 2.784-2.347 3.537-.32.753-1.297 2.179-2.171 3.169-.875.99-1.701 2.25-1.837 2.8-.135.55-1.407 2.271-2.825 3.824-1.419 1.553-2.838 3.443-3.155 4.201-.317.758-2.628 3.511-5.137 6.118-2.509 2.607-4.717 5.216-4.907 5.798-.474 1.458-10.559 11.571-11.835 11.869-.567.133-3.66 2.79-6.963 5.982-3.269 3.158-6.402 5.858-6.964 5.999-.561.141-1.937 1.036-3.057 1.99-1.12.953-2.666 2.008-3.436 2.345-.77.336-2.196 1.345-3.168 2.243-.972.897-2.068 1.631-2.434 1.631-.367 0-1.788.9-3.159 2-1.371 1.1-2.734 2-3.029 2-.295 0-1.498.779-2.673 1.732-1.175.952-2.73 1.936-3.456 2.186-.725.249-1.784.82-2.354 1.268-.569.448-1.336.814-1.703.814-.368 0-1.279.45-2.024 1-.745.55-1.645 1-2 1s-1.255.45-2 1c-.745.55-1.656 1-2.024 1-.367 0-1.139.37-1.714.823-.576.452-1.962.967-3.081 1.144-1.119.177-2.517.677-3.108 1.112-.59.434-1.599.92-2.241 1.08-.643.16-1.612.639-2.154 1.066-.575.452-1.607.775-2.476.775-.905 0-2.035.369-2.876.94-.761.517-2.245 1.037-3.297 1.156-1.052.118-2.39.568-2.973.999-.596.441-1.981.873-3.162.986-1.248.12-2.435.504-2.922.944-.559.506-1.765.832-3.796 1.026-1.812.173-3.486.592-4.276 1.069-.848.512-2.313.853-4.21.98-2.065.138-3.148.409-3.728.934-.668.605-1.758.786-5.996.997-5.336.264-6.766.746-6.766 2.275 0 .411.207.333.7-.261.601-.724 1.403-.903 5.662-1.266 2.804-.239 5.465-.683 6.118-1.02.636-.329 2.581-.761 4.323-.959 1.741-.199 3.592-.641 4.113-.982.521-.341 2.283-.793 3.916-1.003 1.632-.211 3.681-.75 4.553-1.199.871-.449 2.041-.818 2.6-.82.558-.002 1.915-.446 3.015-.987 1.1-.541 2.54-.99 3.2-.998.66-.008 1.797-.378 2.526-.822.729-.445 2.245-1.006 3.369-1.247 1.124-.241 2.597-.776 3.274-1.189.677-.412 1.522-.751 1.877-.752.355 0 1.106-.363 1.668-.805.561-.441 1.621-.91 2.354-1.04 1.108-.197 9.071-3.75 11.132-4.967.33-.195 2.31-1.205 4.4-2.243 2.09-1.039 4.679-2.577 5.752-3.417 1.074-.841 2.189-1.529 2.479-1.529.29 0 1.695-.884 3.123-1.965 1.428-1.081 3.012-2.094 3.521-2.25.509-.157 1.825-1.047 2.925-1.978 1.1-.931 2.431-1.829 2.958-1.995.527-.167 1.697-.978 2.6-1.804.903-.825 2.272-1.822 3.042-2.215 1.402-.716 5.432-4.158 10.544-9.008 1.499-1.422 3.295-2.887 3.991-3.257 1.545-.821 11.169-10.509 11.923-12.001.298-.591 1.713-2.301 3.144-3.8 3.798-3.98 6.798-7.525 6.798-8.032 0-.244 1.347-2.03 2.994-3.969 1.647-1.939 2.997-3.728 3-3.975.003-.247.898-1.565 1.988-2.929 1.09-1.363 2.1-2.85 2.244-3.304.144-.453 1.052-1.863 2.018-3.134.966-1.27 1.756-2.481 1.756-2.691 0-.21.432-1.018.96-1.796s1.089-1.838 1.246-2.356c.157-.517.946-1.841 1.754-2.941 1.705-2.323 6.44-11.706 6.44-12.764 0-.395.428-1.555.952-2.577a138.117 138.117 0 0 0 2.055-4.259c.606-1.32 1.423-3.04 1.815-3.822.392-.783.842-2.133 1-3 .158-.868.712-2.387 1.232-3.375s.946-2.255.946-2.815.357-1.719.793-2.574c.436-.855.969-2.509 1.184-3.675.216-1.166.67-2.545 1.01-3.064.34-.518.781-2.24.98-3.825.199-1.585.646-3.315.993-3.845.347-.529.788-2.374.981-4.099.193-1.726.629-3.675.968-4.331.361-.698.793-3.264 1.041-6.184.367-4.326.538-5.084 1.281-5.691.596-.487.68-.7.275-.7-.32 0-.915.368-1.323.818m-111.893 3.883c-.834.921-2.259 6.868-4.674 19.499-.378 1.98-.985 4.95-1.347 6.6-.363 1.65-.941 4.44-1.285 6.2-1.345 6.889-1.847 9.331-2.609 12.71-1.249 5.533-1.021 5.688 7.947 5.398 17.94-.581 26.777-8.942 29.753-28.152 2.011-12.985-1.882-20.058-12.213-22.19-5.098-1.052-14.643-1.092-15.572-.065"
+        />
+        <path
+          fill="#f6fafb"
+          d="M174 .538c0 1.483-1.472 1.969-6.766 2.231-4.258.212-5.326.39-6.004 1.004-.604.547-1.657.798-3.928.939-1.922.119-3.68.483-4.621.958-.835.421-2.675.905-4.088 1.075-1.567.188-2.884.594-3.377 1.04-.474.43-1.675.815-2.91.934-1.181.113-2.566.545-3.162.986-.583.431-1.921.881-2.973.999-1.052.119-2.536.639-3.297 1.156-.841.571-1.971.94-2.876.94-.869 0-1.901.323-2.476.775-.542.427-1.511.906-2.154 1.066-.642.16-1.651.646-2.241 1.08-.591.435-1.989.935-3.108 1.112-1.119.177-2.505.692-3.081 1.144-.575.453-1.347.823-1.714.823-.368 0-1.279.45-2.024 1-.745.55-1.645 1-2 1s-1.255.45-2 1c-.745.55-1.656 1-2.024 1-.367 0-1.134.366-1.703.814-.57.448-1.629 1.019-2.354 1.268-.726.25-2.281 1.234-3.456 2.186-1.175.953-2.332 1.732-2.57 1.732-.239 0-1.618.797-3.064 1.771-1.446.974-3.124 1.993-3.729 2.264-.605.271-1.1.614-1.1.762 0 .261-2.974 2.27-4.624 3.123-.452.235-1.712 1.244-2.8 2.242-1.087.999-2.426 1.918-2.976 2.041-.55.124-3.16 2.289-5.8 4.811-2.64 2.523-5.97 5.383-7.4 6.357-3.072 2.092-12.8 11.799-12.8 12.773 0 .609-.966 1.718-7.37 8.456-1.045 1.1-2.112 2.474-2.369 3.053-.575 1.291-1.668 2.733-4.054 5.347-1.004 1.1-1.942 2.45-2.085 3-.142.55-1.128 2.044-2.19 3.32-1.063 1.277-1.932 2.559-1.932 2.85 0 .29-.9 1.654-2 3.03s-2 2.794-2 3.151c-.001.357-.451 1.172-1 1.811-.55.639-1 1.471-1 1.848s-.716 1.585-1.591 2.684c-.875 1.099-1.94 2.813-2.367 3.808-.427.995-.957 1.922-1.178 2.059-.221.136-.519.778-.661 1.425-.142.647-.609 1.622-1.037 2.167-.429.545-.93 1.793-1.113 2.775-.183.981-.701 2.389-1.15 3.128-.449.739-.936 1.91-1.083 2.603-.146.692-.615 1.575-1.043 1.962-.427.386-.777 1.101-.777 1.587s-.368 1.353-.819 1.925c-.45.573-.985 2.062-1.188 3.309-.203 1.248-.675 2.607-1.049 3.02-.374.413-.816 1.754-.982 2.98-.167 1.226-.617 2.576-1 3-.384.424-.834 1.774-1 3-.167 1.226-.613 2.572-.991 2.99-.464.513-.781 1.81-.971 3.968-.201 2.289-.498 3.445-1.037 4.041-.564.623-.816 1.709-.999 4.296-.16 2.262-.525 4.018-1.051 5.063-.635 1.261-.85 2.685-1.018 6.723C2.478 174.562 2.013 176 .538 176 .093 176 0 180.325 0 201s.093 25 .538 25c1.484 0 1.972 1.47 2.154 6.494.149 4.1.312 5.094.99 6.052.631.893.867 2.055 1.065 5.259.195 3.149.424 4.3.977 4.911.492.543.826 1.834 1.05 4.055.214 2.126.564 3.519 1.007 4.008.373.412.814 1.753.981 2.979.166 1.226.616 2.576 1 3 .383.424.833 1.774 1 3 .166 1.226.608 2.567.982 2.98.374.413.846 1.772 1.049 3.02.203 1.247.738 2.736 1.188 3.309.451.572.819 1.439.819 1.925s.341 1.193.759 1.571c.417.377.96 1.485 1.205 2.462.246.976.603 1.775.793 1.775.452 0 1.121 1.801 1.393 3.75.119.852.491 1.854.828 2.226.337.372.825 1.294 1.085 2.05.26.756 1.253 2.336 2.205 3.511.953 1.175 1.732 2.445 1.732 2.822 0 .377.45 1.296 1 2.041.55.745 1 1.654 1 2.019 0 .365.45 1.15 1 1.743.55.594 1 1.407 1 1.808 0 .4.9 1.854 2 3.23s2 2.74 2 3.03c0 .291.869 1.573 1.932 2.85 1.062 1.276 2.045 2.77 2.183 3.32.139.55 1.504 2.35 3.036 4 1.531 1.65 2.878 3.45 2.995 4 .116.55 2.29 3.16 4.83 5.8 2.541 2.64 5.419 5.97 6.396 7.4 2.146 3.139 6.405 7.39 9.491 9.473 1.245.84 4.467 3.645 7.161 6.234 2.693 2.59 5.364 4.823 5.936 4.964.572.141 2.3 1.423 3.84 2.849 1.54 1.426 3.416 2.853 4.169 3.171.752.317 2.192 1.265 3.2 2.106 1.007.841 2.513 1.81 3.347 2.152 1.049.432 1.645.995 1.936 1.828.399 1.144 2.073 2.013 3.89 2.021.298.001 1.077.452 1.731 1.002.654.55 1.518 1 1.921 1s1.694.779 2.869 1.732c1.175.952 2.73 1.936 3.456 2.186.725.249 1.784.82 2.354 1.268.569.448 1.336.814 1.703.814.368 0 1.279.45 2.024 1 .745.55 1.656 1 2.024 1 .367 0 1.139.37 1.714.823.576.452 1.962.967 3.081 1.144 1.119.177 2.555.707 3.191 1.177.637.471 1.49.856 1.896.856.406 0 1.349.45 2.094 1 .865.638 1.886 1 2.822 1 .88 0 2.021.376 2.852.94.761.517 2.245 1.037 3.297 1.156 1.052.118 2.39.568 2.973.999.596.441 1.981.873 3.162.986 1.254.121 2.435.504 2.927.948.585.531 1.75.826 4.023 1.022 2.233.191 3.44.493 4 1 .559.506 1.767.808 4 1 2.231.191 3.441.493 3.999.999.648.586 1.785.773 5.979.981 5.294.262 6.766.748 6.766 2.231 0 .445 4.487.538 26 .538 21.513 0 26-.093 26-.538 0-1.483 1.472-1.969 6.766-2.231 4.238-.211 5.328-.392 5.996-.997.58-.525 1.663-.796 3.728-.934 1.897-.127 3.362-.468 4.21-.98.79-.477 2.464-.896 4.276-1.069 2.031-.194 3.237-.52 3.796-1.026.487-.44 1.674-.824 2.922-.944 1.181-.113 2.566-.545 3.162-.986.583-.431 1.921-.881 2.973-.999 1.052-.119 2.536-.639 3.297-1.156.841-.571 1.971-.94 2.876-.94.869 0 1.901-.323 2.476-.775.542-.427 1.511-.906 2.154-1.066.642-.16 1.651-.646 2.241-1.08.591-.435 1.989-.935 3.108-1.112 1.119-.177 2.505-.692 3.081-1.144.575-.453 1.347-.823 1.714-.823.368 0 1.279-.45 2.024-1 .745-.55 1.645-1 2-1s1.255-.45 2-1c.745-.55 1.656-1 2.024-1 .367 0 1.134-.366 1.703-.814.57-.448 1.629-1.019 2.354-1.268.726-.25 2.281-1.234 3.456-2.186 1.175-.953 2.378-1.732 2.673-1.732.295 0 1.658-.9 3.029-2s2.792-2 3.159-2c.366 0 1.462-.734 2.434-1.631.972-.898 2.398-1.907 3.168-2.243.77-.337 2.316-1.392 3.436-2.345 1.12-.954 2.496-1.849 3.057-1.99.562-.141 3.695-2.841 6.964-5.999 3.303-3.192 6.396-5.849 6.963-5.982 1.276-.298 11.361-10.411 11.835-11.869.19-.582 2.398-3.191 4.907-5.798s4.82-5.36 5.137-6.118c.317-.758 1.736-2.648 3.155-4.201 1.418-1.553 2.69-3.274 2.825-3.824.136-.55.962-1.81 1.837-2.8.874-.99 1.851-2.416 2.171-3.169.32-.753 1.376-2.344 2.347-3.537.971-1.192 1.766-2.44 1.766-2.773 0-.333.45-1.14 1-1.794.55-.654 1-1.518 1-1.921s.779-1.694 1.732-2.869c.952-1.175 1.936-2.73 2.186-3.456.249-.725.82-1.784 1.268-2.354.448-.569.814-1.336.814-1.703 0-.368.45-1.279 1-2.024.632-.856 1-1.887 1-2.8 0-.913.368-1.944 1-2.8.55-.745 1-1.655 1-2.022 0-.366.45-1.329 1-2.14.55-.81 1-1.801 1-2.202 0-.4.394-1.229.875-1.84.5-.636.999-2.026 1.164-3.246.16-1.178.664-2.609 1.125-3.196.497-.631.837-1.649.837-2.508.001-.795.393-2.076.87-2.846.478-.77 1.004-2.361 1.169-3.536.165-1.174.624-2.492 1.018-2.928.498-.55.802-1.774.993-3.992.191-2.233.493-3.44 1-4 .506-.559.808-1.767 1-4 .192-2.245.492-3.44 1.006-4.006.598-.661.772-1.744.958-5.955.233-5.276.733-6.783 2.247-6.783.445 0 .538-4.649.538-27s-.093-27-.538-27c-1.514 0-2.014-1.507-2.247-6.783-.19-4.304-.353-5.285-.993-5.993-.561-.62-.828-1.689-.997-3.997-.166-2.252-.441-3.382-.966-3.962-.516-.57-.815-1.759-1.008-4.009-.191-2.218-.495-3.442-.993-3.992-.394-.436-.853-1.796-1.02-3.022-.166-1.226-.616-2.576-1-3-.383-.424-.833-1.732-.998-2.906-.165-1.175-.691-2.766-1.169-3.536-.477-.77-.869-2.04-.87-2.822 0-.887-.377-1.933-1.001-2.778-.55-.745-1-1.688-1-2.094 0-.406-.385-1.259-.856-1.896-.47-.636-1-2.072-1.177-3.191-.177-1.119-.692-2.505-1.144-3.081-.453-.575-.823-1.347-.823-1.714 0-.368-.45-1.279-1-2.024-.55-.745-1-1.656-1-2.024 0-.367-.366-1.134-.814-1.703-.448-.57-1.019-1.629-1.268-2.354-.25-.726-1.234-2.281-2.186-3.456-.953-1.175-1.732-2.466-1.732-2.869s-.45-1.267-1-1.921c-.55-.654-1-1.466-1-1.804 0-.339-.9-1.737-2-3.108s-2-2.726-2-3.011c0-.285-.803-1.505-1.784-2.709-.981-1.205-2.038-2.787-2.347-3.516-.31-.729-1.649-2.503-2.976-3.943-1.328-1.44-2.68-3.255-3.005-4.033-.325-.777-2.638-3.533-5.139-6.123-2.502-2.59-4.704-5.185-4.894-5.767-.474-1.458-10.559-11.571-11.835-11.869-.567-.133-3.66-2.79-6.963-5.982-3.269-3.158-6.403-5.858-6.966-6-.563-.141-1.849-.988-2.857-1.882-1.009-.894-2.554-1.949-3.434-2.344-.88-.395-2.752-1.793-4.159-3.105-1.452-1.354-3.198-2.577-4.035-2.828-.812-.243-1.803-.804-2.203-1.246-.4-.441-1.043-.803-1.428-.803-.386 0-1.663-.779-2.838-1.732-1.175-.952-2.73-1.936-3.456-2.186-.725-.249-1.784-.82-2.354-1.268-.569-.448-1.336-.814-1.703-.814-.368 0-1.279-.45-2.024-1-.745-.55-1.645-1-2-1s-1.255-.45-2-1c-.745-.55-1.645-1-2-1s-1.255-.45-2-1c-.865-.638-1.886-1-2.822-1-.879 0-2.02-.376-2.849-.938-.76-.516-1.896-1.067-2.524-1.225-.628-.158-1.585-.635-2.127-1.062-.575-.452-1.607-.775-2.476-.775-.905 0-2.035-.369-2.876-.94-.761-.517-2.245-1.037-3.297-1.156-1.052-.118-2.389-.566-2.971-.994-.582-.429-2.028-.893-3.213-1.032s-2.501-.566-2.923-.949c-.506-.457-1.811-.795-3.812-.986-2.006-.192-3.397-.552-4.081-1.058-.733-.542-1.947-.826-4.136-.966-2.259-.145-3.321-.401-3.923-.946-.678-.614-1.746-.792-6.004-1.004C227.472 2.507 226 2.021 226 .538 226 .093 221.513 0 200 0c-21.513 0-26 .093-26 .538m37.727 11.461c4.36.212 10.3.754 13.2 1.206 2.9.451 5.993.913 6.873 1.027 1.813.235 7.639 1.483 12.4 2.657l5.4 1.329c5.032 1.236 13.423 4.095 22.8 7.77 42.814 16.778 85.072 59.344 101.769 102.509.574 1.484 1.485 3.824 2.023 5.2 2.835 7.243 6.472 19.517 7.641 25.788.295 1.587.799 3.927 1.119 5.2.319 1.273.701 3.305.849 4.515.147 1.21.613 4.36 1.036 7 1.894 11.824 1.87 37.347-.047 50.105-2.549 16.968-5.004 26.66-10.813 42.695-16.33 45.07-56.364 87.09-100.777 105.776-1.65.694-3.81 1.606-4.8 2.026-3.952 1.679-9.495 3.642-16.4 5.808-26.232 8.23-60.492 10.07-88.2 4.738-7.81-1.503-15.364-3.309-19.6-4.687l-5.8-1.886c-4-1.3-7.797-2.697-10.8-3.973l-4.8-2.033C78.658 355.261 38.366 311.936 22.528 264.8c-.332-.99-.928-2.7-1.322-3.8-1.51-4.208-3.955-12.914-4.887-17.4-.206-.99-.714-3.33-1.129-5.2-.756-3.408-2.185-12.779-2.806-18.4-1.111-10.07-.77-34.961.587-42.8.324-1.87.775-4.93 1.003-6.8.422-3.46 1.441-8.443 2.906-14.2.448-1.76.895-3.65.994-4.2.262-1.456 2.008-7.115 3.826-12.4 2.343-6.812 2.64-7.631 3.488-9.6.426-.99 1.346-3.15 2.045-4.8C45.211 82.745 82.979 44.82 124.8 27.224c1.65-.694 3.81-1.606 4.8-2.026 5.296-2.25 16.103-5.849 22.2-7.394 7.438-1.885 14.41-3.366 17.872-3.796 1.69-.21 4.753-.668 6.807-1.018 7.016-1.196 22.221-1.623 35.248-.991M333.4 93.653c-10.304 11.971-27.646 23.876-49.2 33.773-4.186 1.922-15.21 5.39-21.6 6.795-1.54.339-4.24.96-6 1.38-1.76.42-4.82 1.033-6.8 1.362-5.805.965-10.499 1.776-15.2 2.628-2.42.439-5.93 1.06-7.8 1.38-16.157 2.766-34.328 7.527-44.3 11.606a2328.83 2328.83 0 0 1-4.8 1.957c-23.25 9.446-42.582 28.607-54.854 54.369-3.844 8.071-2.71 8.607 3.171 1.497 10.813-13.073 23.608-23.305 37.983-30.377 1.87-.92 3.744-1.861 4.165-2.092.42-.23 1.68-.75 2.8-1.155 1.119-.405 3.565-1.302 5.435-1.992 11.409-4.214 20.358-5.62 40.8-6.409 13.912-.536 29.084-1.708 35.8-2.763 8.498-1.335 16.522-2.796 21.073-3.836 2.35-.537 4.522-.976 4.826-.976.522 0 5.99-1.755 11.301-3.627 26.774-9.438 45.4-32.654 47.474-59.173.675-8.626-.001-9.313-4.274-4.347m-171-.807c-19.227 1.477-37.672 18.102-44.773 40.354-.737 2.31-1.656 5.1-2.043 6.2-.386 1.1-1.381 4.16-2.211 6.8-2.145 6.823-1.842 6.6-8.943 6.602-7.855.003-7.926.03-12.553 4.739-6.013 6.121-5.716 6.459 5.668 6.459 10.345 0 10.238-.084 8.103 6.336-2.431 7.312-5.255 16.427-6.278 20.264-.587 2.2-1.495 5.406-2.018 7.125-.524 1.718-.951 3.338-.95 3.6.001.261-.456 2.005-1.015 3.875a6366.202 6366.202 0 0 1-4.197 14c-.696 2.31-1.448 4.65-1.673 5.2-.224.55-.728 2.08-1.119 3.4-.835 2.822-4.226 12.316-5.928 16.6l-2.032 5.107c-.462 1.159-1.008 2.419-1.214 2.8-.206.381-1.126 2.223-2.045 4.093-4.981 10.139-15.022 20.361-22.654 23.062-1.007.357-2.525 1.778-2.525 2.363 0 1.189 4.367 1.032 11-.397 15.325-3.3 32.003-18.695 41.186-38.017 1.218-2.562 2.214-4.77 2.214-4.908 0-.138.349-.982.776-1.877 1.573-3.296 3.04-7.559 6.477-18.826.671-2.2 1.547-4.99 1.947-6.2.399-1.21 1.756-5.44 3.015-9.4 3.155-9.92 6.053-18.85 6.817-21 .352-.99.97-2.88 1.373-4.2 2.111-6.904 3.599-10.897 4.479-12.015.761-.968.876-.985 6.758-.985 7.246 0 7.517-.095 11.843-4.164 6.989-6.576 6.834-6.797-4.878-6.963-10.725-.153-10.359.018-9.033-4.194 2.254-7.16 2.983-9.489 3.906-12.479 7.539-24.425 20.844-38.692 32.306-34.643 1.313.464 2.784.843 3.269.843 1.091 0 4.545-3.817 4.545-5.023 0-3.033-8.526-5.228-17.6-4.531m156.728 61.661-5.8 3.514c-12.985 7.864-31.804 14.528-47.928 16.971-1.98.3-5.4.821-7.6 1.158-7.687 1.177-17.13 2.314-22.344 2.691a495.87 495.87 0 0 0-11.056.959c-3.19.318-9.13.768-13.2 1-4.07.233-8.57.61-10 .839-1.43.229-5.03.755-8 1.168-21.942 3.054-39.32 10.821-55.687 24.89-10.745 9.236-19.412 21.543-10.607 15.062 11.28-8.303 19.919-13.067 29.294-16.153 10.973-3.612 25.877-5.634 34.2-4.64 3.859.461 15.716 1.644 24.8 2.475 2.75.252 10.13.461 16.4.464 11.619.007 12.358-.056 24.2-2.065 4.44-.754 11.142-2.682 19.6-5.641 2.662-.931 10.128-4.368 11.462-5.276.584-.398 1.222-.723 1.418-.723 1.472 0 11.998-7.991 16.921-12.846 8.021-7.909 11.39-12.199 14.477-18.433 2.666-5.385 2.477-7.25-.55-5.414M229.8 218.584c-14.947 3.165-24.453 15.146-23.256 29.309.69 8.165 5.111 11.867 19.931 16.691 8.332 2.711 10.718 4.518 11.037 8.355.964 11.634-17.287 14.929-32.163 5.807-4.439-2.723-4.233-2.86-7.716 5.117-2.743 6.283-2.604 6.685 3.305 9.512 14.379 6.88 34.293 4.997 44.001-4.161 9.523-8.984 12.003-24.125 5.134-31.341-2.701-2.837-6.201-4.57-15.473-7.663-11.197-3.734-13.105-5.536-11.842-11.179 1.936-8.652 17.247-10.686 28.242-3.752 3.352 2.114 3.598 2.048 5.168-1.379 3.988-8.706 4.186-9.507 2.737-11.062-3.959-4.247-18.856-6.424-29.105-4.254m-89.331 1.347c-.401.401-.937 1.796-1.189 3.1a727.047 727.047 0 0 1-1.068 5.369 866.18 866.18 0 0 0-1.395 7.084c-.433 2.246-1.046 5.126-1.364 6.4-.317 1.274-.697 3.216-.843 4.316-.147 1.1-.597 3.35-.999 5-.403 1.65-.853 3.9-1 5-.148 1.1-.605 3.35-1.017 5-6.176 24.722 3.235 37.598 26.406 36.129 20.033-1.27 30.431-12.577 35.429-38.529.636-3.298 1.811-9.23 3.132-15.8.354-1.76.997-4.82 1.43-6.8.432-1.98.983-4.77 1.224-6.2.242-1.43.707-3.536 1.035-4.68.327-1.145.54-2.945.473-4l-.123-1.92-6.357-.11c-5.411-.094-6.464-.014-7.075.539-.834.755-2.037 5.855-4.36 18.487-.416 2.265-.938 4.695-1.159 5.4-.222.706-.611 2.713-.865 4.46-.254 1.747-.626 3.609-.827 4.138-.201.529-.626 2.519-.943 4.424-3.349 20.086-8.581 26.662-21.214 26.662-8.238 0-12.108-3.154-12.838-10.463-.3-2.999.038-4.968 4.446-25.937.37-1.76.992-4.91 1.383-7 .688-3.687.994-5.163 3.05-14.714 1.374-6.382 1.678-6.086-6.255-6.086-5.651 0-6.47.084-7.117.731m133.182-.192c-.61.734-1.846 5.021-2.209 7.661-.151 1.1-.704 3.98-1.228 6.4-.524 2.42-1.433 6.83-2.02 9.8-.587 2.97-1.341 6.66-1.676 8.2-.334 1.54-.927 4.51-1.317 6.6-.748 4.006-1.402 7.262-2.975 14.8-.528 2.53-1.441 7.03-2.029 10-.589 2.97-1.318 6.614-1.622 8.098-.972 4.75-1.109 4.705 14.185 4.693 22.287-.018 29.048-1.421 38.956-8.085 6.45-4.338 13.928-14.853 15.871-22.316.256-.985.81-2.87 1.231-4.19 6.408-20.081-.109-35.933-16.818-40.909-4.273-1.273-37.379-1.922-38.349-.752m28.211 13.027c10.331 2.132 14.224 9.205 12.213 22.19-2.976 19.21-11.813 27.571-29.753 28.152-8.968.29-9.196.135-7.947-5.398.762-3.379 1.264-5.821 2.609-12.71.344-1.76.922-4.55 1.285-6.2.362-1.65.969-4.62 1.347-6.6 2.415-12.631 3.84-18.578 4.674-19.499.929-1.027 10.474-.987 15.572.065"
+        />
+      </g>
+    </svg>
+  );
+}
+
+function DfxAssetIconONDO({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 44.8 44.8"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <style>{`.ondo_st0{fill-rule:evenodd;clip-rule:evenodd;fill:${forceColor ?? '#06070a'}}`}</style>
+      <path
+        d="M22.4 3.2c-10.6 0-19.2 8.6-19.2 19.2s8.6 19.2 19.2 19.2h11.5c-3.4 2-7.3 3.2-11.5 3.2C10 44.8 0 34.7 0 22.4 0 10 10 0 22.4 0c12.4 0 22.4 10 22.4 22.4 0 1.1-.1 2.2-.2 3.2h-3.2c.2-1 .3-2.1.3-3.2C41.6 11.8 33 3.2 22.4 3.2z"
+        className="ondo_st0"
+      />
+      <path
+        d="M40.8 35.2c-.8 1.1-1.8 2.2-2.8 3.2H22.4c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16c0 1.1-.1 2.2-.3 3.2h-3.3c.3-1 .4-2.1.4-3.2 0-7.1-5.7-12.8-12.8-12.8-7.1 0-12.8 5.7-12.8 12.8 0 7.1 5.7 12.8 12.8 12.8h18.4z"
+        className="ondo_st0"
+      />
+      <path
+        d="M42.6 32c.5-1 .9-2.1 1.2-3.2H22.3c-3.5 0-6.4-2.9-6.4-6.4 0-3.5 2.9-6.4 6.4-6.4 3.5 0 6.4 2.9 6.4 6.4 0 1.2-.3 2.3-.9 3.2h3.5c.4-1 .5-2.1.5-3.2 0-5.3-4.3-9.6-9.6-9.6s-9.6 4.3-9.6 9.6 4.3 9.6 9.6 9.6H42.6z"
+        className="ondo_st0"
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconADA({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 400 402.01"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M102.8 172c-.8 13.9 9.9 25.8 23.8 26.6h1.5c14 0 25.3-11.3 25.2-25.3 0-14-11.3-25.3-25.3-25.2-13.4 0-24.5 10.5-25.2 23.9zM8.6 165.5c-4.5-.3-8.4 3.2-8.6 7.7s3.2 8.4 7.7 8.6c4.5.3 8.3-3.2 8.6-7.7.3-4.5-3.2-8.3-7.7-8.6zM101.2 25.4c4-2 5.6-7 3.6-11-2-4-7-5.6-11-3.6-4 2-5.6 6.9-3.6 10.9 2 4.1 6.9 5.8 11 3.7-.1 0 0 0 0 0zM126.8 70.1c6.2-3.1 8.7-10.7 5.6-16.9s-10.7-8.7-16.9-5.6c-6.2 3.1-8.7 10.7-5.6 16.9 3.1 6.2 10.7 8.7 16.9 5.6zM40.6 100.8c4.8 3.1 11.2 1.8 14.4-3 3.1-4.8 1.8-11.2-3-14.4-4.8-3.1-11.2-1.8-14.4 3-3.2 4.8-1.8 11.3 3 14.4zM55.9 161c-7-.4-12.9 4.9-13.3 11.9s4.9 12.9 11.9 13.3c7 .4 12.9-4.9 13.3-11.9.4-6.9-4.9-12.9-11.9-13.3zM42 245.7c-5.1 2.6-7.2 8.8-4.6 14 2.6 5.1 8.8 7.2 14 4.6 5.1-2.6 7.2-8.8 4.6-14-2.6-5.1-8.9-7.2-14-4.6zM91 134.9c6.9 4.5 16.1 2.6 20.5-4.3 4.5-6.9 2.6-16.1-4.3-20.5-6.9-4.5-16.1-2.6-20.5 4.3-4.5 6.8-2.6 16 4.3 20.5zM246.5 69.1c5.8 3.8 13.7 2.2 17.5-3.6s2.2-13.7-3.6-17.5c-5.8-3.8-13.7-2.2-17.5 3.6-3.9 5.9-2.3 13.7 3.6 17.5zM272.3 24.6c3.8 2.5 8.8 1.4 11.3-2.4s1.4-8.8-2.4-11.3-8.8-1.4-11.3 2.3c-2.4 3.8-1.3 8.9 2.4 11.4zM248.4 147.9c-13.9-.8-25.9 9.9-26.6 23.8-.8 13.9 9.9 25.9 23.8 26.6h1.4c13.9 0 25.2-11.3 25.2-25.3.1-13.3-10.4-24.4-23.8-25.1zM135.1 133.1c4.3 8.5 13 13.9 22.6 13.9 13.9 0 25.2-11.3 25.2-25.3 0-3.9-.9-7.8-2.7-11.4-6.3-12.5-21.5-17.5-33.9-11.2-12.5 6.4-17.5 21.6-11.2 34zM333 100.8c5.1-2.6 7.1-8.9 4.5-14-2.6-5.1-8.9-7.1-14-4.5-5.1 2.6-7.1 8.8-4.6 13.9 2.7 5.1 8.9 7.2 14.1 4.6zM269 108.8c-7.3 3.7-10.3 12.6-6.6 19.9 3.7 7.3 12.6 10.3 19.9 6.6 7.3-3.7 10.3-12.6 6.6-19.9-3.7-7.3-12.6-10.2-19.9-6.6zM186.5 20.8c5.7.3 10.6-4.1 11-9.8S193.4.4 187.7 0c-5.7-.3-10.6 4-11 9.7-.3 5.8 4.1 10.7 9.8 11.1zM186.4 86.1c8.2.5 15.2-5.8 15.6-14 .5-8.2-5.8-15.2-14-15.6-8.2-.5-15.2 5.8-15.6 14-.4 8.2 5.8 15.2 14 15.6zM106 237.7c7.3-3.7 10.3-12.6 6.6-19.9-3.7-7.3-12.6-10.3-19.9-6.6-7.3 3.7-10.3 12.6-6.6 19.9 3.7 7.3 12.6 10.3 19.9 6.6zM196 107.8c-7.6 11.7-4.4 27.3 7.3 34.9 11.7 7.6 27.3 4.4 34.9-7.3 7.6-11.7 4.4-27.3-7.3-34.9-4.1-2.7-8.9-4.1-13.8-4.1-8.5 0-16.4 4.3-21.1 11.4zM239.9 213.4c-6.3-12.5-21.5-17.5-33.9-11.2-12.5 6.3-17.5 21.5-11.2 33.9 6.3 12.5 21.5 17.5 33.9 11.2 12.4-6.2 17.5-21.2 11.3-33.7 0-.1 0-.1-.1-.2zM284 211.6c-6.9-4.5-16.1-2.6-20.5 4.3-4.5 6.9-2.6 16.1 4.3 20.5 6.9 4.5 16.1 2.6 20.5-4.3 4.5-6.8 2.6-16-4.3-20.5zM332.4 173.7c.4-7-4.9-12.9-11.9-13.3-7-.4-12.9 4.9-13.3 11.9-.4 7 4.9 12.9 11.9 13.3 6.9.4 12.9-5 13.3-11.9zM367.3 164.7c-4.5-.3-8.4 3.2-8.6 7.7s3.2 8.4 7.7 8.6c4.5.3 8.3-3.2 8.6-7.7.2-4.5-3.2-8.3-7.7-8.6zM334.4 245.7c-4.8-3.1-11.2-1.8-14.4 3-3.1 4.8-1.8 11.2 3 14.4 4.8 3.1 11.2 1.8 14.4-3 3.2-4.8 1.8-11.3-3-14.4zM102.6 321.9c-3.8-2.5-8.8-1.4-11.3 2.3-2.5 3.8-1.4 8.8 2.3 11.3 3.8 2.5 8.8 1.4 11.3-2.3 2.6-3.7 1.5-8.8-2.3-11.3zM273.8 321.1c-4 2-5.6 7-3.6 11 2 4 7 5.6 11 3.6 4-2 5.6-6.9 3.6-10.9-2-4.1-6.9-5.8-11-3.7.1 0 0 0 0 0zM179 238.7c7.6-11.7 4.4-27.3-7.3-35-11.7-7.6-27.3-4.4-35 7.3s-4.4 27.3 7.3 35c4.1 2.7 8.9 4.1 13.8 4.1 8.6.1 16.5-4.2 21.2-11.4zM128.5 277.4c-5.8-3.8-13.7-2.2-17.5 3.6-3.8 5.8-2.2 13.7 3.6 17.5s13.7 2.2 17.5-3.6c3.9-5.8 2.3-13.7-3.6-17.5zM187.4 325.7c-5.7-.3-10.6 4.1-11 9.8s4.1 10.6 9.8 11c5.7.3 10.6-4 11-9.7.3-5.8-4.1-10.7-9.8-11.1zM187.5 260.4c-8.2-.5-15.2 5.8-15.6 14-.5 8.2 5.8 15.2 14 15.6 8.2.4 15.2-5.8 15.6-14 .5-8.1-5.8-15.2-14-15.6zM248.2 276.4c-6.2 3.2-8.7 10.8-5.5 17 3.2 6.2 10.8 8.7 17 5.5 6.2-3.1 8.7-10.7 5.6-16.9-3.2-6.2-10.8-8.8-17.1-5.6z"
+        fill={forceColor ?? '#0033ad'}
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconJUSD({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 1024 1024"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill={forceColor ?? 'url(#jusd_a)'}
+        d="M512 0C229.248 0 0 229.248 0 512s229.248 512 512 512 512-229.248 512-512S794.752 0 512 0Z"
+      />
+      <path
+        fill="#fff"
+        d="M664.414 589.056c-7.851-18.261-19.456-34.816-34.816-49.835-15.36-14.848-32.085-28.842-50.517-41.984-18.432-13.141-35.499-25.77-51.542-38.058-16.042-12.288-28.501-24.576-37.546-37.035-9.046-12.459-11.776-25.429-8.363-39.253 4.267-16.896 14.507-28.16 30.891-33.792 16.384-5.632 35.669-5.632 58.026 0 12.971 3.242 27.819 8.192 37.888 14.336 44.032 26.965 40.448 73.216 40.448 73.216l1.707.512 45.227 11.264 20.992-84.139s-36.352-23.893-64.342-37.717c-16.042-8.022-36.01-16.043-54.954-22.358l21.674-87.04-53.589-13.312-21.504 86.358c-24.064-4.267-46.763-5.291-68.096-2.902-27.819 2.902-51.2 11.264-70.315 25.088-18.944 13.654-31.573 32.768-37.546 57.174-5.803 23.21-4.95 43.861 2.56 62.293 7.509 18.432 19.114 35.157 34.645 50.517 15.531 15.19 32.427 29.184 50.859 42.155 18.432 12.8 35.498 25.6 51.541 38.059 15.872 12.458 28.331 25.088 37.205 38.058 8.875 12.8 11.435 26.795 7.68 41.984-4.608 18.774-16.042 30.72-34.133 36.182-18.091 5.461-38.571 5.29-61.269-.342-8.022-2.048-17.579-5.461-27.136-9.728-27.99-12.117-48.128-36.352-54.272-64.512l-1.707-7.68-46.933-11.776-20.31 81.579c13.824 9.557 27.648 19.797 56.32 34.304 24.235 12.288 44.032 20.821 71.68 28.501l-20.992 84.31 53.59 13.312 21.504-86.528c20.138 2.56 39.765 3.072 58.538 1.194 30.379-3.072 56.32-12.117 77.654-27.136 21.333-15.018 35.328-36.01 42.154-63.146 5.803-23.211 4.779-43.862-3.072-62.123h.171Z"
+      />
+      <defs>
+        <linearGradient id="jusd_a" x1={512} x2={512} y1={0} y2={1024} gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F7911A" />
+          <stop offset={1} stopColor="#F57F00" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconJUICE({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 90 90"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill={forceColor ?? 'url(#juice_a)'}
+        d="M45 0C20.149 0 0 20.149 0 45s20.149 45 45 45 45-20.149 45-45S69.851 0 45 0Z"
+      />
+      <path
+        fill="#fff"
+        d="M62.654 27.039a12.748 12.748 0 0 0 7.58-7.481 12.755 12.755 0 0 0-10.617-.86 12.747 12.747 0 0 0-7.58 7.481 12.754 12.754 0 0 0 10.617.86ZM45.356 30.841c13.053 0 23.673 10.62 23.673 23.673 0 13.052-10.62 23.672-23.673 23.672-13.052 0-23.672-10.62-23.672-23.672 0-13.053 10.62-23.673 23.672-23.673Zm0-2.7c-14.564 0-26.372 11.808-26.372 26.373 0 14.564 11.808 26.372 26.372 26.372 14.565 0 26.373-11.808 26.373-26.372 0-14.565-11.808-26.373-26.373-26.373Z"
+      />
+      <path
+        fill="#fff"
+        d="M45.633 58.577 31.091 27.394a7.133 7.133 0 0 0-4.054-3.714l-11.752-4.278 1.078-2.96 11.752 4.277a10.273 10.273 0 0 1 5.832 5.343l14.541 31.183-2.855 1.332Z"
+      />
+      <path
+        fill="#fff"
+        d="M23.768 53.195c-.027.437-.04.875-.04 1.316 0 11.946 9.683 21.63 21.628 21.63 11.946 0 21.63-9.684 21.63-21.63 0-.465-.016-.927-.045-1.383-14.391-11.5-28.782 11.576-43.173.067Z"
+      />
+      <defs>
+        <linearGradient id="juice_a" x1={45} x2={45} y1={0} y2={90} gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F7911A" />
+          <stop offset={1} stopColor="#F57F00" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+function DfxAssetIconFIRO({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 150 150"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <style>{`.firo-color{fill:${forceColor ?? '#9b1c2e'}}`}</style>
+      </defs>
+      <path d="M0 .2h150v150H0Z" style={{ fill: 'none' }} transform="translate(0 -.2)" />
+      <path
+        d="M49 101.45a3.88 3.88 0 0 0 3.46-2.09l9.2-17.47H47.44a3.9 3.9 0 0 1-3.9-3.9v-7.83a3.9 3.9 0 0 1 3.9-3.9h22.49l17.47-33.1a3.94 3.94 0 0 1 3.46-2.09h29.44a62.58 62.58 0 0 0-101.7 70.42H49Z"
+        className="firo-color"
+      />
+      <path
+        d="M100.66 46.66a3.85 3.85 0 0 0-3.45 2.14L88 66.22h14.22a3.9 3.9 0 0 1 3.89 3.9v7.83a3.9 3.9 0 0 1-3.89 3.9H79.73l-17.47 33.09a3.91 3.91 0 0 1-3.46 2.09H29.36a62.58 62.58 0 0 0 101.71-70.41h-30.41Z"
+        className="firo-color"
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconICP({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 500 500"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="icp_a" x1={314.25} y1={145.37} x2={482.63} y2={318.83} gradientUnits="userSpaceOnUse">
+          <stop offset={0.21} stopColor={forceColor ?? '#F15A24'} />
+          <stop offset={0.68} stopColor={forceColor ?? '#FBB03B'} />
+        </linearGradient>
+        <linearGradient id="icp_b" x1={184.81} y1={354.67} x2={16.43} y2={181.21} gradientUnits="userSpaceOnUse">
+          <stop offset={0.21} stopColor={forceColor ?? '#ED1E79'} />
+          <stop offset={0.89} stopColor={forceColor ?? '#522785'} />
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#icp_a)"
+        d="M378.3,127.2c-28,0-58.5,14.9-90.7,44.3c-15.3,13.8-28.6,28.8-38.4,40.7c0,0,15.7,17.7,32.9,36.6 c9.3-11.5,22.7-27.1,38.2-41.1c28.6-26.2,47.3-31.5,58.1-31.5c40.3,0,72.9,33,72.9,73.9c0,40.5-32.6,73.5-72.9,73.9 c-1.9,0-4.2-0.2-7-0.9c11.7,5.3,24.4,9.2,36.2,9.2c73.8,0,88.2-49.9,89-53.5c2.1-9.2,3.4-18.7,3.4-28.6 C499.8,182.4,445.3,127.2,378.3,127.2z"
+      />
+      <path
+        fill="url(#icp_b)"
+        d="M120.8,372.8c28,0,58.5-14.9,90.7-44.3 c15.3-13.8,28.6-28.8,38.4-40.7c0,0-15.7-17.7-32.9-36.6c-9.3,11.5-22.7,27.1-38.2,41.1c-28.6,26-47.5,31.5-58.1,31.5 c-40.3,0-72.9-33-72.9-73.9c0-40.5,32.6-73.5,72.9-73.9c1.9,0,4.2,0.2,7,0.9c-11.7-5.3-24.4-9.2-36.2-9.2c-73.8,0-88.2,49.9-89,53.5 c-2.1,9.2-3.4,18.7-3.4,28.6C-0.9,317.6,53.6,372.8,120.8,372.8z"
+      />
+      <path
+        fill={forceColor ?? '#29ABE2'}
+        d="M176.9,208.8c-8.1-7.7-47.5-39-85.2-40.1c-67.2-1.7-87,46.2-88.7,52.4c12.9-53.7,60.9-93.7,118-93.9 c46.5,0,93.5,44.7,128.3,85c0.1-0.1,0.1-0.1,0.2-0.2c0,0,15.7,17.7,32.9,36.6c0,0,19.5,22.6,40.3,42.4c8.1,7.7,47.3,38.6,85,39.6 c69.1,1.9,88.2-48.6,89.2-52.4c-12.7,53.9-60.8,94.2-118.1,94.4c-46.5,0-93.6-44.7-128.5-85c-0.1,0.1-0.1,0.2-0.2,0.2 c0,0-15.7-17.7-32.9-36.6C217.1,251.2,197.6,228.6,176.9,208.8z"
+      />
+    </svg>
+  );
+}
+
 function DfxAssetIconEUR({ forceColor }: BaseAssetIconProps) {
   const sizeContext = useContext(SizeContext);
   return (
@@ -4620,6 +5631,119 @@ function DfxAssetIconGBP({ forceColor }: BaseAssetIconProps) {
       fill={forceColor ?? '#012479'}
     >
       <path d="M500.496 5C223.572 5 5 229.506 5 500.002c0 276.43 224.506 495.001 495.002 495.001 276.43 0 495.001-224.506 495.001-495.001C995.003 226.539 773.464 5 500.496 5zM275.001 803.135v-73.188h60.33V511.375h-54.396c-6.923 0-5.934.99-5.934-3.956v-56.374c0-4.945-2.967-3.956 4.945-3.956h57.363c0-20.769-.99-37.582-1.978-53.406 0-7.913-.99-14.836-.99-22.748 0-35.604.99-59.34 10.88-96.923 16.813-63.297 58.352-102.858 129.56-122.638 61.32-16.813 138.463-.989 210.66 46.484 3.957 2.967 3.957 2.967-.988 8.9-4.945 5.935-20.77 29.671-43.517 52.419-2.967 2.967.99 3.956-6.923 0-33.626-19.78-68.242-34.616-107.802-33.627-102.858 2.967-98.902 57.363-98.902 217.583l4.945 3.956h161.21v58.352c0 5.934 0 5.934-4.946 5.934h-159.23c-1.979 76.154-1.979 145.385-1.979 216.594 78.132 0 157.253 0 236.375-1.978V628.08c0-6.923-.99-3.956 1.978-3.956h77.143v179.012z"></path>
+    </svg>
+  );
+}
+
+function DfxAssetIconCkBTC({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle cx="16" cy="16" r="16" fill={forceColor ?? '#1B1D36'} />
+      <circle cx="16" cy="16" r="12.5" fill={forceColor ?? '#522785'} />
+      <circle cx="16" cy="16" r="12.5" stroke={forceColor ?? '#6B3FA0'} strokeWidth="1" />
+      <path
+        d="M19.5141 9.30328L20.3141 6.30338L18.5141 5.80339L17.8142 8.7033C17.3142 8.6033 16.8142 8.5033 16.3142 8.40331L17.0142 5.40341L15.1143 5.00342L14.4143 8.00332C14.0143 7.90332 13.6143 7.80333 13.2143 7.70333L10.7144 7.10335L10.2144 9.10328C10.2144 9.10328 11.6144 9.40327 11.5144 9.40327C12.2144 9.60327 12.4143 10.1033 12.4143 10.5032L10.3144 18.703C10.2144 18.903 10.0144 19.303 9.41444 19.103L8.11449 18.803L7.21452 20.9029L9.61444 21.5029L10.9144 21.8029L10.1144 24.8028L11.9144 25.3028L12.7143 22.3029C13.2143 22.4029 13.7143 22.6028 14.2143 22.7028L13.5143 25.7027L15.3143 26.2027L16.1142 23.2028C19.2141 23.8028 21.614 23.6028 22.614 20.7029C23.414 18.403 22.614 17.103 20.9141 16.303C22.114 16.0031 23.014 15.2031 23.214 13.6031C23.514 11.3032 21.914 10.1033 19.5141 9.30328ZM19.0141 19.4029C18.4142 21.7029 14.6143 20.4029 13.4143 20.1029L14.4143 16.1031C15.6142 16.403 19.6141 17.003 19.0141 19.4029ZM19.6141 13.5031C19.1141 15.6031 15.9142 14.5031 14.9143 14.3031L15.8142 10.6032C16.8142 10.8032 20.1141 11.3032 19.6141 13.5031Z"
+        fill="white"
+      />
+    </svg>
+  );
+}
+
+function DfxAssetIconVEUR({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="veur_bg" x1="16" y1="0" x2="16" y2="32" gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#D4B44A'} />
+          <stop offset="1" stopColor={forceColor ?? '#B8943A'} />
+        </linearGradient>
+      </defs>
+      <circle cx="16" cy="16" r="16" fill="url(#veur_bg)" />
+      <circle cx="16" cy="16" r="14.5" stroke={forceColor ?? '#C9A840'} strokeWidth="0.5" fill="none" />
+      <text
+        x="16"
+        y="15"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={forceColor ?? '#1A2744'}
+        fontFamily="Arial, Helvetica, sans-serif"
+        fontWeight="bold"
+        fontSize="10"
+      >
+        EUR
+      </text>
+      <text
+        x="16"
+        y="23"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={forceColor ?? '#1A2744'}
+        fontFamily="Arial, Helvetica, sans-serif"
+        fontWeight="bold"
+        fontSize="5.5"
+      >
+        VNX
+      </text>
+    </svg>
+  );
+}
+
+function DfxAssetIconVCHF({ forceColor }: BaseAssetIconProps) {
+  const sizeContext = useContext(SizeContext);
+  return (
+    <svg
+      width={SIZE_MAPS[sizeContext]}
+      height={SIZE_MAPS[sizeContext]}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="vchf_bg" x1="16" y1="0" x2="16" y2="32" gradientUnits="userSpaceOnUse">
+          <stop stopColor={forceColor ?? '#D4B44A'} />
+          <stop offset="1" stopColor={forceColor ?? '#B8943A'} />
+        </linearGradient>
+      </defs>
+      <circle cx="16" cy="16" r="16" fill="url(#vchf_bg)" />
+      <circle cx="16" cy="16" r="14.5" stroke={forceColor ?? '#C9A840'} strokeWidth="0.5" fill="none" />
+      <text
+        x="16"
+        y="15"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={forceColor ?? '#1A2744'}
+        fontFamily="Arial, Helvetica, sans-serif"
+        fontWeight="bold"
+        fontSize="10"
+      >
+        CHF
+      </text>
+      <text
+        x="16"
+        y="23"
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill={forceColor ?? '#1A2744'}
+        fontFamily="Arial, Helvetica, sans-serif"
+        fontWeight="bold"
+        fontSize="5.5"
+      >
+        VNX
+      </text>
     </svg>
   );
 }

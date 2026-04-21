@@ -3,7 +3,7 @@ import { Blockchain } from '../definitions/blockchain';
 import { ApiError } from '../definitions/error';
 import { useApiSession } from '../hooks/api-session.hook';
 import { useAuthContext } from './auth.context';
-import { useAuth } from '../hooks/auth.hook';
+import { AuthWalletType } from '../definitions/auth';
 
 export interface SessionInterface {
   address?: string;
@@ -20,6 +20,9 @@ export interface SessionInterface {
     discount?: string,
     wallet?: string,
     ref?: string,
+    walletType?: AuthWalletType,
+    recommendationCode?: string,
+    language?: string,
   ) => Promise<string>;
   login: (address?: string, signature?: string, discount?: string) => Promise<string | undefined>;
   signUp: (
@@ -30,6 +33,10 @@ export interface SessionInterface {
     discount?: string,
   ) => Promise<string | undefined>;
   logout: () => Promise<void>;
+  tokenStore: {
+    get: (address: string) => string | undefined;
+    set: (address: string, token: string | null) => void;
+  };
 }
 
 const SessionContext = createContext<SessionInterface>(undefined as any);
@@ -61,10 +68,12 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     createSessionNew: createApiSessionNew,
     deleteSession,
   } = useApiSession();
-  const { authenticationToken } = useAuthContext();
+  const { getAuthToken, setAuthToken } = useAuthContext();
   const [needsSignUp, setNeedsSignUp] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [storedSignature, setStoredSignature] = useState<string>();
+  const [storedAddress, setStoredAddress] = useState<string>();
+  const tokenCache = useRef<Map<string, string>>(new Map());
 
   const firstRender = useRef(true);
   useEffect(() => {
@@ -75,8 +84,25 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
 
     if (!data.address || data.address !== session?.address) {
       deleteSession();
+      setStoredAddress(undefined);
+    } else {
+      setStoredAddress(data.address);
     }
   }, [data.address]);
+
+  const tokenStore = useMemo(
+    () => ({
+      get: (address: string) => tokenCache.current.get(address),
+      set: (address: string, token: string | null) => {
+        if (token) {
+          tokenCache.current.set(address, token);
+        } else {
+          tokenCache.current.delete(address);
+        }
+      },
+    }),
+    [],
+  );
 
   async function authenticate(
     address: string,
@@ -85,18 +111,31 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     discount?: string,
     wallet?: string,
     ref?: string,
+    walletType?: AuthWalletType,
+    recommendationCode?: string,
+    language?: string,
   ): Promise<string> {
     setIsProcessing(true);
-    return createApiSessionNew(address, signature, key, discount, wallet, ref).finally(() => setIsProcessing(false));
+    return createApiSessionNew(
+      address,
+      signature,
+      key,
+      discount,
+      wallet,
+      ref,
+      walletType,
+      recommendationCode,
+      language,
+    ).finally(() => setIsProcessing(false));
   }
 
   async function login(
-    address = data.address,
+    address = storedAddress,
     signature = storedSignature,
     discount = data.discount,
   ): Promise<string | undefined> {
     if (!address) throw new Error('Address is not defined');
-    if (isLoggedIn && session?.address === address) authenticationToken;
+    if (isLoggedIn && session?.address === address && getAuthToken()) return getAuthToken();
 
     signature ??= await getSignature(address);
 
@@ -120,7 +159,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
   }
 
   async function signUp(
-    address = data.address,
+    address = storedAddress,
     signature = storedSignature,
     wallet = data.wallet,
     ref = data.ref,
@@ -138,6 +177,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
 
   async function logout(): Promise<void> {
     setNeedsSignUp(false);
+    setStoredAddress(undefined);
     await deleteSession();
   }
 
@@ -150,7 +190,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
 
   const context = useMemo(
     () => ({
-      address: data.address,
+      address: storedAddress,
       blockchain: data.blockchain,
       availableBlockchains: session?.blockchains,
       isInitialized,
@@ -161,18 +201,19 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       login,
       signUp,
       logout,
+      tokenStore,
     }),
     [
-      data.address,
+      storedAddress,
       data.blockchain,
       session,
       isInitialized,
       isLoggedIn,
       needsSignUp,
       isProcessing,
-      login,
-      signUp,
-      logout,
+      getAuthToken,
+      setAuthToken,
+      tokenStore,
     ],
   );
 

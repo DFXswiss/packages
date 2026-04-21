@@ -7,6 +7,11 @@ import StyledLoadingSpinner, { SpinnerSize, SpinnerVariant } from './StyledLoadi
 interface ExpansionItem {
   label: string;
   text: string;
+  infoText?: string;
+  icon?: IconVariant;
+  iconColor?: IconColor;
+  onClick?: () => void;
+  isCopy?: boolean;
 }
 
 interface StyledDataTableExpandableRowProps extends PropsWithChildren {
@@ -16,12 +21,13 @@ interface StyledDataTableExpandableRowProps extends PropsWithChildren {
   infoText?: string;
   noPadding?: boolean;
   isExpanded?: boolean;
-  expansionItems: ExpansionItem[];
+  expansionItems?: ExpansionItem[];
+  expansionContent?: JSX.Element;
 }
 
 const ALIGN_MAPS: Record<AlignContent, string> = {
-  [AlignContent.LEFT]: ' justify-start',
-  [AlignContent.RIGHT]: ' justify-end',
+  [AlignContent.LEFT]: ' justify-start text-left',
+  [AlignContent.RIGHT]: ' justify-end text-right',
   [AlignContent.BETWEEN]: ' justify-between',
 };
 
@@ -33,13 +39,14 @@ export default function StyledDataTableExpandableRow({
   infoText,
   noPadding,
   expansionItems,
+  expansionContent,
   ...props
 }: StyledDataTableExpandableRowProps) {
   const theme = useContext(ThemeContext);
 
   let wrapperClasses = 'flex flex-col text-sm';
-  let labelClasses = ' ';
-  let rowDataClasses = 'flex gap-3 w-full';
+  let labelClasses = '';
+  let rowDataClasses = '';
   let separatorClasses = 'border-b my-2.5';
 
   discreet && (wrapperClasses += ' opacity-70');
@@ -64,6 +71,7 @@ export default function StyledDataTableExpandableRow({
   rowDataClasses += ALIGN_MAPS[theme.alignContent];
 
   const [isExpanded, setIsExpanded] = useState(false);
+  const [copiedItems, setCopiedItems] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (props.isExpanded != null) {
@@ -71,25 +79,38 @@ export default function StyledDataTableExpandableRow({
     }
   }, [props.isExpanded]);
 
+  const handleCopy = (label: string) => {
+    setCopiedItems((prev) => new Set(prev).add(label));
+    setTimeout(() => {
+      setCopiedItems((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(label);
+        return newSet;
+      });
+    }, 1000);
+  };
+
+  const hasExpansionItems = !!expansionItems?.length;
+  const hasExpansionContent = !!expansionContent;
+  const hasExpansion = hasExpansionItems || hasExpansionContent;
+
   return (
     <div className={wrapperClasses}>
-      <div className="flex">
-        {label && (
-          <div className={`flex-none ${theme.minWidth ? 'w-48' : ''}`}>
-            <p className={labelClasses}>{label}</p>
-          </div>
-        )}
-
+      <div className="flex w-full justify-between">
+        {label && <p className={labelClasses}>{label}</p>}
         <div className={rowDataClasses}>
           {isLoading ? (
-            <StyledLoadingSpinner size={SpinnerSize.SM} variant={SpinnerVariant.PALE} />
+            <StyledLoadingSpinner
+              size={SpinnerSize.SM}
+              variant={theme.darkTheme ? SpinnerVariant.DARK_MODE : SpinnerVariant.LIGHT_MODE}
+            />
           ) : (
             <div
               className={`w-full cursor-pointer flex flex-row gap-2 ${ALIGN_MAPS[theme.alignContent]}`}
               onClick={() => setIsExpanded((e) => !e)}
             >
               {children}
-              {expansionItems.length > 0 && (
+              {hasExpansion && (
                 <DfxIcon icon={isExpanded ? IconVariant.EXPAND_LESS : IconVariant.EXPAND_MORE} size={IconSize.LG} />
               )}
             </div>
@@ -98,26 +119,54 @@ export default function StyledDataTableExpandableRow({
       </div>
       {!isLoading && (
         <>
-          {infoText && (
-            <div className="mt-2">
-              <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
-                {infoText}
-              </StyledInfoText>
-            </div>
-          )}
-          {expansionItems.length > 0 && isExpanded && (
-            <div>
-              <div className={separatorClasses} />
-
-              {expansionItems.map(({ label, text }) => (
-                <div key={label} className="flex">
-                  <div className={`flex-none ${theme.minWidth ? 'w-48' : ''}`}>
-                    <p className={labelClasses}>{label}</p>
-                  </div>
-
-                  <div className={rowDataClasses}>{text}</div>
+          {hasExpansion && isExpanded && (
+            <div className="flex flex-col w-full">
+              {infoText ? (
+                <div className="flex justify-start text-left mt-1">
+                  <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
+                    {infoText}
+                  </StyledInfoText>
                 </div>
-              ))}
+              ) : (
+                <></>
+              )}
+              <div className={separatorClasses} />
+              {expansionItems?.map(({ label, text, infoText, icon, iconColor, onClick, isCopy }) => {
+                const isCopied = copiedItems.has(label);
+                const displayIcon = isCopy ? (isCopied ? IconVariant.CHECK : IconVariant.COPY) : icon;
+                const handleClick = isCopy
+                  ? () => {
+                      handleCopy(label);
+                      onClick?.();
+                    }
+                  : onClick;
+
+                return (
+                  <div key={label} className="flex flex-col w-full">
+                    <div className="flex w-full justify-between">
+                      <p className={labelClasses}>{label}</p>
+                      <button
+                        className="flex flex-row items-center gap-2"
+                        onClick={handleClick}
+                        disabled={!handleClick}
+                      >
+                        <p className={rowDataClasses}>{text}</p>
+                        {displayIcon && <DfxIcon icon={displayIcon} color={iconColor} size={IconSize.SM} />}
+                      </button>
+                    </div>
+                    <div className="flex justify-start text-left my-1">
+                      {infoText && (
+                        <StyledInfoText textSize={StyledInfoTextSize.XS} iconColor={IconColor.GRAY} discreet>
+                          {infoText.split('\n').map((line) => (
+                            <div key={line}>{line}</div>
+                          ))}
+                        </StyledInfoText>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+              <div className="mt-1">{expansionContent}</div>
             </div>
           )}
         </>

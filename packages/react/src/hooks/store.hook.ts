@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 export interface StoreInterface {
-  authenticationToken: {
+  authTokenStore: {
     get: () => string | undefined;
     set: (token: string) => void;
     remove: () => void;
@@ -13,28 +13,14 @@ enum StoreKey {
 }
 
 export function useStore(): StoreInterface {
-  const { localStorage } = window;
-
-  function set(key: StoreKey, value: string) {
-    localStorage.setItem(key, value);
-  }
-
-  function get(key: StoreKey): string | undefined {
-    return localStorage.getItem(key) ?? undefined;
-  }
-
-  function remove(key: StoreKey) {
-    localStorage.removeItem(key);
-  }
-
   return useMemo(
     () => ({
-      authenticationToken: {
-        get: () => get(StoreKey.AUTH_TOKEN),
-        set: (value: string) => set(StoreKey.AUTH_TOKEN, value),
-        remove: () => remove(StoreKey.AUTH_TOKEN),
+      authTokenStore: {
+        get: () => window.localStorage.getItem(StoreKey.AUTH_TOKEN) ?? undefined,
+        set: (value: string) => window.localStorage.setItem(StoreKey.AUTH_TOKEN, value),
+        remove: () => window.localStorage.removeItem(StoreKey.AUTH_TOKEN),
       },
     }),
-    [],
+    [], // No dependencies - this object should be stable
   );
 }

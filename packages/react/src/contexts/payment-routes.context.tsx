@@ -1,0 +1,281 @@
+import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  AssignPaymentLink,
+  CreatePaymentLink,
+  CreatePaymentLinkPayment,
+  PaymentLink,
+  PaymentLinkConfig,
+  PaymentRoute,
+  PaymentRoutes,
+  PaymentRouteType,
+  UpdatePaymentLink,
+  UpdatePaymentLinkConfig,
+} from '../definitions/route';
+import { usePaymentRoutes } from '../hooks/payment-routes.hook';
+import { ApiError } from '../definitions/error';
+import { useUserContext } from './user.context';
+
+interface PaymentRoutesInterface {
+  paymentRoutes?: PaymentRoutes;
+  paymentRoutesLoading: boolean;
+  paymentLinks?: PaymentLink[];
+  paymentLinksLoading: boolean;
+  userPaymentLinksConfig?: PaymentLinkConfig;
+  userPaymentLinksConfigLoading: boolean;
+  createPaymentLink: (request: CreatePaymentLink) => Promise<PaymentLink | undefined>;
+  updatePaymentLink: (
+    request: UpdatePaymentLink,
+    linkId?: string,
+    externalLinkId?: string,
+    externalPaymentId?: string,
+  ) => Promise<void>;
+  assignPaymentLink: (request: AssignPaymentLink, linkId?: string, externalLinkId?: string) => Promise<void>;
+  updateUserPaymentLinksConfig: (config: UpdatePaymentLinkConfig) => Promise<void>;
+  createPaymentLinkPayment: (
+    request: CreatePaymentLinkPayment,
+    linkId?: string,
+    externalLinkId?: string,
+  ) => Promise<void>;
+  cancelPaymentLinkPayment: (linkId?: string, externalLinkId?: string, externalPaymentId?: string) => Promise<void>;
+  deletePaymentRoute: (id: number, type: PaymentRouteType) => Promise<void>;
+  error?: string;
+}
+
+const PaymentRoutesContext = createContext<PaymentRoutesInterface>(undefined as any);
+
+export function usePaymentRoutesContext(): PaymentRoutesInterface {
+  return useContext(PaymentRoutesContext);
+}
+
+export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Element {
+  const { user } = useUserContext();
+  const {
+    getPaymentRoutes,
+    getPaymentLinks,
+    createPaymentLink: createPaymentLinkApi,
+    updatePaymentLink: updatePaymentLinkApi,
+    assignPaymentLink: assignPaymentLinkApi,
+    createPaymentLinkPayment: createPaymentLinkPaymentApi,
+    cancelPaymentLinkPayment: cancelPaymentLinkPaymentApi,
+    deletePaymentRoute: deletePaymentRouteApi,
+    getUserPaymentLinksConfig: getUserPaymentLinksConfigApi,
+    updateUserPaymentLinksConfig: updateUserPaymentLinksConfigApi,
+  } = usePaymentRoutes();
+  const [error, setError] = useState<string | undefined>();
+  const [paymentRoutes, setPaymentRoutes] = useState<PaymentRoutes>();
+  const [paymentLinks, setPaymentLinks] = useState<PaymentLink[]>();
+  const [paymentRoutesLoading, setPaymentRoutesLoading] = useState<boolean>(true);
+  const [paymentLinksLoading, setPaymentLinksLoading] = useState<boolean>(true);
+  const [userPaymentLinksConfig, setUserPaymentLinksConfig] = useState<PaymentLinkConfig>();
+  const [userPaymentLinksConfigLoading, setUserPaymentLinksConfigLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!user) {
+      setPaymentRoutes(undefined);
+      setPaymentLinks(undefined);
+      setUserPaymentLinksConfig(undefined);
+      return;
+    }
+
+    loadPaymentRoutes();
+    loadPaymentLinks();
+    loadUserPaymentLinksConfig();
+  }, [user]);
+
+  async function createPaymentLink(request: CreatePaymentLink): Promise<PaymentLink | undefined> {
+    if (!user) return;
+
+    setPaymentLinksLoading(true);
+    try {
+      const paymentLink = await createPaymentLinkApi(request);
+      updatePaymentLinks(paymentLink);
+      return paymentLink;
+    } finally {
+      setPaymentLinksLoading(false);
+    }
+  }
+
+  async function updatePaymentLink(
+    request: UpdatePaymentLink,
+    linkId?: string,
+    externalLinkId?: string,
+    externalPaymentId?: string,
+  ): Promise<void> {
+    if (!user) return;
+
+    setPaymentLinksLoading(true);
+    return updatePaymentLinkApi(request, linkId, externalLinkId, externalPaymentId)
+      .then(updatePaymentLinks)
+      .finally(() => setPaymentLinksLoading(false));
+  }
+
+  async function assignPaymentLink(
+    request: AssignPaymentLink,
+    linkId?: string,
+    externalLinkId?: string,
+  ): Promise<void> {
+    setPaymentLinksLoading(true);
+    return assignPaymentLinkApi(request, linkId, externalLinkId)
+      .then(updatePaymentLinks)
+      .finally(() => setPaymentLinksLoading(false));
+  }
+
+  async function createPaymentLinkPayment(
+    request: CreatePaymentLinkPayment,
+    linkId?: string,
+    externalLinkId?: string,
+  ): Promise<void> {
+    if (!user) return;
+
+    setPaymentLinksLoading(true);
+    return createPaymentLinkPaymentApi(request, linkId, externalLinkId)
+      .then(updatePaymentLinks)
+      .finally(() => setPaymentLinksLoading(false));
+  }
+
+  async function cancelPaymentLinkPayment(
+    linkId?: string,
+    externalLinkId?: string,
+    externalPaymentId?: string,
+  ): Promise<void> {
+    if (!user) return;
+
+    setPaymentLinksLoading(true);
+    return cancelPaymentLinkPaymentApi(linkId, externalLinkId, externalPaymentId)
+      .then(updatePaymentLinks)
+      .finally(() => setPaymentLinksLoading(false));
+  }
+
+  async function deletePaymentRoute(id: number, type: PaymentRouteType): Promise<void> {
+    if (!user) return;
+
+    setPaymentRoutesLoading(true);
+    return deletePaymentRouteApi(id, type)
+      .then(() => {
+        setPaymentRoutes((routes) => {
+          if (!routes) return;
+          if (type === 'buy') routes.buy = routes.buy.filter((route) => route.id !== id);
+          else if (type === 'sell') routes.sell = routes.sell.filter((route) => route.id !== id);
+          else if (type === 'swap') routes.swap = routes.swap.filter((route) => route.id !== id);
+          return routes;
+        });
+      })
+      .then(loadPaymentLinks)
+      .finally(() => setPaymentRoutesLoading(false));
+  }
+
+  async function loadPaymentRoutes(): Promise<void> {
+    if (!user) return;
+
+    setPaymentRoutesLoading(true);
+    return getPaymentRoutes()
+      .then((routes: PaymentRoutes) => {
+        routes.buy = routes.buy.filter((route) => route.active).sort(sortRoutes);
+        routes.sell = routes.sell.filter((route) => route.active).sort(sortRoutes);
+        routes.swap = routes.swap.filter((route) => route.active).sort(sortRoutes);
+        setPaymentRoutes(routes);
+      })
+      .catch((error: ApiError) => setError(error.message ?? 'Unknown error'))
+      .finally(() => setPaymentRoutesLoading(false));
+  }
+
+  async function loadPaymentLinks(): Promise<void> {
+    if (!user?.paymentLink.active) {
+      setPaymentLinksLoading(false);
+      return;
+    }
+
+    setPaymentLinksLoading(true);
+    return getPaymentLinks()
+      .then((links) => setPaymentLinks(links as PaymentLink[]))
+      .catch((error: ApiError) => {
+        if (error.message === 'permission denied') {
+          setPaymentLinks([]);
+        } else {
+          setError(error.message ?? 'Unknown error');
+        }
+      })
+      .finally(() => setPaymentLinksLoading(false));
+  }
+
+  async function loadUserPaymentLinksConfig(): Promise<void> {
+    if (!user) return;
+
+    setUserPaymentLinksConfigLoading(true);
+    return getUserPaymentLinksConfigApi()
+      .then(setUserPaymentLinksConfig)
+      .catch((error: ApiError) => setError(error.message ?? 'Unknown error'))
+      .finally(() => setUserPaymentLinksConfigLoading(false));
+  }
+
+  function updatePaymentLinks(paymentLink: PaymentLink): void {
+    setPaymentLinks((links) => {
+      if (!links) return [paymentLink];
+      const index = links.findIndex((l) => l.id === paymentLink.id);
+      if (index !== -1) {
+        links[index] = paymentLink;
+      } else {
+        links.push(paymentLink);
+      }
+      return links;
+    });
+  }
+
+  async function updateUserPaymentLinksConfig(config: UpdatePaymentLinkConfig): Promise<void> {
+    if (!user) return;
+
+    setUserPaymentLinksConfigLoading(true);
+    return updateUserPaymentLinksConfigApi(config)
+      .then(() => setUserPaymentLinksConfig((prevConfig) => ({ ...prevConfig, ...config })))
+      .then(loadPaymentLinks)
+      .finally(() => setUserPaymentLinksConfigLoading(false));
+  }
+
+  function sortRoutes(a: PaymentRoute, b: PaymentRoute): number {
+    if ('asset' in a && 'asset' in b) {
+      return a.asset.blockchain.localeCompare(b.asset.blockchain);
+    } else if ('currency' in a && 'currency' in b) {
+      return a.currency.name.localeCompare(b.currency.name);
+    } else {
+      return 0;
+    }
+  }
+
+  const context: PaymentRoutesInterface = useMemo(
+    () => ({
+      paymentRoutes,
+      paymentRoutesLoading,
+      paymentLinksLoading,
+      paymentLinks,
+      userPaymentLinksConfig,
+      userPaymentLinksConfigLoading,
+      createPaymentLink,
+      updatePaymentLink,
+      assignPaymentLink,
+      updateUserPaymentLinksConfig,
+      createPaymentLinkPayment,
+      cancelPaymentLinkPayment,
+      deletePaymentRoute,
+      error,
+    }),
+    [
+      user,
+      paymentRoutes,
+      paymentRoutesLoading,
+      paymentLinks,
+      paymentLinksLoading,
+      userPaymentLinksConfig,
+      userPaymentLinksConfigLoading,
+      error,
+      createPaymentLink,
+      updatePaymentLink,
+      assignPaymentLink,
+      updateUserPaymentLinksConfig,
+      createPaymentLinkPayment,
+      cancelPaymentLinkPayment,
+      deletePaymentRoute,
+    ],
+  );
+
+  return <PaymentRoutesContext.Provider value={context}>{props.children}</PaymentRoutesContext.Provider>;
+}
