@@ -13,24 +13,26 @@ function createMockFetch(response: Partial<Response> & { ok: boolean; status: nu
   });
 }
 
+const noopFetch = jest.fn() as any;
+
 describe('DfxHttpClient', () => {
   describe('constructor', () => {
     it('strips trailing slash from apiUrl', () => {
-      const client = new DfxHttpClient({ apiUrl: 'https://api.dfx.swiss/v1/' });
+      const client = new DfxHttpClient({ apiUrl: 'https://api.dfx.swiss/v1/', fetchFn: noopFetch });
       expect(client.getApiUrl()).toBe('https://api.dfx.swiss/v1');
     });
   });
 
   describe('getBaseUrl', () => {
     it('strips version from apiUrl', () => {
-      const client = new DfxHttpClient({ apiUrl: 'https://api.dfx.swiss/v1' });
+      const client = new DfxHttpClient({ apiUrl: 'https://api.dfx.swiss/v1', fetchFn: noopFetch });
       expect(client.getBaseUrl()).toBe('https://api.dfx.swiss');
     });
   });
 
   describe('token management', () => {
     it('stores and retrieves token', () => {
-      const client = new DfxHttpClient({ apiUrl: 'https://api.dfx.swiss/v1' });
+      const client = new DfxHttpClient({ apiUrl: 'https://api.dfx.swiss/v1', fetchFn: noopFetch });
       expect(client.getToken()).toBeUndefined();
       client.setToken('test-token');
       expect(client.getToken()).toBe('test-token');
