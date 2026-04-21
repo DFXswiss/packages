@@ -9,39 +9,36 @@ import {
   TransactionHistoryQuery,
 } from '../definitions/transaction';
 import { PdfDocument } from '../definitions/buy';
+import { Utils } from '../utils';
 import { DfxHttpClient, ResponseType } from './DfxHttpClient';
 
 export class TransactionApi {
   constructor(private readonly http: DfxHttpClient) {}
 
   async list(userAddress?: string): Promise<Transaction[]> {
-    const query = userAddress ? `?userAddress=${encodeURIComponent(userAddress)}` : '';
+    const query = Utils.buildQuery({ userAddress });
     return this.http.request<Transaction[]>({ url: `${TransactionUrl.get}${query}`, method: 'GET' });
   }
 
   async getDetail(from?: string, to?: string): Promise<DetailTransaction[]> {
-    const params: string[] = [];
-    if (from) params.push(`from=${from}`);
-    if (to) params.push(`to=${to}`);
-    const query = params.length ? `?${params.join('&')}` : '';
+    const query = Utils.buildQuery({ from, to });
     return this.http.request<DetailTransaction[]>({ url: `${TransactionUrl.detail}${query}`, method: 'GET' });
   }
 
   async getSingle(params: { uid?: string; ckoId?: string; requestId?: string }): Promise<Transaction> {
-    const queryParts: string[] = [];
-    if (params.uid) queryParts.push(`uid=${params.uid}`);
-    if (params.ckoId) queryParts.push(`cko-id=${params.ckoId}`);
-    if (params.requestId) queryParts.push(`request-id=${params.requestId}`);
-    const queryStr = queryParts.length ? `?${queryParts.join('&')}` : '';
+    const query = Utils.buildQuery({
+      uid: params.uid,
+      'cko-id': params.ckoId,
+      'request-id': params.requestId,
+    });
     return this.http.request<Transaction>({
-      url: `${TransactionUrl.single}${queryStr}`,
+      url: `${TransactionUrl.single}${query}`,
       method: 'GET',
     });
   }
 
   async exportCsv(query: TransactionHistoryQuery): Promise<string> {
-    const params = this.buildFilterParams(query);
-    const queryStr = params ? `?${params}` : '';
+    const queryStr = this.buildFilterQuery(query);
     return this.http.request<string>({
       url: `${TransactionUrl.csv}${queryStr}`,
       method: 'PUT',
@@ -50,8 +47,7 @@ export class TransactionApi {
   }
 
   async getHistory(type: string, query: TransactionHistoryQuery): Promise<string> {
-    const params = this.buildFilterParams(query);
-    const queryStr = params ? `?${params}` : '';
+    const queryStr = this.buildFilterQuery(query);
     return this.http.request<string>({
       url: `transaction/${type}${queryStr}`,
       method: 'GET',
@@ -68,7 +64,8 @@ export class TransactionApi {
   }
 
   async setTarget(id: number, buyId: number): Promise<void> {
-    return this.http.request({ url: `${TransactionUrl.setTarget(id)}?buyId=${buyId}`, method: 'PUT' });
+    const query = Utils.buildQuery({ buyId });
+    return this.http.request({ url: `${TransactionUrl.setTarget(id)}${query}`, method: 'PUT' });
   }
 
   async getInvoice(id: number | string): Promise<PdfDocument> {
@@ -87,17 +84,17 @@ export class TransactionApi {
     return this.http.request({ url: TransactionUrl.refund(id), method: 'PUT', data });
   }
 
-  private buildFilterParams(query: TransactionHistoryQuery): string {
-    const params: string[] = [];
-    if (query.userAddress) params.push(`userAddress=${encodeURIComponent(query.userAddress)}`);
-    if (query.from) params.push(`from=${query.from instanceof Date ? query.from.toISOString() : query.from}`);
-    if (query.to) params.push(`to=${query.to instanceof Date ? query.to.toISOString() : query.to}`);
-    if (query.format) params.push(`format=${query.format}`);
-    if (query.buy !== undefined) params.push(`buy=${query.buy}`);
-    if (query.sell !== undefined) params.push(`sell=${query.sell}`);
-    if (query.staking !== undefined) params.push(`staking=${query.staking}`);
-    if (query.ref !== undefined) params.push(`ref=${query.ref}`);
-    if (query.lm !== undefined) params.push(`lm=${query.lm}`);
-    return params.join('&');
+  private buildFilterQuery(query: TransactionHistoryQuery): string {
+    return Utils.buildQuery({
+      userAddress: query.userAddress,
+      from: query.from,
+      to: query.to,
+      format: query.format,
+      buy: query.buy,
+      sell: query.sell,
+      staking: query.staking,
+      ref: query.ref,
+      lm: query.lm,
+    });
   }
 }

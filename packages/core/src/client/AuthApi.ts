@@ -1,5 +1,6 @@
 import { AuthUrl, AuthWalletType, SignMessage, SignIn, LnurlAuth, LnurlAuthStatus } from '../definitions/auth';
 import { ApiException } from '../definitions/error';
+import { Utils } from '../utils';
 import { DfxHttpClient } from './DfxHttpClient';
 
 export interface AuthenticateParams {
@@ -29,8 +30,9 @@ export class AuthApi {
   constructor(private readonly http: DfxHttpClient) {}
 
   async getSignMessage(address: string): Promise<string> {
+    const query = Utils.buildQuery({ address });
     const result = await this.http.request<SignMessage>({
-      url: `${AuthUrl.signMessage}?address=${encodeURIComponent(address)}`,
+      url: `${AuthUrl.signMessage}${query}`,
       method: 'GET',
       token: false,
     });
@@ -81,8 +83,9 @@ export class AuthApi {
   }
 
   async getLnurlAuth(k1: string): Promise<LnurlAuthStatus> {
+    const query = Utils.buildQuery({ k1 });
     return this.http.request<LnurlAuthStatus>({
-      url: `${AuthUrl.lnurlStatus}?k1=${encodeURIComponent(k1)}`,
+      url: `${AuthUrl.lnurlStatus}${query}`,
       method: 'GET',
       token: false,
     });
