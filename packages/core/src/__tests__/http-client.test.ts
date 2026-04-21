@@ -1,15 +1,15 @@
 import { DfxHttpClient, ResponseType } from '../client/DfxHttpClient';
 import { ApiException } from '../definitions/error';
 
-function createMockFetch(response: Partial<Response> & { ok: boolean; status: number }) {
+function createMockFetch(response: { ok: boolean; status: number; statusText?: string; json?: jest.Mock; text?: jest.Mock; blob?: jest.Mock; headers?: any }) {
   return jest.fn().mockResolvedValue({
     ok: response.ok,
     status: response.status,
     statusText: response.statusText ?? '',
     json: response.json ?? jest.fn().mockResolvedValue(undefined),
     text: response.text ?? jest.fn().mockResolvedValue(''),
-    blob: response.blob ?? jest.fn().mockResolvedValue(new Blob()),
-    headers: response.headers ?? new Headers(),
+    blob: response.blob ?? jest.fn().mockResolvedValue({}),
+    headers: response.headers ?? { entries: () => [] },
   });
 }
 
