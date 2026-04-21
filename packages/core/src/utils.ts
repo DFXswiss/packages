@@ -52,6 +52,21 @@ export class Utils {
       .join('&');
   }
 
+  static buildQuery(params: { [key: string]: string | number | boolean | string[] | Date | undefined }): string {
+    const parts: string[] = [];
+    for (const [key, value] of Object.entries(params)) {
+      if (value === undefined) continue;
+      if (value instanceof Date) {
+        parts.push(`${key}=${encodeURIComponent(value.toISOString())}`);
+      } else if (Array.isArray(value)) {
+        if (value.length) parts.push(`${key}=${value.map((v) => encodeURIComponent(v)).join(',')}`);
+      } else {
+        parts.push(`${key}=${encodeURIComponent(String(value))}`);
+      }
+    }
+    return parts.length ? `?${parts.join('&')}` : '';
+  }
+
   static toBase64(file: File): Promise<string | undefined> {
     return new Promise<string | undefined>((resolve, reject) => {
       const reader = new FileReader();

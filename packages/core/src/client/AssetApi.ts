@@ -1,5 +1,6 @@
 import { Asset, AssetUrl } from '../definitions/asset';
 import { Blockchain } from '../definitions/blockchain';
+import { Utils } from '../utils';
 import { DfxHttpClient } from './DfxHttpClient';
 
 export interface AssetListParams {
@@ -11,14 +12,10 @@ export class AssetApi {
   constructor(private readonly http: DfxHttpClient) {}
 
   async list(params?: AssetListParams): Promise<Asset[]> {
-    const queryParts: string[] = [];
-    if (params?.blockchains?.length) {
-      queryParts.push(`blockchains=${params.blockchains.join(',')}`);
-    }
-    if (params?.includePrivate) {
-      queryParts.push('includePrivate=true');
-    }
-    const query = queryParts.length ? `?${queryParts.join('&')}` : '';
+    const query = Utils.buildQuery({
+      blockchains: params?.blockchains,
+      includePrivate: params?.includePrivate || undefined,
+    });
     return this.http.request<Asset[]>({ url: `${AssetUrl.get}${query}`, method: 'GET', token: false });
   }
 }
