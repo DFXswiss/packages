@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
@@ -53,3 +55,11 @@ jobs:
 
           npx lerna version --conventional-commits --conventional-graduate --yes
           npx lerna publish from-git --yes
+
+      - name: "Sync main back to develop"
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git fetch origin develop:develop
+          git checkout develop
+          git merge main -X theirs -m "chore: sync main into develop after release [skip ci]"
+          git push origin develop
