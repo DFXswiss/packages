@@ -30,6 +30,7 @@ import {
   UserData,
   buildKycUrl,
 } from '../definitions/kyc';
+import { Utils } from '../utils';
 import { DfxHttpClient } from './DfxHttpClient';
 
 export class KycApi {
@@ -50,7 +51,7 @@ export class KycApi {
   }
 
   async check2fa(level?: TfaLevel): Promise<TfaSetup> {
-    const query = level ? `?level=${level}` : '';
+    const query = Utils.buildQuery({ level });
     return this.http.request<TfaSetup>({ url: `kyc/2fa${query}`, method: 'GET', version: 'v2' });
   }
 
@@ -61,15 +62,12 @@ export class KycApi {
   }
 
   async continue(code: string, autoStep = false): Promise<KycSession> {
-    const query = autoStep ? '?autoStep=true' : '';
+    const query = Utils.buildQuery({ autoStep: autoStep || undefined });
     return this.kycRequest<KycSession>(code, { url: this.kycUrl(`kyc${query}`), method: 'PUT' });
   }
 
   async startStep(code: string, stepName: KycStepName, type?: KycStepType, sequence?: number): Promise<KycStepSession> {
-    const params: string[] = [];
-    if (type) params.push(`type=${type}`);
-    if (sequence !== undefined) params.push(`sequence=${sequence}`);
-    const query = params.length ? `?${params.join('&')}` : '';
+    const query = Utils.buildQuery({ type, sequence });
     return this.kycRequest<KycStepSession>(code, { url: this.kycUrl(`kyc/${stepName}${query}`), method: 'GET' });
   }
 
@@ -118,8 +116,8 @@ export class KycApi {
   }
 
   async getFinancialData(code: string, url: string, lang?: string): Promise<KycFinancialQuestions> {
-    const fullUrl = lang ? `${url}?lang=${lang}` : url;
-    return this.kycRequest<KycFinancialQuestions>(code, { url: fullUrl, method: 'GET' });
+    const query = Utils.buildQuery({ lang });
+    return this.kycRequest<KycFinancialQuestions>(code, { url: `${url}${query}`, method: 'GET' });
   }
 
   async setFinancialData(code: string, url: string, data: KycFinancialResponses): Promise<KycStepBase> {
@@ -147,12 +145,12 @@ export class KycApi {
   }
 
   async setup2fa(code: string, level?: TfaLevel): Promise<TfaSetup> {
-    const query = level ? `?level=${level}` : '';
-    return this.kycRequest<TfaSetup>(code, { url: this.tfaUrl(query), method: 'POST' });
+    const query = Utils.buildQuery({ level });
+    return this.kycRequest<TfaSetup>(code, { url: `${this.http.getBaseUrl()}/v2/kyc/2fa${query}`, method: 'POST' });
   }
 
   async verify2fa(code: string, token: string): Promise<void> {
-    return this.kycRequest(code, { url: `${this.tfaUrl('')}/verify`, method: 'POST', data: { token } });
+    return this.kycRequest(code, { url: `${this.http.getBaseUrl()}/v2/kyc/2fa/verify`, method: 'POST', data: { token } });
   }
 
   async increaseLimit(code: string, data: LimitRequest): Promise<void> {
@@ -190,16 +188,13 @@ export class KycApi {
     return `${v2Base}/${path}`;
   }
 
-  private tfaUrl(query: string): string {
-    return `${this.http.getBaseUrl()}/v2/kyc/2fa${query}`;
-  }
-
   private limitUrl(): string {
     return `${this.http.getBaseUrl()}/v2/kyc/limit`;
   }
 
   private transferUrl(client: string): string {
-    return `${this.http.getBaseUrl()}/v2/kyc/transfer?client=${encodeURIComponent(client)}`;
+    const query = Utils.buildQuery({ client });
+    return `${this.http.getBaseUrl()}/v2/kyc/transfer${query}`;
   }
 
   private async kycRequest<T>(code: string, config: { url: string; method: 'GET' | 'PUT' | 'POST' | 'DELETE'; data?: any; noJson?: boolean }): Promise<T> {

@@ -11,17 +11,14 @@ import {
   PaymentLinkPos,
 } from '../definitions/route';
 import { CustomFile } from '../definitions/file';
+import { Utils } from '../utils';
 import { DfxHttpClient, ResponseType } from './DfxHttpClient';
 
 export class PaymentLinksApi {
   constructor(private readonly http: DfxHttpClient) {}
 
   async list(params?: { linkId?: string; externalLinkId?: string; externalPaymentId?: string }): Promise<PaymentLink | PaymentLink[]> {
-    const queryParts: string[] = [];
-    if (params?.linkId) queryParts.push(`linkId=${params.linkId}`);
-    if (params?.externalLinkId) queryParts.push(`externalLinkId=${params.externalLinkId}`);
-    if (params?.externalPaymentId) queryParts.push(`externalPaymentId=${params.externalPaymentId}`);
-    const query = queryParts.length ? `?${queryParts.join('&')}` : '';
+    const query = Utils.buildQuery(params ?? {});
     return this.http.request<PaymentLink | PaymentLink[]>({ url: `${PaymentLinksUrl.get}${query}`, method: 'GET' });
   }
 
@@ -30,13 +27,13 @@ export class PaymentLinksApi {
   }
 
   async update(params: Record<string, string>, data: UpdatePaymentLink): Promise<PaymentLink> {
-    const query = Object.entries(params).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
-    return this.http.request<PaymentLink>({ url: `${PaymentLinksUrl.update}?${query}`, method: 'PUT', data });
+    const query = Utils.buildQuery(params);
+    return this.http.request<PaymentLink>({ url: `${PaymentLinksUrl.update}${query}`, method: 'PUT', data });
   }
 
   async assign(params: Record<string, string>, data: AssignPaymentLink): Promise<PaymentLink> {
-    const query = Object.entries(params).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
-    return this.http.request<PaymentLink>({ url: `${PaymentLinksUrl.assign}?${query}`, method: 'PUT', data });
+    const query = Utils.buildQuery(params);
+    return this.http.request<PaymentLink>({ url: `${PaymentLinksUrl.assign}${query}`, method: 'PUT', data });
   }
 
   async getRecipient(route: string): Promise<PaymentLinkRecipient> {
@@ -52,26 +49,26 @@ export class PaymentLinksApi {
   }
 
   async createPayment(params: Record<string, string>, data: CreatePaymentLinkPayment): Promise<PaymentLink> {
-    const query = Object.entries(params).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
-    return this.http.request<PaymentLink>({ url: `${PaymentLinksUrl.payment}?${query}`, method: 'POST', data });
+    const query = Utils.buildQuery(params);
+    return this.http.request<PaymentLink>({ url: `${PaymentLinksUrl.payment}${query}`, method: 'POST', data });
   }
 
   async cancelPayment(params: Record<string, string>): Promise<PaymentLink> {
-    const query = Object.entries(params).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
-    return this.http.request<PaymentLink>({ url: `${PaymentLinksUrl.payment}?${query}`, method: 'DELETE' });
+    const query = Utils.buildQuery(params);
+    return this.http.request<PaymentLink>({ url: `${PaymentLinksUrl.payment}${query}`, method: 'DELETE' });
   }
 
   async getStickers(params: Record<string, string>): Promise<CustomFile> {
-    const query = Object.entries(params).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
+    const query = Utils.buildQuery(params);
     return this.http.request<CustomFile>({
-      url: `${PaymentLinksUrl.stickers}?${query}`,
+      url: `${PaymentLinksUrl.stickers}${query}`,
       method: 'GET',
       responseType: ResponseType.BLOB,
     });
   }
 
   async createPos(params: Record<string, string>): Promise<PaymentLinkPos> {
-    const query = Object.entries(params).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
-    return this.http.request<PaymentLinkPos>({ url: `${PaymentLinksUrl.pos}?${query}`, method: 'PUT' });
+    const query = Utils.buildQuery(params);
+    return this.http.request<PaymentLinkPos>({ url: `${PaymentLinksUrl.pos}${query}`, method: 'PUT' });
   }
 }

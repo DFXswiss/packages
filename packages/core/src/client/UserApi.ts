@@ -2,6 +2,7 @@ import { SignIn } from '../definitions/auth';
 import { PhoneCallTime } from '../definitions/user';
 import { User, UserUrl, UpdateUser, Referral, ApiKey, UserProfile } from '../definitions/user';
 import { TransactionFilter } from '../definitions/transaction';
+import { Utils } from '../utils';
 import { DfxHttpClient, SpecialHandling } from './DfxHttpClient';
 
 export class UserApi {
@@ -66,15 +67,13 @@ export class UserApi {
   }
 
   async addSpecialCode(code: string): Promise<void> {
-    return this.http.request({ url: `${UserUrl.specialCodes}?code=${encodeURIComponent(code)}`, method: 'PUT' });
+    const query = Utils.buildQuery({ code });
+    return this.http.request({ url: `${UserUrl.specialCodes}${query}`, method: 'PUT' });
   }
 
   async generateApiKey(type: string, filter?: Record<string, boolean>): Promise<ApiKey> {
-    const queryParts = filter
-      ? Object.entries(filter).map(([k, v]) => `${k}=${v}`).join('&')
-      : '';
-    const url = queryParts ? `${UserUrl.apiKey}/${type}?${queryParts}` : `${UserUrl.apiKey}/${type}`;
-    return this.http.request<ApiKey>({ url, method: 'POST' });
+    const query = filter ? Utils.buildQuery(filter) : '';
+    return this.http.request<ApiKey>({ url: `${UserUrl.apiKey}/${type}${query}`, method: 'POST' });
   }
 
   async deleteApiKey(type: string): Promise<void> {
@@ -82,7 +81,7 @@ export class UserApi {
   }
 
   async updateApiFilter(type: string, filter: Record<string, boolean>): Promise<TransactionFilter[]> {
-    const queryParts = Object.entries(filter).map(([k, v]) => `${k}=${v}`).join('&');
-    return this.http.request<TransactionFilter[]>({ url: `${UserUrl.apiFilter}/${type}?${queryParts}`, method: 'PUT' });
+    const query = Utils.buildQuery(filter);
+    return this.http.request<TransactionFilter[]>({ url: `${UserUrl.apiFilter}/${type}${query}`, method: 'PUT' });
   }
 }
