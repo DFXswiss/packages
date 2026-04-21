@@ -76,7 +76,10 @@ export class DfxHttpClient {
 
     let response: Response;
     try {
-      response = await this.fetchFn(config.url, this.buildInit(config.method, token, config.data, config.noJson, config.headers));
+      response = await this.fetchFn(
+        config.url,
+        this.buildInit(config.method, token, config.data, config.noJson, config.headers),
+      );
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
       throw new ApiException(0, `Network error: ${message}`);

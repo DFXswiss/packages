@@ -77,19 +77,30 @@ export function useApiSession(): ApiSessionInterface {
       recommendationCode?: string,
       language?: string,
     ) => {
-      return authenticate(address, signature, key, discount, wallet, ref, walletType, recommendationCode, language).then(
-        ({ accessToken }) => {
-          setAuthToken(accessToken);
-          return accessToken;
-        },
-      );
+      return authenticate(
+        address,
+        signature,
+        key,
+        discount,
+        wallet,
+        ref,
+        walletType,
+        recommendationCode,
+        language,
+      ).then(({ accessToken }) => {
+        setAuthToken(accessToken);
+        return accessToken;
+      });
     },
     [authenticate, setAuthToken],
   );
 
-  const updateSession = useCallback((token: string) => {
-    setAuthToken(token);
-  }, [setAuthToken]);
+  const updateSession = useCallback(
+    (token: string) => {
+      setAuthToken(token);
+    },
+    [setAuthToken],
+  );
 
   const deleteSession = useCallback(async (): Promise<void> => {
     setAuthToken(undefined);

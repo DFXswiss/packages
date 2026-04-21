@@ -40,13 +40,22 @@ export function useBankAccount(): BankAccountInterface {
     );
   }, []);
 
-  const createAccount = useCallback(async (newAccount: CreateBankAccount): Promise<BankAccount> => {
-    return call<BankAccount>({ url: BankAccountUrl.create, method: 'POST', data: newAccount });
-  }, [call]);
+  const createAccount = useCallback(
+    async (newAccount: CreateBankAccount): Promise<BankAccount> => {
+      return call<BankAccount>({ url: BankAccountUrl.create, method: 'POST', data: newAccount });
+    },
+    [call],
+  );
 
-  const updateAccount = useCallback(async (id: number, changedAccount: UpdateBankAccount): Promise<BankAccount> => {
-    return call<BankAccount>({ url: BankAccountUrl.update(id), method: 'PUT', data: changedAccount });
-  }, [call]);
+  const updateAccount = useCallback(
+    async (id: number, changedAccount: UpdateBankAccount): Promise<BankAccount> => {
+      return call<BankAccount>({ url: BankAccountUrl.update(id), method: 'PUT', data: changedAccount });
+    },
+    [call],
+  );
 
-  return useMemo(() => ({ getAccounts, getAccount, createAccount, updateAccount }), [getAccounts, getAccount, createAccount, updateAccount]);
+  return useMemo(
+    () => ({ getAccounts, getAccount, createAccount, updateAccount }),
+    [getAccounts, getAccount, createAccount, updateAccount],
+  );
 }

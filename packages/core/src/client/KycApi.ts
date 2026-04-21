@@ -150,7 +150,11 @@ export class KycApi {
   }
 
   async verify2fa(code: string, token: string): Promise<void> {
-    return this.kycRequest(code, { url: `${this.http.getBaseUrl()}/v2/kyc/2fa/verify`, method: 'POST', data: { token } });
+    return this.kycRequest(code, {
+      url: `${this.http.getBaseUrl()}/v2/kyc/2fa/verify`,
+      method: 'POST',
+      data: { token },
+    });
   }
 
   async increaseLimit(code: string, data: LimitRequest): Promise<void> {
@@ -197,7 +201,10 @@ export class KycApi {
     return `${this.http.getBaseUrl()}/v2/kyc/transfer${query}`;
   }
 
-  private async kycRequest<T>(code: string, config: { url: string; method: 'GET' | 'PUT' | 'POST' | 'DELETE'; data?: any; noJson?: boolean }): Promise<T> {
+  private async kycRequest<T>(
+    code: string,
+    config: { url: string; method: 'GET' | 'PUT' | 'POST' | 'DELETE'; data?: any; noJson?: boolean },
+  ): Promise<T> {
     return this.http.requestAbsolute<T>({
       ...config,
       token: false,

@@ -79,7 +79,7 @@ export const PaymentLinkBlockchain = {
   SOLANA: Blockchain.SOLANA,
 } as const;
 
-export type PaymentLinkBlockchain = typeof PaymentLinkBlockchain[keyof typeof PaymentLinkBlockchain];
+export type PaymentLinkBlockchain = (typeof PaymentLinkBlockchain)[keyof typeof PaymentLinkBlockchain];
 
 export interface MinAmount {
   amount: number;

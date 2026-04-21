@@ -82,76 +82,103 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     }
   }, [isLoggedIn, reloadUser]);
 
-  const updateUser = useCallback(async (update: UpdateUser, linkAction?: () => void): Promise<void> => {
-    if (!user) return;
+  const updateUser = useCallback(
+    async (update: UpdateUser, linkAction?: () => void): Promise<void> => {
+      if (!user) return;
 
-    setIsUserUpdating(true);
-    return updateUserApi(update, linkAction)
-      .then(setUser)
-      .finally(() => setIsUserUpdating(false));
-  }, [user, updateUserApi]);
+      setIsUserUpdating(true);
+      return updateUserApi(update, linkAction)
+        .then(setUser)
+        .finally(() => setIsUserUpdating(false));
+    },
+    [user, updateUserApi],
+  );
 
-  const updateMail = useCallback(async (mail: string): Promise<void> => {
-    return updateMailApi(mail);
-  }, [updateMailApi]);
+  const updateMail = useCallback(
+    async (mail: string): Promise<void> => {
+      return updateMailApi(mail);
+    },
+    [updateMailApi],
+  );
 
-  const verifyMail = useCallback(async (token: string): Promise<void> => {
-    if (!user) return;
+  const verifyMail = useCallback(
+    async (token: string): Promise<void> => {
+      if (!user) return;
 
-    setIsUserUpdating(true);
-    return verifyMailApi(token)
-      .then(setUser)
-      .finally(() => setIsUserUpdating(false));
-  }, [user, verifyMailApi]);
+      setIsUserUpdating(true);
+      return verifyMailApi(token)
+        .then(setUser)
+        .finally(() => setIsUserUpdating(false));
+    },
+    [user, verifyMailApi],
+  );
 
-  const updatePhone = useCallback(async (phone: string): Promise<void> => {
-    return updateUser({ phone });
-  }, [updateUser]);
+  const updatePhone = useCallback(
+    async (phone: string): Promise<void> => {
+      return updateUser({ phone });
+    },
+    [updateUser],
+  );
 
-  const updateLanguage = useCallback(async (language: Language): Promise<void> => {
-    return updateUser({ language });
-  }, [updateUser]);
+  const updateLanguage = useCallback(
+    async (language: Language): Promise<void> => {
+      return updateUser({ language });
+    },
+    [updateUser],
+  );
 
-  const updateCurrency = useCallback(async (currency: Fiat): Promise<void> => {
-    return updateUser({ currency });
-  }, [updateUser]);
+  const updateCurrency = useCallback(
+    async (currency: Fiat): Promise<void> => {
+      return updateUser({ currency });
+    },
+    [updateUser],
+  );
 
-  const renameAddress = useCallback(async (address: string, label: string): Promise<void> => {
-    if (!user) return;
+  const renameAddress = useCallback(
+    async (address: string, label: string): Promise<void> => {
+      if (!user) return;
 
-    setIsUserUpdating(true);
-    return renameUserAddress(address, label)
-      .then(setUser)
-      .finally(() => setIsUserUpdating(false));
-  }, [user, renameUserAddress]);
+      setIsUserUpdating(true);
+      return renameUserAddress(address, label)
+        .then(setUser)
+        .finally(() => setIsUserUpdating(false));
+    },
+    [user, renameUserAddress],
+  );
 
-  const changeAddress = useCallback(async (address: string): Promise<void> => {
-    if (!user) return;
+  const changeAddress = useCallback(
+    async (address: string): Promise<void> => {
+      if (!user) return;
 
-    setIsUserUpdating(true);
-    return changeUserAddress(address)
-      .then(({ accessToken }) => updateSession(accessToken))
-      .then(() => setUser({ ...user, activeAddress: user.addresses.find((a) => a.address === address) }))
-      .finally(() => setIsUserUpdating(false));
-  }, [user, changeUserAddress, updateSession]);
+      setIsUserUpdating(true);
+      return changeUserAddress(address)
+        .then(({ accessToken }) => updateSession(accessToken))
+        .then(() => setUser({ ...user, activeAddress: user.addresses.find((a) => a.address === address) }))
+        .finally(() => setIsUserUpdating(false));
+    },
+    [user, changeUserAddress, updateSession],
+  );
 
-  const deleteAddress = useCallback(async (address: string): Promise<void> => {
-    if (!user) return;
+  const deleteAddress = useCallback(
+    async (address: string): Promise<void> => {
+      if (!user) return;
 
-    const requiresFallback = address === user.activeAddress?.address;
-    const fallbackAddress =
-      requiresFallback && user.addresses.length > 1
-        ? user.addresses.find((a) => a.address !== address)?.address
-        : undefined;
+      const requiresFallback = address === user.activeAddress?.address;
+      const fallbackAddress =
+        requiresFallback && user.addresses.length > 1
+          ? user.addresses.find((a) => a.address !== address)?.address
+          : undefined;
 
-    return deleteUserAddress(address).then(() => {
-      if (requiresFallback) {
-        fallbackAddress ? changeAddress(fallbackAddress) : deleteSession();
-      } else {
-        reloadUser();
-      }
-    });
-  }, [user, deleteUserAddress, changeAddress, deleteSession, reloadUser]);
+      return deleteUserAddress(address).then(() => {
+        if (requiresFallback) {
+          fallbackAddress ? changeAddress(fallbackAddress) : deleteSession();
+        } else {
+          reloadUser();
+        }
+      });
+    },
+    [user, deleteUserAddress, changeAddress, deleteSession, reloadUser],
+  );
 
   const deleteAccount = useCallback(async (): Promise<void> => {
     if (!user) return;
@@ -159,18 +186,21 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     return deleteUserAccount().then(deleteSession);
   }, [user, deleteUserAccount, deleteSession]);
 
-  const generateKeyCT = useCallback(async (types?: TransactionFilterKey[]): Promise<ApiKey | undefined> => {
-    if (!user) return;
+  const generateKeyCT = useCallback(
+    async (types?: TransactionFilterKey[]): Promise<ApiKey | undefined> => {
+      if (!user) return;
 
-    setIsUserUpdating(true);
-    try {
-      const key = await generateCTApiKey(types);
-      await getUser().then(setUser);
-      return key;
-    } finally {
-      setIsUserUpdating(false);
-    }
-  }, [user, generateCTApiKey, getUser]);
+      setIsUserUpdating(true);
+      try {
+        const key = await generateCTApiKey(types);
+        await getUser().then(setUser);
+        return key;
+      } finally {
+        setIsUserUpdating(false);
+      }
+    },
+    [user, generateCTApiKey, getUser],
+  );
 
   const deleteKeyCT = useCallback(async (): Promise<void> => {
     if (!user) return;
@@ -181,14 +211,17 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       .finally(() => setIsUserUpdating(false));
   }, [user, deleteCTApiKey, getUser]);
 
-  const updateFilterCT = useCallback(async (types?: TransactionFilterKey[]): Promise<void> => {
-    if (!user) return;
+  const updateFilterCT = useCallback(
+    async (types?: TransactionFilterKey[]): Promise<void> => {
+      if (!user) return;
 
-    setIsUserUpdating(true);
-    updateCTApiFilter(types)
-      .then(() => getUser().then(setUser))
-      .finally(() => setIsUserUpdating(false));
-  }, [user, updateCTApiFilter, getUser]);
+      setIsUserUpdating(true);
+      updateCTApiFilter(types)
+        .then(() => getUser().then(setUser))
+        .finally(() => setIsUserUpdating(false));
+    },
+    [user, updateCTApiFilter, getUser],
+  );
 
   const updateCallSettings = useCallback(
     async (preferredPhoneTimes?: PhoneCallTime[], acceptCall?: boolean): Promise<void> => {

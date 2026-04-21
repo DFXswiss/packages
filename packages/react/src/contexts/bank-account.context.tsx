@@ -58,28 +58,34 @@ export function BankAccountContextProvider(props: PropsWithChildren): JSX.Elemen
     }
   }, [isLoggedIn, getAccounts]);
 
-  const addNewAccount = useCallback(async (newAccount: CreateBankAccount): Promise<BankAccount> => {
-    setIsLoading(true);
-    return createAccount(newAccount)
-      .then((b) => {
-        setBankAccounts((accounts) => {
-          const exists = accounts?.some((a) => a.active && a.id === b.id);
-          return exists ? accounts : (accounts ?? []).concat(b);
-        });
-        return b;
-      })
-      .finally(() => setIsLoading(false));
-  }, [createAccount]);
+  const addNewAccount = useCallback(
+    async (newAccount: CreateBankAccount): Promise<BankAccount> => {
+      setIsLoading(true);
+      return createAccount(newAccount)
+        .then((b) => {
+          setBankAccounts((accounts) => {
+            const exists = accounts?.some((a) => a.active && a.id === b.id);
+            return exists ? accounts : (accounts ?? []).concat(b);
+          });
+          return b;
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [createAccount],
+  );
 
-  const updateExistingAccount = useCallback(async (id: number, changedAccount: UpdateBankAccount): Promise<BankAccount> => {
-    setIsLoading(true);
-    return updateAccount(id, changedAccount)
-      .then((b) => {
-        setBankAccounts((accounts) => updateLocal(b, accounts));
-        return b;
-      })
-      .finally(() => setIsLoading(false));
-  }, [updateAccount, updateLocal]);
+  const updateExistingAccount = useCallback(
+    async (id: number, changedAccount: UpdateBankAccount): Promise<BankAccount> => {
+      setIsLoading(true);
+      return updateAccount(id, changedAccount)
+        .then((b) => {
+          setBankAccounts((accounts) => updateLocal(b, accounts));
+          return b;
+        })
+        .finally(() => setIsLoading(false));
+    },
+    [updateAccount, updateLocal],
+  );
 
   const context: BankAccountInterface = useMemo(
     () => ({

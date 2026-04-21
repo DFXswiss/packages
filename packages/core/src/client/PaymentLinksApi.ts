@@ -17,7 +17,11 @@ import { DfxHttpClient, ResponseType } from './DfxHttpClient';
 export class PaymentLinksApi {
   constructor(private readonly http: DfxHttpClient) {}
 
-  async list(params?: { linkId?: string; externalLinkId?: string; externalPaymentId?: string }): Promise<PaymentLink | PaymentLink[]> {
+  async list(params?: {
+    linkId?: string;
+    externalLinkId?: string;
+    externalPaymentId?: string;
+  }): Promise<PaymentLink | PaymentLink[]> {
     const query = Utils.buildQuery(params ?? {});
     return this.http.request<PaymentLink | PaymentLink[]>({ url: `${PaymentLinksUrl.get}${query}`, method: 'GET' });
   }

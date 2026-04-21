@@ -14,10 +14,7 @@ export function useLanguage(): LanguageInterface {
     return call<Language[]>({ url: LanguageUrl.get, method: 'GET' });
   }, [call]);
 
-  const getDefaultLanguage = useCallback(
-    (languages: Language[] = []) => languages.find((f) => f.symbol === 'EN'),
-    [],
-  );
+  const getDefaultLanguage = useCallback((languages: Language[] = []) => languages.find((f) => f.symbol === 'EN'), []);
 
   return useMemo(
     () => ({

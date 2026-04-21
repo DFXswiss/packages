@@ -75,11 +75,14 @@ export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
     }
   }
 
-  const setAuthToken = useCallback((newToken?: string) => {
-    newToken ? authTokenStore.set(newToken) : authTokenStore.remove();
-    tokenRef.current = newToken;
-    setJwt(decodeJwt(newToken));
-  }, [authTokenStore]);
+  const setAuthToken = useCallback(
+    (newToken?: string) => {
+      newToken ? authTokenStore.set(newToken) : authTokenStore.remove();
+      tokenRef.current = newToken;
+      setJwt(decodeJwt(newToken));
+    },
+    [authTokenStore],
+  );
 
   const getAuthToken = useCallback((): string | undefined => {
     return tokenRef.current ?? authTokenStore.get();
