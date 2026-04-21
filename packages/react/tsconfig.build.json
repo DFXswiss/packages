@@ -5,5 +5,8 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "jsx": "react-jsx"
-  }
+  },
+  "references": [
+    { "path": "../core/tsconfig.build.json" }
+  ]
 }

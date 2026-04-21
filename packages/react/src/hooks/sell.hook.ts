@@ -25,7 +25,7 @@ export function useSell(): SellInterface {
 
   const confirmSell = useCallback(
     async (id: number, data: ConfirmSellData): Promise<Transaction> => {
-      return call<Transaction>({ url: SellUrl.confirm.replace(':id', id.toString()), method: 'PUT', data });
+      return call<Transaction>({ url: SellUrl.confirm(id), method: 'PUT', data });
     },
     [call],
   );

@@ -1,10 +1,2 @@
-export const BankUrl = {
-  get: 'bank',
-};
-
-export interface Bank {
-  name: string;
-  iban: string;
-  bic: string;
-  currency: string;
-}
+export { BankUrl } from '@dfx.swiss/core';
+export type { Bank } from '@dfx.swiss/core';

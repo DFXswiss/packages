@@ -45,7 +45,7 @@ export function useSwap(): SwapInterface {
 
   const confirmSwap = useCallback(
     async (id: number, data: ConfirmSwapData): Promise<Transaction> => {
-      return call<Transaction>({ url: SwapUrl.confirm.replace(':id', id.toString()), method: 'POST', data });
+      return call<Transaction>({ url: SwapUrl.confirm(id), method: 'POST', data });
     },
     [call],
   );

@@ -1,9 +1,2 @@
-export const LanguageUrl = { get: 'language' };
-
-export interface Language {
-  id: number;
-  name: string;
-  symbol: string;
-  foreignName: string;
-  enable: boolean;
-}
+export { LanguageUrl } from '@dfx.swiss/core';
+export type { Language } from '@dfx.swiss/core';

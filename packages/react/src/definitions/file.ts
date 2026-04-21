@@ -1,4 +1,1 @@
-export interface CustomFile {
-  data: Blob;
-  headers: Record<string, string>;
-}
+export type { CustomFile } from '@dfx.swiss/core';
