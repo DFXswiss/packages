@@ -13,7 +13,11 @@ export interface ApiError {
 }
 
 export class ApiException extends Error implements ApiError {
-  constructor(public readonly statusCode: number, message: string, public readonly code?: string) {
+  constructor(
+    public readonly statusCode: number,
+    message: string,
+    public readonly code?: string,
+  ) {
     super(message);
     this.name = 'ApiException';
     Object.setPrototypeOf(this, ApiException.prototype);
