@@ -41,6 +41,10 @@ export enum PhoneCallStatus {
   UNAVAILABLE = 'Unavailable',
   COMPLETED = 'Completed',
   FAILED = 'Failed',
+  REPEAT = 'Repeat',
+  USER_REJECTED = 'UserRejected',
+  SUSPICIOUS = 'Suspicious',
+  MANUAL_CHECK = 'ManualCheck',
 }
 
 export interface VolumeInformation {

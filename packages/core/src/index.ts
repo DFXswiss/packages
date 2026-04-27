@@ -17,6 +17,10 @@ export {
   // AML
   CheckStatus,
   AmlReason,
+  // Compliance
+  PendingReviewType,
+  PendingReviewStatus,
+  CallQueue,
   // Asset
   AssetUrl,
   AssetType,
@@ -116,6 +120,12 @@ export {
 export type {
   // Asset
   Asset,
+  // Compliance
+  PendingReviewSummaryEntry,
+  PendingReviewItem,
+  CallQueueSourceType,
+  CallQueueSummaryEntry,
+  CallQueueItem,
   // Auth
   SignMessage,
   SignIn,
