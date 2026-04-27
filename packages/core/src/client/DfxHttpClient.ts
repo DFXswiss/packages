@@ -72,7 +72,7 @@ export class DfxHttpClient {
 
   private async rawRequest<T>(config: RequestConfig): Promise<T> {
     const responseType = config.responseType ?? ResponseType.JSON;
-    const token = config.token === false ? undefined : (config.token ?? this.authToken);
+    const token = config.token === false ? undefined : config.token ?? this.authToken;
 
     let response: Response;
     try {
@@ -109,6 +109,7 @@ export class DfxHttpClient {
     throw new ApiException(
       body?.statusCode ?? response.status,
       body?.message ?? response.statusText ?? 'Unknown error',
+      body?.code,
     );
   }
 
