@@ -69,7 +69,7 @@ export const PaymentLinkBlockchain = {
   ETHEREUM: Blockchain.ETHEREUM,
   LIGHTNING: Blockchain.LIGHTNING,
   SPARK: Blockchain.SPARK,
-  ARK: Blockchain.ARK,
+  ARKADE: Blockchain.ARKADE,
   BITCOIN: Blockchain.BITCOIN,
   FIRO: Blockchain.FIRO,
   INTERNET_COMPUTER: Blockchain.INTERNET_COMPUTER,
@@ -79,7 +79,7 @@ export const PaymentLinkBlockchain = {
   SOLANA: Blockchain.SOLANA,
 } as const;
 
-export type PaymentLinkBlockchain = (typeof PaymentLinkBlockchain)[keyof typeof PaymentLinkBlockchain];
+export type PaymentLinkBlockchain = typeof PaymentLinkBlockchain[keyof typeof PaymentLinkBlockchain];
 
 export interface MinAmount {
   amount: number;
