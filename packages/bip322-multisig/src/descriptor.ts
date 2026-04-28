@@ -106,6 +106,9 @@ export function findAddress(desc: MultisigDescriptor, targetAddress: string, max
 export function buildSortedMultisigScript(pubkeys: Buffer[], threshold: number): Buffer {
   if (threshold < 1 || threshold > 16) throw new Error(`threshold out of range: ${threshold}`);
   if (pubkeys.length < 1 || pubkeys.length > 16) throw new Error(`pubkey count out of range: ${pubkeys.length}`);
+  if (threshold > pubkeys.length) {
+    throw new Error(`threshold ${threshold} exceeds pubkey count ${pubkeys.length} (would be unspendable)`);
+  }
   for (const pk of pubkeys) {
     if (pk.length !== 33) throw new Error(`pubkey must be 33 bytes (compressed), got ${pk.length}`);
     if (pk[0] !== 0x02 && pk[0] !== 0x03)

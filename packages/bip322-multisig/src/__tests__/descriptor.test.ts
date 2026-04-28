@@ -117,4 +117,9 @@ describe('p2wshAddress + buildSortedMultisigScript', () => {
     bad[0] = 0x05;
     expect(() => buildSortedMultisigScript([bad], 1)).toThrow(/0x02 or 0x03/);
   });
+
+  it('rejects threshold greater than pubkey count (unspendable script)', () => {
+    const pk = Buffer.from('02' + '11'.repeat(32), 'hex');
+    expect(() => buildSortedMultisigScript([pk, pk], 5)).toThrow(/exceeds pubkey count/);
+  });
 });
