@@ -1,4 +1,3 @@
-import * as crypto from 'crypto';
 import * as bitcoin from 'bitcoinjs-lib';
 import * as ecc from '@bitcoinerlab/secp256k1';
 import { findAddress, MultisigDescriptor, parseDescriptor, DerivedAddress } from './descriptor';
@@ -27,7 +26,7 @@ export function buildBip322Psbt(args: BuildPsbtArgs): BuiltPsbt {
     throw new Error(`Address ${args.address} not derivable from descriptor in first ${args.maxIndex ?? 200} indices`);
   }
 
-  const program = crypto.createHash('sha256').update(derived.witnessScript).digest();
+  const program = bitcoin.crypto.sha256(derived.witnessScript);
   const scriptPubKey = Buffer.concat([Buffer.from([0x00, 0x20]), program]);
 
   const messageHash = bip322MessageHash(args.message);
@@ -61,11 +60,8 @@ export function buildBip322Psbt(args: BuildPsbtArgs): BuiltPsbt {
 }
 
 function bip322MessageHash(message: string): Buffer {
-  const tagHash = crypto.createHash('sha256').update(TAG).digest();
-  return crypto
-    .createHash('sha256')
-    .update(Buffer.concat([tagHash, tagHash, Buffer.from(message, 'utf8')]))
-    .digest();
+  const tagHash = bitcoin.crypto.sha256(TAG);
+  return bitcoin.crypto.sha256(Buffer.concat([tagHash, tagHash, Buffer.from(message, 'utf8')]));
 }
 
 function buildToSpendTx(messageHash: Buffer, scriptPubKey: Buffer): bitcoin.Transaction {

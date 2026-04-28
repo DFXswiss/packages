@@ -3,11 +3,11 @@
     "target": "esnext",
     "module": "commonjs",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["jest", "node"],
+    "types": ["jest"],
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "strict": false,
     "skipLibCheck": true
   },
-  "include": ["./src/**/*.ts"]
+  "include": ["./src/**/*.ts", "./src/**/*.json"]
 }

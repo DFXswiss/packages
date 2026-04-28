@@ -1,7 +1,7 @@
-import * as crypto from 'crypto';
 import { BIP32Factory, BIP32Interface } from 'bip32';
 import * as ecc from '@bitcoinerlab/secp256k1';
 import { bech32 } from 'bech32';
+import { crypto as btcCrypto } from 'bitcoinjs-lib';
 
 const bip32 = BIP32Factory(ecc);
 
@@ -106,7 +106,7 @@ export function buildSortedMultisigScript(pubkeys: Buffer[], threshold: number):
 }
 
 export function p2wshAddress(witnessScript: Buffer): string {
-  const h = crypto.createHash('sha256').update(witnessScript).digest();
+  const h = btcCrypto.sha256(witnessScript);
   const words = [0, ...bech32.toWords(h)];
   return bech32.encode('bc', words);
 }
