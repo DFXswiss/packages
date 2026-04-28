@@ -35,6 +35,16 @@ export { useSupportChat } from './hooks/support.hook';
 
 // Definitions
 export { CheckStatus, AmlReason } from './definitions/aml';
+export {
+  PendingReviewType,
+  PendingReviewStatus,
+  CallQueue,
+  PendingReviewSummaryEntry,
+  PendingReviewItem,
+  CallQueueSourceType,
+  CallQueueSummaryEntry,
+  CallQueueItem,
+} from './definitions/compliance';
 export { Asset, AssetType, AssetCategory, AssetUrl } from './definitions/asset';
 export { BankAccount, BankAccountUrl } from './definitions/bank-account';
 export { Bank, BankUrl } from './definitions/bank';

@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.2-beta.3](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.2.2-beta.2...@dfx.swiss/core@0.2.2-beta.3) (2026-04-28)
+
+### Bug Fixes
+
+- prettier formatting in route.ts ([69ef425](https://github.com/DFXswiss/packages/commit/69ef4259b1bf1ddeeaa01c9c762efccdfbb598ea))
+
+## [0.2.2-beta.2](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.2.2-beta.1...@dfx.swiss/core@0.2.2-beta.2) (2026-04-28)
+
+### Bug Fixes
+
+- Arkade ([f4782a9](https://github.com/DFXswiss/packages/commit/f4782a9b0437661e06cc0b82cd7b39dd225f4499))
+- Arkade blockchain ([747f704](https://github.com/DFXswiss/packages/commit/747f7044d71294e0ca3c6519664c591eb4d2032a))
+
+## [0.2.2-beta.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.2.2-beta.0...@dfx.swiss/core@0.2.2-beta.1) (2026-04-27)
+
+**Note:** Version bump only for package @dfx.swiss/core
+
+## [0.2.2-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.2.1...@dfx.swiss/core@0.2.2-beta.0) (2026-04-27)
+
+**Note:** Version bump only for package @dfx.swiss/core
+
 ## [0.2.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.2.1-beta.0...@dfx.swiss/core@0.2.1) (2026-04-21)
 
 **Note:** Version bump only for package @dfx.swiss/core
