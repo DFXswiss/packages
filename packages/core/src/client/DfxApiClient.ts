@@ -1,4 +1,4 @@
-import { DfxHttpClient, DfxHttpClientConfig } from './DfxHttpClient';
+import { DfxHttpClient } from './DfxHttpClient';
 import { AuthApi } from './AuthApi';
 import { AssetApi } from './AssetApi';
 import { BankApi } from './BankApi';
