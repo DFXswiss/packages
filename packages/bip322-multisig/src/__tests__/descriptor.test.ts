@@ -34,6 +34,28 @@ describe('parseDescriptor', () => {
   it('rejects malformed descriptors', () => {
     expect(() => parseDescriptor('wsh(sortedmulti(2,plain-pubkey))')).toThrow();
   });
+
+  it('accepts apostrophe-style hardened paths (Bitcoin Core / Coldcard format)', () => {
+    const apo = testDescriptor.replace(/h(?=[/\]])/g, "'");
+    const d = parseDescriptor(apo);
+    expect(d.threshold).toBe(2);
+    expect(d.keys[0].originPath).toBe('48h/0h/0h/2h');
+  });
+
+  it('accepts descriptors with whitespace and newlines', () => {
+    const withSpaces = testDescriptor
+      .replace('wsh(sortedmulti(2,', 'wsh(sortedmulti(2,\n  ')
+      .replace(/,\[/g, ',\n  [')
+      .replace('))#', '\n))#');
+    const d = parseDescriptor(withSpaces);
+    expect(d.threshold).toBe(2);
+    expect(d.keys).toHaveLength(3);
+  });
+
+  it('rejects descriptors with inconsistent receive/change branches', () => {
+    const inconsistent = testDescriptor.replace('<0;1>/*,', '<2;3>/*,');
+    expect(() => parseDescriptor(inconsistent)).toThrow(/Inconsistent/);
+  });
 });
 
 describe('deriveAddress', () => {
@@ -80,7 +102,19 @@ describe('p2wshAddress + buildSortedMultisigScript', () => {
   });
 
   it('rejects out-of-range threshold', () => {
-    expect(() => buildSortedMultisigScript([Buffer.alloc(33)], 0)).toThrow();
-    expect(() => buildSortedMultisigScript([Buffer.alloc(33)], 17)).toThrow();
+    expect(() => buildSortedMultisigScript([Buffer.from('02' + '00'.repeat(32), 'hex')], 0)).toThrow();
+    expect(() => buildSortedMultisigScript([Buffer.from('02' + '00'.repeat(32), 'hex')], 17)).toThrow();
+  });
+
+  it('rejects pubkeys that are not 33 bytes (compressed)', () => {
+    const uncompressed = Buffer.alloc(65);
+    uncompressed[0] = 0x04;
+    expect(() => buildSortedMultisigScript([uncompressed], 1)).toThrow(/33 bytes/);
+  });
+
+  it('rejects pubkeys with wrong leading byte', () => {
+    const bad = Buffer.alloc(33);
+    bad[0] = 0x05;
+    expect(() => buildSortedMultisigScript([bad], 1)).toThrow(/0x02 or 0x03/);
   });
 });

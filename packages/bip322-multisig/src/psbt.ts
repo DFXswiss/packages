@@ -1,8 +1,6 @@
 import * as bitcoin from 'bitcoinjs-lib';
-import * as ecc from '@bitcoinerlab/secp256k1';
 import { findAddress, MultisigDescriptor, parseDescriptor, DerivedAddress } from './descriptor';
-
-bitcoin.initEccLib(ecc);
+import './ecc-init';
 
 const TAG = Buffer.from('BIP0322-signed-message', 'utf8');
 

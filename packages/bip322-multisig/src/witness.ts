@@ -1,7 +1,5 @@
 import * as bitcoin from 'bitcoinjs-lib';
-import * as ecc from '@bitcoinerlab/secp256k1';
-
-bitcoin.initEccLib(ecc);
+import './ecc-init';
 
 export function extractBip322Signature(signedPsbtBase64: string): string {
   const psbt = bitcoin.Psbt.fromBase64(signedPsbtBase64);
