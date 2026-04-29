@@ -145,5 +145,6 @@ const StyledInput = forwardRef<HTMLInputElement, StyledInputProps>(
     );
   },
 );
+StyledInput.displayName = 'StyledInput';
 
 export default StyledInput;

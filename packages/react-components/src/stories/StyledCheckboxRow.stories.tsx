@@ -35,7 +35,7 @@ export const Checked: ComponentStory<typeof StyledCheckboxRow> = (args) => {
   return (
     <div className={whiteBG}>
       <StyledCheckboxRow {...args} isChecked={isChecked} onChange={setIsChecked}>
-        Don't show this again.
+        Don&apos;t show this again.
       </StyledCheckboxRow>
     </div>
   );

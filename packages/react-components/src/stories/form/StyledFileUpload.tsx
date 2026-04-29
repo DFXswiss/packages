@@ -23,7 +23,7 @@ interface StyledFileUploadContentProps extends StyledFileUploadProps {
   value: any;
 }
 
-const StyledFileUpload = forwardRef<HTMLInputElement, StyledFileUploadProps>((props: StyledFileUploadProps, ref) => {
+const StyledFileUpload = forwardRef<HTMLInputElement, StyledFileUploadProps>((props: StyledFileUploadProps, _ref) => {
   return (
     <Controller
       control={props.control}
@@ -37,11 +37,11 @@ const StyledFileUpload = forwardRef<HTMLInputElement, StyledFileUploadProps>((pr
 const Content = forwardRef<HTMLInputElement, StyledFileUploadContentProps>(
   (
     {
-      control,
-      name,
+      control: _control,
+      name: _name,
       label,
-      rules,
-      disabled = false,
+      rules: _rules,
+      disabled: _disabled = false,
       error,
       placeholder,
       forceError,
@@ -116,5 +116,7 @@ const Content = forwardRef<HTMLInputElement, StyledFileUploadContentProps>(
     );
   },
 );
+StyledFileUpload.displayName = 'StyledFileUpload';
+Content.displayName = 'Content';
 
 export default StyledFileUpload;

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react-components@1.3.1...@dfx.swiss/react-components@1.3.2-beta.0) (2026-04-29)
+
+### Bug Fixes
+
+- resolve 67 ESLint warnings in [@dfx](https://github.com/dfx).swiss/react-components ([#172](https://github.com/DFXswiss/packages/issues/172)) ([dd7f061](https://github.com/DFXswiss/packages/commit/dd7f061c7d22111e53ae5d122c0b2d465904053e))
+
 ## [1.3.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react-components@1.3.1-beta.0...@dfx.swiss/react-components@1.3.1) (2026-04-21)
 
 **Note:** Version bump only for package @dfx.swiss/react-components
