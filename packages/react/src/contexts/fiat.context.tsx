@@ -17,7 +17,9 @@ export function FiatContextProvider(props: PropsWithChildren): JSX.Element {
   const { getCurrencies } = useFiat();
 
   useEffect(() => {
+    // eslint-disable-next-line no-console
     getCurrencies().then(setCurrencies).catch(console.error); // TODO: (Krysh) add real error handling
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const context: FiatInterface = useMemo(
