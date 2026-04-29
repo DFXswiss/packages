@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@dfx.swiss/bip322-multisig",
-  "version": "0.1.0",
+  "version": "0.2.0-beta.0",
   "description": "Build and sign BIP-322 simple signatures for Bitcoin P2WSH multisig wallets via PSBT",
   "license": "MIT",
   "repository": {
