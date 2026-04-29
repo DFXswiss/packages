@@ -19,7 +19,7 @@ export function LanguageContextProvider(props: PropsWithChildren): JSX.Element {
   useEffect(() => {
     // eslint-disable-next-line no-console
     getLanguages().then(setLanguages).catch(console.error); // TODO: (Krysh) add real error handling
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const context: LanguageInterface = useMemo(() => ({ languages: languages?.filter((l) => l.enable) }), [languages]);

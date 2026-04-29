@@ -88,7 +88,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     } else {
       setStoredAddress(data.address);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.address]);
 
   const tokenStore = useMemo(
@@ -205,16 +205,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       tokenStore,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      storedAddress,
-      data.blockchain,
-      session,
-      isInitialized,
-      isLoggedIn,
-      needsSignUp,
-      isProcessing,
-      tokenStore,
-    ],
+    [storedAddress, data.blockchain, session, isInitialized, isLoggedIn, needsSignUp, isProcessing, tokenStore],
   );
 
   return <SessionContext.Provider value={context}>{children}</SessionContext.Provider>;

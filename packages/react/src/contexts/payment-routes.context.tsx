@@ -80,7 +80,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     loadPaymentRoutes();
     loadPaymentLinks();
     loadUserPaymentLinksConfig();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   async function createPaymentLink(request: CreatePaymentLink): Promise<PaymentLink | undefined> {

@@ -42,7 +42,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
   useEffect(() => {
     const interval = setTimeout(() => sync && syncSupportIssue(), 5000);
     return () => clearInterval(interval);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supportIssue, sync]);
 
   async function loadTickets(): Promise<void> {

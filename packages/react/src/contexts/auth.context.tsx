@@ -48,7 +48,7 @@ export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
     }
 
     setIsInitialized(true);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function isExpired(): boolean {
