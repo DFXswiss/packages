@@ -166,7 +166,7 @@ export const SignaturePopupAlert: ComponentStory<typeof StyledModal> = (args) =>
             blockchain address.
           </h2>
           <StyledCheckboxRow isChecked={isChecked} onChange={setIsChecked} centered>
-            Don't show this again.
+            Don&apos;t show this again.
           </StyledCheckboxRow>
 
           <StyledButton

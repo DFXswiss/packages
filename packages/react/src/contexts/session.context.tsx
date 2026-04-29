@@ -68,7 +68,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     createSessionNew: createApiSessionNew,
     deleteSession,
   } = useApiSession();
-  const { getAuthToken, setAuthToken } = useAuthContext();
+  const { getAuthToken } = useAuthContext();
   const [needsSignUp, setNeedsSignUp] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [storedSignature, setStoredSignature] = useState<string>();
@@ -88,6 +88,7 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
     } else {
       setStoredAddress(data.address);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.address]);
 
   const tokenStore = useMemo(
@@ -203,18 +204,8 @@ export function SessionContextProvider({ api, data, children }: SessionContextPr
       logout,
       tokenStore,
     }),
-    [
-      storedAddress,
-      data.blockchain,
-      session,
-      isInitialized,
-      isLoggedIn,
-      needsSignUp,
-      isProcessing,
-      getAuthToken,
-      setAuthToken,
-      tokenStore,
-    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [storedAddress, data.blockchain, session, isInitialized, isLoggedIn, needsSignUp, isProcessing, tokenStore],
   );
 
   return <SessionContext.Provider value={context}>{children}</SessionContext.Provider>;

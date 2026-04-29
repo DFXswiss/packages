@@ -76,6 +76,7 @@ function StyledSearchDropdown<T>({
       element.addEventListener('mousedown', closeDropdown);
       return () => element.removeEventListener('mousedown', closeDropdown);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rootRef, isOpen]);
 
   function closeDropdown(e: Event) {

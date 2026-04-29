@@ -18,7 +18,7 @@ export function useBankAccountContext(): BankAccountInterface {
 }
 
 export function BankAccountContextProvider(props: PropsWithChildren): JSX.Element {
-  const { isLoggedIn, session } = useApiSession();
+  const { isLoggedIn } = useApiSession();
   const { getAccounts, createAccount, updateAccount } = useBankAccount();
 
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>();

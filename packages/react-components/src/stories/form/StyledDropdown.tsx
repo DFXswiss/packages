@@ -2,7 +2,7 @@ import { ControlProps } from './Form';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import DfxIcon, { IconColor, IconSize, IconVariant } from '../DfxIcon';
 import { Controller } from 'react-hook-form';
-import DfxAssetIcon, { AssetIconSize, AssetIconVariant } from '../DfxAssetIcon';
+import DfxAssetIcon, { AssetIconVariant } from '../DfxAssetIcon';
 import { Utils } from '../../utils';
 
 export interface StyledDropdownProps<T> extends ControlProps {
@@ -60,6 +60,7 @@ export default function StyledDropdown<T>({
       element.addEventListener('mousedown', closeDropdown);
       return () => element.removeEventListener('mousedown', closeDropdown);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rootRef, isOpen]);
 
   function closeDropdown(e: Event) {
