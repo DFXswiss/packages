@@ -37,6 +37,7 @@ export function AssetContextProvider(props: AssetContextProviderProps): JSX.Elem
     getApiAssets(chains, props.includePrivateAssets ?? false)
       .then(updateAssets)
       .finally(() => setAssetsLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
 
   function updateAssets(assets: Asset[]) {
@@ -68,7 +69,8 @@ export function AssetContextProvider(props: AssetContextProviderProps): JSX.Elem
       assetsLoading,
       getAssets,
     }),
-    [assets, assetsLoading, getApiAssets],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [assets, assetsLoading],
   );
 
   return <AssetContext.Provider value={context}>{props.children}</AssetContext.Provider>;

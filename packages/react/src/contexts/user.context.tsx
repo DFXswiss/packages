@@ -41,7 +41,7 @@ export function useUserContext(): UserInterface {
 }
 
 export function UserContextProvider(props: PropsWithChildren): JSX.Element {
-  const { isLoggedIn, session, updateSession, deleteSession } = useApiSession();
+  const { isLoggedIn, updateSession, deleteSession } = useApiSession();
   const {
     getUser,
     updateUser: updateUserApi,
@@ -63,9 +63,6 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
 
   const refCode = user?.activeAddress?.refCode;
   const refLink = refCode && `${process.env.REACT_APP_REF_URL ?? 'https://dfx.swiss/app?code='}${refCode}`;
-
-  const userAddresses = user?.addresses.filter((a) => !a.isCustody) ?? [];
-  const custodyAddresses = user?.addresses.filter((a) => a.isCustody) ?? [];
 
   const reloadUser = useCallback(async (): Promise<void> => {
     setIsUserLoading(true);
@@ -235,8 +232,11 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     [user, updateCallSettingsApi],
   );
 
-  const context: UserInterface = useMemo(
-    () => ({
+  const context: UserInterface = useMemo(() => {
+    const userAddresses = user?.addresses.filter((a) => !a.isCustody) ?? [];
+    const custodyAddresses = user?.addresses.filter((a) => a.isCustody) ?? [];
+
+    return {
       user,
       refLink,
       isUserLoading,
@@ -262,31 +262,28 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       deleteKeyCT,
       updateFilterCT,
       updateCallSettings,
-    }),
-    [
-      user,
-      refLink,
-      isUserLoading,
-      isUserUpdating,
-      updateMail,
-      verifyMail,
-      updatePhone,
-      updateLanguage,
-      updateCurrency,
-      userAddresses,
-      custodyAddresses,
-      renameAddress,
-      changeAddress,
-      deleteAddress,
-      deleteAccount,
-      addSpecialCode,
-      reloadUser,
-      generateKeyCT,
-      deleteKeyCT,
-      updateFilterCT,
-      updateCallSettings,
-    ],
-  );
+    };
+  }, [
+    user,
+    refLink,
+    isUserLoading,
+    isUserUpdating,
+    updateMail,
+    verifyMail,
+    updatePhone,
+    updateLanguage,
+    updateCurrency,
+    renameAddress,
+    changeAddress,
+    deleteAddress,
+    deleteAccount,
+    addSpecialCode,
+    reloadUser,
+    generateKeyCT,
+    deleteKeyCT,
+    updateFilterCT,
+    updateCallSettings,
+  ]);
 
   return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
 }

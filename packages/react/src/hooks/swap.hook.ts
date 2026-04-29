@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo } from 'react';
 import { CallConfig, useApi } from './api.hook';
 import { Swap, SwapPaymentInfo, SwapUrl, ConfirmSwapData } from '../definitions/swap';
 import { useUser } from './user.hook';

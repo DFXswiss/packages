@@ -42,6 +42,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
   useEffect(() => {
     const interval = setTimeout(() => sync && syncSupportIssue(), 5000);
     return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supportIssue, sync]);
 
   async function loadTickets(): Promise<void> {
@@ -214,19 +215,8 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
       loadFileData,
       setSync,
     }),
-    [
-      tickets,
-      supportIssue,
-      isLoading,
-      isError,
-      loadTickets,
-      loadSupportIssue,
-      createSupportIssue,
-      submitMessage,
-      handleEmojiClick,
-      loadFileData,
-      setSync,
-    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [tickets, supportIssue, isLoading, isError],
   );
 
   // --- HELPER FUNCTIONS --- //

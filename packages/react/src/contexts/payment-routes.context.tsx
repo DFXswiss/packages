@@ -80,6 +80,7 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
     loadPaymentRoutes();
     loadPaymentLinks();
     loadUserPaymentLinksConfig();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   async function createPaymentLink(request: CreatePaymentLink): Promise<PaymentLink | undefined> {
@@ -258,8 +259,8 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       deletePaymentRoute,
       error,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
-      user,
       paymentRoutes,
       paymentRoutesLoading,
       paymentLinks,
@@ -267,13 +268,6 @@ export function PaymentRoutesContextProvider(props: PropsWithChildren): JSX.Elem
       userPaymentLinksConfig,
       userPaymentLinksConfigLoading,
       error,
-      createPaymentLink,
-      updatePaymentLink,
-      assignPaymentLink,
-      updateUserPaymentLinksConfig,
-      createPaymentLinkPayment,
-      cancelPaymentLinkPayment,
-      deletePaymentRoute,
     ],
   );
 
