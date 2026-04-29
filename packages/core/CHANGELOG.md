@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.3-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.2.2...@dfx.swiss/core@0.2.3-beta.0) (2026-04-29)
+
+### Bug Fixes
+
+- resolve 3 ESLint warnings in [@dfx](https://github.com/dfx).swiss/core ([42c19b1](https://github.com/DFXswiss/packages/commit/42c19b1a7e5588cb3038da9c8b777b4a9b96f5c0))
+
 ## [0.2.2](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.2.2-beta.3...@dfx.swiss/core@0.2.2) (2026-04-28)
 
 **Note:** Version bump only for package @dfx.swiss/core

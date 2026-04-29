@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.3-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.3.2...@dfx.swiss/react@1.3.3-beta.0) (2026-04-29)
+
+**Note:** Version bump only for package @dfx.swiss/react
+
 ## [1.3.2](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.3.2-beta.3...@dfx.swiss/react@1.3.2) (2026-04-28)
 
 **Note:** Version bump only for package @dfx.swiss/react
