@@ -13,7 +13,7 @@ interface StyledDateAndTimePickerContentProps extends StyledDateAndTimePickerPro
 }
 
 const StyledDateAndTimePicker = forwardRef<HTMLDivElement, StyledDateAndTimePickerProps>(
-  (props: StyledDateAndTimePickerProps, ref) => {
+  (props: StyledDateAndTimePickerProps, _ref) => {
     return (
       <Controller
         control={props.control}
@@ -28,10 +28,10 @@ const StyledDateAndTimePicker = forwardRef<HTMLDivElement, StyledDateAndTimePick
 const Content = forwardRef<HTMLInputElement, StyledDateAndTimePickerContentProps>(
   (
     {
-      control,
-      name,
+      control: _control,
+      name: _name,
       label,
-      rules,
+      rules: _rules,
       disabled,
       error,
       hideLabel,
@@ -138,5 +138,7 @@ const Content = forwardRef<HTMLInputElement, StyledDateAndTimePickerContentProps
     );
   },
 );
+StyledDateAndTimePicker.displayName = 'StyledDateAndTimePicker';
+Content.displayName = 'Content';
 
 export default StyledDateAndTimePicker;
