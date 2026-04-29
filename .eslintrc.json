@@ -49,6 +49,12 @@
       "rules": {
         "no-console": "off"
       }
+    },
+    {
+      "files": ["**/*.stories.{ts,tsx}"],
+      "rules": {
+        "no-console": "off"
+      }
     }
   ],
   "ignorePatterns": ["dist", "node_modules", "*.js"]
