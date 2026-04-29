@@ -1,7 +1,7 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import { buildBip322Psbt } from '../psbt';
 import { parseDescriptor } from '../descriptor';
-import { extractBip322Signature } from '../witness';
+import { extractBip322Signature } from '../core';
 
 const testDescriptor =
   'wsh(sortedmulti(2,' +

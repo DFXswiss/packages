@@ -1,8 +1,6 @@
-import * as bitcoin from 'bitcoinjs-lib';
+import { buildToSignPsbt, p2wshScriptPubKey } from './core';
 import { findAddress, MultisigDescriptor, parseDescriptor, DerivedAddress } from './descriptor';
 import './ecc-init';
-
-const TAG = Buffer.from('BIP0322-signed-message', 'utf8');
 
 export interface BuildPsbtArgs {
   message: string;
@@ -24,16 +22,7 @@ export function buildBip322Psbt(args: BuildPsbtArgs): BuiltPsbt {
     throw new Error(`Address ${args.address} not derivable from descriptor in first ${args.maxIndex ?? 200} indices`);
   }
 
-  const program = bitcoin.crypto.sha256(derived.witnessScript);
-  const scriptPubKey = Buffer.concat([Buffer.from([0x00, 0x20]), program]);
-
-  const messageHash = bip322MessageHash(args.message);
-  const toSpend = buildToSpendTx(messageHash, scriptPubKey);
-  const toSpendTxid = toSpend.getId();
-
-  const psbt = new bitcoin.Psbt();
-  psbt.setVersion(0);
-  psbt.setLocktime(0);
+  const scriptPubKey = p2wshScriptPubKey(derived.witnessScript);
 
   const bip32Derivation = desc.keys.map((k, idx) => ({
     masterFingerprint: Buffer.from(k.fingerprint, 'hex'),
@@ -41,33 +30,12 @@ export function buildBip322Psbt(args: BuildPsbtArgs): BuiltPsbt {
     pubkey: derived.pubkeys[idx],
   }));
 
-  psbt.addInput({
-    hash: toSpendTxid,
-    index: 0,
-    sequence: 0,
-    witnessUtxo: { script: scriptPubKey, value: 0 },
+  const { psbtBase64, toSpendTxid } = buildToSignPsbt({
+    message: args.message,
+    scriptPubKey,
     witnessScript: derived.witnessScript,
-    sighashType: bitcoin.Transaction.SIGHASH_ALL,
     bip32Derivation,
-    nonWitnessUtxo: toSpend.toBuffer(),
   });
 
-  psbt.addOutput({ value: 0, script: Buffer.from([0x6a]) });
-
-  return { psbtBase64: psbt.toBase64(), toSpendTxid, derived };
-}
-
-function bip322MessageHash(message: string): Buffer {
-  const tagHash = bitcoin.crypto.sha256(TAG);
-  return bitcoin.crypto.sha256(Buffer.concat([tagHash, tagHash, Buffer.from(message, 'utf8')]));
-}
-
-function buildToSpendTx(messageHash: Buffer, scriptPubKey: Buffer): bitcoin.Transaction {
-  const tx = new bitcoin.Transaction();
-  tx.version = 0;
-  tx.locktime = 0;
-  const scriptSig = Buffer.concat([Buffer.from([0x00, 0x20]), messageHash]);
-  tx.addInput(Buffer.alloc(32), 0xffffffff, 0, scriptSig);
-  tx.addOutput(scriptPubKey, 0);
-  return tx;
+  return { psbtBase64, toSpendTxid, derived };
 }

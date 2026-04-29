@@ -1,7 +1,6 @@
 import { BIP32Factory, BIP32Interface } from 'bip32';
 import * as ecc from '@bitcoinerlab/secp256k1';
-import { bech32 } from 'bech32';
-import { crypto as btcCrypto } from 'bitcoinjs-lib';
+import { buildSortedMultisigScript, p2wshAddress } from './core';
 
 const bip32 = BIP32Factory(ecc);
 
@@ -103,26 +102,5 @@ export function findAddress(desc: MultisigDescriptor, targetAddress: string, max
   return null;
 }
 
-export function buildSortedMultisigScript(pubkeys: Buffer[], threshold: number): Buffer {
-  if (threshold < 1 || threshold > 16) throw new Error(`threshold out of range: ${threshold}`);
-  if (pubkeys.length < 1 || pubkeys.length > 16) throw new Error(`pubkey count out of range: ${pubkeys.length}`);
-  if (threshold > pubkeys.length) {
-    throw new Error(`threshold ${threshold} exceeds pubkey count ${pubkeys.length} (would be unspendable)`);
-  }
-  for (const pk of pubkeys) {
-    if (pk.length !== 33) throw new Error(`pubkey must be 33 bytes (compressed), got ${pk.length}`);
-    if (pk[0] !== 0x02 && pk[0] !== 0x03)
-      throw new Error(`pubkey must start with 0x02 or 0x03, got 0x${pk[0].toString(16)}`);
-  }
-  const sorted = [...pubkeys].sort(Buffer.compare);
-  const parts: Buffer[] = [Buffer.from([0x50 + threshold])];
-  for (const pk of sorted) parts.push(Buffer.from([0x21]), pk);
-  parts.push(Buffer.from([0x50 + sorted.length, 0xae]));
-  return Buffer.concat(parts);
-}
-
-export function p2wshAddress(witnessScript: Buffer): string {
-  const h = btcCrypto.sha256(witnessScript);
-  const words = [0, ...bech32.toWords(h)];
-  return bech32.encode('bc', words);
-}
+// buildSortedMultisigScript and p2wshAddress are in core.ts
+export { buildSortedMultisigScript, p2wshAddress } from './core';

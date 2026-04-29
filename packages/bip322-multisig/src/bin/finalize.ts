@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import * as fs from 'fs';
-import { extractBip322Signature } from '../witness';
+import { extractBip322Signature } from '../core';
 
 interface Args {
   psbt: string;
