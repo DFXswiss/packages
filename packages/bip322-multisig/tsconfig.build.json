@@ -5,6 +5,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
+    "module": "commonjs",
     "lib": ["dom", "dom.iterable", "esnext"]
   }
 }

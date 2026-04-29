@@ -13,6 +13,13 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "bip322-sign": "./dist/bin/sign.js",
+    "bip322-finalize": "./dist/bin/finalize.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "files": [
     "dist"
   ],
