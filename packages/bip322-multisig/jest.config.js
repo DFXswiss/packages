@@ -4,6 +4,12 @@ module.exports = {
   roots: ['<rootDir>/src'],
   testMatch: ['**/__tests__/**/*.test.ts'],
   transform: {
-    '^.+\\.ts$': ['ts-jest', { tsconfig: 'tsconfig.test.json' }],
+    '^.+\\.[tj]s$': ['ts-jest', { tsconfig: 'tsconfig.test.json' }],
+  },
+  transformIgnorePatterns: [
+    'node_modules/(?!(@noble/curves|@noble/hashes)/)',
+  ],
+  moduleNameMapper: {
+    '^@noble/curves/secp256k1$': '@noble/curves/secp256k1.js',
   },
 };
