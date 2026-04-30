@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import { Transaction } from 'bitcoinjs-lib';
 import { secp256k1 } from '@noble/curves/secp256k1';
 import { isP2wshAddress, verifyBip322P2wshSignature } from '../verify';
@@ -9,7 +10,7 @@ import { buildSortedMultisigScript, p2wshAddress, p2wshScriptPubKey, bip322Messa
 
 /** Generate a random compressed public key (with corresponding private key). */
 function generateKey() {
-  const priv = secp256k1.utils.randomSecretKey();
+  const priv = randomBytes(32);
   const pub = Buffer.from(secp256k1.getPublicKey(priv, true));
   return { priv, pub };
 }

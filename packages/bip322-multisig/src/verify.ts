@@ -68,6 +68,7 @@ function decodeWitnessStack(buf: Buffer): Buffer[] {
     items.push(buf.subarray(offset, offset + len));
     offset += len;
   }
+  if (offset !== buf.length) return [];
   return items;
 }
 
