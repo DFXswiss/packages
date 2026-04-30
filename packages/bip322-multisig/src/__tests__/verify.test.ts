@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
 import { Transaction } from 'bitcoinjs-lib';
-import { secp256k1 } from '@noble/curves/secp256k1';
+import { secp256k1 } from '@noble/curves/secp256k1.js';
 import { isP2wshAddress, verifyBip322P2wshSignature } from '../verify';
 import { buildSortedMultisigScript, p2wshAddress, p2wshScriptPubKey, bip322MessageHash, buildToSpendTx } from '../core';
 

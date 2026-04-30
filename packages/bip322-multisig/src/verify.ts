@@ -5,7 +5,7 @@
  */
 import { Transaction, crypto as btcCrypto } from 'bitcoinjs-lib';
 import { bech32 } from 'bech32';
-import { secp256k1 } from '@noble/curves/secp256k1';
+import { secp256k1 } from '@noble/curves/secp256k1.js';
 
 import { bip322MessageHash, buildToSpendTx, p2wshScriptPubKey } from './core';
 
