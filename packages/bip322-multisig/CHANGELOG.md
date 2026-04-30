@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.2](https://github.com/DFXswiss/packages/compare/@dfx.swiss/bip322-multisig@0.2.0-beta.0...@dfx.swiss/bip322-multisig@0.2.0-beta.2) (2026-04-30)
+
+### Features
+
+- **bip322-multisig:** add BIP-322 P2WSH signature verification ([#175](https://github.com/DFXswiss/packages/issues/175)) ([d70a7e3](https://github.com/DFXswiss/packages/commit/d70a7e3b3bcda141ab690d325fb9caa6f3d6179e))
+
 # 0.2.0-beta.0 (2026-04-29)
 
 ### Features
