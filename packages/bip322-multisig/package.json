@@ -1,0 +1,49 @@
+{
+  "private": false,
+  "name": "@dfx.swiss/bip322-multisig",
+  "version": "0.2.0-beta.3",
+  "description": "Build and sign BIP-322 simple signatures for Bitcoin P2WSH multisig wallets via PSBT",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DFXswiss/packages.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "bip322-sign": "./dist/bin/sign.js",
+    "bip322-finalize": "./dist/bin/finalize.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b ./tsconfig.build.json",
+    "clean": "rm -rf ./dist/ && rm -rf ./tsconfig.build.tsbuildinfo",
+    "test": "jest",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write src",
+    "format:check": "prettier --check src",
+    "pack": "npm pack"
+  },
+  "dependencies": {
+    "@bitcoinerlab/secp256k1": "^1.2.0",
+    "@noble/curves": "^1.9.0",
+    "bech32": "^2.0.0",
+    "bip32": "^4.0.0",
+    "bitcoinjs-lib": "^6.1.7"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.4.9",
+    "typescript": "^4.9.3"
+  }
+}
