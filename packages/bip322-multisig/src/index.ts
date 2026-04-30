@@ -16,3 +16,6 @@ export type { DescriptorKey, MultisigDescriptor, DerivedAddress } from './descri
 
 export { buildBip322Psbt } from './psbt';
 export type { BuildPsbtArgs, BuiltPsbt } from './psbt';
+
+// Verification
+export { isP2wshAddress, verifyBip322P2wshSignature } from './verify';

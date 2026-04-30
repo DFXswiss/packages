@@ -6,6 +6,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "module": "commonjs",
-    "lib": ["dom", "dom.iterable", "esnext"]
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "skipLibCheck": true
   }
 }
