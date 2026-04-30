@@ -1,13 +1,7 @@
 import { Transaction } from 'bitcoinjs-lib';
 import { secp256k1 } from '@noble/curves/secp256k1';
 import { isP2wshAddress, verifyBip322P2wshSignature } from '../verify';
-import {
-  buildSortedMultisigScript,
-  p2wshAddress,
-  p2wshScriptPubKey,
-  bip322MessageHash,
-  buildToSpendTx,
-} from '../core';
+import { buildSortedMultisigScript, p2wshAddress, p2wshScriptPubKey, bip322MessageHash, buildToSpendTx } from '../core';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -107,9 +101,7 @@ function signMultisig(
 
 describe('isP2wshAddress', () => {
   it('accepts a valid mainnet P2WSH address', () => {
-    expect(
-      isP2wshAddress('bc1qsy93ywfzzp4e8aczvzn4452jmlwvyp2fklnm2qevnyzlmyd672pqrl3cep'),
-    ).toBe(true);
+    expect(isP2wshAddress('bc1qsy93ywfzzp4e8aczvzn4452jmlwvyp2fklnm2qevnyzlmyd672pqrl3cep')).toBe(true);
   });
 
   it('rejects a P2WPKH address (20-byte program)', () => {
@@ -121,11 +113,7 @@ describe('isP2wshAddress', () => {
   });
 
   it('rejects a testnet P2WSH address', () => {
-    expect(
-      isP2wshAddress(
-        'tb1qrp33g0q5b5698ahp5jnf5yzjmgced69zxx0pehrqcgul8ntf0t4qnmva5v',
-      ),
-    ).toBe(false);
+    expect(isP2wshAddress('tb1qrp33g0q5b5698ahp5jnf5yzjmgced69zxx0pehrqcgul8ntf0t4qnmva5v')).toBe(false);
   });
 
   it('rejects a malformed string', () => {
@@ -144,32 +132,18 @@ describe('isP2wshAddress', () => {
 describe('verifyBip322P2wshSignature — structural negatives', () => {
   it('returns false for empty signature', () => {
     expect(
-      verifyBip322P2wshSignature(
-        'hello',
-        'bc1qsy93ywfzzp4e8aczvzn4452jmlwvyp2fklnm2qevnyzlmyd672pqrl3cep',
-        '',
-      ),
+      verifyBip322P2wshSignature('hello', 'bc1qsy93ywfzzp4e8aczvzn4452jmlwvyp2fklnm2qevnyzlmyd672pqrl3cep', ''),
     ).toBe(false);
   });
 
   it('returns false for garbage base64', () => {
     expect(
-      verifyBip322P2wshSignature(
-        'hello',
-        'bc1qsy93ywfzzp4e8aczvzn4452jmlwvyp2fklnm2qevnyzlmyd672pqrl3cep',
-        'AAAA',
-      ),
+      verifyBip322P2wshSignature('hello', 'bc1qsy93ywfzzp4e8aczvzn4452jmlwvyp2fklnm2qevnyzlmyd672pqrl3cep', 'AAAA'),
     ).toBe(false);
   });
 
   it('returns false for non-P2WSH address', () => {
-    expect(
-      verifyBip322P2wshSignature(
-        'hello',
-        'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4',
-        'AAAA',
-      ),
-    ).toBe(false);
+    expect(verifyBip322P2wshSignature('hello', 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4', 'AAAA')).toBe(false);
   });
 });
 

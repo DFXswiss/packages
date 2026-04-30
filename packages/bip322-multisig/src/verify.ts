@@ -183,11 +183,7 @@ function parseMultisigScript(script: Buffer): MultisigInfo | null {
  * @param signatureBase64 The base64-encoded witness stack
  * @returns true when the signature is valid
  */
-export function verifyBip322P2wshSignature(
-  message: string,
-  address: string,
-  signatureBase64: string,
-): boolean {
+export function verifyBip322P2wshSignature(message: string, address: string, signatureBase64: string): boolean {
   try {
     // 1. Decode address -> 32-byte witness program
     if (!isP2wshAddress(address)) return false;
@@ -226,12 +222,7 @@ export function verifyBip322P2wshSignature(
     toSign.addInput(toSpend.getHash(), 0, 0);
     toSign.addOutput(Buffer.from([0x6a]), 0);
 
-    const sighash = toSign.hashForWitnessV0(
-      0,
-      witnessScript,
-      0,
-      Transaction.SIGHASH_ALL,
-    );
+    const sighash = toSign.hashForWitnessV0(0, witnessScript, 0, Transaction.SIGHASH_ALL);
 
     // 8. Verify multisig (OP_CHECKMULTISIG convention)
     let pkIdx = 0;
