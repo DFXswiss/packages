@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@bitcoinerlab/secp256k1": "^1.2.0",
-    "@noble/curves": "^2.2.0",
+    "@noble/curves": "^1.9.0",
     "bech32": "^2.0.0",
     "bip32": "^4.0.0",
     "bitcoinjs-lib": "^6.1.7"

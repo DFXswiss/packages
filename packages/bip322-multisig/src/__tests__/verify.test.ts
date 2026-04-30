@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
 import { Transaction } from 'bitcoinjs-lib';
-import { secp256k1 } from '@noble/curves/secp256k1.js';
+import { secp256k1 } from '@noble/curves/secp256k1';
 import { isP2wshAddress, verifyBip322P2wshSignature } from '../verify';
 import { buildSortedMultisigScript, p2wshAddress, p2wshScriptPubKey, bip322MessageHash, buildToSpendTx } from '../core';
 
@@ -56,8 +56,9 @@ function computeSighash(message: string, witnessScript: Buffer): Buffer {
 
 /** Sign a sighash and return DER-encoded signature with SIGHASH_ALL appended. */
 function signDer(sighash: Buffer, privKey: Uint8Array): Buffer {
-  const derSig = secp256k1.sign(sighash, privKey, { format: 'der' });
-  return Buffer.concat([Buffer.from(derSig), Buffer.from([Transaction.SIGHASH_ALL])]);
+  const sig = secp256k1.sign(sighash, privKey, { lowS: true });
+  const der = Buffer.from(sig.toDERRawBytes());
+  return Buffer.concat([der, Buffer.from([Transaction.SIGHASH_ALL])]);
 }
 
 /** Sign and produce a BIP-322 base64 witness for a 2-of-3 multisig. */
