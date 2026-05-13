@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.4](https://github.com/DFXswiss/packages/compare/@dfx.swiss/bip322-multisig@0.2.0-beta.3...@dfx.swiss/bip322-multisig@0.2.0-beta.4) (2026-05-13)
+
+### Bug Fixes
+
+- **bip322-multisig:** use @noble/curves v1 for CommonJS compatibility ([8edcb33](https://github.com/DFXswiss/packages/commit/8edcb3337c297a205a05f46b51c8fdebf60f00ea))
+
 # [0.2.0-beta.3](https://github.com/DFXswiss/packages/compare/@dfx.swiss/bip322-multisig@0.2.0-beta.2...@dfx.swiss/bip322-multisig@0.2.0-beta.3) (2026-04-30)
 
 ### Bug Fixes
