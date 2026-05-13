@@ -39,6 +39,8 @@ export {
   PendingReviewType,
   PendingReviewStatus,
   CallQueue,
+  ManualPassWhitelistErrors,
+  canManualPass,
   PendingReviewSummaryEntry,
   PendingReviewItem,
   CallQueueSourceType,

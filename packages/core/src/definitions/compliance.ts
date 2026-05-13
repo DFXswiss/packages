@@ -62,3 +62,23 @@ export interface CallQueueItem {
   phoneCallStatus?: PhoneCallStatus;
   date: string;
 }
+
+export const ManualPassWhitelistErrors: string[] = [
+  'PhoneVerificationNeeded',
+  'IpPhoneVerificationNeeded',
+  'BicPhoneVerificationNeeded',
+  'IbanPhoneVerificationNeeded',
+  'IpCountryMismatch',
+  'TradeApprovalDateMissing',
+  'UserDataFailedCall',
+  'UserDataRejectedCall',
+  'ReferralNoTradeHistory',
+];
+
+export function canManualPass(comment: string | null | undefined): boolean {
+  const errors = (comment ?? '')
+    .split(';')
+    .map((e) => e.trim())
+    .filter(Boolean);
+  return errors.length > 0 && errors.every((e) => ManualPassWhitelistErrors.includes(e));
+}
