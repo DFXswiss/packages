@@ -1,4 +1,10 @@
-export { PendingReviewType, PendingReviewStatus, CallQueue } from '@dfx.swiss/core';
+export {
+  PendingReviewType,
+  PendingReviewStatus,
+  CallQueue,
+  ManualPassWhitelistErrors,
+  canManualPass,
+} from '@dfx.swiss/core';
 
 export type {
   PendingReviewSummaryEntry,

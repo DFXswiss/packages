@@ -21,6 +21,8 @@ export {
   PendingReviewType,
   PendingReviewStatus,
   CallQueue,
+  ManualPassWhitelistErrors,
+  canManualPass,
   // Asset
   AssetUrl,
   AssetType,
