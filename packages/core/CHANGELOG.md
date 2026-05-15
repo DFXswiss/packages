@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.2.3...@dfx.swiss/core@0.3.0-beta.0) (2026-05-13)
+
+### Features
+
+- **compliance:** add manual AML pass whitelist and canManualPass helper ([#176](https://github.com/DFXswiss/packages/issues/176)) ([00f647d](https://github.com/DFXswiss/packages/commit/00f647d68af0ae0b2b492f5853b00bfb6e2db5d6))
+
 ## [0.2.3](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.2.3-beta.0...@dfx.swiss/core@0.2.3) (2026-04-29)
 
 **Note:** Version bump only for package @dfx.swiss/core

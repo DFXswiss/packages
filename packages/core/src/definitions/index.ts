@@ -1,5 +1,11 @@
 export { CheckStatus, AmlReason } from './aml';
-export { PendingReviewType, PendingReviewStatus, CallQueue } from './compliance';
+export {
+  PendingReviewType,
+  PendingReviewStatus,
+  CallQueue,
+  ManualPassWhitelistErrors,
+  canManualPass,
+} from './compliance';
 export type {
   PendingReviewSummaryEntry,
   PendingReviewItem,
