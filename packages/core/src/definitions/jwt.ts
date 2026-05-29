@@ -11,6 +11,7 @@ export enum UserRole {
   KYC_CLIENT_COMPANY = 'KycClientCompany',
   CUSTODY = 'Custody',
   REALUNIT = 'RealUnit',
+  PARTNER = 'Partner',
   MARKETING = 'Marketing',
   MONITORING = 'Monitoring',
 }

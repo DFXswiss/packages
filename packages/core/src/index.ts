@@ -88,6 +88,8 @@ export {
   PaymentQuoteStatus,
   MinCompletionStatus,
   PaymentLinkBlockchain,
+  // Partner
+  PartnerUrl,
   // Sell
   SellUrl,
   // Settings
@@ -213,6 +215,10 @@ export type {
   UpdatePaymentLink,
   AssignPaymentLink,
   PaymentLinkPos,
+  // Partner
+  PartnerUserInfo,
+  PartnerFee,
+  SetOnboardingFee,
   // Sell
   Eip5792Call,
   Eip5792Data,

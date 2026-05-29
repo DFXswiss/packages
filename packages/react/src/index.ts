@@ -156,6 +156,8 @@ export {
   isStepDone,
   buildKycUrl,
 } from './definitions/kyc';
+export { PartnerUrl } from './definitions/partner';
+export type { PartnerUserInfo, PartnerFee, SetOnboardingFee } from './definitions/partner';
 export {
   Sell,
   SellPaymentInfo,
