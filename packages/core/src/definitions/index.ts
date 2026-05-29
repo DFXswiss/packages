@@ -137,6 +137,8 @@ export type {
   AssignPaymentLink,
   PaymentLinkPos,
 } from './route';
+export { PartnerUrl } from './partner';
+export type { PartnerUserInfo, PartnerFee, SetOnboardingFee } from './partner';
 export { SellUrl } from './sell';
 export type { Eip5792Call, Eip5792Data, UnsignedTx, Sell, Beneficiary, SellPaymentInfo, ConfirmSellData } from './sell';
 export type { Session } from './session';
