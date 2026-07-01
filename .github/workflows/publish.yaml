@@ -4,6 +4,8 @@ on:
     branches:
       - develop
       - main
+  # allow re-triggering a publish manually (e.g. after a transient npm/auth failure) without a new commit
+  workflow_dispatch:
 
 env:
   NODE_VERSION: "18.x"
@@ -43,7 +45,9 @@ jobs:
           git config user.email "info@dfx.swiss"
 
           npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
-          npx lerna publish from-git --yes --dist-tag beta
+          # from-package (not from-git) so a re-run/dispatch publishes any package.json version missing from
+          # the registry, even when no tag sits on the checked-out commit (recovers a partially-failed publish)
+          npx lerna publish from-package --yes --dist-tag beta
 
       - name: "Version and publish (stable)"
         if: github.ref == 'refs/heads/main'
@@ -54,7 +58,8 @@ jobs:
           git config user.email "info@dfx.swiss"
 
           npx lerna version --conventional-commits --conventional-graduate --yes
-          npx lerna publish from-git --yes
+          # from-package so a re-run/dispatch can recover a partially-failed publish (see beta step)
+          npx lerna publish from-package --yes
 
       - name: "Sync main back to develop"
         if: github.ref == 'refs/heads/main'
