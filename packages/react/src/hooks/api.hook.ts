@@ -76,6 +76,7 @@ export function useApi(): ApiInterface {
               throw new ApiException(
                 body?.statusCode ?? response.status,
                 body?.message ?? response.statusText ?? 'Unknown error',
+                body?.code,
               );
             });
         });

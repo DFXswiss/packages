@@ -1,5 +1,6 @@
 import { AuthUrl, AuthWalletType, SignMessage, SignIn, LnurlAuth, LnurlAuthStatus } from '../definitions/auth';
 import { ApiException } from '../definitions/error';
+import { TfaLevel, TfaSetup } from '../definitions/kyc';
 import { Utils } from '../utils';
 import { DfxHttpClient } from './DfxHttpClient';
 
@@ -81,6 +82,20 @@ export class AuthApi {
       data: { mail, redirectUri, recommendationCode, wallet },
       token: false,
     });
+  }
+
+  async check2fa(level?: TfaLevel): Promise<TfaSetup> {
+    const query = Utils.buildQuery({ level });
+    return this.http.request<TfaSetup>({ url: `${AuthUrl.tfa}${query}`, method: 'GET' });
+  }
+
+  async setup2fa(level?: TfaLevel): Promise<TfaSetup> {
+    const query = Utils.buildQuery({ level });
+    return this.http.request<TfaSetup>({ url: `${AuthUrl.tfa}${query}`, method: 'POST' });
+  }
+
+  async verify2fa(token: string): Promise<void> {
+    return this.http.request({ url: `${AuthUrl.tfa}/verify`, method: 'POST', data: { token } });
   }
 
   async createLnurlAuth(): Promise<LnurlAuth> {

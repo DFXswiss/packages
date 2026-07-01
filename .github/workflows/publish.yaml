@@ -4,12 +4,16 @@ on:
     branches:
       - develop
       - main
+  # allow re-triggering a publish manually (e.g. after a transient npm/auth failure) without a new commit
+  workflow_dispatch:
 
 env:
-  NODE_VERSION: "18.x"
+  NODE_VERSION: "22.x"
 
 permissions:
   contents: write
+  # required for npm OIDC (Trusted Publisher) — replaces NODE_AUTH_TOKEN
+  id-token: write
 
 jobs:
   publish:
@@ -28,7 +32,7 @@ jobs:
 
       - name: Install packages
         run: |
-          npm install
+          npm ci
 
       - name: Build code
         run: |
@@ -37,24 +41,29 @@ jobs:
       - name: "Version and publish (beta)"
         if: github.ref == 'refs/heads/develop'
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+          # OIDC would auto-enable provenance, but existing versions on npm have none —
+          # disable explicitly so mixed-provenance publishes don't E404 (see #150/#151)
+          NPM_CONFIG_PROVENANCE: "false"
         run: |
           git config user.name "DFX"
           git config user.email "info@dfx.swiss"
 
           npx lerna version --conventional-commits --conventional-prerelease --preid beta --yes
-          npx lerna publish from-git --yes --dist-tag beta
+          # from-package (not from-git) so a re-run/dispatch publishes any package.json version missing from
+          # the registry, even when no tag sits on the checked-out commit (recovers a partially-failed publish)
+          npx lerna publish from-package --yes --dist-tag beta
 
       - name: "Version and publish (stable)"
         if: github.ref == 'refs/heads/main'
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "false"
         run: |
           git config user.name "DFX"
           git config user.email "info@dfx.swiss"
 
           npx lerna version --conventional-commits --conventional-graduate --yes
-          npx lerna publish from-git --yes
+          # from-package so a re-run/dispatch can recover a partially-failed publish (see beta step)
+          npx lerna publish from-package --yes
 
       - name: "Sync main back to develop"
         if: github.ref == 'refs/heads/main'

@@ -1,7 +1,8 @@
 {
   "private": false,
-  "name": "@dfx.swiss/core",
-  "version": "0.3.0-beta.2",
+  "name": "@dfx.swiss/bip322-multisig",
+  "version": "0.2.0-beta.4",
+  "description": "Build and sign BIP-322 simple signatures for Bitcoin P2WSH multisig wallets via PSBT",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -12,6 +13,13 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "bip322-sign": "./dist/bin/sign.js",
+    "bip322-finalize": "./dist/bin/finalize.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "files": [
     "dist"
   ],
@@ -26,8 +34,11 @@
     "pack": "npm pack"
   },
   "dependencies": {
-    "ibantools": "^4.2.1",
-    "libphonenumber-js": "^1.10.39"
+    "@bitcoinerlab/secp256k1": "^1.2.0",
+    "@noble/curves": "^1.9.0",
+    "bech32": "^2.0.0",
+    "bip32": "^4.0.0",
+    "bitcoinjs-lib": "^6.1.7"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
