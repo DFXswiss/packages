@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/bip322-multisig@0.2.0-beta.4...@dfx.swiss/bip322-multisig@0.2.0) (2026-07-01)
+
+**Note:** Version bump only for package @dfx.swiss/bip322-multisig
+
 # [0.2.0-beta.4](https://github.com/DFXswiss/packages/compare/@dfx.swiss/bip322-multisig@0.2.0-beta.3...@dfx.swiss/bip322-multisig@0.2.0-beta.4) (2026-05-13)
 
 ### Bug Fixes
