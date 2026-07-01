@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { AuthUrl, AuthWalletType, LnurlAuth, LnurlAuthStatus, SignIn, SignMessage } from '../definitions/auth';
+import { TfaLevel, TfaSetup } from '../definitions/kyc';
 import { CallConfig, useApi } from './api.hook';
 import { ApiError } from '../definitions/error';
 
@@ -35,6 +36,9 @@ export interface AuthInterface {
     language?: string,
   ) => Promise<SignIn>;
   signInWithMail: (mail: string, redirectUri?: string, recommendationCode?: string, wallet?: string) => Promise<void>;
+  check2fa: (level?: TfaLevel) => Promise<TfaSetup>;
+  setup2fa: (level?: TfaLevel) => Promise<TfaSetup>;
+  verify2fa: (token: string) => Promise<void>;
   createLnurlAuth: () => Promise<LnurlAuth>;
   getLnurlAuth: (k1: string) => Promise<LnurlAuthStatus>;
 }
@@ -188,6 +192,29 @@ export function useAuth(): AuthInterface {
     [call],
   );
 
+  const check2fa = useCallback(
+    async (level?: TfaLevel): Promise<TfaSetup> => {
+      const url = level ? `${AuthUrl.tfa}?level=${level}` : AuthUrl.tfa;
+      return call({ url, method: 'GET' });
+    },
+    [call],
+  );
+
+  const setup2fa = useCallback(
+    async (level?: TfaLevel): Promise<TfaSetup> => {
+      const url = level ? `${AuthUrl.tfa}?level=${level}` : AuthUrl.tfa;
+      return call({ url, method: 'POST' });
+    },
+    [call],
+  );
+
+  const verify2fa = useCallback(
+    async (token: string): Promise<void> => {
+      return call({ url: `${AuthUrl.tfa}/verify`, method: 'POST', data: { token } });
+    },
+    [call],
+  );
+
   const createLnurlAuth = useCallback(async (): Promise<LnurlAuth> => {
     return call({ url: AuthUrl.lnurl, method: 'POST' });
   }, [call]);
@@ -200,7 +227,29 @@ export function useAuth(): AuthInterface {
   );
 
   return useMemo(
-    () => ({ getSignMessage, authenticate, signIn, signUp, signInWithMail, createLnurlAuth, getLnurlAuth }),
-    [getSignMessage, authenticate, signIn, signUp, signInWithMail, createLnurlAuth, getLnurlAuth],
+    () => ({
+      getSignMessage,
+      authenticate,
+      signIn,
+      signUp,
+      signInWithMail,
+      check2fa,
+      setup2fa,
+      verify2fa,
+      createLnurlAuth,
+      getLnurlAuth,
+    }),
+    [
+      getSignMessage,
+      authenticate,
+      signIn,
+      signUp,
+      signInWithMail,
+      check2fa,
+      setup2fa,
+      verify2fa,
+      createLnurlAuth,
+      getLnurlAuth,
+    ],
   );
 }
