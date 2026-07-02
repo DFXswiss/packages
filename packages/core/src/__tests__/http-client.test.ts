@@ -66,6 +66,22 @@ describe('DfxHttpClient', () => {
       );
     });
 
+    it('normalizes a leading-slash path to a single-slash URL', async () => {
+      const mockFetch = createMockFetch({
+        ok: true,
+        status: 200,
+        json: jest.fn().mockResolvedValue({}),
+      });
+      const client = new DfxHttpClient({ apiUrl: 'https://api.dfx.swiss/v1', fetchFn: mockFetch as any });
+
+      await client.request({ url: '/realunit/admin/quotes', method: 'GET' });
+
+      expect(mockFetch).toHaveBeenCalledWith(
+        'https://api.dfx.swiss/v1/realunit/admin/quotes',
+        expect.objectContaining({ method: 'GET' }),
+      );
+    });
+
     it('uses custom version', async () => {
       const mockFetch = createMockFetch({
         ok: true,

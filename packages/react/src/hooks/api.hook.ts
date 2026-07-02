@@ -1,3 +1,4 @@
+import { Utils } from '@dfx.swiss/core';
 import { useCallback, useMemo } from 'react';
 import { useAuthContext } from '../contexts/auth.context';
 import { ApiError, ApiException } from '../definitions/error';
@@ -38,11 +39,11 @@ export function useApi(): ApiInterface {
   const fetchFrom = useCallback(
     async function <T>(config: CallConfig): Promise<T> {
       const version = config.version ?? defaultVersion;
-      const baseUrl = `${url}/${version}`;
+      const baseUrl = Utils.joinUrl(url, version);
       const responseType = config.responseType ?? ResponseType.JSON;
 
       return fetch(
-        `${baseUrl}/${config.url}`,
+        Utils.joinUrl(baseUrl, config.url),
         buildInit(config.method, config.token === false ? undefined : config.token, config.data, config.noJson),
       )
         .catch((error: unknown) => {
@@ -123,5 +124,5 @@ export function useApi(): ApiInterface {
     };
   }
 
-  return useMemo(() => ({ defaultUrl: `${url}/${defaultVersion}`, call }), [url, defaultVersion, call]);
+  return useMemo(() => ({ defaultUrl: Utils.joinUrl(url, defaultVersion), call }), [url, defaultVersion, call]);
 }

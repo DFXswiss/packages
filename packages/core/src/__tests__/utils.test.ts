@@ -54,6 +54,49 @@ describe('Utils', () => {
     });
   });
 
+  describe('joinUrl', () => {
+    it('joins base and clean path with a single slash', () => {
+      expect(Utils.joinUrl('https://api.dfx.swiss/v1', 'asset')).toBe('https://api.dfx.swiss/v1/asset');
+    });
+
+    it('strips a leading slash from the path', () => {
+      expect(Utils.joinUrl('https://api.dfx.swiss/v1', '/realunit/admin/quotes')).toBe(
+        'https://api.dfx.swiss/v1/realunit/admin/quotes',
+      );
+    });
+
+    it('strips multiple leading slashes from the path', () => {
+      expect(Utils.joinUrl('https://api.dfx.swiss/v1', '///asset')).toBe('https://api.dfx.swiss/v1/asset');
+    });
+
+    it('strips a trailing slash from the base', () => {
+      expect(Utils.joinUrl('https://api.dfx.swiss/v1/', 'asset')).toBe('https://api.dfx.swiss/v1/asset');
+    });
+
+    it('collapses slashes on both sides of the seam', () => {
+      expect(Utils.joinUrl('https://api.dfx.swiss/v1//', '//asset')).toBe('https://api.dfx.swiss/v1/asset');
+    });
+
+    it('preserves query strings on the path', () => {
+      expect(Utils.joinUrl('https://api.dfx.swiss/v1', '/buy/quote?asset=BTC&amount=1')).toBe(
+        'https://api.dfx.swiss/v1/buy/quote?asset=BTC&amount=1',
+      );
+    });
+
+    it('joins an absolute path literally, keeping parity with plain concatenation', () => {
+      // Deliberate: request()/call() attach the bearer token, so an absolute config.url must
+      // stay a same-origin request (harmless 404) and never be sent to a foreign host.
+      // Absolute URLs belong to requestAbsolute().
+      expect(Utils.joinUrl('https://api.dfx.swiss/v1', 'https://evil.example.com/steal')).toBe(
+        'https://api.dfx.swiss/v1/https://evil.example.com/steal',
+      );
+    });
+
+    it('returns the trimmed base for an empty path', () => {
+      expect(Utils.joinUrl('https://api.dfx.swiss/v1/', '')).toBe('https://api.dfx.swiss/v1');
+    });
+  });
+
   describe('formatAmount', () => {
     it('formats with default 2 decimals', () => {
       expect(Utils.formatAmount(1234.5678)).toBe('1 234.57');
