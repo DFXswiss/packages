@@ -53,9 +53,10 @@ every pull request against `develop` or `main`. Run these locally before pushing
 
 - **TypeScript** everywhere; each package builds with `tsc -b ./tsconfig.build.json`.
 - **Prettier** (`.prettierrc`): single quotes, trailing commas (`all`), print width 120.
-- **ESLint** (`.eslintrc.json`): `no-console` is an error outside tests/stories,
-  unused vars are errors (prefix intentionally unused ones with `_`). Warnings are
-  treated as errors — do not introduce new ESLint warnings.
+- **ESLint** (`.eslintrc.json`): the project-specific rules are set to error — e.g.
+  `no-console` (outside tests/stories) and unused vars (prefix intentionally unused
+  ones with `_`). Rules inherited at warn level from the shared configs do not fail
+  lint or CI — still, do not introduce new ESLint warnings.
 - Format and lint before committing: `npm run format` and `npm run lint:fix`.
 
 ## Tests
