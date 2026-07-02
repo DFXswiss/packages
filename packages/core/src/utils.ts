@@ -46,16 +46,18 @@ export class Utils {
   }
 
   /**
-   * Join a base URL with a relative path, collapsing any duplicate slashes at the seam.
+   * Join a base URL with a relative API path, collapsing any duplicate slashes at the seam.
    *
    * Trailing slashes on the base and leading slashes on the path are stripped before joining
    * with a single '/'. This prevents malformed URLs like `https://api.dfx.swiss/v1//foo` (which
    * the API rejects with a 404 before any route/guard runs) when a caller passes a leading-slash
-   * path such as '/foo'. Absolute paths (http/https) are returned unchanged, and query strings
-   * are preserved.
+   * path such as '/foo'. Query strings are preserved.
+   *
+   * This is pure seam normalization for relative paths: an absolute (http/https) path is joined
+   * literally like any other segment, exactly as plain concatenation did. Requests to absolute
+   * URLs belong to `DfxHttpClient.requestAbsolute()`.
    */
   static joinUrl(base: string, path: string): string {
-    if (/^https?:\/\//i.test(path)) return path;
     const trimmedBase = base.replace(/\/+$/, '');
     const trimmedPath = path.replace(/^\/+/, '');
     return trimmedPath ? `${trimmedBase}/${trimmedPath}` : trimmedBase;

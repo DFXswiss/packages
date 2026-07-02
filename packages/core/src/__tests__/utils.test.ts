@@ -83,9 +83,12 @@ describe('Utils', () => {
       );
     });
 
-    it('returns an absolute http/https path unchanged', () => {
-      expect(Utils.joinUrl('https://api.dfx.swiss/v1', 'https://kyc.dfx.swiss/session/abc')).toBe(
-        'https://kyc.dfx.swiss/session/abc',
+    it('joins an absolute path literally, keeping parity with plain concatenation', () => {
+      // Deliberate: request()/call() attach the bearer token, so an absolute config.url must
+      // stay a same-origin request (harmless 404) and never be sent to a foreign host.
+      // Absolute URLs belong to requestAbsolute().
+      expect(Utils.joinUrl('https://api.dfx.swiss/v1', 'https://evil.example.com/steal')).toBe(
+        'https://api.dfx.swiss/v1/https://evil.example.com/steal',
       );
     });
 
