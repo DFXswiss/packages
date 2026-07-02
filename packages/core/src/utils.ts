@@ -45,6 +45,22 @@ export class Utils {
     return jwt ? /^[A-Za-z0-9_-]{2,}(?:\.[A-Za-z0-9_-]{2,}){2}$/.test(jwt) : false;
   }
 
+  /**
+   * Join a base URL with a relative path, collapsing any duplicate slashes at the seam.
+   *
+   * Trailing slashes on the base and leading slashes on the path are stripped before joining
+   * with a single '/'. This prevents malformed URLs like `https://api.dfx.swiss/v1//foo` (which
+   * the API rejects with a 404 before any route/guard runs) when a caller passes a leading-slash
+   * path such as '/foo'. Absolute paths (http/https) are returned unchanged, and query strings
+   * are preserved.
+   */
+  static joinUrl(base: string, path: string): string {
+    if (/^https?:\/\//i.test(path)) return path;
+    const trimmedBase = base.replace(/\/+$/, '');
+    const trimmedPath = path.replace(/^\/+/, '');
+    return trimmedPath ? `${trimmedBase}/${trimmedPath}` : trimmedBase;
+  }
+
   static buildQueryParams(params: { [key: string]: string | number | undefined }): string {
     return Object.keys(params)
       .filter((key) => params[key] !== undefined)

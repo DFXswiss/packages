@@ -1,4 +1,5 @@
 import { ApiError, ApiException } from '../definitions/error';
+import { Utils } from '../utils';
 
 export enum ResponseType {
   JSON = 'json',
@@ -51,8 +52,8 @@ export class DfxHttpClient {
    */
   async request<T>(config: RequestConfig): Promise<T> {
     const version = config.version ?? this.getDefaultVersion();
-    const baseUrl = `${this.getBaseUrl()}/${version}`;
-    return this.rawRequest<T>({ ...config, url: `${baseUrl}/${config.url}` });
+    const baseUrl = Utils.joinUrl(this.getBaseUrl(), version);
+    return this.rawRequest<T>({ ...config, url: Utils.joinUrl(baseUrl, config.url) });
   }
 
   /**
