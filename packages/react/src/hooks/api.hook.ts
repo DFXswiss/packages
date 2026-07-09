@@ -78,6 +78,7 @@ export function useApi(): ApiInterface {
                 body?.statusCode ?? response.status,
                 body?.message ?? response.statusText ?? 'Unknown error',
                 body?.code,
+                body?.switchToCode,
               );
             });
         });
