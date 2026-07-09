@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.4.1...@dfx.swiss/react@1.5.0-beta.0) (2026-07-09)
+
+### Features
+
+- expose switchToCode on ApiException for merged-account redirects ([#187](https://github.com/DFXswiss/packages/issues/187)) ([2084e20](https://github.com/DFXswiss/packages/commit/2084e20c9ee3fd58e399d0a9a9e771f2fd135cc6)), closes [DFXswiss/api#4092](https://github.com/DFXswiss/api/issues/4092)
+
 ## [1.4.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.4.1-beta.0...@dfx.swiss/react@1.4.1) (2026-07-02)
 
 **Note:** Version bump only for package @dfx.swiss/react
