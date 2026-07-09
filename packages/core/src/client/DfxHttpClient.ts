@@ -111,6 +111,7 @@ export class DfxHttpClient {
       body?.statusCode ?? response.status,
       body?.message ?? response.statusText ?? 'Unknown error',
       body?.code,
+      body?.switchToCode,
     );
   }
 

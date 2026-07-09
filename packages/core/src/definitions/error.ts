@@ -10,6 +10,11 @@ export interface ApiError {
    * 'KYC_LEVEL_REQUIRED'). Absent for generic errors.
    */
   code?: string;
+  /**
+   * Code of the master account to redirect to when a request targets a merged
+   * account (HTTP 401). Absent otherwise.
+   */
+  switchToCode?: string;
 }
 
 export class ApiException extends Error implements ApiError {
@@ -17,6 +22,7 @@ export class ApiException extends Error implements ApiError {
     public readonly statusCode: number,
     message: string,
     public readonly code?: string,
+    public readonly switchToCode?: string,
   ) {
     super(message);
     this.name = 'ApiException';

@@ -32,4 +32,14 @@ describe('ApiException', () => {
       }
     }
   });
+
+  it('carries switchToCode when provided', () => {
+    const error = new ApiException(401, 'User is merged', undefined, 'MASTER-CODE');
+    expect(error.switchToCode).toBe('MASTER-CODE');
+  });
+
+  it('leaves switchToCode undefined when not provided', () => {
+    const error = new ApiException(401, 'Unauthorized');
+    expect(error.switchToCode).toBeUndefined();
+  });
 });
