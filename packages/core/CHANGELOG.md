@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.1-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.4.0...@dfx.swiss/core@0.4.1-beta.0) (2026-07-11)
+
+### Bug Fixes
+
+- **react:** omit userAddress on transaction list without session address ([#189](https://github.com/DFXswiss/packages/issues/189)) ([f1b115a](https://github.com/DFXswiss/packages/commit/f1b115ac3c319354aa5503165feffb5acecb49ff))
+
 # [0.4.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.4.0-beta.0...@dfx.swiss/core@0.4.0) (2026-07-09)
 
 **Note:** Version bump only for package @dfx.swiss/core
