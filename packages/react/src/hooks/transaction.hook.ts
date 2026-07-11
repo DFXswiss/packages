@@ -57,7 +57,9 @@ export function useTransaction(): TransactionInterface {
   const getTransactions = useCallback(async (): Promise<Transaction[]> => {
     if (!session) throw new Error('No active session');
 
-    return call<Transaction[]>({ url: `${TransactionUrl.get}?userAddress=${session.address}`, method: 'GET' });
+    // API requires JWT; optional userAddress scopes to the session wallet (must belong to account).
+    const q = session.address ? `?userAddress=${encodeURIComponent(session.address)}` : '';
+    return call<Transaction[]>({ url: `${TransactionUrl.get}${q}`, method: 'GET' });
   }, [call, session]);
 
   const getDetailTransactions = useCallback(
