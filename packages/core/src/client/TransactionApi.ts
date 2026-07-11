@@ -15,6 +15,10 @@ import { DfxHttpClient, ResponseType } from './DfxHttpClient';
 export class TransactionApi {
   constructor(private readonly http: DfxHttpClient) {}
 
+  /**
+   * List history for the authenticated subject (Bearer JWT required on the HTTP client).
+   * Optional `userAddress` filters to one wallet that must belong to the account.
+   */
   async list(userAddress?: string): Promise<Transaction[]> {
     const query = Utils.buildQuery({ userAddress });
     return this.http.request<Transaction[]>({ url: `${TransactionUrl.get}${query}`, method: 'GET' });

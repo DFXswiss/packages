@@ -216,6 +216,7 @@ export interface TransactionRefundData {
 }
 
 export interface TransactionHistoryQuery {
+  /** Optional wallet scope; must belong to the authenticated account when set. */
   userAddress?: string;
   from?: Date;
   to?: Date;
