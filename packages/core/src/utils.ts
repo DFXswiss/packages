@@ -93,4 +93,15 @@ export class Utils {
       reader.onerror = (e) => reject(e);
     });
   }
+
+  // True only when `url` targets the exact same origin as `baseUrl`. Used to guard credentialed
+  // requests (e.g. the x-kyc-code header) against being sent to a foreign origin if a step URL ever
+  // came from an untrusted source. Unparsable input fails closed.
+  static isSameOrigin(url: string, baseUrl: string): boolean {
+    try {
+      return new URL(url).origin === new URL(baseUrl).origin;
+    } catch {
+      return false;
+    }
+  }
 }
