@@ -38,6 +38,7 @@ export {
   Blockchain,
   // Buy
   BuyUrl,
+  PersonalIbanProvider,
   // Country
   CountryUrl,
   // Error

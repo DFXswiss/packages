@@ -22,7 +22,7 @@ export type { Bank } from './bank';
 export { BankAccountUrl } from './bank-account';
 export type { BankAccount } from './bank-account';
 export { Blockchain } from './blockchain';
-export { BuyUrl } from './buy';
+export { BuyUrl, PersonalIbanProvider } from './buy';
 export type { Buy, BuyPaymentInfo, PdfDocument } from './buy';
 export { CountryUrl } from './country';
 export type { Country } from './country';
