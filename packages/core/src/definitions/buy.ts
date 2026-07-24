@@ -62,7 +62,10 @@ export interface BuyPaymentInfo {
   paymentMethod?: FiatPaymentMethod;
   externalTransactionId?: string;
   exactPrice?: boolean;
-  /** Explicit personal IBAN provider (e.g. frick). Fail-closed on the API. */
+  /**
+   * Explicit personal IBAN provider (e.g. PersonalIbanProvider.FRICK / "Frick").
+   * Fail-closed on the API.
+   */
   personalIbanProvider?: PersonalIbanProvider;
 }
 
