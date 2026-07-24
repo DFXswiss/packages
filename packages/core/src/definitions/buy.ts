@@ -12,7 +12,7 @@ export const BuyUrl = {
 };
 
 export enum PersonalIbanProvider {
-  FRICK = 'frick',
+  FRICK = 'Frick',
 }
 
 export interface Buy {
