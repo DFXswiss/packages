@@ -11,10 +11,19 @@ export interface Bank {
 }
 
 export enum ReceiveIbanStatus {
+  /** The IBAN belongs to DFX. Whether that account still receives is not implied - many are decommissioned. */
   DFX_IBAN = 'DfxIban',
-  // valid IBAN, but not attributable for this caller - no claim that DFX does not own it
+  /**
+   * Valid IBAN, but not attributable for this caller. This is no claim that DFX does not own it: the personal IBAN of
+   * another customer is never checked, and after an account merge personal IBANs stay with the old account.
+   */
   NOT_MATCHED = 'NotMatched',
+  /** Not a valid IBAN. */
   INVALID_IBAN = 'InvalidIban',
+  /**
+   * No collective account matched and the caller is not logged in, so personal IBANs were not checked. Returned
+   * instead of NotMatched to signal that the check is incomplete, not that the IBAN is unknown to DFX.
+   */
   LOGIN_REQUIRED = 'LoginRequired',
 }
 
