@@ -11,7 +11,10 @@ export interface Bank {
 }
 
 export enum ReceiveIbanStatus {
-  /** The IBAN belongs to DFX. Whether that account still receives is not implied - many are decommissioned. */
+  /**
+   * Either a collective DFX account or the requesting account's own personal deposit IBAN. Whether that account still
+   * receives is not implied - many are decommissioned.
+   */
   DFX_IBAN = 'DfxIban',
   /**
    * Valid IBAN, but not attributable for this caller. This is no claim that DFX does not own it: the personal IBAN of

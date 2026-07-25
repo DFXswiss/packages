@@ -30,8 +30,8 @@ describe('BankApi', () => {
       expect(mockHttp.request).toHaveBeenCalledWith({ url: 'bank/receive-iban', method: 'PUT', data: { iban } });
     });
 
-    it('sends the auth token, so the API can answer LoginRequired', async () => {
-      const mockHttp = createMockHttpClient({ status: ReceiveIbanStatus.LOGIN_REQUIRED });
+    it('does not suppress the auth token, so the API can answer more than LoginRequired', async () => {
+      const mockHttp = createMockHttpClient({ status: ReceiveIbanStatus.NOT_MATCHED });
       const api = new BankApi(mockHttp);
 
       await api.checkReceiveIban(iban);
