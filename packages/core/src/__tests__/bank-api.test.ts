@@ -19,7 +19,7 @@ describe('BankApi', () => {
   const iban = 'DE89370400440532013000';
 
   describe('checkReceiveIban', () => {
-    it('sends the IBAN as PUT to the receive-iban endpoint', async () => {
+    it('sends the IBAN as PUT to the receiveIban endpoint', async () => {
       const mockHttp = createMockHttpClient({ status: ReceiveIbanStatus.DFX_IBAN });
       const api = new BankApi(mockHttp);
 
@@ -27,7 +27,7 @@ describe('BankApi', () => {
 
       expect(result).toEqual({ status: ReceiveIbanStatus.DFX_IBAN });
       expect(mockHttp.request).toHaveBeenCalledTimes(1);
-      expect(mockHttp.request).toHaveBeenCalledWith({ url: 'bank/receive-iban', method: 'PUT', data: { iban } });
+      expect(mockHttp.request).toHaveBeenCalledWith({ url: 'bank/receiveIban', method: 'PUT', data: { iban } });
     });
 
     it('does not suppress the auth token, so the API can answer more than LoginRequired', async () => {

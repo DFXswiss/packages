@@ -1,6 +1,6 @@
 export const BankUrl = {
   get: 'bank',
-  receiveIban: 'bank/receive-iban',
+  receiveIban: 'bank/receiveIban',
 };
 
 export interface Bank {
