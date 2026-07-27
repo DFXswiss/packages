@@ -11,6 +11,10 @@ export const BuyUrl = {
   confirm: (txId: number) => `buy/paymentInfos/${txId}/confirm`,
 };
 
+export enum PersonalIbanProvider {
+  FRICK = 'Frick',
+}
+
 export interface Buy {
   id: number;
   uid: string;
@@ -24,6 +28,8 @@ export interface Buy {
   iban?: string;
   bic: string;
   sepaInstant: boolean;
+  /** Bank name (e.g. for personal IBAN); optional for backward compatibility. */
+  bank?: string;
   routeId: number;
   remittanceInfo?: string;
   fees: Fees;
@@ -56,6 +62,11 @@ export interface BuyPaymentInfo {
   paymentMethod?: FiatPaymentMethod;
   externalTransactionId?: string;
   exactPrice?: boolean;
+  /**
+   * Explicit personal IBAN provider (e.g. PersonalIbanProvider.FRICK / "Frick").
+   * Fail-closed on the API.
+   */
+  personalIbanProvider?: PersonalIbanProvider;
 }
 
 export interface PdfDocument {

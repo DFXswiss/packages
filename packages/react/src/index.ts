@@ -52,6 +52,8 @@ export { BankAccount, BankAccountUrl } from './definitions/bank-account';
 export { Bank, BankUrl } from './definitions/bank';
 export { Blockchain } from './definitions/blockchain';
 export { Buy, BuyPaymentInfo, PdfDocument, BuyUrl } from './definitions/buy';
+/** Personal IBAN provider values accepted by buy payment-info requests. */
+export { PersonalIbanProvider } from './definitions/buy';
 export { Country, CountryUrl } from './definitions/country';
 export { ApiError, ApiException } from './definitions/error';
 export { Fiat, FiatUrl } from './definitions/fiat';
