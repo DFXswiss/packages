@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.4.1...@dfx.swiss/core@0.5.0-beta.0) (2026-07-27)
+
+### Features
+
+- **core:** add personal IBAN provider contract ([#191](https://github.com/DFXswiss/packages/issues/191)) ([67f4cd5](https://github.com/DFXswiss/packages/commit/67f4cd5c4d509ccd591f9968e7178b41cb4a0e03))
+
 ## [0.4.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.4.1-beta.0...@dfx.swiss/core@0.4.1) (2026-07-11)
 
 **Note:** Version bump only for package @dfx.swiss/core
