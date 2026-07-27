@@ -9,8 +9,10 @@ export interface BankInterface {
    *
    * There is no abort signal, so a call can neither be cancelled nor superseded. When driving this from a text
    * field, debounce the input, track the most recent request and discard responses that do not belong to it - a
-   * slow answer for a prefix can otherwise overwrite a fast answer for the full IBAN. The endpoint is throttled:
-   * HTTP 429 arrives as an ApiException with no matching status and means "not checkable", not a failed check.
+   * slow answer for a prefix can otherwise overwrite a fast answer for the full IBAN.
+   *
+   * Any non-2xx response is raised as an ApiException instead of being returned as a status. Treat a rejected
+   * call as "could not check", never as a negative result about the IBAN.
    */
   checkReceiveIban: (iban: string) => Promise<ReceiveIbanCheck>;
 }

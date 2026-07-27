@@ -11,22 +11,18 @@ export interface Bank {
 }
 
 export enum ReceiveIbanStatus {
-  /**
-   * Either a collective DFX account or the requesting account's own personal deposit IBAN. Does not imply that the
-   * account currently accepts incoming funds.
-   */
+  /** The IBAN is a DFX IBAN. This does not imply that it currently accepts payments. */
   DFX_IBAN = 'DfxIban',
   /**
-   * Valid IBAN, but not attributable to the requesting account. This is no claim that DFX does not own it: an IBAN
-   * the same customer used earlier can end up here, and the personal IBAN of another customer is never checked.
-   * Never phrase this to the user as "this IBAN does not belong to DFX".
+   * No match was found for this request. This is not a statement that the IBAN is not DFX's - word it as "could
+   * not recognize", never as "not ours".
    */
   NOT_MATCHED = 'NotMatched',
   /** Not a valid IBAN. */
   INVALID_IBAN = 'InvalidIban',
   /**
-   * No collective account matched and the request carried no account-scoped identity, so personal IBANs were not
-   * checked. Returned instead of NotMatched to signal that the check is incomplete, not that the IBAN is unknown.
+   * No match was found and the request carried no account-scoped identity, so the check is incomplete. Prompt for
+   * login instead of reporting the IBAN as unknown.
    */
   LOGIN_REQUIRED = 'LoginRequired',
 }

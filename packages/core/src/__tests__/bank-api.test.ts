@@ -36,7 +36,7 @@ describe('BankApi', () => {
 
       await api.checkReceiveIban(iban);
 
-      // must stay unset: with token false the API could never tell NotMatched from LoginRequired
+      // Unlike list(), this call does not opt out of the token, so an authenticated caller's request carries it.
       expect(mockHttp.request.mock.calls[0][0]).not.toHaveProperty('token');
     });
   });
