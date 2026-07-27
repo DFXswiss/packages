@@ -16,27 +16,28 @@ function createMockHttpClient(response?: any) {
 }
 
 describe('BankApi', () => {
-  const iban = 'DE89370400440532013000';
-
   describe('checkReceiveIban', () => {
-    it('sends the IBAN as PUT to the receiveIban endpoint', async () => {
-      const mockHttp = createMockHttpClient({ status: ReceiveIbanStatus.DFX_IBAN });
-      const api = new BankApi(mockHttp);
+    it.each(['DE89370400440532013000', 'FR1420041010050500013M02606'])(
+      'sends the IBAN as PUT to the receiveIban endpoint (%s)',
+      async (iban) => {
+        const mockHttp = createMockHttpClient({ status: ReceiveIbanStatus.DFX_IBAN });
+        const api = new BankApi(mockHttp);
 
-      const result = await api.checkReceiveIban(iban);
+        const result = await api.checkReceiveIban(iban);
 
-      expect(result).toEqual({ status: ReceiveIbanStatus.DFX_IBAN });
-      expect(mockHttp.request).toHaveBeenCalledTimes(1);
-      expect(mockHttp.request).toHaveBeenCalledWith({ url: 'bank/receiveIban', method: 'PUT', data: { iban } });
-    });
+        expect(result).toEqual({ status: ReceiveIbanStatus.DFX_IBAN });
+        expect(mockHttp.request).toHaveBeenCalledTimes(1);
+        expect(mockHttp.request).toHaveBeenCalledWith({ url: 'bank/receiveIban', method: 'PUT', data: { iban } });
+      },
+    );
 
-    it('does not suppress the auth token, so the API can answer more than LoginRequired', async () => {
+    it('does not opt out of the auth token, unlike list()', async () => {
       const mockHttp = createMockHttpClient({ status: ReceiveIbanStatus.NOT_MATCHED });
       const api = new BankApi(mockHttp);
 
-      await api.checkReceiveIban(iban);
+      await api.checkReceiveIban('DE89370400440532013000');
 
-      // Unlike list(), this call does not opt out of the token, so an authenticated caller's request carries it.
+      // Unlike list(), this call does not set token: false on the request options.
       expect(mockHttp.request.mock.calls[0][0]).not.toHaveProperty('token');
     });
   });

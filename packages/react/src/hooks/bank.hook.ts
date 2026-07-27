@@ -11,8 +11,8 @@ export interface BankInterface {
    * field, debounce the input, track the most recent request and discard responses that do not belong to it - a
    * slow answer for a prefix can otherwise overwrite a fast answer for the full IBAN.
    *
-   * Any non-2xx response is raised as an ApiException instead of being returned as a status. Treat a rejected
-   * call as "could not check", never as a negative result about the IBAN.
+   * HTTP failures never arrive as a ReceiveIbanStatus. When the call rejects, it rejects with an ApiException -
+   * treat that as "could not check", never as a negative result about the IBAN.
    */
   checkReceiveIban: (iban: string) => Promise<ReceiveIbanCheck>;
 }
