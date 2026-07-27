@@ -32,6 +32,7 @@ export {
   AuthWalletType,
   // Bank
   BankUrl,
+  ReceiveIbanStatus,
   // Bank Account
   BankAccountUrl,
   // Blockchain
@@ -136,6 +137,7 @@ export type {
   LnurlAuthStatus,
   // Bank
   Bank,
+  ReceiveIbanCheck,
   // Bank Account
   BankAccount,
   // Buy

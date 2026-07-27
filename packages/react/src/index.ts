@@ -49,7 +49,7 @@ export {
 } from './definitions/compliance';
 export { Asset, AssetType, AssetCategory, AssetUrl } from './definitions/asset';
 export { BankAccount, BankAccountUrl } from './definitions/bank-account';
-export { Bank, BankUrl } from './definitions/bank';
+export { Bank, BankUrl, ReceiveIbanCheck, ReceiveIbanStatus } from './definitions/bank';
 export { Blockchain } from './definitions/blockchain';
 export { Buy, BuyPaymentInfo, PdfDocument, BuyUrl } from './definitions/buy';
 /** Personal IBAN provider values accepted by buy payment-info requests. */
