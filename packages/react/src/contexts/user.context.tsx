@@ -97,11 +97,16 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       // it the cached `user.mail` stays stale and callers keep re-submitting the same address.
       // A failing refresh must not reject the call — the mail is already changed at that point, and
       // reporting it as an error would send the caller back into exactly that re-submit loop.
+      // The previous object is kept when the address did not move: an update that is still pending
+      // mail verification answers 202 and leaves the stored address untouched, so handing out a
+      // fresh identity there would re-trigger effects that watch `user` and re-submit endlessly.
       setIsUserUpdating(true);
       return updateMailApi(mail)
         .then(() =>
           getUser()
-            .then(setUser)
+            .then((refreshed) =>
+              setUser((prev) => (refreshed && prev && refreshed.mail === prev.mail ? prev : refreshed)),
+            )
             .catch(() => undefined),
         )
         .finally(() => setIsUserUpdating(false));
