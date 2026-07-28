@@ -95,10 +95,15 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     async (mail: string): Promise<void> => {
       // The endpoint answers with an empty body, so the refreshed user has to be fetched: without
       // it the cached `user.mail` stays stale and callers keep re-submitting the same address.
+      // A failing refresh must not reject the call — the mail is already changed at that point, and
+      // reporting it as an error would send the caller back into exactly that re-submit loop.
       setIsUserUpdating(true);
       return updateMailApi(mail)
-        .then(() => getUser())
-        .then(setUser)
+        .then(() =>
+          getUser()
+            .then(setUser)
+            .catch(() => undefined),
+        )
         .finally(() => setIsUserUpdating(false));
     },
     [getUser, updateMailApi],
