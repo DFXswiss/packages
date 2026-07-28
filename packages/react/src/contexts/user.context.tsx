@@ -93,9 +93,15 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
 
   const updateMail = useCallback(
     async (mail: string): Promise<void> => {
-      return updateMailApi(mail);
+      // The endpoint answers with an empty body, so the refreshed user has to be fetched: without
+      // it the cached `user.mail` stays stale and callers keep re-submitting the same address.
+      setIsUserUpdating(true);
+      return updateMailApi(mail)
+        .then(() => getUser())
+        .then(setUser)
+        .finally(() => setIsUserUpdating(false));
     },
-    [updateMailApi],
+    [getUser, updateMailApi],
   );
 
   const verifyMail = useCallback(
