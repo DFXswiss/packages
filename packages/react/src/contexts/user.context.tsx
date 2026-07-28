@@ -105,7 +105,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
         .then(() =>
           getUser()
             .then((refreshed) =>
-              setUser((prev) => (refreshed && prev && refreshed.mail === prev.mail ? prev : refreshed)),
+              setUser((prev) => (refreshed && (!prev || refreshed.mail !== prev.mail) ? refreshed : prev)),
             )
             .catch(() => undefined),
         )
