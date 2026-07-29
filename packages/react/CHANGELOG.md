@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.6.0...@dfx.swiss/react@1.7.0-beta.0) (2026-07-27)
+
+### Features
+
+- **bank:** add a receive-IBAN check to the bank client and hook ([#192](https://github.com/DFXswiss/packages/issues/192)) ([e7a8f89](https://github.com/DFXswiss/packages/commit/e7a8f8912716b93a36756a8991dab8ff5b0de592))
+
 # [1.6.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.6.0-beta.0...@dfx.swiss/react@1.6.0) (2026-07-27)
 
 **Note:** Version bump only for package @dfx.swiss/react
