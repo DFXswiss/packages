@@ -96,13 +96,14 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       // The endpoint returns an empty body, so the refreshed user has to be fetched. The refresh is
       // best-effort, and keeps the previous object when the address did not move — a change pending
       // mail verification (202) leaves it untouched, and a fresh identity there would re-trigger
-      // effects that watch `user` and re-submit endlessly.
+      // effects that watch `user` and re-submit endlessly. A cleared state stays cleared: a refresh
+      // landing after a logout must not put the signed-out user back.
       setIsUserUpdating(true);
       return updateMailApi(mail)
         .then(() =>
           getUser()
             .then((refreshed) =>
-              setUser((prev) => (refreshed && (!prev || refreshed.mail !== prev.mail) ? refreshed : prev)),
+              setUser((prev) => (prev && refreshed && refreshed.mail !== prev.mail ? refreshed : prev)),
             )
             .catch(() => undefined),
         )
