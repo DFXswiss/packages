@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [1.7.0-beta.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.7.0-beta.0...@dfx.swiss/react@1.7.0-beta.1) (2026-07-29)
+# [1.7.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.7.0-beta.0...@dfx.swiss/react@1.7.0) (2026-07-29)
 
 ### Bug Fixes
 
