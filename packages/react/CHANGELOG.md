@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0-beta.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.7.0-beta.0...@dfx.swiss/react@1.7.0-beta.1) (2026-07-29)
+
+### Bug Fixes
+
+- **react:** refresh the cached user after updateMail ([#196](https://github.com/DFXswiss/packages/issues/196)) ([9462884](https://github.com/DFXswiss/packages/commit/9462884498b296decbfb024f8c602455a5627eba)), closes [#473](https://github.com/DFXswiss/packages/issues/473)
+
 # [1.7.0-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.6.0...@dfx.swiss/react@1.7.0-beta.0) (2026-07-27)
 
 ### Features
