@@ -93,13 +93,10 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
 
   const updateMail = useCallback(
     async (mail: string): Promise<void> => {
-      // The endpoint answers with an empty body, so the refreshed user has to be fetched: without
-      // it the cached `user.mail` stays stale and callers keep re-submitting the same address.
-      // A failing refresh must not reject the call — the mail is already changed at that point, and
-      // reporting it as an error would send the caller back into exactly that re-submit loop.
-      // The previous object is kept when the address did not move: an update that is still pending
-      // mail verification answers 202 and leaves the stored address untouched, so handing out a
-      // fresh identity there would re-trigger effects that watch `user` and re-submit endlessly.
+      // The endpoint returns an empty body, so the refreshed user has to be fetched. The refresh is
+      // best-effort, and keeps the previous object when the address did not move — a change pending
+      // mail verification (202) leaves it untouched, and a fresh identity there would re-trigger
+      // effects that watch `user` and re-submit endlessly.
       setIsUserUpdating(true);
       return updateMailApi(mail)
         .then(() =>
