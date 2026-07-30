@@ -17,7 +17,7 @@ export interface Job<T = unknown> {
   created: Date;
   started?: Date;
   finished?: Date;
-  expectedSeconds: number;
+  expectedSeconds?: number;
   result?: T;
   error?: string;
 }

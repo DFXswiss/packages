@@ -8,8 +8,7 @@ export interface JobStatusMessage {
 }
 
 export interface JobContextInterface {
-  subscribe: (uid: string, onStatus: (message: JobStatusMessage) => void) => void;
-  unsubscribe: (uid: string) => void;
+  subscribe: (uid: string, onStatus: (message: JobStatusMessage) => void) => () => void;
 }
 
 const JobContext = createContext<JobContextInterface>(undefined as any);
@@ -23,9 +22,22 @@ const RECONNECT_BASE_MS = 1000;
 const RECONNECT_MAX_DELAY_MS = 30000;
 const RECONNECT_MAX_ATTEMPTS = 5;
 
+function isJobStatusMessage(value: unknown): value is JobStatusMessage {
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) {
+    return false;
+  }
+
+  const candidate = value as { uid?: unknown; status?: unknown };
+  if (typeof candidate.uid !== 'string' || typeof candidate.status !== 'string') {
+    return false;
+  }
+
+  return (Object.values(JobStatus) as string[]).includes(candidate.status);
+}
+
 export function JobContextProvider(props: PropsWithChildren): JSX.Element {
   const { defaultUrl } = useApi();
-  const subscribersRef = useRef(new Map<string, (message: JobStatusMessage) => void>());
+  const subscribersRef = useRef(new Map<string, Set<(message: JobStatusMessage) => void>>());
   const socketRef = useRef<WebSocket | null>(null);
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const reconnectAttemptRef = useRef(0);
@@ -80,18 +92,24 @@ export function JobContextProvider(props: PropsWithChildren): JSX.Element {
     };
 
     socket.onmessage = (event: MessageEvent) => {
-      let message: JobStatusMessage;
+      let parsed: unknown;
       try {
-        message = JSON.parse(String(event.data)) as JobStatusMessage;
+        parsed = JSON.parse(String(event.data));
       } catch {
         // Malformed socket payloads are ignored; they must not crash the app.
         return;
       }
 
-      const onStatus = subscribersRef.current.get(message.uid);
-      if (onStatus) {
-        onStatus(message);
+      if (!isJobStatusMessage(parsed)) {
+        // Non-object or incomplete payloads are discarded the same way as parse failures.
+        return;
       }
+
+      // Copied into a const because the narrowing from the guard above does not survive into the
+      // callback closure. forEach rather than for...of: this package compiles below ES2015, where
+      // iterating a Set would need downlevelIteration.
+      const message = parsed;
+      subscribersRef.current.get(message.uid)?.forEach((onStatus) => onStatus(message));
     };
 
     socket.onclose = () => {
@@ -118,23 +136,32 @@ export function JobContextProvider(props: PropsWithChildren): JSX.Element {
   }, [buildSocketUrl, clearReconnectTimer, closeSocket]);
 
   const subscribe = useCallback(
-    (uid: string, onStatus: (message: JobStatusMessage) => void) => {
-      subscribersRef.current.set(uid, onStatus);
+    (uid: string, onStatus: (message: JobStatusMessage) => void): (() => void) => {
+      let listeners = subscribersRef.current.get(uid);
+      if (listeners === undefined) {
+        listeners = new Set();
+        subscribersRef.current.set(uid, listeners);
+      }
+      listeners.add(onStatus);
       reconnectAttemptRef.current = 0;
       connect();
-    },
-    [connect],
-  );
 
-  const unsubscribe = useCallback(
-    (uid: string) => {
-      subscribersRef.current.delete(uid);
-      if (subscribersRef.current.size === 0) {
-        clearReconnectTimer();
-        closeSocket();
-        return;
-      }
-      connect();
+      return () => {
+        const current = subscribersRef.current.get(uid);
+        if (current === undefined) {
+          return;
+        }
+        current.delete(onStatus);
+        if (current.size === 0) {
+          subscribersRef.current.delete(uid);
+          if (subscribersRef.current.size === 0) {
+            clearReconnectTimer();
+            closeSocket();
+            return;
+          }
+          connect();
+        }
+      };
     },
     [clearReconnectTimer, closeSocket, connect],
   );
@@ -156,9 +183,8 @@ export function JobContextProvider(props: PropsWithChildren): JSX.Element {
   const context = useMemo(
     () => ({
       subscribe,
-      unsubscribe,
     }),
-    [subscribe, unsubscribe],
+    [subscribe],
   );
 
   return <JobContext.Provider value={context}>{props.children}</JobContext.Provider>;

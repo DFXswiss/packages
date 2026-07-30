@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useJobContext } from '../contexts/job.context';
 import { isJobFinished, Job, JobUrl } from '../definitions/job';
 import { useApi } from './api.hook';
@@ -20,33 +20,41 @@ export function useJob(uid: string | undefined): UseJobInterface {
   const [job, setJob] = useState<Job | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(uid !== undefined);
   const [error, setError] = useState<string | undefined>(undefined);
-
-  const activeRef = useRef(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const attemptRef = useRef(0);
-  const subscribedUidRef = useRef<string | undefined>(undefined);
+  const [isOverdue, setIsOverdue] = useState(false);
 
   useEffect(() => {
-    activeRef.current = true;
-    attemptRef.current = 0;
+    // Effect-scoped guard: shared refs would let a stale fetch from a previous uid write after a re-run.
+    let cancelled = false;
+    // Once settled (finished job, timeout, or cleanup), no further setJob/setIsLoading/setError from this run.
+    let settled = false;
+    let fetchInFlight = false;
+    let refetchRequested = false;
+    let attempt = 0;
+    let pollTimer: ReturnType<typeof setTimeout> | undefined;
+    let maxTrackingTimer: ReturnType<typeof setTimeout> | undefined;
+    let unsubscribeFromContext: (() => void) | undefined;
 
-    const clearTimer = () => {
-      if (timerRef.current !== undefined) {
-        clearTimeout(timerRef.current);
-        timerRef.current = undefined;
+    const clearPollTimer = () => {
+      if (pollTimer !== undefined) {
+        clearTimeout(pollTimer);
+        pollTimer = undefined;
       }
     };
 
-    const unsubscribeFromContext = () => {
-      if (jobContext && subscribedUidRef.current !== undefined) {
-        jobContext.unsubscribe(subscribedUidRef.current);
-        subscribedUidRef.current = undefined;
+    const clearMaxTrackingTimer = () => {
+      if (maxTrackingTimer !== undefined) {
+        clearTimeout(maxTrackingTimer);
+        maxTrackingTimer = undefined;
       }
     };
 
     const stopTracking = () => {
-      clearTimer();
-      unsubscribeFromContext();
+      clearPollTimer();
+      clearMaxTrackingTimer();
+      if (unsubscribeFromContext !== undefined) {
+        unsubscribeFromContext();
+        unsubscribeFromContext = undefined;
+      }
     };
 
     if (uid === undefined) {
@@ -54,7 +62,8 @@ export function useJob(uid: string | undefined): UseJobInterface {
       setIsLoading(false);
       setError(undefined);
       return () => {
-        activeRef.current = false;
+        cancelled = true;
+        settled = true;
         stopTracking();
       };
     }
@@ -63,52 +72,78 @@ export function useJob(uid: string | undefined): UseJobInterface {
     setIsLoading(true);
     setError(undefined);
 
-    const startTime = Date.now();
+    // Dedicated cap so a hung fetch cannot prevent the 10-minute timeout from firing.
+    maxTrackingTimer = setTimeout(() => {
+      if (cancelled || settled) {
+        return;
+      }
+      settled = true;
+      setError('Job tracking timed out after 10 minutes');
+      setIsLoading(false);
+      stopTracking();
+    }, MAX_TRACKING_MS);
 
-    const fetchJob = async (): Promise<boolean> => {
+    const runFetch = async (): Promise<void> => {
+      if (cancelled || settled) {
+        return;
+      }
+      if (fetchInFlight) {
+        // Coalesce concurrent poll/socket triggers into a single follow-up fetch.
+        refetchRequested = true;
+        return;
+      }
+
+      fetchInFlight = true;
       try {
-        const result = await call<Job>({ url: JobUrl.get(uid), method: 'GET' });
-        if (!activeRef.current) {
-          return true;
+        for (;;) {
+          refetchRequested = false;
+          if (cancelled || settled) {
+            return;
+          }
+          try {
+            const result = await call<Job>({ url: JobUrl.get(uid), method: 'GET' });
+            if (cancelled || settled) {
+              return;
+            }
+            setJob(result);
+            setIsLoading(false);
+            if (isJobFinished(result.status)) {
+              settled = true;
+              stopTracking();
+              return;
+            }
+          } catch {
+            // Transient poll failures are skipped; the next scheduled interval retries.
+          }
+          if (!refetchRequested) {
+            return;
+          }
         }
-        setJob(result);
-        setIsLoading(false);
-        if (isJobFinished(result.status)) {
-          stopTracking();
-          return true;
+      } finally {
+        fetchInFlight = false;
+        if (refetchRequested && !cancelled && !settled) {
+          refetchRequested = false;
+          void runFetch();
         }
-        return false;
-      } catch {
-        // Transient poll failures are skipped; the next scheduled interval retries.
-        return false;
       }
     };
 
     const scheduleNext = () => {
-      if (!activeRef.current) {
+      if (cancelled || settled) {
         return;
       }
 
-      const delay = attemptRef.current < POLL_DELAYS_MS.length ? POLL_DELAYS_MS[attemptRef.current] : STEADY_POLL_MS;
+      const delay = attempt < POLL_DELAYS_MS.length ? POLL_DELAYS_MS[attempt] : STEADY_POLL_MS;
 
-      timerRef.current = setTimeout(() => {
+      pollTimer = setTimeout(() => {
         void (async () => {
-          if (!activeRef.current) {
+          if (cancelled || settled) {
             return;
           }
 
-          if (Date.now() - startTime >= MAX_TRACKING_MS) {
-            if (activeRef.current) {
-              setError('Job tracking timed out after 10 minutes');
-              setIsLoading(false);
-            }
-            stopTracking();
-            return;
-          }
-
-          attemptRef.current += 1;
-          const finished = await fetchJob();
-          if (!activeRef.current || finished) {
+          attempt += 1;
+          await runFetch();
+          if (cancelled || settled) {
             return;
           }
           scheduleNext();
@@ -117,29 +152,49 @@ export function useJob(uid: string | undefined): UseJobInterface {
     };
 
     if (jobContext) {
-      jobContext.subscribe(uid, () => {
-        void fetchJob();
+      unsubscribeFromContext = jobContext.subscribe(uid, () => {
+        void runFetch();
       });
-      subscribedUidRef.current = uid;
     }
 
     scheduleNext();
 
     return () => {
-      activeRef.current = false;
+      cancelled = true;
+      settled = true;
       stopTracking();
     };
   }, [uid, call, jobContext]);
 
-  const isOverdue = useMemo(() => {
+  useEffect(() => {
     if (!job || isJobFinished(job.status)) {
-      return false;
+      setIsOverdue(false);
+      return;
     }
     // expectedSeconds may be absent on the wire; do not invent a default — overdue is false without it.
     if (typeof job.expectedSeconds !== 'number') {
-      return false;
+      setIsOverdue(false);
+      return;
     }
-    return Date.now() - new Date(job.created).getTime() > job.expectedSeconds * 1000;
+
+    // isOverdue depends on the client's local clock relative to the server's created timestamp;
+    // a skewed client clock will report overdue early, late, or never.
+    const deadline = new Date(job.created).getTime() + job.expectedSeconds * 1000;
+    const remainingMs = deadline - Date.now();
+
+    if (remainingMs <= 0) {
+      setIsOverdue(true);
+      return;
+    }
+
+    setIsOverdue(false);
+    const timer = setTimeout(() => {
+      setIsOverdue(true);
+    }, remainingMs);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [job]);
 
   return useMemo(
