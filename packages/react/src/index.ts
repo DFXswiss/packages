@@ -2,6 +2,7 @@
 export { DfxContextProvider } from './contexts/dfx.context';
 export { SupportChatContextProvider } from './contexts/support.context';
 export { PaymentRoutesContextProvider } from './contexts/payment-routes.context';
+export { JobContextProvider } from './contexts/job.context';
 
 export { useAssetContext } from './contexts/asset.context';
 export { useFiatContext } from './contexts/fiat.context';
@@ -11,6 +12,7 @@ export { useBankAccountContext } from './contexts/bank-account.context';
 export { useSessionContext } from './contexts/session.context';
 export { useUserContext } from './contexts/user.context';
 export { usePaymentRoutesContext } from './contexts/payment-routes.context';
+export { useJobContext } from './contexts/job.context';
 export { useSupportChatContext } from './contexts/support.context';
 
 // Hooks
@@ -32,6 +34,7 @@ export { useSell } from './hooks/sell.hook';
 export { useUser } from './hooks/user.hook';
 export { useSwap } from './hooks/swap.hook';
 export { useSupportChat } from './hooks/support.hook';
+export { useJob } from './hooks/job.hook';
 
 // Definitions
 export { CheckStatus, AmlReason } from './definitions/aml';
@@ -93,6 +96,8 @@ export { InfoBanner, SettingsUrl } from './definitions/settings';
 export { PriceStep } from './definitions/price-step';
 export { Language, LanguageUrl } from './definitions/language';
 export { Jwt, UserRole } from './definitions/jwt';
+export { JobUrl, JobStatus, isJobFinished } from './definitions/job';
+export type { Job } from './definitions/job';
 export {
   AccountType,
   KycStatus,

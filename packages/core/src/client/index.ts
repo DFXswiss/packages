@@ -12,6 +12,7 @@ export type { CreateBankAccount, UpdateBankAccount } from './BankAccountApi';
 export { BuyApi } from './BuyApi';
 export { CountryApi } from './CountryApi';
 export { FiatApi } from './FiatApi';
+export { JobApi } from './JobApi';
 export { KycApi } from './KycApi';
 export { LanguageApi } from './LanguageApi';
 export { PaymentLinksApi } from './PaymentLinksApi';

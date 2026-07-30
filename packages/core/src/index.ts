@@ -46,6 +46,10 @@ export {
   ApiException,
   // Fiat
   FiatUrl,
+  // Job
+  JobUrl,
+  JobStatus,
+  isJobFinished,
   // JWT
   UserRole,
   // KYC
@@ -154,6 +158,8 @@ export type {
   Fiat,
   // File
   CustomFile,
+  // Job
+  Job,
   // JWT
   Jwt,
   // KYC
