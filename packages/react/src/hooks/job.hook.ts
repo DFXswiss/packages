@@ -89,8 +89,7 @@ export function useJob(uid: string | undefined): UseJobInterface {
         return;
       }
 
-      const delay =
-        attemptRef.current < POLL_DELAYS_MS.length ? POLL_DELAYS_MS[attemptRef.current] : STEADY_POLL_MS;
+      const delay = attemptRef.current < POLL_DELAYS_MS.length ? POLL_DELAYS_MS[attemptRef.current] : STEADY_POLL_MS;
 
       timerRef.current = setTimeout(() => {
         void (async () => {
