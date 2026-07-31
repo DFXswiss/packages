@@ -214,13 +214,20 @@ export interface KycStepSession extends KycStepBase {
 
 /** Response of KYC data submit endpoints (personal / financial). */
 export interface KycStepSubmit extends KycStepBase {
-  /** Whether the submission fulfilled all required fields and the step advanced. When false, a draft was saved but the step did not progress. */
-  complete: boolean;
   /**
-   * Missing required field paths (personal: e.g. `firstName`, `address.city`; financial: unanswered applicable question keys).
-   * Empty when `complete` is true. May also be empty while `complete` is false if the blocking field belongs to another step.
+   * Whether the submission fulfilled all required fields and the step advanced.
+   * When false, a draft was saved but the step did not progress.
+   * Absent on API versions that do not report submission completeness.
    */
-  missingFields: string[];
+  complete?: boolean;
+  /**
+   * Missing required field paths (personal: e.g. `firstName`, `address.city`;
+   * financial: unanswered applicable question keys). Empty when `complete` is
+   * true. May also be empty while `complete` is false if the blocking field
+   * belongs to another step. Absent on API versions that do not report
+   * submission completeness.
+   */
+  missingFields?: string[];
 }
 
 // personal data

@@ -2,7 +2,6 @@ import { KycApi } from '../client/KycApi';
 import { DfxHttpClient } from '../client/DfxHttpClient';
 import {
   AccountType,
-  KycFinancialCondition,
   KycFinancialQuestions,
   KycFinancialResponses,
   KycPersonalData,
@@ -23,21 +22,6 @@ function createMockHttpClient(response?: unknown) {
     setToken: jest.fn(),
     getToken: jest.fn(),
   } as unknown as DfxHttpClient & { requestAbsolute: jest.Mock };
-}
-
-/** Compile-time guard: fails tsc/ts-jest if the value is not a full KycStepSubmit. */
-function requireKycStepSubmit(value: KycStepSubmit): KycStepSubmit {
-  return value;
-}
-
-/** Compile-time guard: fails if KycFinancialCondition loses question/response as string. */
-function requireKycFinancialCondition(value: KycFinancialCondition): KycFinancialCondition {
-  return value;
-}
-
-/** Compile-time guard: fails if conditions is not KycFinancialCondition[]. */
-function requireKycFinancialConditions(value: KycFinancialCondition[]): KycFinancialCondition[] {
-  return value;
 }
 
 const personalData: KycPersonalData = {
@@ -73,7 +57,7 @@ const kycCode = 'kyc-code-1';
 
 describe('KycApi', () => {
   describe('setPersonalData', () => {
-    it('passes complete and missingFields through from the HTTP response unchanged', async () => {
+    it('returns complete=false and missingFields from the HTTP response', async () => {
       const response: KycStepSubmit = {
         name: KycStepName.PERSONAL_DATA,
         status: KycStepStatus.IN_PROGRESS,
@@ -86,16 +70,8 @@ describe('KycApi', () => {
 
       const result = await api.setPersonalData(kycCode, submitUrl, personalData);
 
-      // Runtime: fields must survive the client unchanged (no mapper that drops them).
-      expect(result.complete).toBe(false);
-      expect(result.missingFields).toEqual(['address.city', 'phone']);
       expect(result).toEqual(response);
-
-      // Type-level: return value must be a KycStepSubmit (breaks if return type is KycStepBase).
-      const typed = requireKycStepSubmit(result);
-      expect(typed.complete).toBe(false);
-      expect(typed.missingFields).toEqual(['address.city', 'phone']);
-
+      expect(result.complete).toBe(false);
       expect(mockHttp.requestAbsolute).toHaveBeenCalledTimes(1);
       expect(mockHttp.requestAbsolute).toHaveBeenCalledWith({
         url: submitUrl,
@@ -106,7 +82,7 @@ describe('KycApi', () => {
       });
     });
 
-    it('passes complete=true with empty missingFields through unchanged', async () => {
+    it('returns complete=true with empty missingFields from the HTTP response', async () => {
       const response: KycStepSubmit = {
         name: KycStepName.PERSONAL_DATA,
         status: KycStepStatus.IN_REVIEW,
@@ -118,17 +94,32 @@ describe('KycApi', () => {
       const api = new KycApi(mockHttp);
 
       const result = await api.setPersonalData(kycCode, submitUrl, personalData);
-      requireKycStepSubmit(result);
 
+      expect(result).toEqual(response);
       expect(result.complete).toBe(true);
-      expect(result.missingFields).toEqual([]);
+    });
+
+    it('returns undefined fields when the API does not report completeness', async () => {
+      const response: KycStepSubmit = {
+        name: KycStepName.PERSONAL_DATA,
+        status: KycStepStatus.IN_PROGRESS,
+        sequenceNumber: 1,
+      };
+      const mockHttp = createMockHttpClient(response);
+      const api = new KycApi(mockHttp);
+
+      const result = await api.setPersonalData(kycCode, submitUrl, personalData);
+
+      expect(result).toEqual(response);
+      expect(result.complete).toBeUndefined();
+      expect(result.missingFields).toBeUndefined();
     });
   });
 
   describe('setFinancialData', () => {
     const financialUrl = 'https://api.dfx.swiss/v2/kyc/data/financial/7';
 
-    it('passes complete and missingFields through from the HTTP response unchanged', async () => {
+    it('returns complete and missingFields from the HTTP response', async () => {
       const response: KycStepSubmit = {
         name: KycStepName.FINANCIAL_DATA,
         status: KycStepStatus.IN_PROGRESS,
@@ -141,14 +132,8 @@ describe('KycApi', () => {
 
       const result = await api.setFinancialData(kycCode, financialUrl, financialData);
 
-      expect(result.complete).toBe(false);
-      expect(result.missingFields).toEqual(['income', 'assets']);
       expect(result).toEqual(response);
-
-      const typed = requireKycStepSubmit(result);
-      expect(typed.complete).toBe(false);
-      expect(typed.missingFields).toEqual(['income', 'assets']);
-
+      expect(result.missingFields).toEqual(['income', 'assets']);
       expect(mockHttp.requestAbsolute).toHaveBeenCalledTimes(1);
       expect(mockHttp.requestAbsolute).toHaveBeenCalledWith({
         url: financialUrl,
@@ -163,8 +148,7 @@ describe('KycApi', () => {
   describe('getFinancialData', () => {
     const financialUrl = 'https://api.dfx.swiss/v2/kyc/data/financial/7';
 
-    it('passes question conditions through from the HTTP response unchanged', async () => {
-      const conditions: KycFinancialCondition[] = [{ question: 'occupation', response: 'employed' }];
+    it('returns question conditions from the HTTP response', async () => {
       const response: KycFinancialQuestions = {
         responses: [],
         questions: [
@@ -173,7 +157,7 @@ describe('KycApi', () => {
             type: QuestionType.TEXT,
             title: 'Describe your occupation',
             description: 'Only if employed',
-            conditions,
+            conditions: [{ question: 'occupation', response: 'employed' }],
           },
           {
             key: 'income',
@@ -188,24 +172,8 @@ describe('KycApi', () => {
 
       const result = await api.getFinancialData(kycCode, financialUrl, 'en');
 
-      // Runtime: conditions must survive the client unchanged (no mapper that drops them).
-      expect(result.questions[0].conditions).toEqual([{ question: 'occupation', response: 'employed' }]);
-      expect(result.questions[0].conditions?.[0].question).toBe('occupation');
-      expect(result.questions[0].conditions?.[0].response).toBe('employed');
       expect(result).toEqual(response);
-
-      // Type-level: conditions is KycFinancialCondition[] with string question/response.
-      const rawConditions = result.questions[0].conditions;
-      if (!rawConditions) {
-        throw new Error('expected conditions on first question');
-      }
-      const typedConditions = requireKycFinancialConditions(rawConditions);
-      const typedCondition = requireKycFinancialCondition(typedConditions[0]);
-      const question: string = typedCondition.question;
-      const responseValue: string = typedCondition.response;
-      expect(question).toBe('occupation');
-      expect(responseValue).toBe('employed');
-
+      expect(result.questions[0].conditions).toEqual([{ question: 'occupation', response: 'employed' }]);
       expect(mockHttp.requestAbsolute).toHaveBeenCalledTimes(1);
       expect(mockHttp.requestAbsolute).toHaveBeenCalledWith({
         url: `${financialUrl}?lang=en`,
