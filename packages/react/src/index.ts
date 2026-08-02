@@ -20,7 +20,7 @@ export { useAsset } from './hooks/asset.hook';
 export { useAuth } from './hooks/auth.hook';
 export { useBankAccount, CreateBankAccount, UpdateBankAccount } from './hooks/bank-account.hook';
 export { useBank } from './hooks/bank.hook';
-export { useBlockchain, BlockchainInterface } from './hooks/blockchain.hook';
+export { useBlockchain } from './hooks/blockchain.hook';
 export { useBuy } from './hooks/buy.hook';
 export { useCountry } from './hooks/country.hook';
 export { useFiat } from './hooks/fiat.hook';

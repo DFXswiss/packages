@@ -61,8 +61,9 @@ export interface CreateBlockchainTransaction {
 }
 
 /**
- * An unsigned transaction, encoded per blockchain: base64 for Solana, hex elsewhere. Decoding and
- * signing it needs a chain-specific library and stays with the caller.
+ * An unsigned transaction. The payload format is chain-specific and is not always what `encoding`
+ * says - read it together with the blockchain the transaction was requested for. Decoding and
+ * signing need a chain-specific library and stay with the caller.
  */
 export interface UnsignedTransaction {
   rawTransaction: string;
