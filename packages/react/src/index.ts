@@ -90,6 +90,7 @@ export {
   PaymentLinksUrl,
   PaymentStandard,
   C2BPaymentMethod,
+  ManualPaymentMethod,
   TransferMethod,
   TransferAmount,
   PaymentAmount,

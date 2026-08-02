@@ -146,7 +146,12 @@ describe('hasPaymentQuote', () => {
   });
 
   it('is false for an idle terminal response', () => {
-    const response: PaymentLinkPayResponse = { ...requestBase, error: 'No pending payment', statusCode: 404 };
+    const response: PaymentLinkPayResponse = {
+      ...requestBase,
+      error: 'Not Found',
+      message: 'No pending payment',
+      statusCode: 404,
+    };
 
     expect(hasPaymentQuote(response)).toBe(false);
   });

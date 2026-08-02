@@ -116,6 +116,7 @@ export {
   MinCompletionStatus,
   PaymentLinkBlockchain,
   C2BPaymentMethod,
+  ManualPaymentMethod,
   hasPaymentQuote,
 } from './route';
 export type {

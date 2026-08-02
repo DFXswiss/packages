@@ -10,6 +10,7 @@ export {
   MinCompletionStatus,
   PaymentLinkBlockchain,
   C2BPaymentMethod,
+  ManualPaymentMethod,
   hasPaymentQuote,
 } from '@dfx.swiss/core';
 
