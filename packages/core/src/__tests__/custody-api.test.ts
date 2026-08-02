@@ -1,11 +1,14 @@
 import { CustodyApi } from '../client/CustodyApi';
 import { DfxHttpClient } from '../client/DfxHttpClient';
+import { Blockchain } from '../definitions/blockchain';
 import {
   CustodyAccessLevel,
+  CustodyAccount,
   CustodyAddressType,
   CustodyOrderType,
   CustodyValueCurrency,
   LegacyCustodyAccountId,
+  toCustodyAccountId,
 } from '../definitions/custody';
 
 function createMockHttpClient(response?: any) {
@@ -102,6 +105,82 @@ describe('CustodyApi', () => {
         method: 'POST',
         token: 'custody-token',
       });
+    });
+
+    it('carries the destination of a send order', async () => {
+      const mockHttp = createMockHttpClient({});
+      const api = new CustodyApi(mockHttp);
+
+      await api.createOrder(
+        {
+          type: CustodyOrderType.SEND,
+          sourceAsset: 'ZCHF',
+          targetAsset: 'ZCHF',
+          sourceAmount: 5,
+          targetAddress: '0xabc',
+          targetBlockchain: Blockchain.ETHEREUM,
+        },
+        'custody-token',
+      );
+
+      expect((mockHttp.request.mock.calls[0][0] as { data: Record<string, unknown> }).data).toEqual({
+        type: CustodyOrderType.SEND,
+        sourceAsset: 'ZCHF',
+        targetAsset: 'ZCHF',
+        sourceAmount: 5,
+        targetAddress: '0xabc',
+        targetBlockchain: Blockchain.ETHEREUM,
+      });
+    });
+
+    it('carries the destination account of a withdrawal', async () => {
+      const mockHttp = createMockHttpClient({});
+      const api = new CustodyApi(mockHttp);
+
+      await api.createOrder(
+        {
+          type: CustodyOrderType.WITHDRAWAL,
+          sourceAsset: 'ZCHF',
+          targetAsset: 'CHF',
+          targetAmount: 5,
+          targetIban: 'CH9300762011623852957',
+        },
+        'custody-token',
+      );
+
+      expect((mockHttp.request.mock.calls[0][0] as { data: Record<string, unknown> }).data).toEqual({
+        type: CustodyOrderType.WITHDRAWAL,
+        sourceAsset: 'ZCHF',
+        targetAsset: 'CHF',
+        targetAmount: 5,
+        targetIban: 'CH9300762011623852957',
+      });
+    });
+  });
+
+  describe('account addressing', () => {
+    it('resolves the legacy account to its marker rather than to a null id', () => {
+      const legacy: CustodyAccount = {
+        id: null,
+        title: 'Safe',
+        isLegacy: true,
+        accessLevel: CustodyAccessLevel.WRITE,
+        isOwner: true,
+      };
+
+      expect(toCustodyAccountId(legacy)).toBe(LegacyCustodyAccountId);
+    });
+
+    it('resolves an ordinary account to its id', () => {
+      const account: CustodyAccount = {
+        id: 7,
+        title: 'Safe',
+        isLegacy: false,
+        accessLevel: CustodyAccessLevel.READ,
+        isOwner: false,
+      };
+
+      expect(toCustodyAccountId(account)).toBe(7);
     });
   });
 

@@ -16,6 +16,7 @@ import {
   CustodyPdfQuery,
   CustodySignup,
   CustodyUrl,
+  PersistedCustodyAccountId,
   UpdateCustodyAccount,
   UpdateCustodyAccountAccess,
 } from '../definitions/custody';
@@ -33,7 +34,8 @@ export interface CustodyInterface {
   getAccounts: () => Promise<CustodyAccount[]>;
   getAccount: (id: CustodyAccountId) => Promise<CustodyAccount>;
   createAccount: (data: CreateCustodyAccount) => Promise<CustodyAccount>;
-  updateAccount: (id: CustodyAccountId, data: UpdateCustodyAccount) => Promise<CustodyAccount>;
+  /** The legacy account cannot be renamed - it has no row to rename. */
+  updateAccount: (id: PersistedCustodyAccountId, data: UpdateCustodyAccount) => Promise<CustodyAccount>;
   /** Balances of the caller's own custody account. For a specific account use getAccountBalance. */
   getBalance: () => Promise<CustodyBalance>;
   getAccountBalance: (id: CustodyAccountId) => Promise<CustodyBalance>;
@@ -44,22 +46,23 @@ export interface CustodyInterface {
   /**
    * Quotes an order and reserves it. Nothing moves until the order is confirmed.
    *
-   * Needs the custody token from signup, not the session token.
+   * The custody token from signup is required, not the session token. It is not optional on
+   * purpose: leaving it out would send the session token instead and fail on the API side.
    */
-  createOrder: (data: CreateCustodyOrder, token?: string) => Promise<CustodyOrder>;
-  /** Confirms a quoted order. Needs the custody token, like createOrder. */
-  confirmOrder: (orderId: number, token?: string) => Promise<void>;
+  createOrder: (data: CreateCustodyOrder, token: string) => Promise<CustodyOrder>;
+  /** Confirms a quoted order. Requires the custody token, like createOrder. */
+  confirmOrder: (orderId: number, token: string) => Promise<void>;
   /** Balance report of the caller's own custody account, as a base64 encoded PDF. */
   getPdf: (params: CustodyPdfQuery) => Promise<PdfDocument>;
   getAccountPdf: (id: CustodyAccountId, params: CustodyPdfQuery) => Promise<PdfDocument>;
-  getAccess: (id: CustodyAccountId) => Promise<CustodyAccountAccess[]>;
+  getAccess: (id: PersistedCustodyAccountId) => Promise<CustodyAccountAccess[]>;
   grantAccess: (id: CustodyAccountId, data: CreateCustodyAccountAccess) => Promise<CustodyAccountAccess>;
   updateAccess: (
-    id: CustodyAccountId,
+    id: PersistedCustodyAccountId,
     accessId: number,
     data: UpdateCustodyAccountAccess,
   ) => Promise<CustodyAccountAccess>;
-  revokeAccess: (id: CustodyAccountId, accessId: number) => Promise<void>;
+  revokeAccess: (id: PersistedCustodyAccountId, accessId: number) => Promise<void>;
 }
 
 export function useCustody(): CustodyInterface {
@@ -86,8 +89,8 @@ export function useCustody(): CustodyInterface {
   );
 
   const updateAccount = useCallback(
-    async (id: CustodyAccountId, data: UpdateCustodyAccount) =>
-      call<CustodyAccount>({ url: CustodyUrl.accountById(id), method: 'PUT', data }),
+    async (id: PersistedCustodyAccountId, data: UpdateCustodyAccount) =>
+      call<CustodyAccount>({ url: CustodyUrl.updateAccount(id), method: 'PUT', data }),
     [call],
   );
 
@@ -116,13 +119,13 @@ export function useCustody(): CustodyInterface {
   );
 
   const createOrder = useCallback(
-    async (data: CreateCustodyOrder, token?: string) =>
+    async (data: CreateCustodyOrder, token: string) =>
       call<CustodyOrder>({ url: CustodyUrl.order, method: 'POST', data, token }),
     [call],
   );
 
   const confirmOrder = useCallback(
-    async (orderId: number, token?: string) =>
+    async (orderId: number, token: string) =>
       call<void>({ url: CustodyUrl.confirmOrder(orderId), method: 'POST', token }),
     [call],
   );
@@ -140,7 +143,8 @@ export function useCustody(): CustodyInterface {
   );
 
   const getAccess = useCallback(
-    async (id: CustodyAccountId) => call<CustodyAccountAccess[]>({ url: CustodyUrl.accountAccess(id), method: 'GET' }),
+    async (id: PersistedCustodyAccountId) =>
+      call<CustodyAccountAccess[]>({ url: CustodyUrl.accountAccessList(id), method: 'GET' }),
     [call],
   );
 
@@ -151,13 +155,13 @@ export function useCustody(): CustodyInterface {
   );
 
   const updateAccess = useCallback(
-    async (id: CustodyAccountId, accessId: number, data: UpdateCustodyAccountAccess) =>
+    async (id: PersistedCustodyAccountId, accessId: number, data: UpdateCustodyAccountAccess) =>
       call<CustodyAccountAccess>({ url: CustodyUrl.accountAccessById(id, accessId), method: 'PUT', data }),
     [call],
   );
 
   const revokeAccess = useCallback(
-    async (id: CustodyAccountId, accessId: number) =>
+    async (id: PersistedCustodyAccountId, accessId: number) =>
       call<void>({ url: CustodyUrl.accountAccessById(id, accessId), method: 'DELETE' }),
     [call],
   );

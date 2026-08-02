@@ -1,6 +1,7 @@
 export {
   CustodyUrl,
   LegacyCustodyAccountId,
+  toCustodyAccountId,
   CustodyAddressType,
   CustodyAccessLevel,
   CustodyOrderType,
@@ -10,6 +11,7 @@ export {
 } from '@dfx.swiss/core';
 export type {
   CustodyAccountId,
+  PersistedCustodyAccountId,
   CustodyAuth,
   CustodySignup,
   CustodyUser,

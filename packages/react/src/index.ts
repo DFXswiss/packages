@@ -22,7 +22,7 @@ export { useBankAccount, CreateBankAccount, UpdateBankAccount } from './hooks/ba
 export { useBank } from './hooks/bank.hook';
 export { useBuy } from './hooks/buy.hook';
 export { useCountry } from './hooks/country.hook';
-export { useCustody, CustodyInterface } from './hooks/custody.hook';
+export { useCustody } from './hooks/custody.hook';
 export { useFiat } from './hooks/fiat.hook';
 export { usePaymentRoutes } from './hooks/payment-routes.hook';
 export { useSettings } from './hooks/settings.hook';
@@ -59,6 +59,7 @@ export { Country, CountryUrl } from './definitions/country';
 export {
   CustodyUrl,
   LegacyCustodyAccountId,
+  toCustodyAccountId,
   CustodyAddressType,
   CustodyAccessLevel,
   CustodyOrderType,
@@ -66,6 +67,7 @@ export {
   CustodyOrderHistoryStatus,
   CustodyValueCurrency,
   CustodyAccountId,
+  PersistedCustodyAccountId,
   CustodyAuth,
   CustodySignup,
   CustodyUser,

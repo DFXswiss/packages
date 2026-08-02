@@ -27,6 +27,7 @@ export type { Buy, BuyPaymentInfo, PdfDocument } from './buy';
 export {
   CustodyUrl,
   LegacyCustodyAccountId,
+  toCustodyAccountId,
   CustodyAddressType,
   CustodyAccessLevel,
   CustodyOrderType,
@@ -36,6 +37,7 @@ export {
 } from './custody';
 export type {
   CustodyAccountId,
+  PersistedCustodyAccountId,
   CustodyAuth,
   CustodySignup,
   CustodyUser,

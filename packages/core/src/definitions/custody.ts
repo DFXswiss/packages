@@ -7,8 +7,23 @@ import { FiatPaymentMethod, TransactionError } from './transaction';
 /** Id of the legacy custody account, which has no account row of its own. */
 export const LegacyCustodyAccountId = 'legacy';
 
-/** A custody account is addressed by its id, or by the legacy marker. */
-export type CustodyAccountId = number | typeof LegacyCustodyAccountId;
+/**
+ * Id of an account that exists as a row. The account management and access endpoints accept only
+ * this - passing the legacy marker there is rejected.
+ */
+export type PersistedCustodyAccountId = number;
+
+/**
+ * How a custody account is addressed on the reading endpoints: by id, or by the legacy marker.
+ * `CustodyAccount.id` is null for the legacy account, so go through `toCustodyAccountId` rather
+ * than passing the raw id along - `custody/account/null/...` is not an endpoint.
+ */
+export type CustodyAccountId = PersistedCustodyAccountId | typeof LegacyCustodyAccountId;
+
+/** The id to address an account with, taking the legacy account into account. */
+export function toCustodyAccountId(account: CustodyAccount): CustodyAccountId {
+  return account.isLegacy || account.id === null ? LegacyCustodyAccountId : account.id;
+}
 
 export const CustodyUrl = {
   /** POST: signs the account up for custody and returns a custody access token. */
@@ -21,12 +36,15 @@ export const CustodyUrl = {
   confirmOrder: (orderId: number) => `custody/order/${orderId}/confirm`,
   account: 'custody/account',
   accountById: (id: CustodyAccountId) => `custody/account/${id}`,
+  updateAccount: (id: PersistedCustodyAccountId) => `custody/account/${id}`,
   accountBalance: (id: CustodyAccountId) => `custody/account/${id}/balance`,
   accountHistory: (id: CustodyAccountId) => `custody/account/${id}/history`,
   accountOrder: (id: CustodyAccountId) => `custody/account/${id}/order`,
   accountPdf: (id: CustodyAccountId) => `custody/account/${id}/pdf`,
+  /** Reading the grants needs a persisted id; granting also accepts the legacy marker. */
+  accountAccessList: (id: PersistedCustodyAccountId) => `custody/account/${id}/access`,
   accountAccess: (id: CustodyAccountId) => `custody/account/${id}/access`,
-  accountAccessById: (id: CustodyAccountId, accessId: number) => `custody/account/${id}/access/${accessId}`,
+  accountAccessById: (id: PersistedCustodyAccountId, accessId: number) => `custody/account/${id}/access/${accessId}`,
 };
 
 export enum CustodyAddressType {
@@ -84,7 +102,6 @@ export interface CustodySignup {
   wallet?: string;
   usedRef?: string;
   specialCode?: string;
-  moderator?: string;
 }
 
 export interface CustodyUser {
@@ -229,18 +246,44 @@ export interface CustodyOrder {
   paymentInfo: CustodyOrderPaymentInfo;
 }
 
-export interface CreateCustodyOrder {
-  type: CustodyOrderType;
+interface CreateCustodyOrderBase {
   sourceAsset: string;
   targetAsset: string;
-  sourceAmount?: number;
-  targetAmount?: number;
-  targetAddress?: string;
-  targetBlockchain?: Blockchain;
-  targetIban?: string;
-  /** Defaults to a bank transfer on the API side. */
+  /** Omitted, the API falls back to a bank transfer. */
   paymentMethod?: FiatPaymentMethod;
 }
+
+/** Exactly one of the two amounts is given; the other side is priced from it. */
+type CustodyOrderAmount =
+  | { sourceAmount: number; targetAmount?: never }
+  | { sourceAmount?: never; targetAmount: number };
+
+/** A send needs its destination on chain. */
+type CreateCustodySendOrder = CreateCustodyOrderBase &
+  CustodyOrderAmount & {
+    type: CustodyOrderType.SEND;
+    targetAddress: string;
+    targetBlockchain: Blockchain;
+  };
+
+/** A withdrawal needs its destination account. */
+type CreateCustodyWithdrawalOrder = CreateCustodyOrderBase &
+  CustodyOrderAmount & {
+    type: CustodyOrderType.WITHDRAWAL;
+    targetIban: string;
+  };
+
+type CreateCustodyOtherOrder = CreateCustodyOrderBase &
+  CustodyOrderAmount & {
+    type: Exclude<CustodyOrderType, CustodyOrderType.SEND | CustodyOrderType.WITHDRAWAL>;
+  };
+
+/**
+ * A custody order request. Which fields are required depends on the order type - the API rejects a
+ * send without a destination, a withdrawal without an IBAN, and any request that carries both
+ * amounts or neither.
+ */
+export type CreateCustodyOrder = CreateCustodySendOrder | CreateCustodyWithdrawalOrder | CreateCustodyOtherOrder;
 
 export interface CustodyPdfQuery {
   currency: CustodyValueCurrency;

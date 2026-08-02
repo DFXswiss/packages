@@ -14,6 +14,7 @@ import {
   CustodyPdfQuery,
   CustodySignup,
   CustodyUrl,
+  PersistedCustodyAccountId,
   UpdateCustodyAccount,
   UpdateCustodyAccountAccess,
 } from '../definitions/custody';
@@ -46,8 +47,9 @@ export class CustodyApi {
     return this.http.request<CustodyAccount>({ url: CustodyUrl.account, method: 'POST', data });
   }
 
-  async updateAccount(id: CustodyAccountId, data: UpdateCustodyAccount): Promise<CustodyAccount> {
-    return this.http.request<CustodyAccount>({ url: CustodyUrl.accountById(id), method: 'PUT', data });
+  /** The legacy account cannot be renamed - it has no row to rename. */
+  async updateAccount(id: PersistedCustodyAccountId, data: UpdateCustodyAccount): Promise<CustodyAccount> {
+    return this.http.request<CustodyAccount>({ url: CustodyUrl.updateAccount(id), method: 'PUT', data });
   }
 
   /** Balances of the caller's own custody account. For a specific account use getAccountBalance. */
@@ -78,14 +80,15 @@ export class CustodyApi {
   /**
    * Quotes an order and reserves it. Nothing moves until the order is confirmed.
    *
-   * Needs the custody token from signup, not the session token; pass it as `token`.
+   * The custody token from signup is required, not the session token. It is not optional on
+   * purpose: leaving it out would send the session token instead and fail on the API side.
    */
-  async createOrder(data: CreateCustodyOrder, token?: string): Promise<CustodyOrder> {
+  async createOrder(data: CreateCustodyOrder, token: string): Promise<CustodyOrder> {
     return this.http.request<CustodyOrder>({ url: CustodyUrl.order, method: 'POST', data, token });
   }
 
-  /** Confirms a quoted order. Needs the custody token, like createOrder. */
-  async confirmOrder(orderId: number, token?: string): Promise<void> {
+  /** Confirms a quoted order. Requires the custody token, like createOrder. */
+  async confirmOrder(orderId: number, token: string): Promise<void> {
     return this.http.request<void>({ url: CustodyUrl.confirmOrder(orderId), method: 'POST', token });
   }
 
@@ -100,8 +103,8 @@ export class CustodyApi {
     return this.http.request<PdfDocument>({ url: `${CustodyUrl.accountPdf(id)}${query}`, method: 'GET' });
   }
 
-  async listAccess(id: CustodyAccountId): Promise<CustodyAccountAccess[]> {
-    return this.http.request<CustodyAccountAccess[]>({ url: CustodyUrl.accountAccess(id), method: 'GET' });
+  async listAccess(id: PersistedCustodyAccountId): Promise<CustodyAccountAccess[]> {
+    return this.http.request<CustodyAccountAccess[]>({ url: CustodyUrl.accountAccessList(id), method: 'GET' });
   }
 
   async grantAccess(id: CustodyAccountId, data: CreateCustodyAccountAccess): Promise<CustodyAccountAccess> {
@@ -109,7 +112,7 @@ export class CustodyApi {
   }
 
   async updateAccess(
-    id: CustodyAccountId,
+    id: PersistedCustodyAccountId,
     accessId: number,
     data: UpdateCustodyAccountAccess,
   ): Promise<CustodyAccountAccess> {
@@ -120,7 +123,7 @@ export class CustodyApi {
     });
   }
 
-  async revokeAccess(id: CustodyAccountId, accessId: number): Promise<void> {
+  async revokeAccess(id: PersistedCustodyAccountId, accessId: number): Promise<void> {
     return this.http.request<void>({ url: CustodyUrl.accountAccessById(id, accessId), method: 'DELETE' });
   }
 }

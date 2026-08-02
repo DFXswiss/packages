@@ -43,6 +43,7 @@ export {
   // Custody
   CustodyUrl,
   LegacyCustodyAccountId,
+  toCustodyAccountId,
   CustodyAddressType,
   CustodyAccessLevel,
   CustodyOrderType,
@@ -155,6 +156,7 @@ export type {
   PdfDocument,
   // Custody
   CustodyAccountId,
+  PersistedCustodyAccountId,
   CustodyAuth,
   CustodySignup,
   CustodyUser,
