@@ -115,6 +115,8 @@ export {
   PaymentQuoteStatus,
   MinCompletionStatus,
   PaymentLinkBlockchain,
+  C2BPaymentMethod,
+  hasPaymentQuote,
 } from './route';
 export type {
   MinAmount,
@@ -136,6 +138,19 @@ export type {
   UpdatePaymentLink,
   AssignPaymentLink,
   PaymentLinkPos,
+  PaymentStandard,
+  TransferMethod,
+  TransferAmount,
+  PaymentAmount,
+  PaymentQuote,
+  PaymentLinkRequestBase,
+  PaymentLinkPayRequest,
+  PaymentLinkPayTerminal,
+  PaymentLinkPayResponse,
+  PaymentLinkHistory,
+  PaymentLinkHistoryPayment,
+  PaymentLinkPaymentQuery,
+  PaymentLinkHistoryQuery,
 } from './route';
 export { SellUrl } from './sell';
 export type { Eip5792Call, Eip5792Data, UnsignedTx, Sell, Beneficiary, SellPaymentInfo, ConfirmSellData } from './sell';
