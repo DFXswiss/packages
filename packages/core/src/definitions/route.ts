@@ -1,6 +1,7 @@
 import { Asset } from './asset';
 import { Blockchain } from './blockchain';
 import { Fiat } from './fiat';
+import { GoodsCategory, GoodsType, MerchantCategory, StoreType } from './kyc';
 
 export const PaymentRoutesUrl = { get: 'route' };
 export const PaymentLinksUrl = {
@@ -149,6 +150,7 @@ export interface PaymentLink {
   routeId: string;
   externalId?: string;
   label?: string;
+  webhookUrl?: string;
   recipient?: PaymentLinkRecipient;
   status: PaymentLinkStatus;
   mode: PaymentLinkMode;
@@ -156,6 +158,7 @@ export interface PaymentLink {
   config?: PaymentLinkConfig;
   url: string;
   lnurl: string;
+  frontendUrl: string;
 }
 
 export interface PaymentLinkRecipient {
@@ -164,6 +167,11 @@ export interface PaymentLinkRecipient {
   phone?: string;
   mail?: string;
   website?: string;
+  registrationNumber?: string;
+  storeType?: StoreType;
+  merchantCategory?: MerchantCategory;
+  goodsType?: GoodsType;
+  goodsCategory?: GoodsCategory;
 }
 
 export interface PaymentLinkRecipientAddress {
@@ -250,7 +258,12 @@ export enum C2BPaymentMethod {
   KUCOIN_PAY = 'KucoinPay',
 }
 
-export type TransferMethod = Blockchain | C2BPaymentMethod;
+/** Methods that are settled by hand and are not blockchains of their own. */
+export enum ManualPaymentMethod {
+  TAPROOT_ASSET = 'TaprootAsset',
+}
+
+export type TransferMethod = Blockchain | C2BPaymentMethod | ManualPaymentMethod;
 
 export interface PaymentAmount {
   asset: string;
@@ -307,9 +320,9 @@ export interface PaymentLinkPayRequest extends PaymentLinkRequestBase {
  * usual, and the error fields say why nothing is payable.
  */
 export interface PaymentLinkPayTerminal extends PaymentLinkRequestBase {
-  error?: string;
-  message?: string;
-  statusCode?: number;
+  error: string;
+  message: string;
+  statusCode: number;
 }
 
 export type PaymentLinkPayResponse = PaymentLinkPayRequest | PaymentLinkPayTerminal;
@@ -333,6 +346,7 @@ export interface PaymentLinkHistoryPayment {
   isConfirmed: boolean;
   url: string;
   lnurl: string;
+  frontendUrl: string;
 }
 
 /** A payment link with its payments, as served by `paymentLink/history`. Carries no single `payment`. */
@@ -348,11 +362,9 @@ export interface PaymentLinkPaymentQuery {
   externalPaymentId?: string;
   /** Payment link access key, for terminals that hold no session. */
   key?: string;
-  route?: string;
 }
 
 export interface PaymentLinkHistoryQuery {
-  linkId?: string;
   externalLinkId?: string;
   key?: string;
   /** Defaults to completed payments only when omitted. */

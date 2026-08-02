@@ -92,6 +92,7 @@ export {
   MinCompletionStatus,
   PaymentLinkBlockchain,
   C2BPaymentMethod,
+  ManualPaymentMethod,
   hasPaymentQuote,
   // Sell
   SellUrl,
