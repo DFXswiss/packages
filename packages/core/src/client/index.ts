@@ -7,6 +7,7 @@ export type { AuthenticateParams } from './AuthApi';
 export { AssetApi } from './AssetApi';
 export type { AssetListParams } from './AssetApi';
 export { BankApi } from './BankApi';
+export { BlockchainApi } from './BlockchainApi';
 export { BankAccountApi } from './BankAccountApi';
 export type { CreateBankAccount, UpdateBankAccount } from './BankAccountApi';
 export { BuyApi } from './BuyApi';

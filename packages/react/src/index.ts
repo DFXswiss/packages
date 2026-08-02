@@ -20,6 +20,7 @@ export { useAsset } from './hooks/asset.hook';
 export { useAuth } from './hooks/auth.hook';
 export { useBankAccount, CreateBankAccount, UpdateBankAccount } from './hooks/bank-account.hook';
 export { useBank } from './hooks/bank.hook';
+export { useBlockchain, BlockchainInterface } from './hooks/blockchain.hook';
 export { useBuy } from './hooks/buy.hook';
 export { useCountry } from './hooks/country.hook';
 export { useFiat } from './hooks/fiat.hook';
@@ -50,7 +51,17 @@ export {
 export { Asset, AssetType, AssetCategory, AssetUrl } from './definitions/asset';
 export { BankAccount, BankAccountUrl } from './definitions/bank-account';
 export { Bank, BankUrl, ReceiveIbanCheck, ReceiveIbanStatus } from './definitions/bank';
-export { Blockchain } from './definitions/blockchain';
+export {
+  Blockchain,
+  BlockchainUrl,
+  GetBlockchainBalances,
+  BlockchainBalance,
+  BlockchainBalances,
+  CreateBlockchainTransaction,
+  UnsignedTransaction,
+  BroadcastTransaction,
+  BroadcastResult,
+} from './definitions/blockchain';
 export { Buy, BuyPaymentInfo, PdfDocument, BuyUrl } from './definitions/buy';
 /** Personal IBAN provider values accepted by buy payment-info requests. */
 export { PersonalIbanProvider } from './definitions/buy';

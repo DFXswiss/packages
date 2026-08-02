@@ -2,6 +2,7 @@ import { DfxHttpClient } from './DfxHttpClient';
 import { AuthApi } from './AuthApi';
 import { AssetApi } from './AssetApi';
 import { BankApi } from './BankApi';
+import { BlockchainApi } from './BlockchainApi';
 import { BankAccountApi } from './BankAccountApi';
 import { BuyApi } from './BuyApi';
 import { CountryApi } from './CountryApi';
@@ -30,6 +31,7 @@ export class DfxApiClient {
   readonly auth: AuthApi;
   readonly asset: AssetApi;
   readonly bank: BankApi;
+  readonly blockchain: BlockchainApi;
   readonly bankAccount: BankAccountApi;
   readonly buy: BuyApi;
   readonly country: CountryApi;
@@ -54,6 +56,7 @@ export class DfxApiClient {
     this.auth = new AuthApi(this.http);
     this.asset = new AssetApi(this.http);
     this.bank = new BankApi(this.http);
+    this.blockchain = new BlockchainApi(this.http);
     this.bankAccount = new BankAccountApi(this.http);
     this.buy = new BuyApi(this.http);
     this.country = new CountryApi(this.http);

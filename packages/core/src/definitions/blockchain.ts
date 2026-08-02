@@ -27,3 +27,55 @@ export enum Blockchain {
 
   DEFICHAIN = 'DeFiChain',
 }
+
+export const BlockchainUrl = {
+  balances: 'blockchain/balances',
+  transaction: 'blockchain/transaction',
+  broadcast: 'blockchain/broadcast',
+};
+
+export interface GetBlockchainBalances {
+  address: string;
+  blockchain: Blockchain;
+  /** Restricts the response to these assets; without it the API decides what to report. */
+  assetIds?: number[];
+}
+
+export interface BlockchainBalance {
+  assetId: number;
+  chainId?: string;
+  balance: number;
+}
+
+export interface BlockchainBalances {
+  balances: BlockchainBalance[];
+}
+
+export interface CreateBlockchainTransaction {
+  blockchain: Blockchain;
+  fromAddress: string;
+  toAddress: string;
+  amount: number;
+  /** Omit to send the native coin of the blockchain. */
+  assetId?: number;
+}
+
+/**
+ * An unsigned transaction, encoded per blockchain: base64 for Solana, hex elsewhere. Decoding and
+ * signing it needs a chain-specific library and stays with the caller.
+ */
+export interface UnsignedTransaction {
+  rawTransaction: string;
+  encoding: 'base64' | 'hex';
+  recentBlockhash?: string;
+  expiration?: number;
+}
+
+export interface BroadcastTransaction {
+  blockchain: Blockchain;
+  signedTransaction: string;
+}
+
+export interface BroadcastResult {
+  txHash: string;
+}
