@@ -32,5 +32,6 @@ export type {
   CustodyOrderPaymentInfo,
   CustodyOrder,
   CreateCustodyOrder,
+  CreatableCustodyOrderType,
   CustodyPdfQuery,
 } from '@dfx.swiss/core';

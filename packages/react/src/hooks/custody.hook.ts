@@ -56,6 +56,10 @@ export interface CustodyInterface {
   getPdf: (params: CustodyPdfQuery) => Promise<PdfDocument>;
   getAccountPdf: (id: CustodyAccountId, params: CustodyPdfQuery) => Promise<PdfDocument>;
   getAccess: (id: PersistedCustodyAccountId) => Promise<CustodyAccountAccess[]>;
+  /**
+   * Grants access to an account. Unlike the other three access calls, this one also takes the legacy
+   * marker - the API resolves it here but not when reading, changing or revoking a grant.
+   */
   grantAccess: (id: CustodyAccountId, data: CreateCustodyAccountAccess) => Promise<CustodyAccountAccess>;
   updateAccess: (
     id: PersistedCustodyAccountId,

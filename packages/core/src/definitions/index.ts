@@ -58,6 +58,7 @@ export type {
   CustodyOrderPaymentInfo,
   CustodyOrder,
   CreateCustodyOrder,
+  CreatableCustodyOrderType,
   CustodyPdfQuery,
 } from './custody';
 export { CountryUrl } from './country';

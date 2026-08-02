@@ -107,6 +107,10 @@ export class CustodyApi {
     return this.http.request<CustodyAccountAccess[]>({ url: CustodyUrl.accountAccess(id), method: 'GET' });
   }
 
+  /**
+   * Grants access to an account. Unlike the other three access calls, this one also takes the legacy
+   * marker - the API resolves it here but not when reading, changing or revoking a grant.
+   */
   async grantAccess(id: CustodyAccountId, data: CreateCustodyAccountAccess): Promise<CustodyAccountAccess> {
     return this.http.request<CustodyAccountAccess>({ url: CustodyUrl.accountAccess(id), method: 'POST', data });
   }

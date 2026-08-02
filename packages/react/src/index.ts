@@ -88,6 +88,7 @@ export {
   CustodyOrderPaymentInfo,
   CustodyOrder,
   CreateCustodyOrder,
+  CreatableCustodyOrderType,
   CustodyPdfQuery,
 } from './definitions/custody';
 export { ApiError, ApiException } from './definitions/error';

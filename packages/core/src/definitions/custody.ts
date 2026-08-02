@@ -210,7 +210,8 @@ export interface CustodyOrderBuyInfo {
 }
 
 export interface CustodyOrderPaymentInfo {
-  id: number;
+  /** Absent for orders the API prices without a transaction request of their own. */
+  id?: number;
   uid?: string;
   timestamp: Date;
   minVolume: number;
@@ -270,9 +271,20 @@ type CreateCustodyWithdrawalOrder = CreateCustodyOrderBase &
     targetIban: string;
   };
 
+/**
+ * The order types that can be requested. The remaining members of CustodyOrderType describe orders
+ * the API creates itself - they show up in the history but are rejected as a request.
+ */
+export type CreatableCustodyOrderType =
+  | CustodyOrderType.DEPOSIT
+  | CustodyOrderType.WITHDRAWAL
+  | CustodyOrderType.SWAP
+  | CustodyOrderType.SEND
+  | CustodyOrderType.RECEIVE;
+
 type CreateCustodyOtherOrder = CreateCustodyOrderBase &
   CustodyOrderAmount & {
-    type: Exclude<CustodyOrderType, CustodyOrderType.SEND | CustodyOrderType.WITHDRAWAL>;
+    type: Exclude<CreatableCustodyOrderType, CustodyOrderType.SEND | CustodyOrderType.WITHDRAWAL>;
   };
 
 /**

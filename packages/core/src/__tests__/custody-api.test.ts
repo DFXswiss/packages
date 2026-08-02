@@ -60,6 +60,19 @@ describe('CustodyApi', () => {
       expect(mockHttp.request).toHaveBeenCalledWith({ url: 'custody/account/legacy/history', method: 'GET' });
     });
 
+    it('reads a single account by either form of id', async () => {
+      const mockHttp = createMockHttpClient({});
+      const api = new CustodyApi(mockHttp);
+
+      await api.getAccount(7);
+      await api.getAccount(LegacyCustodyAccountId);
+
+      expect(mockHttp.request.mock.calls.map((c: any[]) => c[0].url)).toEqual([
+        'custody/account/7',
+        'custody/account/legacy',
+      ]);
+    });
+
     it('reads the own account through the plain endpoints', async () => {
       const mockHttp = createMockHttpClient({});
       const api = new CustodyApi(mockHttp);
@@ -210,6 +223,18 @@ describe('CustodyApi', () => {
         method: 'POST',
         data: { mail: 'someone@example.com', accessLevel: CustodyAccessLevel.READ },
       });
+    });
+
+    it('grants access on the legacy account too', async () => {
+      const mockHttp = createMockHttpClient({});
+      const api = new CustodyApi(mockHttp);
+
+      await api.grantAccess(LegacyCustodyAccountId, {
+        mail: 'someone@example.com',
+        accessLevel: CustodyAccessLevel.READ,
+      });
+
+      expect(mockHttp.request.mock.calls[0][0].url).toBe('custody/account/legacy/access');
     });
 
     it('revokes a single grant', async () => {

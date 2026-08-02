@@ -177,6 +177,7 @@ export type {
   CustodyOrderPaymentInfo,
   CustodyOrder,
   CreateCustodyOrder,
+  CreatableCustodyOrderType,
   CustodyPdfQuery,
   // Country
   Country,
