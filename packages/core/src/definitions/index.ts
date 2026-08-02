@@ -22,8 +22,16 @@ export type { Bank, ReceiveIbanCheck } from './bank';
 export { BankAccountUrl } from './bank-account';
 export type { BankAccount } from './bank-account';
 export { Blockchain } from './blockchain';
-export { BuyUrl, PersonalIbanProvider } from './buy';
-export type { Buy, BuyPaymentInfo, PdfDocument } from './buy';
+export {
+  BuyUrl,
+  PersonalIbanProvider,
+  VirtualIbanStatus,
+  normalizePersonalIban,
+  toPersonalIbanProvider,
+  isUnrecognizedPersonalIbanSelector,
+  toPersonalIbanProviderRequest,
+} from './buy';
+export type { Buy, BuyPaymentInfo, CreateVirtualIban, PdfDocument, VirtualIban } from './buy';
 export { CountryUrl } from './country';
 export type { Country } from './country';
 export { ApiException } from './error';
