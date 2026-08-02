@@ -40,6 +40,11 @@ export {
   // Buy
   BuyUrl,
   PersonalIbanProvider,
+  VirtualIbanStatus,
+  normalizePersonalIban,
+  toPersonalIbanProvider,
+  isUnrecognizedPersonalIbanSelector,
+  toPersonalIbanProviderRequest,
   // Country
   CountryUrl,
   // Error
@@ -143,7 +148,9 @@ export type {
   // Buy
   Buy,
   BuyPaymentInfo,
+  CreateVirtualIban,
   PdfDocument,
+  VirtualIban,
   // Country
   Country,
   // Error

@@ -30,6 +30,7 @@ export { useLanguage } from './hooks/language.hook';
 export { useKyc } from './hooks/kyc.hook';
 export { useSell } from './hooks/sell.hook';
 export { useUser } from './hooks/user.hook';
+export { useVirtualIban, VirtualIbanInterface } from './hooks/virtual-iban.hook';
 export { useSwap } from './hooks/swap.hook';
 export { useSupportChat } from './hooks/support.hook';
 
@@ -54,6 +55,15 @@ export { Blockchain } from './definitions/blockchain';
 export { Buy, BuyPaymentInfo, PdfDocument, BuyUrl } from './definitions/buy';
 /** Personal IBAN provider values accepted by buy payment-info requests. */
 export { PersonalIbanProvider } from './definitions/buy';
+export {
+  CreateVirtualIban,
+  VirtualIban,
+  VirtualIbanStatus,
+  normalizePersonalIban,
+  toPersonalIbanProvider,
+  isUnrecognizedPersonalIbanSelector,
+  toPersonalIbanProviderRequest,
+} from './definitions/buy';
 export { Country, CountryUrl } from './definitions/country';
 export { ApiError, ApiException } from './definitions/error';
 export { Fiat, FiatUrl } from './definitions/fiat';

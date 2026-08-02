@@ -9,10 +9,71 @@ export const BuyUrl = {
   receive: 'buy/paymentInfos',
   invoice: (txId: number) => `buy/paymentInfos/${txId}/invoice`,
   confirm: (txId: number) => `buy/paymentInfos/${txId}/confirm`,
+  personalIban: 'buy/personalIban',
 };
 
 export enum PersonalIbanProvider {
   FRICK = 'Frick',
+}
+
+export enum VirtualIbanStatus {
+  RESERVED = 'Reserved',
+  ACTIVE = 'Active',
+  EXPIRED = 'Expired',
+  DEACTIVATED = 'Deactivated',
+}
+
+export interface VirtualIban {
+  id: number;
+  iban: string;
+  bban?: string;
+  currency: string;
+  active: boolean;
+  /** Whether the bank behind this IBAN currently accepts payments. Independent of `active`. */
+  acceptsPayments: boolean;
+  status?: VirtualIbanStatus;
+  label?: string;
+  activatedAt?: Date;
+}
+
+export interface CreateVirtualIban {
+  /** Currency name, e.g. "EUR". */
+  currency: string;
+}
+
+/**
+ * Returns the canonical spelling of a personal IBAN provider selector, matched case-insensitively.
+ * Values that match no known provider are returned unchanged.
+ */
+export function normalizePersonalIban(value: string | undefined): string | undefined {
+  if (value === undefined) return undefined;
+
+  return Object.values(PersonalIbanProvider).find((p) => p.toLowerCase() === value.toLowerCase()) ?? value;
+}
+
+/** Returns the provider for a selector, or undefined when it matches no known provider. */
+export function toPersonalIbanProvider(value: string | undefined): PersonalIbanProvider | undefined {
+  if (value === undefined) return undefined;
+
+  return Object.values(PersonalIbanProvider).find((p) => p.toLowerCase() === value.toLowerCase());
+}
+
+/**
+ * True when a selector was set but matches no known provider (e.g. a typo, or a provider this
+ * version does not know). The API rejects unknown providers, so fail closed on such a selector
+ * instead of dropping it and silently requesting an ordinary bank transfer.
+ */
+export function isUnrecognizedPersonalIbanSelector(value: string | undefined): boolean {
+  return value !== undefined && toPersonalIbanProvider(value) === undefined;
+}
+
+/** Builds the personal IBAN part of a buy payment info request; empty for an unset or unknown selector. */
+export function toPersonalIbanProviderRequest(value: string | undefined): {
+  personalIbanProvider?: PersonalIbanProvider;
+} {
+  const provider = toPersonalIbanProvider(value);
+
+  return provider ? { personalIbanProvider: provider } : {};
 }
 
 export interface Buy {
