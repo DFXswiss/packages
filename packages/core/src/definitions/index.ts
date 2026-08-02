@@ -24,6 +24,40 @@ export type { BankAccount } from './bank-account';
 export { Blockchain } from './blockchain';
 export { BuyUrl, PersonalIbanProvider } from './buy';
 export type { Buy, BuyPaymentInfo, PdfDocument } from './buy';
+export {
+  CustodyUrl,
+  LegacyCustodyAccountId,
+  CustodyAddressType,
+  CustodyAccessLevel,
+  CustodyOrderType,
+  CustodyOrderStatus,
+  CustodyOrderHistoryStatus,
+  CustodyValueCurrency,
+} from './custody';
+export type {
+  CustodyAccountId,
+  CustodyAuth,
+  CustodySignup,
+  CustodyUser,
+  CustodyAccount,
+  CreateCustodyAccount,
+  UpdateCustodyAccount,
+  CustodyAccountAccess,
+  CreateCustodyAccountAccess,
+  UpdateCustodyAccountAccess,
+  CustodyAsset,
+  CustodyFiatValue,
+  CustodyAssetBalance,
+  CustodyBalance,
+  CustodyHistoryEntry,
+  CustodyHistory,
+  CustodyOrderHistory,
+  CustodyOrderBuyInfo,
+  CustodyOrderPaymentInfo,
+  CustodyOrder,
+  CreateCustodyOrder,
+  CustodyPdfQuery,
+} from './custody';
 export { CountryUrl } from './country';
 export type { Country } from './country';
 export { ApiException } from './error';
