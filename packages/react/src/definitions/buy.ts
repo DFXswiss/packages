@@ -1,7 +1,7 @@
 export { BuyUrl } from '@dfx.swiss/core';
 /** Personal IBAN provider values accepted by buy payment-info requests. */
+export { PersonalIbanProvider } from '@dfx.swiss/core';
 export {
-  PersonalIbanProvider,
   VirtualIbanStatus,
   normalizePersonalIban,
   toPersonalIbanProvider,
