@@ -30,7 +30,7 @@ export { useLanguage } from './hooks/language.hook';
 export { useKyc } from './hooks/kyc.hook';
 export { useSell } from './hooks/sell.hook';
 export { useUser } from './hooks/user.hook';
-export { useVirtualIban, VirtualIbanInterface } from './hooks/virtual-iban.hook';
+export { useVirtualIban } from './hooks/virtual-iban.hook';
 export { useSwap } from './hooks/swap.hook';
 export { useSupportChat } from './hooks/support.hook';
 

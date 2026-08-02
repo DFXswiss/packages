@@ -28,8 +28,8 @@ export class BuyApi {
   /**
    * Issues a personal IBAN for the authenticated account.
    *
-   * The API requires a KYC level of at least 50 and rejects unsupported currencies; both arrive as an
-   * ApiException, never as a VirtualIban.
+   * Rejections - an insufficient KYC level, an unsupported currency - arrive as an ApiException,
+   * never as a VirtualIban.
    */
   async createPersonalIban(data: CreateVirtualIban): Promise<VirtualIban> {
     return this.http.request<VirtualIban>({ url: BuyUrl.personalIban, method: 'POST', data });
