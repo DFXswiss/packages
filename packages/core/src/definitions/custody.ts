@@ -36,13 +36,10 @@ export const CustodyUrl = {
   confirmOrder: (orderId: number) => `custody/order/${orderId}/confirm`,
   account: 'custody/account',
   accountById: (id: CustodyAccountId) => `custody/account/${id}`,
-  updateAccount: (id: PersistedCustodyAccountId) => `custody/account/${id}`,
   accountBalance: (id: CustodyAccountId) => `custody/account/${id}/balance`,
   accountHistory: (id: CustodyAccountId) => `custody/account/${id}/history`,
   accountOrder: (id: CustodyAccountId) => `custody/account/${id}/order`,
   accountPdf: (id: CustodyAccountId) => `custody/account/${id}/pdf`,
-  /** Reading the grants needs a persisted id; granting also accepts the legacy marker. */
-  accountAccessList: (id: PersistedCustodyAccountId) => `custody/account/${id}/access`,
   accountAccess: (id: CustodyAccountId) => `custody/account/${id}/access`,
   accountAccessById: (id: PersistedCustodyAccountId, accessId: number) => `custody/account/${id}/access/${accessId}`,
 };

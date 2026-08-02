@@ -90,7 +90,7 @@ export function useCustody(): CustodyInterface {
 
   const updateAccount = useCallback(
     async (id: PersistedCustodyAccountId, data: UpdateCustodyAccount) =>
-      call<CustodyAccount>({ url: CustodyUrl.updateAccount(id), method: 'PUT', data }),
+      call<CustodyAccount>({ url: CustodyUrl.accountById(id), method: 'PUT', data }),
     [call],
   );
 
@@ -144,7 +144,7 @@ export function useCustody(): CustodyInterface {
 
   const getAccess = useCallback(
     async (id: PersistedCustodyAccountId) =>
-      call<CustodyAccountAccess[]>({ url: CustodyUrl.accountAccessList(id), method: 'GET' }),
+      call<CustodyAccountAccess[]>({ url: CustodyUrl.accountAccess(id), method: 'GET' }),
     [call],
   );
 

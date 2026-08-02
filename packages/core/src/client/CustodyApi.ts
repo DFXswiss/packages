@@ -49,7 +49,7 @@ export class CustodyApi {
 
   /** The legacy account cannot be renamed - it has no row to rename. */
   async updateAccount(id: PersistedCustodyAccountId, data: UpdateCustodyAccount): Promise<CustodyAccount> {
-    return this.http.request<CustodyAccount>({ url: CustodyUrl.updateAccount(id), method: 'PUT', data });
+    return this.http.request<CustodyAccount>({ url: CustodyUrl.accountById(id), method: 'PUT', data });
   }
 
   /** Balances of the caller's own custody account. For a specific account use getAccountBalance. */
@@ -104,7 +104,7 @@ export class CustodyApi {
   }
 
   async listAccess(id: PersistedCustodyAccountId): Promise<CustodyAccountAccess[]> {
-    return this.http.request<CustodyAccountAccess[]>({ url: CustodyUrl.accountAccessList(id), method: 'GET' });
+    return this.http.request<CustodyAccountAccess[]>({ url: CustodyUrl.accountAccess(id), method: 'GET' });
   }
 
   async grantAccess(id: CustodyAccountId, data: CreateCustodyAccountAccess): Promise<CustodyAccountAccess> {
