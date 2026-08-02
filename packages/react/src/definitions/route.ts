@@ -9,6 +9,8 @@ export {
   PaymentQuoteStatus,
   MinCompletionStatus,
   PaymentLinkBlockchain,
+  C2BPaymentMethod,
+  hasPaymentQuote,
 } from '@dfx.swiss/core';
 
 export type {
@@ -31,4 +33,17 @@ export type {
   UpdatePaymentLink,
   AssignPaymentLink,
   PaymentLinkPos,
+  PaymentStandard,
+  TransferMethod,
+  TransferAmount,
+  PaymentAmount,
+  PaymentQuote,
+  PaymentLinkRequestBase,
+  PaymentLinkPayRequest,
+  PaymentLinkPayTerminal,
+  PaymentLinkPayResponse,
+  PaymentLinkHistory,
+  PaymentLinkHistoryPayment,
+  PaymentLinkPaymentQuery,
+  PaymentLinkHistoryQuery,
 } from '@dfx.swiss/core';

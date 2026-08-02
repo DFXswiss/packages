@@ -88,6 +88,21 @@ export {
   PaymentLinkPos,
   PaymentRoutesUrl,
   PaymentLinksUrl,
+  PaymentStandard,
+  C2BPaymentMethod,
+  TransferMethod,
+  TransferAmount,
+  PaymentAmount,
+  PaymentQuote,
+  PaymentLinkRequestBase,
+  PaymentLinkPayRequest,
+  PaymentLinkPayTerminal,
+  PaymentLinkPayResponse,
+  PaymentLinkHistory,
+  PaymentLinkHistoryPayment,
+  PaymentLinkPaymentQuery,
+  PaymentLinkHistoryQuery,
+  hasPaymentQuote,
 } from './definitions/route';
 export { InfoBanner, SettingsUrl } from './definitions/settings';
 export { PriceStep } from './definitions/price-step';

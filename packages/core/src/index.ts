@@ -90,6 +90,8 @@ export {
   PaymentQuoteStatus,
   MinCompletionStatus,
   PaymentLinkBlockchain,
+  C2BPaymentMethod,
+  hasPaymentQuote,
   // Sell
   SellUrl,
   // Settings
@@ -216,6 +218,19 @@ export type {
   UpdatePaymentLink,
   AssignPaymentLink,
   PaymentLinkPos,
+  PaymentStandard,
+  TransferMethod,
+  TransferAmount,
+  PaymentAmount,
+  PaymentQuote,
+  PaymentLinkRequestBase,
+  PaymentLinkPayRequest,
+  PaymentLinkPayTerminal,
+  PaymentLinkPayResponse,
+  PaymentLinkHistory,
+  PaymentLinkHistoryPayment,
+  PaymentLinkPaymentQuery,
+  PaymentLinkHistoryQuery,
   // Sell
   Eip5792Call,
   Eip5792Data,
