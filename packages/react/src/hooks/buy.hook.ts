@@ -23,10 +23,11 @@ export function useBuy(): BuyInterface {
   );
 
   const invoiceFor = useCallback(
-    async (txId: number, collectionAccount = false): Promise<PdfDocument> => {
-      const url = collectionAccount ? `${BuyUrl.invoice(txId)}?collectionAccount=true` : BuyUrl.invoice(txId);
-      return call<PdfDocument>({ url, method: 'PUT' });
-    },
+    async (txId: number, collectionAccount?: boolean): Promise<PdfDocument> =>
+      call<PdfDocument>({
+        url: collectionAccount ? `${BuyUrl.invoice(txId)}?collectionAccount=true` : BuyUrl.invoice(txId),
+        method: 'PUT',
+      }),
     [call],
   );
 
