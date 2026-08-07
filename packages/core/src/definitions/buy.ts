@@ -7,7 +7,8 @@ import { FiatPaymentMethod, TransactionError } from './transaction';
 export const BuyUrl = {
   quote: 'buy/quote',
   receive: 'buy/paymentInfos',
-  invoice: (txId: number) => `buy/paymentInfos/${txId}/invoice`,
+  invoice: (txId: number, collectionAccount?: boolean) =>
+    collectionAccount ? `buy/paymentInfos/${txId}/invoice?collectionAccount=true` : `buy/paymentInfos/${txId}/invoice`,
   confirm: (txId: number) => `buy/paymentInfos/${txId}/confirm`,
 };
 

@@ -12,8 +12,8 @@ export class BuyApi {
     return this.http.request<Buy>({ url: BuyUrl.receive, method: 'PUT', data: info });
   }
 
-  async getInvoice(txId: number): Promise<PdfDocument> {
-    return this.http.request<PdfDocument>({ url: BuyUrl.invoice(txId), method: 'PUT' });
+  async getInvoice(txId: number, collectionAccount?: boolean): Promise<PdfDocument> {
+    return this.http.request<PdfDocument>({ url: BuyUrl.invoice(txId, collectionAccount), method: 'PUT' });
   }
 
   async confirm(txId: number): Promise<void> {
