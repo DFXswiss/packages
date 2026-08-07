@@ -6,7 +6,7 @@ import { useApi } from './api.hook';
 
 export interface BuyInterface {
   receiveFor: (info: BuyPaymentInfo) => Promise<Buy>;
-  invoiceFor: (txId: number) => Promise<PdfDocument>;
+  invoiceFor: (txId: number, collectionAccount?: boolean) => Promise<PdfDocument>;
   confirmFor: (txId: number) => Promise<void>;
   currencies?: Fiat[];
 }
@@ -23,9 +23,11 @@ export function useBuy(): BuyInterface {
   );
 
   const invoiceFor = useCallback(
-    async (txId: number): Promise<PdfDocument> => {
-      return call<PdfDocument>({ url: BuyUrl.invoice(txId), method: 'PUT' });
-    },
+    async (txId: number, collectionAccount?: boolean): Promise<PdfDocument> =>
+      call<PdfDocument>({
+        url: collectionAccount ? `${BuyUrl.invoice(txId)}?collectionAccount=true` : BuyUrl.invoice(txId),
+        method: 'PUT',
+      }),
     [call],
   );
 
