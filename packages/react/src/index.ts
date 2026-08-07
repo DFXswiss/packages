@@ -104,6 +104,7 @@ export {
   PaymentLinkHistoryPayment,
   PaymentLinkPaymentQuery,
   PaymentLinkHistoryQuery,
+  PaymentLinkInvoicePaymentQuery,
   hasPaymentQuote,
 } from './definitions/route';
 export { InfoBanner, SettingsUrl } from './definitions/settings';

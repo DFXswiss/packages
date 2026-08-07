@@ -234,6 +234,7 @@ export type {
   PaymentLinkHistoryPayment,
   PaymentLinkPaymentQuery,
   PaymentLinkHistoryQuery,
+  PaymentLinkInvoicePaymentQuery,
   // Sell
   Eip5792Call,
   Eip5792Data,

@@ -152,6 +152,7 @@ export type {
   PaymentLinkHistoryPayment,
   PaymentLinkPaymentQuery,
   PaymentLinkHistoryQuery,
+  PaymentLinkInvoicePaymentQuery,
 } from './route';
 export { SellUrl } from './sell';
 export type { Eip5792Call, Eip5792Data, UnsignedTx, Sell, Beneficiary, SellPaymentInfo, ConfirmSellData } from './sell';

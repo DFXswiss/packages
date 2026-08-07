@@ -374,3 +374,28 @@ export interface PaymentLinkHistoryQuery {
   /** Defaults to the last day of the current month when omitted. */
   to?: Date;
 }
+
+/**
+ * Query for the unauthenticated invoice payment endpoint (`GET paymentLink/payment`).
+ *
+ * From the API `CreateInvoicePaymentDto` validation:
+ * - A route identity is required: at least one of `routeId` or `route` (mutually alternative
+ *   with short-form `r`, which is not part of this contract).
+ * - A payment identity is required: at least one of `externalId` or `message` (mutually
+ *   alternative with short-forms `e`/`m`, not part of this contract).
+ * - `amount` is required (mutually alternative only with short-form `a`, not in this contract).
+ * - `label`, `note`, `currency`, `expiryDate`, `standard`, `webhookUrl` are optional.
+ */
+export interface PaymentLinkInvoicePaymentQuery {
+  routeId?: string;
+  route?: string;
+  externalId?: string;
+  message?: string;
+  label?: string;
+  note?: string;
+  amount: string;
+  currency?: string;
+  expiryDate?: Date;
+  standard?: PaymentStandardType;
+  webhookUrl?: string;
+}

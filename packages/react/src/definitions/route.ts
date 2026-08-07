@@ -47,4 +47,5 @@ export type {
   PaymentLinkHistoryPayment,
   PaymentLinkPaymentQuery,
   PaymentLinkHistoryQuery,
+  PaymentLinkInvoicePaymentQuery,
 } from '@dfx.swiss/core';

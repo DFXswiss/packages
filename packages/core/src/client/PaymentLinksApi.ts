@@ -7,7 +7,9 @@ import {
   CreatePaymentLinkPayment,
   PaymentLinkHistory,
   PaymentLinkHistoryQuery,
+  PaymentLinkInvoicePaymentQuery,
   PaymentLinkPaymentQuery,
+  PaymentLinkPayResponse,
   PaymentLinkRecipient,
   PaymentLinkConfig,
   UpdatePaymentLinkConfig,
@@ -114,5 +116,19 @@ export class PaymentLinksApi {
   async getHistory(params: PaymentLinkHistoryQuery): Promise<PaymentLinkHistory[]> {
     const query = Utils.buildQuery({ ...params });
     return this.http.request<PaymentLinkHistory[]>({ url: `${PaymentLinksUrl.history}${query}`, method: 'GET' });
+  }
+
+  /**
+   * Creates or loads an invoice payment. Public - no session needed.
+   *
+   * Returns a quoted pay request when a payment is active, or a terminal error payload when not.
+   */
+  async getInvoicePayment(params: PaymentLinkInvoicePaymentQuery): Promise<PaymentLinkPayResponse> {
+    const query = Utils.buildQuery({ ...params });
+    return this.http.request<PaymentLinkPayResponse>({
+      url: `${PaymentLinksUrl.payment}${query}`,
+      method: 'GET',
+      token: false,
+    });
   }
 }

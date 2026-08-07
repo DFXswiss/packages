@@ -127,6 +127,89 @@ describe('PaymentLinksApi pay flow', () => {
       expect(mockHttp.request).toHaveBeenCalledWith({ url: 'paymentLink/history', method: 'GET' });
     });
   });
+
+  describe('getInvoicePayment', () => {
+    it('builds the full query, uses GET, and skips the auth token', async () => {
+      const mockHttp = createMockHttpClient({ ...requestBase, error: 'Not Found', message: 'none', statusCode: 404 });
+      const api = new PaymentLinksApi(mockHttp);
+
+      await api.getInvoicePayment({
+        routeId: '42',
+        route: 'shop',
+        externalId: 'ext 1',
+        message: 'inv/1',
+        label: 'L',
+        note: 'N',
+        amount: '10.5',
+        currency: 'CHF',
+        expiryDate: new Date('2027-01-01T00:00:00.000Z'),
+        standard: PaymentStandardType.OPEN_CRYPTO_PAY,
+        webhookUrl: 'https://example.com/hook',
+      });
+
+      expect(mockHttp.request).toHaveBeenCalledWith({
+        url:
+          'paymentLink/payment?routeId=42&route=shop&externalId=ext%201&message=inv%2F1&label=L&note=N' +
+          '&amount=10.5&currency=CHF&expiryDate=2027-01-01T00%3A00%3A00.000Z' +
+          '&standard=OpenCryptoPay&webhookUrl=https%3A%2F%2Fexample.com%2Fhook',
+        method: 'GET',
+        token: false,
+      });
+    });
+
+    it('omits optional fields that were not set', async () => {
+      const mockHttp = createMockHttpClient({ ...requestBase, error: 'Not Found', message: 'none', statusCode: 404 });
+      const api = new PaymentLinksApi(mockHttp);
+
+      await api.getInvoicePayment({
+        route: 'shop',
+        message: 'inv-1',
+        amount: '5',
+      });
+
+      expect(mockHttp.request).toHaveBeenCalledWith({
+        url: 'paymentLink/payment?route=shop&message=inv-1&amount=5',
+        method: 'GET',
+        token: false,
+      });
+    });
+
+    it('returns a quoted pay request', async () => {
+      const quoted: PaymentLinkPayResponse = {
+        ...requestBase,
+        tag: 'payRequest',
+        callback: 'https://example.com/callback',
+        metadata: '[]',
+        minSendable: 1,
+        maxSendable: 2,
+        quote: { id: 'q1', expiration: new Date(), payment: 'pay1' },
+        requestedAmount: { asset: 'CHF', amount: 1 },
+      };
+      const mockHttp = createMockHttpClient(quoted);
+      const api = new PaymentLinksApi(mockHttp);
+
+      const result = await api.getInvoicePayment({ route: 'shop', message: 'inv-1', amount: '5' });
+
+      expect(hasPaymentQuote(result)).toBe(true);
+      expect(result).toEqual(quoted);
+    });
+
+    it('returns a terminal error response', async () => {
+      const terminal: PaymentLinkPayResponse = {
+        ...requestBase,
+        error: 'Not Found',
+        message: 'No pending payment',
+        statusCode: 404,
+      };
+      const mockHttp = createMockHttpClient(terminal);
+      const api = new PaymentLinksApi(mockHttp);
+
+      const result = await api.getInvoicePayment({ route: 'shop', message: 'inv-1', amount: '5' });
+
+      expect(hasPaymentQuote(result)).toBe(false);
+      expect(result).toEqual(terminal);
+    });
+  });
 });
 
 describe('hasPaymentQuote', () => {
