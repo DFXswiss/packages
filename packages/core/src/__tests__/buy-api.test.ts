@@ -1,6 +1,5 @@
 import { BuyApi } from '../client/BuyApi';
 import { DfxHttpClient } from '../client/DfxHttpClient';
-import { BuyUrl } from '../definitions/buy';
 
 function createMockHttpClient(response?: any) {
   const requestMock = jest.fn().mockResolvedValue(response);
@@ -21,49 +20,36 @@ describe('BuyApi', () => {
       const mockHttp = createMockHttpClient({ pdfData: 'base64' });
       const api = new BuyApi(mockHttp);
 
-      await api.getInvoice(42);
+      const result = await api.getInvoice(42);
 
       expect(mockHttp.request).toHaveBeenCalledTimes(1);
       expect(mockHttp.request).toHaveBeenCalledWith({ url: 'buy/paymentInfos/42/invoice', method: 'PUT' });
+      expect(result).toEqual({ pdfData: 'base64' });
     });
 
     it('appends collectionAccount=true when the switch is set', async () => {
       const mockHttp = createMockHttpClient({ pdfData: 'base64' });
       const api = new BuyApi(mockHttp);
 
-      await api.getInvoice(42, true);
+      const result = await api.getInvoice(42, true);
 
       expect(mockHttp.request).toHaveBeenCalledTimes(1);
       expect(mockHttp.request).toHaveBeenCalledWith({
         url: 'buy/paymentInfos/42/invoice?collectionAccount=true',
         method: 'PUT',
       });
+      expect(result).toEqual({ pdfData: 'base64' });
     });
 
     it('does not append a collectionAccount query when the switch is false', async () => {
-      // The API treats any present value as true (Util.mapBooleanQuery), so false must omit the param.
       const mockHttp = createMockHttpClient({ pdfData: 'base64' });
       const api = new BuyApi(mockHttp);
 
-      await api.getInvoice(42, false);
+      const result = await api.getInvoice(42, false);
 
       expect(mockHttp.request).toHaveBeenCalledTimes(1);
       expect(mockHttp.request).toHaveBeenCalledWith({ url: 'buy/paymentInfos/42/invoice', method: 'PUT' });
+      expect(result).toEqual({ pdfData: 'base64' });
     });
-  });
-});
-
-describe('BuyUrl.invoice', () => {
-  it('builds the path without a query when collectionAccount is omitted', () => {
-    expect(BuyUrl.invoice(42)).toBe('buy/paymentInfos/42/invoice');
-  });
-
-  it('appends collectionAccount=true when the switch is set', () => {
-    expect(BuyUrl.invoice(42, true)).toBe('buy/paymentInfos/42/invoice?collectionAccount=true');
-  });
-
-  it('builds the path without a query when collectionAccount is false', () => {
-    // The API treats any present value as true (Util.mapBooleanQuery), so false must omit the param.
-    expect(BuyUrl.invoice(42, false)).toBe('buy/paymentInfos/42/invoice');
   });
 });

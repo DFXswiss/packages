@@ -1,4 +1,5 @@
 import { Buy, BuyUrl, BuyPaymentInfo, PdfDocument } from '../definitions/buy';
+import { Utils } from '../utils';
 import { DfxHttpClient } from './DfxHttpClient';
 
 export class BuyApi {
@@ -12,8 +13,9 @@ export class BuyApi {
     return this.http.request<Buy>({ url: BuyUrl.receive, method: 'PUT', data: info });
   }
 
-  async getInvoice(txId: number, collectionAccount?: boolean): Promise<PdfDocument> {
-    return this.http.request<PdfDocument>({ url: BuyUrl.invoice(txId, collectionAccount), method: 'PUT' });
+  async getInvoice(txId: number, collectionAccount = false): Promise<PdfDocument> {
+    const query = Utils.buildQuery({ collectionAccount: collectionAccount || undefined });
+    return this.http.request<PdfDocument>({ url: `${BuyUrl.invoice(txId)}${query}`, method: 'PUT' });
   }
 
   async confirm(txId: number): Promise<void> {
