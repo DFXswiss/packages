@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.7.0-beta.1...@dfx.swiss/react@1.8.0-beta.0) (2026-08-07)
+
+### Features
+
+- **core,react:** let the buy invoice call target the collection account ([#204](https://github.com/DFXswiss/packages/issues/204)) ([d388d81](https://github.com/DFXswiss/packages/commit/d388d8105a539e56f78d246462c6ca021233bf39)), closes [DFXswiss/api#4686](https://github.com/DFXswiss/api/issues/4686) [DFXswiss/services#1270](https://github.com/DFXswiss/services/issues/1270) [#152](https://github.com/DFXswiss/packages/issues/152) [DFXswiss/api#4686](https://github.com/DFXswiss/api/issues/4686) [DFXswiss/services#1270](https://github.com/DFXswiss/services/issues/1270)
+
 # [1.7.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.7.0-beta.0...@dfx.swiss/react@1.7.0) (2026-07-29)
 
 ### Bug Fixes
