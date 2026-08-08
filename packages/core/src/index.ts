@@ -37,6 +37,7 @@ export {
   BankAccountUrl,
   // Blockchain
   Blockchain,
+  BlockchainUrl,
   // Buy
   BuyUrl,
   PersonalIbanProvider,
@@ -140,6 +141,14 @@ export type {
   ReceiveIbanCheck,
   // Bank Account
   BankAccount,
+  // Blockchain
+  GetBlockchainBalances,
+  BlockchainBalance,
+  BlockchainBalances,
+  CreateBlockchainTransaction,
+  UnsignedTransaction,
+  BroadcastTransaction,
+  BroadcastResult,
   // Buy
   Buy,
   BuyPaymentInfo,

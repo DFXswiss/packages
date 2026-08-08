@@ -8,6 +8,7 @@ export { AssetApi } from './AssetApi';
 export type { AssetListParams } from './AssetApi';
 export { BankApi } from './BankApi';
 export { BankAccountApi } from './BankAccountApi';
+export { BlockchainApi } from './BlockchainApi';
 export type { CreateBankAccount, UpdateBankAccount } from './BankAccountApi';
 export { BuyApi } from './BuyApi';
 export { CountryApi } from './CountryApi';

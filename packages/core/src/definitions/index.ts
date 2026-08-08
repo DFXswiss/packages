@@ -21,7 +21,17 @@ export { BankUrl, ReceiveIbanStatus } from './bank';
 export type { Bank, ReceiveIbanCheck } from './bank';
 export { BankAccountUrl } from './bank-account';
 export type { BankAccount } from './bank-account';
-export { Blockchain } from './blockchain';
+export { Blockchain, BlockchainUrl } from './blockchain';
+export type {
+  GetBlockchainBalances,
+  BlockchainBalance,
+  BlockchainBalances,
+  CreateBlockchainTransaction,
+  UnsignedTransaction,
+  BroadcastTransaction,
+  BroadcastResult,
+} from './blockchain';
+
 export { BuyUrl, PersonalIbanProvider } from './buy';
 export type { Buy, BuyPaymentInfo, PdfDocument } from './buy';
 export { CountryUrl } from './country';

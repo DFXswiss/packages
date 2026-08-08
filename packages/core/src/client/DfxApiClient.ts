@@ -3,6 +3,7 @@ import { AuthApi } from './AuthApi';
 import { AssetApi } from './AssetApi';
 import { BankApi } from './BankApi';
 import { BankAccountApi } from './BankAccountApi';
+import { BlockchainApi } from './BlockchainApi';
 import { BuyApi } from './BuyApi';
 import { CountryApi } from './CountryApi';
 import { FiatApi } from './FiatApi';
@@ -31,6 +32,7 @@ export class DfxApiClient {
   readonly asset: AssetApi;
   readonly bank: BankApi;
   readonly bankAccount: BankAccountApi;
+  readonly blockchain: BlockchainApi;
   readonly buy: BuyApi;
   readonly country: CountryApi;
   readonly fiat: FiatApi;
@@ -55,6 +57,7 @@ export class DfxApiClient {
     this.asset = new AssetApi(this.http);
     this.bank = new BankApi(this.http);
     this.bankAccount = new BankAccountApi(this.http);
+    this.blockchain = new BlockchainApi(this.http);
     this.buy = new BuyApi(this.http);
     this.country = new CountryApi(this.http);
     this.fiat = new FiatApi(this.http);
