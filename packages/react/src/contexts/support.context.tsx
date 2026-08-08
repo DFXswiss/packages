@@ -8,6 +8,7 @@ import {
   DataFile,
 } from '../definitions/support';
 import { useSupportChat } from '../hooks/support.hook';
+import { lastSettledMessageId, mergeMessages, settleMessage as settleMessageInList } from '../support-messages';
 
 interface SupportChatInterface {
   tickets: SupportIssue[];
@@ -31,19 +32,32 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
   const { getIssues, getIssue, createIssue, createMessage, fetchFileData } = useSupportChat();
 
   const currUnsettledMessageId = useRef(0);
+  const supportIssueRef = useRef<SupportIssue>();
+  const isLoadingRef = useRef(false);
+  // Ref (not state): the interval callback closes once on [sync]; state would go stale and
+  // the overlap guard would never see isSyncing flip to true between ticks.
+  const isSyncingRef = useRef(false);
 
   const [tickets, setTickets] = useState<SupportIssue[]>([]);
   const [supportIssue, setSupportIssue] = useState<SupportIssue>();
   const [isLoading, setIsLoading] = useState(false);
-  const [isSyncing, setIsSyncing] = useState(false);
   const [isError, setIsError] = useState<string>();
   const [sync, setSync] = useState(false);
 
   useEffect(() => {
-    const interval = setTimeout(() => sync && syncSupportIssue(), 5000);
-    return () => clearInterval(interval);
+    supportIssueRef.current = supportIssue;
+  }, [supportIssue]);
+
+  useEffect(() => {
+    isLoadingRef.current = isLoading;
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (!sync) return;
+    const handle = setInterval(() => void syncSupportIssue(), 5000);
+    return () => clearInterval(handle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [supportIssue, sync]);
+  }, [sync]);
 
   async function loadTickets(): Promise<void> {
     setIsLoading(true);
@@ -67,33 +81,42 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
   }
 
   async function syncSupportIssue(): Promise<void> {
-    if (!supportIssue || isLoading || isSyncing) return;
+    const issue = supportIssueRef.current;
+    if (!issue || isLoadingRef.current || isSyncingRef.current) return;
 
-    setIsSyncing(true);
+    const fromMessageId = lastSettledMessageId(issue.messages);
+
+    isSyncingRef.current = true;
     setIsError(undefined);
-    const fromMessageId = supportIssue.messages[supportIssue.messages.length - 1].id;
-    return getIssue(supportIssue.uid, fromMessageId)
+    // undefined -> SupportUrl.getIssue omits the query (full history), not fromMessageId=undefined
+    return getIssue(issue.uid, fromMessageId)
       .then((response) => updateSupportIssue(response))
       .catch(() => setIsError('Error while syncing messages'))
-      .finally(() => setIsSyncing(false));
+      .finally(() => {
+        isSyncingRef.current = false;
+      });
   }
 
   async function createSupportIssue(request: CreateSupportIssue, file?: File): Promise<string> {
     const dataFile = file && (await mapFileToDataFile(file));
     const messageId = getNextUnsettledMessageId();
 
-    setSupportIssue((supportIssue) => {
-      if (!supportIssue) return supportIssue;
-      supportIssue.messages.push({
-        id: messageId,
-        created: new Date(),
-        message: request.message,
-        fileName: file?.name,
-        file: dataFile,
-        status: SupportMessageStatus.SENT,
-      });
-
-      return { ...supportIssue };
+    setSupportIssue((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        messages: [
+          ...prev.messages,
+          {
+            id: messageId,
+            created: new Date(),
+            message: request.message,
+            fileName: file?.name,
+            file: dataFile,
+            status: SupportMessageStatus.SENT,
+          },
+        ],
+      };
     });
 
     try {
@@ -115,6 +138,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
 
     if (!hasText && !hasFiles) return;
 
+    const issueUid = supportIssue.uid;
     const modFiles = files?.length !== 1 && hasText ? [...(files ?? []), undefined] : (files ?? []);
     modFiles.forEach(async (file: File | undefined, index) => {
       const dataFile = file && (await mapFileToDataFile(file));
@@ -130,13 +154,15 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
         replyTo: index === 0 ? replyToMessage?.id : undefined,
       };
 
-      setSupportIssue((supportIssue) => {
-        if (!supportIssue) return supportIssue;
-        supportIssue.messages.push(newMessage);
-        return { ...supportIssue };
+      setSupportIssue((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          messages: [...prev.messages, newMessage],
+        };
       });
 
-      createMessage(supportIssue.uid, {
+      createMessage(issueUid, {
         message: newMessage.message,
         file: dataFile?.file,
         fileName: newMessage.fileName,
@@ -161,41 +187,58 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
         url: URL.createObjectURL(blob),
       };
 
-      setSupportIssue((supportIssue) => {
-        if (!supportIssue) return supportIssue;
-        if (message) message.file = newFile;
-        return { ...supportIssue };
+      setSupportIssue((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          messages: prev.messages.map((m) => (m.id === messageId ? { ...m, file: newFile } : m)),
+        };
       });
     });
   }
 
   function handleEmojiClick(messageId: number, emoji: string, user = 'Customer') {
-    if (!supportIssue) return;
+    setSupportIssue((prev) => {
+      if (!prev) return prev;
 
-    const messageIndex = supportIssue.messages.findIndex((m) => m.id === messageId);
-    if (messageIndex === -1) return;
+      const messageIndex = prev.messages.findIndex((m) => m.id === messageId);
+      if (messageIndex === -1) return prev;
 
-    const message = supportIssue.messages[messageIndex];
-    if (!message.reactions) message.reactions = [];
-    const reactionIndex = message.reactions?.findIndex((r) => r.emoji === emoji);
-    if (reactionIndex === -1) {
-      message.reactions.push({ emoji, users: [user] });
-    } else {
-      const userIndex = message.reactions[reactionIndex].users.indexOf(user);
-      if (userIndex === -1) {
-        message.reactions[reactionIndex].users.push(user);
+      const message = prev.messages[messageIndex];
+      const reactions = message.reactions ? [...message.reactions] : [];
+      const reactionIndex = reactions.findIndex((r) => r.emoji === emoji);
+
+      let nextReactions = reactions;
+      if (reactionIndex === -1) {
+        nextReactions = [...reactions, { emoji, users: [user] }];
       } else {
-        message.reactions[reactionIndex].users.splice(userIndex, 1);
-        if (message.reactions[reactionIndex].users.length === 0) {
-          message.reactions.splice(reactionIndex, 1);
+        const reaction = reactions[reactionIndex];
+        const users = [...reaction.users];
+        const userIndex = users.indexOf(user);
+        if (userIndex === -1) {
+          nextReactions = [
+            ...reactions.slice(0, reactionIndex),
+            { ...reaction, users: [...users, user] },
+            ...reactions.slice(reactionIndex + 1),
+          ];
+        } else {
+          const nextUsers = users.filter((_, i) => i !== userIndex);
+          if (nextUsers.length === 0) {
+            nextReactions = reactions.filter((_, i) => i !== reactionIndex);
+          } else {
+            nextReactions = [
+              ...reactions.slice(0, reactionIndex),
+              { ...reaction, users: nextUsers },
+              ...reactions.slice(reactionIndex + 1),
+            ];
+          }
         }
       }
-    }
 
-    setSupportIssue((supportIssue) => {
-      if (!supportIssue) return supportIssue;
-      supportIssue.messages[messageIndex] = message;
-      return { ...supportIssue };
+      return {
+        ...prev,
+        messages: prev.messages.map((m, i) => (i === messageIndex ? { ...m, reactions: nextReactions } : m)),
+      };
     });
 
     // TODO (later): Update message on server side. Feature not yet available.
@@ -222,30 +265,22 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
   // --- HELPER FUNCTIONS --- //
 
   function updateSupportIssue(newState: SupportIssue) {
-    setSupportIssue((supportIssue) => {
-      if (!supportIssue) return newState;
-      supportIssue.messages = [
-        ...supportIssue.messages,
-        ...newState.messages.filter((m) => !supportIssue.messages.some((sm) => sm.id === m.id)),
-      ];
-      return { ...supportIssue };
+    setSupportIssue((prev) => {
+      if (!prev) return newState;
+      return {
+        ...prev,
+        messages: mergeMessages(prev.messages, newState.messages),
+      };
     });
   }
 
   function settleMessage(messageId: number, newMessage?: SupportMessage) {
-    const idx = supportIssue?.messages.findIndex((m) => m.id === messageId);
-    if (!supportIssue || !idx || idx === -1) return;
-
-    const settledMessage = supportIssue.messages[idx];
-
-    setSupportIssue((supportIssue) => {
-      if (!supportIssue) return supportIssue;
-      supportIssue.messages[idx] = {
-        ...settledMessage,
-        ...newMessage,
-        status: newMessage ? SupportMessageStatus.RECEIVED : SupportMessageStatus.FAILED,
+    setSupportIssue((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        messages: settleMessageInList(prev.messages, messageId, newMessage),
       };
-      return { ...supportIssue };
     });
   }
 
