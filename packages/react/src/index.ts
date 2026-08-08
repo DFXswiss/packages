@@ -22,6 +22,7 @@ export { useBankAccount, CreateBankAccount, UpdateBankAccount } from './hooks/ba
 export { useBank } from './hooks/bank.hook';
 export { useBuy } from './hooks/buy.hook';
 export { useCountry } from './hooks/country.hook';
+export { useCustody } from './hooks/custody.hook';
 export { useFiat } from './hooks/fiat.hook';
 export { usePaymentRoutes } from './hooks/payment-routes.hook';
 export { useSettings } from './hooks/settings.hook';
@@ -55,6 +56,41 @@ export { Buy, BuyPaymentInfo, PdfDocument, BuyUrl } from './definitions/buy';
 /** Personal IBAN provider values accepted by buy payment-info requests. */
 export { PersonalIbanProvider } from './definitions/buy';
 export { Country, CountryUrl } from './definitions/country';
+export {
+  CustodyUrl,
+  LegacyCustodyAccountId,
+  toCustodyAccountId,
+  CustodyAddressType,
+  CustodyAccessLevel,
+  CustodyOrderType,
+  CustodyOrderStatus,
+  CustodyOrderHistoryStatus,
+  CustodyValueCurrency,
+  CustodyAccountId,
+  PersistedCustodyAccountId,
+  CustodyAuth,
+  CustodySignup,
+  CustodyUser,
+  CustodyAccount,
+  CreateCustodyAccount,
+  UpdateCustodyAccount,
+  CustodyAccountAccess,
+  CreateCustodyAccountAccess,
+  UpdateCustodyAccountAccess,
+  CustodyAsset,
+  CustodyFiatValue,
+  CustodyAssetBalance,
+  CustodyBalance,
+  CustodyHistoryEntry,
+  CustodyHistory,
+  CustodyOrderHistory,
+  CustodyOrderBuyInfo,
+  CustodyOrderPaymentInfo,
+  CustodyOrder,
+  CreateCustodyOrder,
+  CreatableCustodyOrderType,
+  CustodyPdfQuery,
+} from './definitions/custody';
 export { ApiError, ApiException } from './definitions/error';
 export { Fiat, FiatUrl } from './definitions/fiat';
 export { CustomFile } from './definitions/file';

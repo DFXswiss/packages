@@ -5,6 +5,7 @@ import { BankApi } from './BankApi';
 import { BankAccountApi } from './BankAccountApi';
 import { BuyApi } from './BuyApi';
 import { CountryApi } from './CountryApi';
+import { CustodyApi } from './CustodyApi';
 import { FiatApi } from './FiatApi';
 import { KycApi } from './KycApi';
 import { LanguageApi } from './LanguageApi';
@@ -33,6 +34,7 @@ export class DfxApiClient {
   readonly bankAccount: BankAccountApi;
   readonly buy: BuyApi;
   readonly country: CountryApi;
+  readonly custody: CustodyApi;
   readonly fiat: FiatApi;
   readonly kyc: KycApi;
   readonly language: LanguageApi;
@@ -57,6 +59,7 @@ export class DfxApiClient {
     this.bankAccount = new BankAccountApi(this.http);
     this.buy = new BuyApi(this.http);
     this.country = new CountryApi(this.http);
+    this.custody = new CustodyApi(this.http);
     this.fiat = new FiatApi(this.http);
     this.kyc = new KycApi(this.http);
     this.language = new LanguageApi(this.http);

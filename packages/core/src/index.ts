@@ -40,6 +40,16 @@ export {
   // Buy
   BuyUrl,
   PersonalIbanProvider,
+  // Custody
+  CustodyUrl,
+  LegacyCustodyAccountId,
+  toCustodyAccountId,
+  CustodyAddressType,
+  CustodyAccessLevel,
+  CustodyOrderType,
+  CustodyOrderStatus,
+  CustodyOrderHistoryStatus,
+  CustodyValueCurrency,
   // Country
   CountryUrl,
   // Error
@@ -144,6 +154,31 @@ export type {
   Buy,
   BuyPaymentInfo,
   PdfDocument,
+  // Custody
+  CustodyAccountId,
+  PersistedCustodyAccountId,
+  CustodyAuth,
+  CustodySignup,
+  CustodyUser,
+  CustodyAccount,
+  CreateCustodyAccount,
+  UpdateCustodyAccount,
+  CustodyAccountAccess,
+  CreateCustodyAccountAccess,
+  UpdateCustodyAccountAccess,
+  CustodyAsset,
+  CustodyFiatValue,
+  CustodyAssetBalance,
+  CustodyBalance,
+  CustodyHistoryEntry,
+  CustodyHistory,
+  CustodyOrderHistory,
+  CustodyOrderBuyInfo,
+  CustodyOrderPaymentInfo,
+  CustodyOrder,
+  CreateCustodyOrder,
+  CreatableCustodyOrderType,
+  CustodyPdfQuery,
   // Country
   Country,
   // Error
