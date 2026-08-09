@@ -41,3 +41,23 @@ export function settleMessage(messages: SupportMessage[], tempId: number, settle
     };
   });
 }
+
+export type PrepareRetryResult = {
+  messages: SupportMessage[];
+  /** Snapshot of the failed message to re-send; absent means no-op. */
+  payload?: SupportMessage;
+};
+
+/** Claims a Failed message for retry: sets status to Sent in place.
+ *  Unknown ids and non-Failed statuses leave the list effectively unchanged (new array, no payload). */
+export function prepareRetry(messages: SupportMessage[], messageId: number): PrepareRetryResult {
+  const target = messages.find((m) => m.id === messageId);
+  if (!target || target.status !== SupportMessageStatus.FAILED) {
+    return { messages: [...messages] };
+  }
+
+  return {
+    messages: messages.map((m) => (m.id === messageId ? { ...m, status: SupportMessageStatus.SENT } : m)),
+    payload: target,
+  };
+}

@@ -1,5 +1,5 @@
 import { SupportMessage, SupportMessageStatus } from '../definitions/support';
-import { lastSettledMessageId, mergeMessages, settleMessage } from '../support-messages';
+import { lastSettledMessageId, mergeMessages, prepareRetry, settleMessage } from '../support-messages';
 
 function msg(id: number, overrides: Partial<SupportMessage> = {}): SupportMessage {
   return {
@@ -141,5 +141,112 @@ describe('settleMessage', () => {
       status: SupportMessageStatus.RECEIVED,
       message: 'from-create',
     });
+  });
+});
+
+describe('prepareRetry', () => {
+  it('is a no-op for an unknown id', () => {
+    const messages = [msg(1, { status: SupportMessageStatus.FAILED })];
+    const result = prepareRetry(messages, -99);
+
+    expect(result.payload).toBeUndefined();
+    expect(result.messages).not.toBe(messages);
+    expect(result.messages).toEqual(messages);
+  });
+
+  it('is a no-op for a non-failed message', () => {
+    const messages = [
+      msg(1),
+      msg(-1, { status: SupportMessageStatus.SENT, message: 'in-flight' }),
+      msg(-2, { status: SupportMessageStatus.RECEIVED, message: 'done' }),
+    ];
+
+    expect(prepareRetry(messages, -1).payload).toBeUndefined();
+    expect(prepareRetry(messages, -2).payload).toBeUndefined();
+    expect(prepareRetry(messages, -1).messages.map((m) => m.status)).toEqual([
+      undefined,
+      SupportMessageStatus.SENT,
+      SupportMessageStatus.RECEIVED,
+    ]);
+  });
+
+  it('claims a failed message in place as Sent and returns its payload', () => {
+    const failed = msg(-1, {
+      status: SupportMessageStatus.FAILED,
+      message: 'customer text',
+      fileName: 'shot.png',
+      file: { file: 'base64', type: 'image/png', size: 4, url: 'blob:x' },
+    });
+    const messages = [msg(100, { message: 'prior' }), failed, msg(50, { message: 'other' })];
+
+    const result = prepareRetry(messages, -1);
+
+    expect(result.payload).toEqual(failed);
+    expect(result.messages.map((m) => m.id)).toEqual([100, -1, 50]);
+    expect(result.messages[1].status).toBe(SupportMessageStatus.SENT);
+    expect(result.messages[1].message).toBe('customer text');
+    expect(result.messages[0].status).toBeUndefined();
+    expect(result.messages).not.toBe(messages);
+  });
+
+  it('success path: settle after prepare keeps position and applies server data', () => {
+    const messages = [
+      msg(100),
+      msg(-1, { status: SupportMessageStatus.FAILED, message: 'retry-me' }),
+      msg(99, { message: 'tail' }),
+    ];
+
+    const prepared = prepareRetry(messages, -1);
+    expect(prepared.payload?.message).toBe('retry-me');
+
+    const settled = settleMessage(prepared.messages, -1, msg(200, { message: 'from-server' }));
+
+    expect(settled.map((m) => m.id)).toEqual([100, 200, 99]);
+    expect(settled[1]).toMatchObject({
+      id: 200,
+      status: SupportMessageStatus.RECEIVED,
+      message: 'from-server',
+    });
+  });
+
+  it('failure path: settle without server data returns to Failed in place', () => {
+    const messages = [msg(100), msg(-1, { status: SupportMessageStatus.FAILED, message: 'retry-me' })];
+
+    const prepared = prepareRetry(messages, -1);
+    const failedAgain = settleMessage(prepared.messages, -1);
+
+    expect(failedAgain.map((m) => m.id)).toEqual([100, -1]);
+    expect(failedAgain[1]).toMatchObject({
+      id: -1,
+      status: SupportMessageStatus.FAILED,
+      message: 'retry-me',
+    });
+  });
+
+  it('duplicate path: settle after prepare drops optimistic when sync already has settled.id', () => {
+    const messages = [
+      msg(100),
+      msg(-1, { status: SupportMessageStatus.FAILED, message: 'optimistic' }),
+      msg(101, { message: 'from-sync' }),
+    ];
+
+    const prepared = prepareRetry(messages, -1);
+    expect(prepared.messages[1].status).toBe(SupportMessageStatus.SENT);
+
+    const result = settleMessage(prepared.messages, -1, msg(101, { message: 'from-create' }));
+
+    expect(result.map((m) => m.id)).toEqual([100, 101]);
+    expect(result.filter((m) => m.id === 101)).toHaveLength(1);
+    expect(result[1].message).toBe('from-sync');
+  });
+
+  it('second prepareRetry on the same id is a no-op (already Sent)', () => {
+    const messages = [msg(-1, { status: SupportMessageStatus.FAILED, message: 'once' })];
+    const first = prepareRetry(messages, -1);
+    const second = prepareRetry(first.messages, -1);
+
+    expect(first.payload).toBeDefined();
+    expect(second.payload).toBeUndefined();
+    expect(second.messages[0].status).toBe(SupportMessageStatus.SENT);
   });
 });

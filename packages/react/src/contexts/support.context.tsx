@@ -8,7 +8,12 @@ import {
   DataFile,
 } from '../definitions/support';
 import { useSupportChat } from '../hooks/support.hook';
-import { lastSettledMessageId, mergeMessages, settleMessage as settleMessageInList } from '../support-messages';
+import {
+  lastSettledMessageId,
+  mergeMessages,
+  prepareRetry,
+  settleMessage as settleMessageInList,
+} from '../support-messages';
 
 interface SupportChatInterface {
   tickets: SupportIssue[];
@@ -19,6 +24,9 @@ interface SupportChatInterface {
   loadSupportIssue: (uid: string) => Promise<void>;
   createSupportIssue: (request: CreateSupportIssue, file?: File) => Promise<string>;
   submitMessage: (message?: string, files?: File[], replyToMessage?: SupportMessage) => Promise<void>;
+  /** Sends a message that previously failed again, in place.
+   *  Unknown or non-failed ids are a no-op. */
+  retryMessage: (messageId: number) => Promise<void>;
   handleEmojiClick: (messageId: number, emoji: string) => void;
   loadFileData: (messageId: number) => Promise<void>;
   setSync: (sync: boolean) => void;
@@ -197,6 +205,33 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
     });
   }
 
+  async function retryMessage(messageId: number): Promise<void> {
+    const current = supportIssueRef.current;
+    if (!current) return;
+
+    // Claim Failed → Sent on the ref before any await so a second call is a no-op.
+    const prepared = prepareRetry(current.messages, messageId);
+    if (!prepared.payload) return;
+
+    supportIssueRef.current = { ...current, messages: prepared.messages };
+    setSupportIssue((prev) => {
+      if (!prev) return prev;
+      const next = prepareRetry(prev.messages, messageId);
+      return { ...prev, messages: next.messages };
+    });
+
+    try {
+      const response = await createMessage(current.uid, {
+        message: prepared.payload.message,
+        file: prepared.payload.file?.file,
+        fileName: prepared.payload.fileName,
+      });
+      settleMessage(messageId, response);
+    } catch {
+      settleMessage(messageId);
+    }
+  }
+
   function handleEmojiClick(messageId: number, emoji: string, user = 'Customer') {
     setSupportIssue((prev) => {
       if (!prev) return prev;
@@ -254,6 +289,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
       loadSupportIssue,
       createSupportIssue,
       submitMessage,
+      retryMessage,
       handleEmojiClick,
       loadFileData,
       setSync,
