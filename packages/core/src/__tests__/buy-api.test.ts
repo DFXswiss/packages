@@ -1,6 +1,8 @@
 import { BuyApi } from '../client/BuyApi';
 import { DfxHttpClient } from '../client/DfxHttpClient';
-import { PersonalIbanProvider } from '../definitions/buy';
+import { Asset } from '../definitions/asset';
+import { Buy, BuyPaymentInfo, PersonalIbanProvider } from '../definitions/buy';
+import { Fiat } from '../definitions/fiat';
 
 function createMockHttpClient(response?: any) {
   const requestMock = jest.fn().mockResolvedValue(response);
@@ -51,6 +53,28 @@ describe('BuyApi', () => {
       expect(mockHttp.request).toHaveBeenCalledTimes(1);
       expect(mockHttp.request).toHaveBeenCalledWith({ url: 'buy/paymentInfos/42/invoice', method: 'PUT' });
       expect(result).toEqual({ pdfData: 'base64' });
+    });
+  });
+
+  describe('createPaymentInfo', () => {
+    it('forwards personalIbanProvider as its wire string literal to the HTTP client', async () => {
+      const mockHttp = createMockHttpClient({} as Buy);
+      const api = new BuyApi(mockHttp);
+
+      const paymentInfo: BuyPaymentInfo = {
+        currency: {} as Fiat,
+        asset: {} as Asset,
+        personalIbanProvider: PersonalIbanProvider.YAPEAL,
+      };
+
+      await api.createPaymentInfo(paymentInfo);
+
+      expect(mockHttp.request).toHaveBeenCalledTimes(1);
+      expect(mockHttp.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ personalIbanProvider: 'Yapeal' }),
+        }),
+      );
     });
   });
 });
