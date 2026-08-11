@@ -1,7 +1,7 @@
 import { BuyApi } from '../client/BuyApi';
 import { DfxHttpClient } from '../client/DfxHttpClient';
 import { Asset } from '../definitions/asset';
-import { Buy, BuyPaymentInfo, PersonalIbanProvider } from '../definitions/buy';
+import { Buy, BuyPaymentInfo, PersonalIbanProvider, VirtualIban } from '../definitions/buy';
 import { Fiat } from '../definitions/fiat';
 
 function createMockHttpClient(response?: any) {
@@ -18,6 +18,29 @@ function createMockHttpClient(response?: any) {
 }
 
 describe('BuyApi', () => {
+  describe('getPersonalIbans', () => {
+    it('requests the personal IBAN list', async () => {
+      const response: VirtualIban[] = [
+        {
+          id: 1,
+          iban: 'CH9300762011623852957',
+          currency: 'CHF',
+          bank: 'Bank Frick',
+          active: true,
+          acceptsPayments: true,
+        },
+      ];
+      const mockHttp = createMockHttpClient(response);
+      const api = new BuyApi(mockHttp);
+
+      const result = await api.getPersonalIbans();
+
+      expect(mockHttp.request).toHaveBeenCalledTimes(1);
+      expect(mockHttp.request).toHaveBeenCalledWith({ url: 'buy/personalIban', method: 'GET' });
+      expect(result).toEqual(response);
+    });
+  });
+
   describe('getInvoice', () => {
     it('requests the invoice without a collectionAccount query when omitted', async () => {
       const mockHttp = createMockHttpClient({ pdfData: 'base64' });

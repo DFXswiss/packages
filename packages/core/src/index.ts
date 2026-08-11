@@ -40,6 +40,7 @@ export {
   // Buy
   BuyUrl,
   PersonalIbanProvider,
+  VirtualIbanStatus,
   // Country
   CountryUrl,
   // Error
@@ -144,6 +145,7 @@ export type {
   Buy,
   BuyPaymentInfo,
   PdfDocument,
+  VirtualIban,
   // Country
   Country,
   // Error
