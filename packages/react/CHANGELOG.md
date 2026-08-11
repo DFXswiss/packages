@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.8.0-beta.0...@dfx.swiss/react@1.8.0-beta.1) (2026-08-11)
+
+### Bug Fixes
+
+- **react:** keep the support chat sync alive, and let a failed message be sent again ([#210](https://github.com/DFXswiss/packages/issues/210)) ([a3bace9](https://github.com/DFXswiss/packages/commit/a3bace9de2171ad179f7311028eedb7d7e38b6f7))
+
 # [1.8.0-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.7.0-beta.1...@dfx.swiss/react@1.8.0-beta.0) (2026-08-07)
 
 ### Features
