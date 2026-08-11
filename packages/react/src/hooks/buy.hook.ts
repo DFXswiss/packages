@@ -23,7 +23,7 @@ export function useBuy(): BuyInterface {
     [call],
   );
 
-  const getPersonalIbans = useCallback(async () => {
+  const getPersonalIbans = useCallback(async (): Promise<VirtualIban[]> => {
     return call<VirtualIban[]>({ url: BuyUrl.personalIban, method: 'GET' });
   }, [call]);
 
