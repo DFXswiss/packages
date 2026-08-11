@@ -1,4 +1,4 @@
-import { SupportMessage, SupportMessageStatus } from './definitions/support';
+import { SupportIssue, SupportMessage, SupportMessageStatus } from './definitions/support';
 
 /** Höchste bestätigte Nachrichten-Kennung, oder undefined wenn es keine gibt.
  *  Optimistische Nachrichten tragen negative Platzhalter und zählen nicht. */
@@ -18,6 +18,19 @@ export function lastSettledMessageId(messages: SupportMessage[]): number | undef
  *  Gibt IMMER ein neues Array zurück und verändert das übergebene nie. */
 export function mergeMessages(current: SupportMessage[], incoming: SupportMessage[]): SupportMessage[] {
   return [...current, ...incoming.filter((m) => !current.some((c) => c.id === m.id))];
+}
+
+/** Wendet eine eingehende SupportIssue-Antwort auf den lokalen State an.
+ *  Kein offenes Ticket → incoming übernehmen.
+ *  Anderes Ticket (uid) → prev unverändert lassen (veraltete Sync-Antwort verwerfen).
+ *  Selbes Ticket → Nachrichten mergen, übrige prev-Felder behalten. */
+export function applySupportIssueUpdate(prev: SupportIssue | undefined, incoming: SupportIssue): SupportIssue {
+  if (!prev) return incoming;
+  if (prev.uid !== incoming.uid) return prev;
+  return {
+    ...prev,
+    messages: mergeMessages(prev.messages, incoming.messages),
+  };
 }
 
 /** Ersetzt die optimistische Nachricht mit der Kennung `tempId`.

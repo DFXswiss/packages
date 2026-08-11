@@ -9,8 +9,8 @@ import {
 } from '../definitions/support';
 import { useSupportChat } from '../hooks/support.hook';
 import {
+  applySupportIssueUpdate,
   lastSettledMessageId,
-  mergeMessages,
   prepareRetry,
   settleMessage as settleMessageInList,
 } from '../support-messages';
@@ -301,13 +301,7 @@ export function SupportChatContextProvider(props: PropsWithChildren): JSX.Elemen
   // --- HELPER FUNCTIONS --- //
 
   function updateSupportIssue(newState: SupportIssue) {
-    setSupportIssue((prev) => {
-      if (!prev) return newState;
-      return {
-        ...prev,
-        messages: mergeMessages(prev.messages, newState.messages),
-      };
-    });
+    setSupportIssue((prev) => applySupportIssueUpdate(prev, newState));
   }
 
   function settleMessage(messageId: number, newMessage?: SupportMessage) {

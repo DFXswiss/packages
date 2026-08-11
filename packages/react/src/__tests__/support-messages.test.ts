@@ -1,11 +1,37 @@
-import { SupportMessage, SupportMessageStatus } from '../definitions/support';
-import { lastSettledMessageId, mergeMessages, prepareRetry, settleMessage } from '../support-messages';
+import {
+  SupportIssue,
+  SupportIssueReason,
+  SupportIssueState,
+  SupportIssueType,
+  SupportMessage,
+  SupportMessageStatus,
+} from '../definitions/support';
+import {
+  applySupportIssueUpdate,
+  lastSettledMessageId,
+  mergeMessages,
+  prepareRetry,
+  settleMessage,
+} from '../support-messages';
 
 function msg(id: number, overrides: Partial<SupportMessage> = {}): SupportMessage {
   return {
     id,
     created: new Date('2026-01-01T00:00:00.000Z'),
     message: `m-${id}`,
+    ...overrides,
+  };
+}
+
+function issue(uid: string, messages: SupportMessage[], overrides: Partial<SupportIssue> = {}): SupportIssue {
+  return {
+    uid,
+    state: SupportIssueState.PENDING,
+    type: SupportIssueType.GENERIC_ISSUE,
+    reason: SupportIssueReason.OTHER,
+    name: `issue-${uid}`,
+    created: new Date('2026-01-01T00:00:00.000Z'),
+    messages,
     ...overrides,
   };
 }
@@ -60,6 +86,42 @@ describe('mergeMessages', () => {
 
     expect(result).not.toBe(current);
     expect(result).toEqual(current);
+  });
+});
+
+describe('applySupportIssueUpdate', () => {
+  it('discards a sync response for a different ticket (stale getIssue after ticket switch)', () => {
+    const ticketB = issue('ticket-B', [msg(10, { message: 'from-B' })]);
+    const staleFromA = issue('ticket-A', [msg(1, { message: 'from-A' }), msg(2, { message: 'also-A' })]);
+
+    const result = applySupportIssueUpdate(ticketB, staleFromA);
+
+    expect(result).toBe(ticketB);
+    expect(result.uid).toBe('ticket-B');
+    expect(result.messages).toHaveLength(1);
+    expect(result.messages[0].message).toBe('from-B');
+    expect(result.messages.some((m) => m.message === 'from-A' || m.message === 'also-A')).toBe(false);
+  });
+
+  it('merges messages when the response belongs to the open ticket', () => {
+    const open = issue('ticket-B', [msg(10, { message: 'from-B' })]);
+    const sync = issue('ticket-B', [msg(11, { message: 'new-from-sync' })]);
+
+    const result = applySupportIssueUpdate(open, sync);
+
+    expect(result.uid).toBe('ticket-B');
+    expect(result.messages.map((m) => m.id)).toEqual([10, 11]);
+    expect(result.messages[0].message).toBe('from-B');
+    expect(result.messages[1].message).toBe('new-from-sync');
+    expect(result).not.toBe(open);
+  });
+
+  it('takes the incoming issue when there is no open ticket', () => {
+    const incoming = issue('ticket-A', [msg(1)]);
+
+    const result = applySupportIssueUpdate(undefined, incoming);
+
+    expect(result).toBe(incoming);
   });
 });
 
