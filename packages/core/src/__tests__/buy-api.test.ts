@@ -1,5 +1,6 @@
 import { BuyApi } from '../client/BuyApi';
 import { DfxHttpClient } from '../client/DfxHttpClient';
+import { PersonalIbanProvider } from '../definitions/buy';
 
 function createMockHttpClient(response?: any) {
   const requestMock = jest.fn().mockResolvedValue(response);
@@ -51,5 +52,12 @@ describe('BuyApi', () => {
       expect(mockHttp.request).toHaveBeenCalledWith({ url: 'buy/paymentInfos/42/invoice', method: 'PUT' });
       expect(result).toEqual({ pdfData: 'base64' });
     });
+  });
+});
+
+describe('PersonalIbanProvider', () => {
+  it('pins the wire format of the enum values', () => {
+    expect(PersonalIbanProvider.FRICK).toBe('Frick');
+    expect(PersonalIbanProvider.YAPEAL).toBe('Yapeal');
   });
 });

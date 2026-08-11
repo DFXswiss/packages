@@ -13,6 +13,7 @@ export const BuyUrl = {
 
 export enum PersonalIbanProvider {
   FRICK = 'Frick',
+  YAPEAL = 'Yapeal',
 }
 
 export interface Buy {
@@ -65,6 +66,8 @@ export interface BuyPaymentInfo {
   /**
    * Explicit personal IBAN provider (e.g. PersonalIbanProvider.FRICK / "Frick").
    * Fail-closed on the API.
+   * `PersonalIbanProvider.YAPEAL` selects the customer's EXISTING legacy Yapeal
+   * personal IBAN and never issues a new one.
    */
   personalIbanProvider?: PersonalIbanProvider;
 }
