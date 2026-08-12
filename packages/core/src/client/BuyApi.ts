@@ -1,4 +1,4 @@
-import { Buy, BuyUrl, BuyPaymentInfo, PdfDocument } from '../definitions/buy';
+import { Buy, BuyUrl, BuyPaymentInfo, PdfDocument, VirtualIban } from '../definitions/buy';
 import { Utils } from '../utils';
 import { DfxHttpClient } from './DfxHttpClient';
 
@@ -11,6 +11,10 @@ export class BuyApi {
 
   async createPaymentInfo(info: BuyPaymentInfo): Promise<Buy> {
     return this.http.request<Buy>({ url: BuyUrl.receive, method: 'PUT', data: info });
+  }
+
+  async getPersonalIbans(): Promise<VirtualIban[]> {
+    return this.http.request<VirtualIban[]>({ url: BuyUrl.personalIban, method: 'GET' });
   }
 
   async getInvoice(txId: number, collectionAccount = false): Promise<PdfDocument> {

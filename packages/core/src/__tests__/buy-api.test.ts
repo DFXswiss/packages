@@ -1,5 +1,8 @@
 import { BuyApi } from '../client/BuyApi';
 import { DfxHttpClient } from '../client/DfxHttpClient';
+import { Asset } from '../definitions/asset';
+import { Buy, BuyPaymentInfo, PersonalIbanProvider, VirtualIban } from '../definitions/buy';
+import { Fiat } from '../definitions/fiat';
 
 function createMockHttpClient(response?: any) {
   const requestMock = jest.fn().mockResolvedValue(response);
@@ -15,6 +18,29 @@ function createMockHttpClient(response?: any) {
 }
 
 describe('BuyApi', () => {
+  describe('getPersonalIbans', () => {
+    it('requests the personal IBAN list', async () => {
+      const response: VirtualIban[] = [
+        {
+          id: 1,
+          iban: 'CH9300762011623852957',
+          currency: 'CHF',
+          bank: 'Bank Frick',
+          active: true,
+          acceptsPayments: true,
+        },
+      ];
+      const mockHttp = createMockHttpClient(response);
+      const api = new BuyApi(mockHttp);
+
+      const result = await api.getPersonalIbans();
+
+      expect(mockHttp.request).toHaveBeenCalledTimes(1);
+      expect(mockHttp.request).toHaveBeenCalledWith({ url: 'buy/personalIban', method: 'GET' });
+      expect(result).toEqual(response);
+    });
+  });
+
   describe('getInvoice', () => {
     it('requests the invoice without a collectionAccount query when omitted', async () => {
       const mockHttp = createMockHttpClient({ pdfData: 'base64' });
@@ -51,5 +77,34 @@ describe('BuyApi', () => {
       expect(mockHttp.request).toHaveBeenCalledWith({ url: 'buy/paymentInfos/42/invoice', method: 'PUT' });
       expect(result).toEqual({ pdfData: 'base64' });
     });
+  });
+
+  describe('createPaymentInfo', () => {
+    it('forwards personalIbanProvider as its wire string literal to the HTTP client', async () => {
+      const mockHttp = createMockHttpClient({} as Buy);
+      const api = new BuyApi(mockHttp);
+
+      const paymentInfo: BuyPaymentInfo = {
+        currency: {} as Fiat,
+        asset: {} as Asset,
+        personalIbanProvider: PersonalIbanProvider.YAPEAL,
+      };
+
+      await api.createPaymentInfo(paymentInfo);
+
+      expect(mockHttp.request).toHaveBeenCalledTimes(1);
+      expect(mockHttp.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ personalIbanProvider: 'Yapeal' }),
+        }),
+      );
+    });
+  });
+});
+
+describe('PersonalIbanProvider', () => {
+  it('pins the wire format of the enum values', () => {
+    expect(PersonalIbanProvider.FRICK).toBe('Frick');
+    expect(PersonalIbanProvider.YAPEAL).toBe('Yapeal');
   });
 });
