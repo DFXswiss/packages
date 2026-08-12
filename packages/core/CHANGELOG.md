@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0-beta.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.7.0-beta.0...@dfx.swiss/core@0.7.0-beta.1) (2026-08-12)
+
+### Features
+
+- **core:** add the Yapeal personal IBAN provider member ([#211](https://github.com/DFXswiss/packages/issues/211)) ([2880e00](https://github.com/DFXswiss/packages/commit/2880e00f161f311a15bc6e454dc08937fa5c3754))
+
 # [0.7.0-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.6.0...@dfx.swiss/core@0.7.0-beta.0) (2026-08-07)
 
 ### Features
