@@ -10,6 +10,7 @@ on:
       - synchronize
       - reopened
       - ready_for_review
+      - edited
       - labeled
       - unlabeled
   workflow_dispatch:
@@ -90,7 +91,7 @@ jobs:
           #   and any path under .github/workflows/
           # Do NOT treat packages/*/package.json as infrastructure.
           rc=0
-          infra=$(grep -E '^(lerna\.json|package\.json|package-lock\.json|tsconfig[^/]*\.json|\.github/workflows/.+)$' <<< "$diff_all") || rc=$?
+          infra=$(grep -E '^(lerna\.json|package\.json|package-lock\.json|tsconfig[^/]*\.json|\.eslintrc\.json|\.prettierrc|\.github/workflows/.+)$' <<< "$diff_all") || rc=$?
           if (( rc >= 2 )); then
             echo "::error::grep failed while matching infrastructure paths (exit $rc)."
             exit 1
@@ -120,33 +121,49 @@ jobs:
           finish changed
 
       - name: Run linter
+        env:
+          MODE: ${{ steps.scope.outputs.mode }}
+          BASE: ${{ github.base_ref }}
         run: |
-          if [ "${{ steps.scope.outputs.mode }}" = "full" ]; then
-            npx lerna run lint
-          else
-            npx lerna run lint --since "origin/${{ github.base_ref }}"
-          fi
+          set -euo pipefail
+          case "$MODE" in
+            full) npx lerna run lint ;;
+            changed) npx lerna run lint --since "origin/$BASE" ;;
+            *) echo "::error::Unknown scope mode: '$MODE'."; exit 1 ;;
+          esac
 
       - name: Check formatting
+        env:
+          MODE: ${{ steps.scope.outputs.mode }}
+          BASE: ${{ github.base_ref }}
         run: |
-          if [ "${{ steps.scope.outputs.mode }}" = "full" ]; then
-            npx lerna run format:check
-          else
-            npx lerna run format:check --since "origin/${{ github.base_ref }}"
-          fi
+          set -euo pipefail
+          case "$MODE" in
+            full) npx lerna run format:check ;;
+            changed) npx lerna run format:check --since "origin/$BASE" ;;
+            *) echo "::error::Unknown scope mode: '$MODE'."; exit 1 ;;
+          esac
 
       - name: Build code
+        env:
+          MODE: ${{ steps.scope.outputs.mode }}
+          BASE: ${{ github.base_ref }}
         run: |
-          if [ "${{ steps.scope.outputs.mode }}" = "full" ]; then
-            npx lerna run build
-          else
-            npx lerna run build --since "origin/${{ github.base_ref }}"
-          fi
+          set -euo pipefail
+          case "$MODE" in
+            full) npx lerna run build ;;
+            changed) npx lerna run build --since "origin/$BASE" ;;
+            *) echo "::error::Unknown scope mode: '$MODE'."; exit 1 ;;
+          esac
 
       - name: Run tests
+        env:
+          MODE: ${{ steps.scope.outputs.mode }}
+          BASE: ${{ github.base_ref }}
         run: |
-          if [ "${{ steps.scope.outputs.mode }}" = "full" ]; then
-            npx lerna run test
-          else
-            npx lerna run test --since "origin/${{ github.base_ref }}"
-          fi
+          set -euo pipefail
+          case "$MODE" in
+            full) npx lerna run test ;;
+            changed) npx lerna run test --since "origin/$BASE" ;;
+            *) echo "::error::Unknown scope mode: '$MODE'."; exit 1 ;;
+          esac

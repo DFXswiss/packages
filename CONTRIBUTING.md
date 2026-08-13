@@ -46,12 +46,14 @@ npm run test           # jest (core and bip322-multisig only)
 npm run clean          # remove dist/ and build info
 ```
 
-The PR CI (`.github/workflows/pr.yaml`) runs lint, format check, build and test on
-every pull request against `develop` or `main`. For PRs into `develop`, Lerna runs
-only for packages changed since the merge base (`--since`). Apply the `ci:full` label
-to force a full run across every package. PRs into `main`, `workflow_dispatch`,
-infrastructure changes (root config / workflows), and any deleted file under
-`packages/` also trigger a full run. Run these commands locally before pushing.
+The same Lerna tasks used by CI can be run across all packages locally. In CI,
+develop PRs run those tasks only for packages changed since the merge base
+(`--since`). Apply the `ci:full` label to force a full run; adding or removing
+any label retriggers the workflow. PRs into `main`, `workflow_dispatch`, unsafe
+path characters, infrastructure
+(`lerna.json`, root `package.json` / `package-lock.json`, root `tsconfig*.json`,
+`.eslintrc.json`, `.prettierrc`, `.github/workflows/`), and any deleted file
+under `packages/` also trigger a full run.
 
 ## Code style
 
