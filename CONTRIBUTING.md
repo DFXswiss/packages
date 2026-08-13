@@ -24,7 +24,7 @@ declares `engines.node >= 18`.
 
 ## Build & Test
 
-Commands run across all packages via Lerna (as in CI):
+Commands run across all packages via Lerna (the same tasks CI uses; locally they always cover every package):
 
 ```bash
 npx lerna run lint          # ESLint
@@ -46,8 +46,14 @@ npm run test           # jest (core and bip322-multisig only)
 npm run clean          # remove dist/ and build info
 ```
 
-The PR CI (`.github/workflows/pr.yaml`) runs lint, format check, build and test on
-every pull request against `develop` or `main`. Run these locally before pushing.
+The same Lerna tasks used by CI can be run across all packages locally. In CI,
+develop PRs run those tasks only for packages changed since the merge base
+(`--since`). Apply the `ci:full` label to force a full run; adding or removing
+any label retriggers the workflow. PRs into `main`, `workflow_dispatch`, paths
+containing characters outside `A-Za-z0-9._/-`, infrastructure
+(`lerna.json`, root `package.json` / `package-lock.json`, root `tsconfig*.json`,
+`.eslintrc.json`, `.prettierrc`, `.github/workflows/`), and any deleted file
+under `packages/` also trigger a full run.
 
 ## Code style
 
