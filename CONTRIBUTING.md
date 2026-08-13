@@ -47,7 +47,11 @@ npm run clean          # remove dist/ and build info
 ```
 
 The PR CI (`.github/workflows/pr.yaml`) runs lint, format check, build and test on
-every pull request against `develop` or `main`. Run these locally before pushing.
+every pull request against `develop` or `main`. For PRs into `develop`, Lerna runs
+only for packages changed since the merge base (`--since`). Apply the `ci:full` label
+to force a full run across every package. PRs into `main`, `workflow_dispatch`,
+infrastructure changes (root config / workflows), and any deleted file under
+`packages/` also trigger a full run. Run these commands locally before pushing.
 
 ## Code style
 
