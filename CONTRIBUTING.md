@@ -77,6 +77,8 @@ you change or add functionality in those packages.
 - Branch off **`develop`**; open pull requests against **`develop`**. The `main`
   branch is the released state, updated only through automatic `develop -> main`
   release PRs.
+- CI rejects a pull request into `main` unless its head is this repository's
+  `develop` (check name `Main only from develop`).
 - **Branch names** are prefixed by type, e.g. `feat/…`, `fix/…`, `chore/…`,
   `docs/…` (existing history also uses `feature/…`).
 - **Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/)**,
