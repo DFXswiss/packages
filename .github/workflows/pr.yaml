@@ -88,7 +88,7 @@ jobs:
 
           # Infrastructure → full. Root-level only:
           #   lerna.json, package.json, package-lock.json, tsconfig*.json (root),
-          #   and any path under .github/workflows/
+          #   .eslintrc.json, .prettierrc, and any path under .github/workflows/
           # Do NOT treat packages/*/package.json as infrastructure.
           rc=0
           infra=$(grep -E '^(lerna\.json|package\.json|package-lock\.json|tsconfig[^/]*\.json|\.eslintrc\.json|\.prettierrc|\.github/workflows/.+)$' <<< "$diff_all") || rc=$?
