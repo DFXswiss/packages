@@ -9,7 +9,7 @@ packages to npm:
 - `@dfx.swiss/bip322-multisig`
 
 The packages are consumed as pinned npm dependencies by other DFX.swiss apps (e.g.
-`DFXswiss/services`), so breaking changes ripple downstream through those version
+`DFXswiss/app`), so breaking changes ripple downstream through those version
 pins. Keep public APIs stable where possible and flag breaking changes explicitly.
 
 ## Setup
