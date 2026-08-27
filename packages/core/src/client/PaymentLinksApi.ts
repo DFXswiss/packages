@@ -5,10 +5,15 @@ import {
   UpdatePaymentLink,
   AssignPaymentLink,
   CreatePaymentLinkPayment,
+  PaymentLinkHistory,
+  PaymentLinkHistoryQuery,
+  PaymentLinkPaymentQuery,
   PaymentLinkRecipient,
   PaymentLinkConfig,
   UpdatePaymentLinkConfig,
   PaymentLinkPos,
+  PaymentStandard,
+  PaymentStandardType,
 } from '../definitions/route';
 import { CustomFile } from '../definitions/file';
 import { Utils } from '../utils';
@@ -74,5 +79,40 @@ export class PaymentLinksApi {
   async createPos(params: Record<string, string>): Promise<PaymentLinkPos> {
     const query = Utils.buildQuery(params);
     return this.http.request<PaymentLinkPos>({ url: `${PaymentLinksUrl.pos}${query}`, method: 'PUT' });
+  }
+
+  /** The payment standards the API supports. Public - no session needed. */
+  async getStandards(): Promise<PaymentStandard[]> {
+    return this.http.request<PaymentStandard[]>({ url: PaymentLinksUrl.standard, method: 'GET', token: false });
+  }
+
+  async getStandard(id: PaymentStandardType): Promise<PaymentStandard> {
+    return this.http.request<PaymentStandard>({
+      url: PaymentLinksUrl.standardById(id),
+      method: 'GET',
+      token: false,
+    });
+  }
+
+  /**
+   * Long-polls until the payment reaches a final state, then returns the link with that payment.
+   *
+   * The request stays open for as long as the API keeps it open, and it resolves on a timeout as
+   * well - read the returned status instead of assuming the payment moved.
+   */
+  async waitForPayment(params: PaymentLinkPaymentQuery): Promise<PaymentLink> {
+    const query = Utils.buildQuery({ ...params });
+    return this.http.request<PaymentLink>({ url: `${PaymentLinksUrl.paymentWait}${query}`, method: 'GET' });
+  }
+
+  async confirmPayment(params: PaymentLinkPaymentQuery): Promise<PaymentLink> {
+    const query = Utils.buildQuery({ ...params });
+    return this.http.request<PaymentLink>({ url: `${PaymentLinksUrl.paymentConfirm}${query}`, method: 'PUT' });
+  }
+
+  /** Payments of a link within a period. Without `status` the API returns completed payments only. */
+  async getHistory(params: PaymentLinkHistoryQuery): Promise<PaymentLinkHistory[]> {
+    const query = Utils.buildQuery({ ...params });
+    return this.http.request<PaymentLinkHistory[]>({ url: `${PaymentLinksUrl.history}${query}`, method: 'GET' });
   }
 }
