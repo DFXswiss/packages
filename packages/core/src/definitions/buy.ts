@@ -7,12 +7,36 @@ import { FiatPaymentMethod, TransactionError } from './transaction';
 export const BuyUrl = {
   quote: 'buy/quote',
   receive: 'buy/paymentInfos',
+  personalIban: 'buy/personalIban',
   invoice: (txId: number) => `buy/paymentInfos/${txId}/invoice`,
   confirm: (txId: number) => `buy/paymentInfos/${txId}/confirm`,
 };
 
 export enum PersonalIbanProvider {
   FRICK = 'Frick',
+  YAPEAL = 'Yapeal',
+}
+
+export enum VirtualIbanStatus {
+  RESERVED = 'Reserved',
+  ACTIVE = 'Active',
+  EXPIRED = 'Expired',
+  DEACTIVATED = 'Deactivated',
+}
+
+export interface VirtualIban {
+  id: number;
+  iban: string;
+  bban?: string;
+  currency: string;
+  /** Name of the issuing bank (e.g. 'Bank Frick', 'Yapeal'). */
+  bank: string;
+  active: boolean;
+  /** Whether the issuing bank still accepts incoming payments for this IBAN. */
+  acceptsPayments: boolean;
+  status?: VirtualIbanStatus;
+  label?: string;
+  activatedAt?: Date;
 }
 
 export interface Buy {
@@ -65,6 +89,8 @@ export interface BuyPaymentInfo {
   /**
    * Explicit personal IBAN provider (e.g. PersonalIbanProvider.FRICK / "Frick").
    * Fail-closed on the API.
+   * `PersonalIbanProvider.YAPEAL` selects the customer's EXISTING legacy Yapeal
+   * personal IBAN and never issues a new one.
    */
   personalIbanProvider?: PersonalIbanProvider;
 }

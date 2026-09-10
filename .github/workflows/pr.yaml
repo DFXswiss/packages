@@ -5,6 +5,14 @@ on:
     branches:
       - main
       - develop
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+      - edited
+      - labeled
+      - unlabeled
   workflow_dispatch:
 
 env:
@@ -17,6 +25,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
@@ -27,18 +37,133 @@ jobs:
         run: |
           npm install
 
-      - name: Run linter
+      - name: Determine scope
+        id: scope
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE: ${{ github.base_ref }}
         run: |
-          npx lerna run lint
+          set -euo pipefail
+
+          finish() { echo "mode=$1" >> "$GITHUB_OUTPUT"; exit 0; }
+
+          if [[ "$EVENT_NAME" != 'pull_request' ]]; then
+            echo 'Full run: not a pull request.'
+            finish full
+          fi
+
+          if [[ "$BASE" == 'main' ]]; then
+            echo 'Full run: pull request targets main.'
+            finish full
+          fi
+
+          # Exact ci:full via jq on GITHUB_EVENT_PATH (not GitHub contains()).
+          # rc 0 = full, 1 = no label, >=2 = fail the step.
+          rc=0
+          jq -e 'any(.pull_request.labels[]?; .name == "ci:full")' "$GITHUB_EVENT_PATH" >/dev/null || rc=$?
+          if (( rc >= 2 )); then
+            echo "::error::jq failed while reading pull request labels (exit $rc)."
+            exit 1
+          fi
+          if (( rc == 0 )); then
+            echo 'Full run: pull request has the ci:full label.'
+            finish full
+          fi
+
+          git fetch --quiet origin "$BASE"
+          diff_all=$(git diff --no-renames --name-only "origin/$BASE...HEAD")
+
+          # Unsafe paths → full. grep rc 0/1/>=2 like api-pr.yaml.
+          # Use a herestring, not a pipe (pipefail + grep -q early-exit can SIGPIPE).
+          rc=0
+          grep -qv '^[A-Za-z0-9._/-]*$' <<< "$diff_all" || rc=$?
+          if (( rc >= 2 )); then
+            echo "::error::grep failed while validating changed paths (exit $rc)."
+            exit 1
+          fi
+          if (( rc == 0 )); then
+            echo 'Full run: a changed path contains characters outside the safe set A-Za-z0-9._/-.'
+            finish full
+          fi
+
+          # Infrastructure → full. Root-level only:
+          #   lerna.json, package.json, package-lock.json, tsconfig*.json (root),
+          #   .eslintrc.json, .prettierrc, and any path under .github/workflows/
+          # Do NOT treat packages/*/package.json as infrastructure.
+          rc=0
+          infra=$(grep -E '^(lerna\.json|package\.json|package-lock\.json|tsconfig[^/]*\.json|\.eslintrc\.json|\.prettierrc|\.github/workflows/.+)$' <<< "$diff_all") || rc=$?
+          if (( rc >= 2 )); then
+            echo "::error::grep failed while matching infrastructure paths (exit $rc)."
+            exit 1
+          fi
+          if (( rc == 0 )); then
+            echo 'Full run: the PR touches infrastructure:'
+            echo "$infra"
+            finish full
+          fi
+
+          # Any deleted path under packages/ → full (--diff-filter=D).
+          # --no-renames is already used above, so a rename is delete+add and hits this too.
+          rc=0
+          deleted=$(git diff --no-renames --name-only --diff-filter=D "origin/$BASE...HEAD")
+          deleted_pkg=$(grep -E '^packages/' <<< "$deleted") || rc=$?
+          if (( rc >= 2 )); then
+            echo "::error::grep failed while matching deleted files under packages/ (exit $rc)."
+            exit 1
+          fi
+          if (( rc == 0 )); then
+            echo 'Full run: the PR deletes files under packages/:'
+            echo "$deleted_pkg"
+            finish full
+          fi
+
+          echo 'Reduced run: Lerna tasks for packages changed since the merge base.'
+          finish changed
+
+      - name: Run linter
+        env:
+          MODE: ${{ steps.scope.outputs.mode }}
+          BASE: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+          case "$MODE" in
+            full) npx lerna run lint ;;
+            changed) npx lerna run lint --since "origin/$BASE" ;;
+            *) echo "::error::Unknown scope mode: '$MODE'."; exit 1 ;;
+          esac
 
       - name: Check formatting
+        env:
+          MODE: ${{ steps.scope.outputs.mode }}
+          BASE: ${{ github.base_ref }}
         run: |
-          npx lerna run format:check
+          set -euo pipefail
+          case "$MODE" in
+            full) npx lerna run format:check ;;
+            changed) npx lerna run format:check --since "origin/$BASE" ;;
+            *) echo "::error::Unknown scope mode: '$MODE'."; exit 1 ;;
+          esac
 
       - name: Build code
+        env:
+          MODE: ${{ steps.scope.outputs.mode }}
+          BASE: ${{ github.base_ref }}
         run: |
-          npx lerna run build
+          set -euo pipefail
+          case "$MODE" in
+            full) npx lerna run build ;;
+            changed) npx lerna run build --since "origin/$BASE" ;;
+            *) echo "::error::Unknown scope mode: '$MODE'."; exit 1 ;;
+          esac
 
       - name: Run tests
+        env:
+          MODE: ${{ steps.scope.outputs.mode }}
+          BASE: ${{ github.base_ref }}
         run: |
-          npx lerna run test
+          set -euo pipefail
+          case "$MODE" in
+            full) npx lerna run test ;;
+            changed) npx lerna run test --since "origin/$BASE" ;;
+            *) echo "::error::Unknown scope mode: '$MODE'."; exit 1 ;;
+          esac

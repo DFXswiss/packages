@@ -1,12 +1,13 @@
 import { useCallback, useMemo } from 'react';
 import { useFiatContext } from '../contexts/fiat.context';
-import { Buy, BuyUrl, BuyPaymentInfo, PdfDocument } from '../definitions/buy';
+import { Buy, BuyUrl, BuyPaymentInfo, PdfDocument, VirtualIban } from '../definitions/buy';
 import { Fiat } from '../definitions/fiat';
 import { useApi } from './api.hook';
 
 export interface BuyInterface {
   receiveFor: (info: BuyPaymentInfo) => Promise<Buy>;
-  invoiceFor: (txId: number) => Promise<PdfDocument>;
+  getPersonalIbans: () => Promise<VirtualIban[]>;
+  invoiceFor: (txId: number, collectionAccount?: boolean) => Promise<PdfDocument>;
   confirmFor: (txId: number) => Promise<void>;
   currencies?: Fiat[];
 }
@@ -22,10 +23,16 @@ export function useBuy(): BuyInterface {
     [call],
   );
 
+  const getPersonalIbans = useCallback(async (): Promise<VirtualIban[]> => {
+    return call<VirtualIban[]>({ url: BuyUrl.personalIban, method: 'GET' });
+  }, [call]);
+
   const invoiceFor = useCallback(
-    async (txId: number): Promise<PdfDocument> => {
-      return call<PdfDocument>({ url: BuyUrl.invoice(txId), method: 'PUT' });
-    },
+    async (txId: number, collectionAccount?: boolean): Promise<PdfDocument> =>
+      call<PdfDocument>({
+        url: collectionAccount ? `${BuyUrl.invoice(txId)}?collectionAccount=true` : BuyUrl.invoice(txId),
+        method: 'PUT',
+      }),
     [call],
   );
 
@@ -39,10 +46,11 @@ export function useBuy(): BuyInterface {
   return useMemo(
     () => ({
       receiveFor,
+      getPersonalIbans,
       invoiceFor,
       confirmFor,
       currencies: currencies?.filter((c) => c.sellable || c.cardSellable || c.instantSellable),
     }),
-    [receiveFor, invoiceFor, confirmFor, currencies],
+    [receiveFor, getPersonalIbans, invoiceFor, confirmFor, currencies],
   );
 }
