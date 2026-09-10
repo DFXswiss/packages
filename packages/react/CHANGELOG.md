@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0-beta.5](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.8.0-beta.4...@dfx.swiss/react@1.8.0-beta.5) (2026-09-10)
+
+### Bug Fixes
+
+- **react:** swallow blocked localStorage in the auth token store ([#229](https://github.com/DFXswiss/packages/issues/229)) ([3d0ca6a](https://github.com/DFXswiss/packages/commit/3d0ca6ad03b3b195386c0047db6cbe95030707b8))
+
 # [1.8.0-beta.4](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.8.0-beta.3...@dfx.swiss/react@1.8.0-beta.4) (2026-08-20)
 
 **Note:** Version bump only for package @dfx.swiss/react
