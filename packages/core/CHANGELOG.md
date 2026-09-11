@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.1-beta.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.7.0-beta.3...@dfx.swiss/core@0.7.1-beta.1) (2026-09-11)
+
+**Note:** Version bump only for package @dfx.swiss/core
+
 # [0.7.0-beta.3](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.7.0-beta.2...@dfx.swiss/core@0.7.0-beta.3) (2026-08-20)
 
 **Note:** Version bump only for package @dfx.swiss/core
