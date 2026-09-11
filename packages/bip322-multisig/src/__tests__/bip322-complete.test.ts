@@ -55,11 +55,11 @@ describe('BIP-322 Complete official P2WSH 3-of-3 vector', () => {
   });
 
   it('returns false for ful and pof encodings of the official payload', () => {
-    expect(
-      verifyBip322P2wshSignature(official.message, official.address, BIP322_FULL_PREFIX + officialPayload),
-    ).toBe(false);
-    expect(
-      verifyBip322P2wshSignature(official.message, official.address, BIP322_POF_PREFIX + officialPayload),
-    ).toBe(false);
+    expect(verifyBip322P2wshSignature(official.message, official.address, BIP322_FULL_PREFIX + officialPayload)).toBe(
+      false,
+    );
+    expect(verifyBip322P2wshSignature(official.message, official.address, BIP322_POF_PREFIX + officialPayload)).toBe(
+      false,
+    );
   });
 });
