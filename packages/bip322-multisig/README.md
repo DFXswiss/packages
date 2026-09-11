@@ -49,6 +49,7 @@ const built = buildBip322Psbt({
 
 // After the PSBT has been signed (e.g. by Sparrow + hardware wallets):
 const signatureBase64 = extractBip322Signature(signedPsbtBase64);
+// → BIP-322 Complete simple: "smp" + base64(witness stack)
 ```
 
 ## Scope
@@ -63,9 +64,9 @@ const signatureBase64 = extractBip322Signature(signedPsbtBase64);
 
 ## How it works
 
-[BIP-322](https://github.com/bitcoin/bips/blob/master/bip-0322.mediawiki) defines a generic message-signing scheme by constructing two virtual transactions: `to_spend` commits the message to the address, and `to_sign` spends `to_spend`. The simple-format signature is just the witness stack of `to_sign`'s input, base64-encoded.
+[BIP-322](https://github.com/bitcoin/bips/blob/master/bip-0322.mediawiki) defines a generic message-signing scheme by constructing two virtual transactions: `to_spend` commits the message to the address, and `to_sign` spends `to_spend`. BIP-322 Complete simple signatures are `smp` plus the base64 witness stack of `to_sign`'s input (no colon). Unprefixed simple signatures still verify for backward compatibility.
 
-This package builds `to_sign` as a regular PSBT with all the BIP32 derivation paths, witness UTXO, witness script, and sighash type that hardware wallets need to sign. Sparrow (or any other coordinator) handles the multisig orchestration via its standard PSBT-signing flow; this package extracts the resulting witness as a BIP-322 simple signature.
+This package builds `to_sign` as a regular PSBT with all the BIP32 derivation paths, witness UTXO, witness script, sighash type, and global `PSBT_GLOBAL_GENERIC_SIGNED_MESSAGE` (`0x09`, UTF-8 message bytes) that hardware wallets need to sign and display “signing message …”. Sparrow (or any other coordinator) handles the multisig orchestration via its standard PSBT-signing flow; this package extracts the resulting witness as a BIP-322 Complete simple signature.
 
 ## License
 

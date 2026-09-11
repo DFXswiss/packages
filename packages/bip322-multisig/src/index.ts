@@ -7,8 +7,20 @@ export {
   buildSortedMultisigScript,
   p2wshScriptPubKey,
   p2wshAddress,
+  BIP322_SIMPLE_PREFIX,
+  BIP322_FULL_PREFIX,
+  BIP322_POF_PREFIX,
+  PSBT_GLOBAL_GENERIC_SIGNED_MESSAGE,
+  parseBip322SignatureEncoding,
+  encodeBip322SimpleSignature,
 } from './core';
-export type { Bip32Derivation, BuildToSignPsbtArgs, BuildToSignPsbtResult } from './core';
+export type {
+  Bip32Derivation,
+  BuildToSignPsbtArgs,
+  BuildToSignPsbtResult,
+  Bip322SignatureVariant,
+  ParsedBip322Signature,
+} from './core';
 
 // High-level API (descriptor-based, requires ecc)
 export { parseDescriptor, deriveAddress, findAddress } from './descriptor';
