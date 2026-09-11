@@ -1,7 +1,7 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import { buildBip322Psbt } from '../psbt';
 import { parseDescriptor } from '../descriptor';
-import { extractBip322Signature } from '../core';
+import { extractBip322Signature, PSBT_GLOBAL_GENERIC_SIGNED_MESSAGE } from '../core';
 
 const testDescriptor =
   'wsh(sortedmulti(2,' +
@@ -34,6 +34,11 @@ describe('buildBip322Psbt', () => {
     expect(tx.outs).toHaveLength(1);
     expect(tx.outs[0].value).toBe(0);
     expect(tx.outs[0].script.toString('hex')).toBe('6a');
+
+    const unknown = (psbt.data.globalMap as { unknownKeyVals?: { key: Buffer; value: Buffer }[] }).unknownKeyVals;
+    const signedMessage = unknown?.find((kv) => kv.key.equals(Buffer.from([PSBT_GLOBAL_GENERIC_SIGNED_MESSAGE])));
+    expect(signedMessage).toBeDefined();
+    expect(signedMessage!.value.equals(Buffer.from(testMessage, 'utf8'))).toBe(true);
   });
 
   it('accepts pre-parsed descriptor', () => {

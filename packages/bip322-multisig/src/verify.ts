@@ -7,7 +7,7 @@ import { Transaction, crypto as btcCrypto } from 'bitcoinjs-lib';
 import { bech32 } from 'bech32';
 import { secp256k1 } from '@noble/curves/secp256k1';
 
-import { bip322MessageHash, buildToSpendTx, p2wshScriptPubKey } from './core';
+import { bip322MessageHash, buildToSpendTx, p2wshScriptPubKey, parseBip322SignatureEncoding } from './core';
 
 // ---------------------------------------------------------------------------
 // Address validation
@@ -122,16 +122,19 @@ function parseMultisigScript(script: Buffer): MultisigInfo | null {
  *
  * @param message         The signed message (UTF-8 string)
  * @param address         A mainnet P2WSH address (bc1q...)
- * @param signatureBase64 The base64-encoded witness stack
+ * @param signatureBase64 BIP-322 Complete simple (`smp`+base64) or unprefixed base64 witness stack
  * @returns true when the signature is valid
  */
 export function verifyBip322P2wshSignature(message: string, address: string, signatureBase64: string): boolean {
   try {
+    const parsed = parseBip322SignatureEncoding(signatureBase64);
+    if (parsed.variant === 'full' || parsed.variant === 'pof') return false;
+
     if (!isP2wshAddress(address)) return false;
     const decoded = bech32.decode(address);
     const program = Buffer.from(bech32.fromWords(decoded.words.slice(1)));
 
-    const witnessBuf = Buffer.from(signatureBase64, 'base64');
+    const witnessBuf = Buffer.from(parsed.payload, 'base64');
     const stack = decodeWitnessStack(witnessBuf);
     if (stack.length < 3) return false;
 

@@ -10,6 +10,51 @@ import * as bitcoin from 'bitcoinjs-lib';
 import { bech32 } from 'bech32';
 
 // ---------------------------------------------------------------------------
+// BIP-322 Complete signature encoding
+// ---------------------------------------------------------------------------
+
+/** BIP-322 Complete simple / full / proof-of-funds prefixes (no colon). */
+export const BIP322_SIMPLE_PREFIX = 'smp';
+export const BIP322_FULL_PREFIX = 'ful';
+export const BIP322_POF_PREFIX = 'pof';
+
+/** BIP-174 global type PSBT_GLOBAL_GENERIC_SIGNED_MESSAGE */
+export const PSBT_GLOBAL_GENERIC_SIGNED_MESSAGE = 0x09;
+
+export type Bip322SignatureVariant = 'simple' | 'full' | 'pof' | 'unprefixed';
+
+export interface ParsedBip322Signature {
+  variant: Bip322SignatureVariant;
+  payload: string; // base64 body without the 3-char prefix
+}
+
+/**
+ * If `signature` starts with smp / ful / pof, strip those 3 chars and set variant.
+ * Otherwise variant is `unprefixed` and payload is the full string (BIP: verifier MAY assume simple).
+ * Empty / non-string: treat as unprefixed with payload '' or the given value; verify() already returns false.
+ */
+export function parseBip322SignatureEncoding(signature: string): ParsedBip322Signature {
+  if (typeof signature !== 'string') {
+    return { variant: 'unprefixed', payload: '' };
+  }
+  if (signature.startsWith(BIP322_SIMPLE_PREFIX)) {
+    return { variant: 'simple', payload: signature.slice(BIP322_SIMPLE_PREFIX.length) };
+  }
+  if (signature.startsWith(BIP322_FULL_PREFIX)) {
+    return { variant: 'full', payload: signature.slice(BIP322_FULL_PREFIX.length) };
+  }
+  if (signature.startsWith(BIP322_POF_PREFIX)) {
+    return { variant: 'pof', payload: signature.slice(BIP322_POF_PREFIX.length) };
+  }
+  return { variant: 'unprefixed', payload: signature };
+}
+
+/** `smp` + base64(witnessStackBytes). No colon, no whitespace. */
+export function encodeBip322SimpleSignature(witnessStack: Buffer): string {
+  return BIP322_SIMPLE_PREFIX + witnessStack.toString('base64');
+}
+
+// ---------------------------------------------------------------------------
 // BIP-322 Tagged Message Hash
 // ---------------------------------------------------------------------------
 
@@ -79,6 +124,11 @@ export function buildToSignPsbt(args: BuildToSignPsbtArgs): BuildToSignPsbtResul
 
   psbt.addOutput({ value: 0, script: Buffer.from([0x6a]) });
 
+  psbt.addUnknownKeyValToGlobal({
+    key: Buffer.from([PSBT_GLOBAL_GENERIC_SIGNED_MESSAGE]),
+    value: Buffer.from(args.message, 'utf8'),
+  });
+
   return { psbt, psbtBase64: psbt.toBase64(), toSpendTxid };
 }
 
@@ -92,7 +142,7 @@ export function extractBip322Signature(signedPsbtBase64: string): string {
   if (!input) throw new Error('PSBT has no inputs');
 
   if (input.finalScriptWitness) {
-    return input.finalScriptWitness.toString('base64');
+    return encodeBip322SimpleSignature(input.finalScriptWitness);
   }
 
   throw new Error('PSBT input is not finalized — ensure all required signatures are present and the PSBT is finalized');

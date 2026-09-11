@@ -14,7 +14,7 @@ function usage(): never {
     `Usage: bip322-finalize --psbt <file> --address <bc1q...> [--api <baseUrl>] [--no-submit]
 
 Reads a signed BIP-322 PSBT (e.g. from Sparrow), extracts the witness as a
-BIP-322 simple signature (Base64), and POSTs it to DFX /v1/auth.
+BIP-322 Complete simple signature ('smp' prefix + Base64), and POSTs it to DFX /v1/auth.
 Defaults: --api https://api.dfx.swiss
 `,
   );
