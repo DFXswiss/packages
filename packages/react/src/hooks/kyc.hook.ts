@@ -30,6 +30,7 @@ import {
   KycChangeNameData,
   KycChangePhoneData,
 } from '../definitions/kyc';
+import { Utils } from '../utils';
 import { useApi } from './api.hook';
 
 export interface CallConfig {
@@ -105,6 +106,12 @@ export function useKyc(): KycInterface {
 
   const call = useCallback(
     async <T>(config: CallConfig): Promise<T> => {
+      // Never send the x-kyc-code credential anywhere but the configured API origin: some setters
+      // take their URL from a previous step response, so a tampered URL must not exfiltrate it.
+      if (!Utils.isSameOrigin(config.url, defaultUrl)) {
+        throw new Error('Refusing to send KYC credentials to a non-API origin');
+      }
+
       return fetch(config.url, buildInit(config)).then((response) => {
         if (response.ok) {
           return response.json().catch(() => undefined);
@@ -114,7 +121,7 @@ export function useKyc(): KycInterface {
         });
       });
     },
-    [buildInit],
+    [buildInit, defaultUrl],
   );
 
   const setName = useCallback(
