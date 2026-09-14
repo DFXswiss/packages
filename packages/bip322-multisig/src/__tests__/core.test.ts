@@ -7,6 +7,9 @@ import {
   buildSortedMultisigScript,
   p2wshScriptPubKey,
   p2wshAddress,
+  encodeBip322SimpleSignature,
+  BIP322_SIMPLE_PREFIX,
+  PSBT_GLOBAL_GENERIC_SIGNED_MESSAGE,
 } from '../core';
 
 const testMessage = 'Hello DFX BIP-322 multisig auth';
@@ -86,6 +89,11 @@ describe('buildToSignPsbt', () => {
     expect(inp.sighashType).toBe(bitcoin.Transaction.SIGHASH_ALL);
     expect(inp.bip32Derivation).toHaveLength(3);
     expect(inp.nonWitnessUtxo).toBeDefined();
+
+    const unknown = (psbt.data.globalMap as { unknownKeyVals?: { key: Buffer; value: Buffer }[] }).unknownKeyVals;
+    const signedMessage = unknown?.find((kv) => kv.key.equals(Buffer.from([PSBT_GLOBAL_GENERIC_SIGNED_MESSAGE])));
+    expect(signedMessage).toBeDefined();
+    expect(signedMessage!.value.equals(Buffer.from(testMessage, 'utf8'))).toBe(true);
   });
 });
 
@@ -118,5 +126,22 @@ describe('extractBip322Signature', () => {
       bip32Derivation: [],
     });
     expect(() => extractBip322Signature(psbtBase64)).toThrow(/not finalized/);
+  });
+
+  it('returns an smp-prefixed simple signature when the input is finalized', () => {
+    const witnessScript = buildSortedMultisigScript([pk1, pk2, pk3], 2);
+    const scriptPubKey = p2wshScriptPubKey(witnessScript);
+    const { psbt } = buildToSignPsbt({
+      message: testMessage,
+      scriptPubKey,
+      witnessScript,
+      bip32Derivation: [],
+    });
+    const witness = Buffer.from([0x03, 0x00, 0x01, 0xaa, 0x01, 0xbb]);
+    psbt.data.inputs[0].finalScriptWitness = witness;
+    const extracted = extractBip322Signature(psbt.toBase64());
+    expect(extracted).toBe(encodeBip322SimpleSignature(witness));
+    expect(extracted.startsWith(BIP322_SIMPLE_PREFIX)).toBe(true);
+    expect(extracted.includes(':')).toBe(false);
   });
 });

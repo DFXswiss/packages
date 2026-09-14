@@ -2,7 +2,14 @@ import { randomBytes } from 'crypto';
 import { Transaction } from 'bitcoinjs-lib';
 import { secp256k1 } from '@noble/curves/secp256k1';
 import { isP2wshAddress, verifyBip322P2wshSignature } from '../verify';
-import { buildSortedMultisigScript, p2wshAddress, p2wshScriptPubKey, bip322MessageHash, buildToSpendTx } from '../core';
+import {
+  buildSortedMultisigScript,
+  p2wshAddress,
+  p2wshScriptPubKey,
+  bip322MessageHash,
+  buildToSpendTx,
+  BIP322_SIMPLE_PREFIX,
+} from '../core';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -175,6 +182,12 @@ describe('verifyBip322P2wshSignature — 2-of-3 roundtrip', () => {
     const msg = 'A'.repeat(500);
     const { address, signatureBase64 } = signMultisig(msg, keys, [0, 2]);
     expect(verifyBip322P2wshSignature(msg, address, signatureBase64)).toBe(true);
+  });
+
+  it('verifies an smp-prefixed simple signature', () => {
+    const msg = 'prefixed simple';
+    const { address, signatureBase64 } = signMultisig(msg, keys, [0, 1]);
+    expect(verifyBip322P2wshSignature(msg, address, BIP322_SIMPLE_PREFIX + signatureBase64)).toBe(true);
   });
 });
 
