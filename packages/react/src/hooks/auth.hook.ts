@@ -5,6 +5,8 @@ import { CallConfig, useApi } from './api.hook';
 import { ApiError } from '../definitions/error';
 
 export interface AuthInterface {
+  confirmAccountMerge: (code: string, authenticated?: boolean) => Promise<AccountMergeResponse | ApiJobResponse>;
+  getAnonymousJob: (uid: string) => Promise<ApiJobResponse>;
   getSignMessage: (address: string) => Promise<string>;
   authenticate: (
     address: string,
@@ -43,6 +45,27 @@ export interface AuthInterface {
   getLnurlAuth: (k1: string) => Promise<LnurlAuthStatus>;
 }
 
+export interface AccountMergeResponse {
+  kycHash?: string;
+  accessToken?: string;
+}
+
+export enum ApiJobStatus {
+  PENDING = 'Pending',
+  PROCESSING = 'Processing',
+  COMPLETE = 'Complete',
+  RETRY = 'Retry',
+  FAILED = 'Failed',
+  DEAD_LETTER = 'DeadLetter',
+}
+
+export interface ApiJobResponse {
+  uid: string;
+  status: ApiJobStatus;
+  expectedSeconds: number;
+  error?: string;
+}
+
 interface SignUpParams {
   address: string;
   signature: string;
@@ -58,6 +81,24 @@ interface SignUpParams {
 
 export function useAuth(): AuthInterface {
   const { call } = useApi();
+
+  const confirmAccountMerge = useCallback(
+    async (code: string, authenticated = true): Promise<AccountMergeResponse | ApiJobResponse> => {
+      return call<AccountMergeResponse | ApiJobResponse>({
+        url: `auth/mail/confirm?code=${encodeURIComponent(code)}`,
+        method: 'GET',
+        ...(authenticated ? {} : { token: false }),
+      });
+    },
+    [call],
+  );
+
+  const getAnonymousJob = useCallback(
+    async (uid: string): Promise<ApiJobResponse> => {
+      return call<ApiJobResponse>({ url: `job/${encodeURIComponent(uid)}`, method: 'GET', token: false });
+    },
+    [call],
+  );
 
   const getParams = useCallback(
     (
@@ -228,6 +269,8 @@ export function useAuth(): AuthInterface {
 
   return useMemo(
     () => ({
+      confirmAccountMerge,
+      getAnonymousJob,
       getSignMessage,
       authenticate,
       signIn,
@@ -240,6 +283,8 @@ export function useAuth(): AuthInterface {
       getLnurlAuth,
     }),
     [
+      confirmAccountMerge,
+      getAnonymousJob,
       getSignMessage,
       authenticate,
       signIn,

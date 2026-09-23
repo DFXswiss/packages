@@ -5,6 +5,7 @@ import { Fiat } from '../definitions/fiat';
 import { useApi } from './api.hook';
 
 export interface BuyInterface {
+  quote: (info: BuyPaymentInfo) => Promise<Buy>;
   receiveFor: (info: BuyPaymentInfo) => Promise<Buy>;
   getPersonalIbans: () => Promise<VirtualIban[]>;
   invoiceFor: (txId: number, collectionAccount?: boolean) => Promise<PdfDocument>;
@@ -15,6 +16,13 @@ export interface BuyInterface {
 export function useBuy(): BuyInterface {
   const { call } = useApi();
   const { currencies } = useFiatContext();
+
+  const quote = useCallback(
+    async (info: BuyPaymentInfo): Promise<Buy> => {
+      return call<Buy>({ url: BuyUrl.quote, method: 'PUT', data: info, token: false });
+    },
+    [call],
+  );
 
   const receiveFor = useCallback(
     async (info: BuyPaymentInfo): Promise<Buy> => {
@@ -46,11 +54,12 @@ export function useBuy(): BuyInterface {
   return useMemo(
     () => ({
       receiveFor,
+      quote,
       getPersonalIbans,
       invoiceFor,
       confirmFor,
       currencies: currencies?.filter((c) => c.sellable || c.cardSellable || c.instantSellable),
     }),
-    [receiveFor, getPersonalIbans, invoiceFor, confirmFor, currencies],
+    [receiveFor, quote, getPersonalIbans, invoiceFor, confirmFor, currencies],
   );
 }

@@ -57,6 +57,37 @@ export interface PaymentRoutesInterface {
     language?: string,
   ) => Promise<CustomFile>;
   createPosLink: (linkId?: string, externalLinkId?: string, externalPaymentId?: string) => Promise<PaymentLinkPos>;
+  getPaymentLinkHistory: () => Promise<PaymentLinkHistory[]>;
+  createPaymentLinkInvoice: (query: PaymentLinkInvoiceQuery) => Promise<{ id: string | number }>;
+  createSellPaymentRoute: (request: CreateSellPaymentRoute) => Promise<void>;
+  activatePaymentRoute: (id: number, type: PaymentRouteType) => Promise<PaymentRoute>;
+}
+
+export interface PaymentLinkHistory {
+  payments?: Array<{
+    id: string | number;
+    note?: string;
+    externalId?: string;
+    amount: number;
+    currency: string;
+    status: string;
+    date?: string;
+  }>;
+  totalCompletedAmount?: number;
+}
+
+export interface PaymentLinkInvoiceQuery {
+  routeId: string | number;
+  amount: number;
+  currency: string;
+  message: string;
+  expiryDate: string;
+}
+
+export interface CreateSellPaymentRoute {
+  iban: string;
+  currency?: { id: number };
+  blockchain: string;
 }
 
 export function usePaymentRoutes(): PaymentRoutesInterface {
@@ -65,6 +96,38 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
   const getPaymentRoutes = useCallback(async (): Promise<PaymentRoutes> => {
     return call<PaymentRoutes>({ url: PaymentRoutesUrl.get, method: 'GET' });
   }, [call]);
+
+  const getPaymentLinkHistory = useCallback(async (): Promise<PaymentLinkHistory[]> => {
+    return call<PaymentLinkHistory[]>({ url: 'paymentLink/history', method: 'GET' });
+  }, [call]);
+
+  const createPaymentLinkInvoice = useCallback(
+    async (query: PaymentLinkInvoiceQuery) => {
+      const params = new URLSearchParams({
+        routeId: String(query.routeId),
+        amount: String(query.amount),
+        currency: query.currency,
+        message: query.message,
+        expiryDate: query.expiryDate,
+      });
+      return call<{ id: string | number }>({ url: `${PaymentLinksUrl.payment}?${params.toString()}`, method: 'GET' });
+    },
+    [call],
+  );
+
+  const createSellPaymentRoute = useCallback(
+    async (request: CreateSellPaymentRoute): Promise<void> => {
+      return call<void>({ url: '/sell', method: 'POST', data: request });
+    },
+    [call],
+  );
+
+  const activatePaymentRoute = useCallback(
+    async (id: number, type: PaymentRouteType): Promise<PaymentRoute> => {
+      return call<PaymentRoute>({ url: `/${type}/${id}`, method: 'PUT', data: { active: true } });
+    },
+    [call],
+  );
 
   const getPaymentLinks = useCallback(
     async (
@@ -229,6 +292,10 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
       getPaymentRecipient,
       getPaymentStickers,
       createPosLink,
+      getPaymentLinkHistory,
+      createPaymentLinkInvoice,
+      createSellPaymentRoute,
+      activatePaymentRoute,
     }),
     [
       getPaymentRoutes,
@@ -244,6 +311,10 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
       getPaymentRecipient,
       getPaymentStickers,
       createPosLink,
+      getPaymentLinkHistory,
+      createPaymentLinkInvoice,
+      createSellPaymentRoute,
+      activatePaymentRoute,
     ],
   );
 }

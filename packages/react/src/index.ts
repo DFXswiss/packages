@@ -24,6 +24,7 @@ export { useBuy } from './hooks/buy.hook';
 export { useCountry } from './hooks/country.hook';
 export { useFiat } from './hooks/fiat.hook';
 export { usePaymentRoutes } from './hooks/payment-routes.hook';
+export type { CreateSellPaymentRoute, PaymentLinkHistory, PaymentLinkInvoiceQuery } from './hooks/payment-routes.hook';
 export { useSettings } from './hooks/settings.hook';
 export { useTransaction } from './hooks/transaction.hook';
 export { useLanguage } from './hooks/language.hook';
@@ -32,9 +33,14 @@ export { useSell } from './hooks/sell.hook';
 export { useUser } from './hooks/user.hook';
 export { useSwap } from './hooks/swap.hook';
 export { useSupportChat } from './hooks/support.hook';
+export { useRecommendation } from './hooks/recommendation.hook';
 
 // Definitions
 export { CheckStatus, AmlReason } from './definitions/aml';
+export { RecommendationStatus, RecommendationType, RecommendationMethod } from './definitions/recommendation';
+export type { Recommendation, CreateRecommendation } from './definitions/recommendation';
+export type { AccountMergeResponse, ApiJobResponse } from './hooks/auth.hook';
+export { ApiJobStatus } from './hooks/auth.hook';
 export {
   PendingReviewType,
   PendingReviewStatus,
