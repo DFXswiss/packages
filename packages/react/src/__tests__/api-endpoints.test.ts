@@ -13,6 +13,10 @@ jest.mock('../hooks/api.hook', () => ({
   useApi: () => ({ call: mockCall }),
 }));
 
+jest.mock('../contexts/auth.context', () => ({
+  useAuthContext: () => ({ session: undefined }),
+}));
+
 jest.mock('../contexts/fiat.context', () => ({
   useFiatContext: () => ({ currencies: undefined }),
 }));
@@ -35,6 +39,7 @@ import { usePaymentRoutes } from '../hooks/payment-routes.hook';
 import { useRecommendation } from '../hooks/recommendation.hook';
 import { useSell } from '../hooks/sell.hook';
 import { useSwap } from '../hooks/swap.hook';
+import { useTransaction } from '../hooks/transaction.hook';
 import type { CreateRecommendation } from '../definitions/recommendation';
 import type { BuyPaymentInfo } from '../definitions/buy';
 import type { SellPaymentInfo } from '../definitions/sell';
@@ -74,6 +79,24 @@ describe('SDK endpoint methods', () => {
     await usePaymentRoutes().getPaymentLinkHistory();
 
     expect(mockCall).toHaveBeenCalledWith({ url: 'paymentLink/history', method: 'GET' });
+  });
+
+  it('loads one transaction request detail by its encoded UID', async () => {
+    await useTransaction().getTransactionDetailByUid('request / 42');
+
+    expect(mockCall).toHaveBeenCalledWith({
+      url: 'transaction/detail/single?uid=request%20%2F%2042',
+      method: 'GET',
+    });
+  });
+
+  it('looks up only the safe payment-request claim status by key and trade type', async () => {
+    await useTransaction().getPaymentInfoRequestStatus('cdab92dc-8f3f-4a90-bb37-a7026e12a9fa', 'Buy');
+
+    expect(mockCall).toHaveBeenCalledWith({
+      url: 'transaction/payment-info-request?clientRequestId=cdab92dc-8f3f-4a90-bb37-a7026e12a9fa&type=Buy',
+      method: 'GET',
+    });
   });
 
   it('looks up a payment link by external payment ID in the GET query', async () => {
@@ -198,12 +221,6 @@ describe('SDK endpoint methods', () => {
       method: 'GET',
       token: false,
     });
-  });
-
-  it('polls jobs anonymously with an encoded UID path segment', async () => {
-    await useAuth().getAnonymousJob('job/a b');
-
-    expect(mockCall).toHaveBeenCalledWith({ url: 'job/job%2Fa%20b', method: 'GET', token: false });
   });
 
   it('routes recommendation actions by the supplied recommendation ID', async () => {

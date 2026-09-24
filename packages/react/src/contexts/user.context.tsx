@@ -1,10 +1,19 @@
-import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { ApiKey, PhoneCallTime, UpdateUser, User, UserAddress } from '../definitions/user';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
 import { Language } from '../definitions/language';
 import { Fiat } from '../definitions/fiat';
 import { TransactionFilterKey } from '../definitions/transaction';
+import {
+  decrementUserUpdate,
+  incrementUserUpdate,
+  isCurrentUserRequest,
+  isUserUpdatingForIdentity,
+  userForSession,
+  type UserSnapshot,
+  type UserUpdateCounts,
+} from './user-identity';
 
 interface UserInterface {
   user?: User;
@@ -41,7 +50,7 @@ export function useUserContext(): UserInterface {
 }
 
 export function UserContextProvider(props: PropsWithChildren): JSX.Element {
-  const { isLoggedIn, updateSession, deleteSession } = useApiSession();
+  const { isLoggedIn, session, updateSession, deleteSession } = useApiSession();
   const {
     getUser,
     updateUser: updateUserApi,
@@ -57,71 +66,213 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     updateCTApiFilter,
     updateCallSettings: updateCallSettingsApi,
   } = useUser();
-  const [user, setUser] = useState<User>();
+  const accountId = isLoggedIn ? session?.account : undefined;
+  const identity = accountId === undefined ? undefined : String(accountId);
+  const requestIdentity =
+    identity === undefined ? undefined : `${identity}:${session?.user ?? ''}:${session?.address ?? ''}`;
+  const identityRef = useRef(identity);
+  const requestIdentityRef = useRef(requestIdentity);
+  const accountIdRef = useRef(accountId);
+  // Update during render so async completions and event handlers observe the
+  // account/token-address scope represented by the tree about to be committed.
+  identityRef.current = identity;
+  requestIdentityRef.current = requestIdentity;
+  accountIdRef.current = accountId;
+  const [userSnapshot, setUserSnapshot] = useState<UserSnapshot>();
+  const user = useMemo(
+    () => userForSession(userSnapshot, identity, session?.address),
+    [identity, session?.address, userSnapshot],
+  );
+  const [loadedIdentity, setLoadedIdentity] = useState<string>();
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
-  const [isUserUpdating, setIsUserUpdating] = useState<boolean>(false);
+  const [userUpdateCounts, setUserUpdateCounts] = useState<UserUpdateCounts>({});
+  const beginUserUpdate = useCallback(
+    (requestIdentity: string) => setUserUpdateCounts((counts) => incrementUserUpdate(counts, requestIdentity)),
+    [],
+  );
+  const endUserUpdate = useCallback(
+    (requestIdentity: string) => setUserUpdateCounts((counts) => decrementUserUpdate(counts, requestIdentity)),
+    [],
+  );
+  const isUserUpdating = isUserUpdatingForIdentity(userUpdateCounts, requestIdentity);
+
+  const setUserForIdentity = useCallback(
+    (
+      expectedIdentity: string,
+      expectedRequestIdentity: string,
+      expectedAccountId: number,
+      next: User | undefined | ((previous: User | undefined) => User | undefined),
+    ) => {
+      if (
+        !isCurrentUserRequest(
+          expectedIdentity,
+          expectedRequestIdentity,
+          identityRef.current,
+          requestIdentityRef.current,
+        )
+      )
+        return;
+      setUserSnapshot((previous) => {
+        if (
+          !isCurrentUserRequest(
+            expectedIdentity,
+            expectedRequestIdentity,
+            identityRef.current,
+            requestIdentityRef.current,
+          )
+        )
+          return previous;
+        const current = previous?.identity === expectedIdentity ? previous.user : undefined;
+        const nextUser = typeof next === 'function' ? next(current) : next;
+        if (nextUser && nextUser.accountId !== expectedAccountId) return previous;
+        return nextUser ? { identity: expectedIdentity, user: nextUser } : undefined;
+      });
+    },
+    [],
+  );
+  const hasCurrentIdentity = useCallback(
+    () =>
+      identity !== undefined &&
+      accountId !== undefined &&
+      requestIdentity !== undefined &&
+      isCurrentUserRequest(identity, requestIdentity, identityRef.current, requestIdentityRef.current),
+    [accountId, identity, requestIdentity],
+  );
 
   const refCode = user?.activeAddress?.refCode;
   const refLink = refCode && `${process.env.REACT_APP_REF_URL ?? 'https://dfx.swiss/app?code='}${refCode}`;
 
   const reloadUser = useCallback(async (): Promise<void> => {
+    const requestAccountIdentity = identityRef.current;
+    const requestIdentity = requestIdentityRef.current;
+    const requestAccountId = accountIdRef.current;
+    if (!requestAccountIdentity || !requestIdentity || requestAccountId === undefined) {
+      setUserSnapshot(undefined);
+      setLoadedIdentity(undefined);
+      setIsUserLoading(false);
+      return;
+    }
     setIsUserLoading(true);
-    getUser()
-      .then(setUser)
-      .finally(() => setIsUserLoading(false));
-  }, [getUser]);
+    try {
+      const nextUser = await getUser();
+      if (
+        isCurrentUserRequest(requestAccountIdentity, requestIdentity, identityRef.current, requestIdentityRef.current)
+      ) {
+        setUserForIdentity(requestAccountIdentity, requestIdentity, requestAccountId, nextUser);
+      }
+    } catch {
+      // A failed load does not restore another account's cached data. The current
+      // account remains masked and can call reloadUser again when connectivity returns.
+    } finally {
+      if (
+        isCurrentUserRequest(requestAccountIdentity, requestIdentity, identityRef.current, requestIdentityRef.current)
+      ) {
+        setLoadedIdentity(requestAccountIdentity);
+        setIsUserLoading(false);
+      }
+    }
+  }, [getUser, setUserForIdentity]);
 
   useEffect(() => {
     if (isLoggedIn) {
-      reloadUser();
+      void reloadUser();
     } else {
-      setUser(undefined);
+      setUserSnapshot(undefined);
+      setLoadedIdentity(undefined);
+      setIsUserLoading(false);
     }
-  }, [isLoggedIn, reloadUser]);
+  }, [isLoggedIn, identity, requestIdentity, reloadUser]);
 
   const updateUser = useCallback(
     async (update: UpdateUser, linkAction?: () => void): Promise<void> => {
-      if (!user) return;
+      if (!user || !hasCurrentIdentity() || accountId === undefined || identity === undefined || !requestIdentity)
+        return;
+      const expectedIdentity = identity;
+      const expectedRequestIdentity = requestIdentity;
+      const expectedAccountId = accountId;
 
-      setIsUserUpdating(true);
+      beginUserUpdate(expectedRequestIdentity);
       return updateUserApi(update, linkAction)
-        .then(setUser)
-        .finally(() => setIsUserUpdating(false));
+        .then((updated) => setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, updated))
+        .finally(() => endUserUpdate(expectedRequestIdentity));
     },
-    [user, updateUserApi],
+    [
+      accountId,
+      beginUserUpdate,
+      endUserUpdate,
+      hasCurrentIdentity,
+      identity,
+      requestIdentity,
+      setUserForIdentity,
+      updateUserApi,
+      user,
+    ],
   );
 
   const updateMail = useCallback(
     async (mail: string): Promise<void> => {
+      if (!user || !hasCurrentIdentity() || accountId === undefined || identity === undefined || !requestIdentity)
+        return;
+      const expectedIdentity = identity;
+      const expectedRequestIdentity = requestIdentity;
+      const expectedAccountId = accountId;
       // The endpoint returns an empty body, so the refreshed user has to be fetched. The refresh is
       // best-effort, and keeps the previous object when the address did not move — a change pending
       // mail verification (202) leaves it untouched, and a fresh identity there would re-trigger
       // effects that watch `user` and re-submit endlessly. A cleared state stays cleared: a refresh
       // landing after a logout must not put the signed-out user back.
-      setIsUserUpdating(true);
+      beginUserUpdate(expectedRequestIdentity);
       return updateMailApi(mail)
-        .then(() =>
-          getUser()
+        .then(() => {
+          if (requestIdentityRef.current !== expectedRequestIdentity) return;
+          return getUser()
             .then((refreshed) =>
-              setUser((prev) => (prev && refreshed && refreshed.mail !== prev.mail ? refreshed : prev)),
+              setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, (previous) =>
+                previous && refreshed && refreshed.mail !== previous.mail ? refreshed : previous,
+              ),
             )
-            .catch(() => undefined),
-        )
-        .finally(() => setIsUserUpdating(false));
+            .catch(() => undefined);
+        })
+        .finally(() => endUserUpdate(expectedRequestIdentity));
     },
-    [getUser, updateMailApi],
+    [
+      accountId,
+      beginUserUpdate,
+      endUserUpdate,
+      getUser,
+      hasCurrentIdentity,
+      identity,
+      requestIdentity,
+      setUserForIdentity,
+      updateMailApi,
+      user,
+    ],
   );
 
   const verifyMail = useCallback(
     async (token: string): Promise<void> => {
-      if (!user) return;
+      if (!user || !hasCurrentIdentity() || accountId === undefined || identity === undefined || !requestIdentity)
+        return;
+      const expectedIdentity = identity;
+      const expectedRequestIdentity = requestIdentity;
+      const expectedAccountId = accountId;
 
-      setIsUserUpdating(true);
+      beginUserUpdate(expectedRequestIdentity);
       return verifyMailApi(token)
-        .then(setUser)
-        .finally(() => setIsUserUpdating(false));
+        .then((updated) => setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, updated))
+        .finally(() => endUserUpdate(expectedRequestIdentity));
     },
-    [user, verifyMailApi],
+    [
+      accountId,
+      beginUserUpdate,
+      endUserUpdate,
+      hasCurrentIdentity,
+      identity,
+      requestIdentity,
+      setUserForIdentity,
+      user,
+      verifyMailApi,
+    ],
   );
 
   const updatePhone = useCallback(
@@ -147,32 +298,70 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
 
   const renameAddress = useCallback(
     async (address: string, label: string): Promise<void> => {
-      if (!user) return;
+      if (!user || !hasCurrentIdentity() || accountId === undefined || identity === undefined || !requestIdentity)
+        return;
+      const expectedIdentity = identity;
+      const expectedRequestIdentity = requestIdentity;
+      const expectedAccountId = accountId;
 
-      setIsUserUpdating(true);
+      beginUserUpdate(expectedRequestIdentity);
       return renameUserAddress(address, label)
-        .then(setUser)
-        .finally(() => setIsUserUpdating(false));
+        .then((updated) => setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, updated))
+        .finally(() => endUserUpdate(expectedRequestIdentity));
     },
-    [user, renameUserAddress],
+    [
+      accountId,
+      beginUserUpdate,
+      endUserUpdate,
+      hasCurrentIdentity,
+      identity,
+      renameUserAddress,
+      requestIdentity,
+      setUserForIdentity,
+      user,
+    ],
   );
 
   const changeAddress = useCallback(
     async (address: string): Promise<void> => {
-      if (!user) return;
+      if (!user || !hasCurrentIdentity() || accountId === undefined || identity === undefined || !requestIdentity)
+        return;
+      const expectedIdentity = identity;
+      const expectedRequestIdentity = requestIdentity;
+      const expectedAccountId = accountId;
 
-      setIsUserUpdating(true);
+      beginUserUpdate(expectedRequestIdentity);
       return changeUserAddress(address)
-        .then(({ accessToken }) => updateSession(accessToken))
-        .then(() => setUser({ ...user, activeAddress: user.addresses.find((a) => a.address === address) }))
-        .finally(() => setIsUserUpdating(false));
+        .then(({ accessToken }) => {
+          if (requestIdentityRef.current !== expectedRequestIdentity) return;
+          setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, {
+            ...user,
+            activeAddress: user.addresses.find((a) => a.address === address),
+          });
+          updateSession(accessToken);
+        })
+        .finally(() => endUserUpdate(expectedRequestIdentity));
     },
-    [user, changeUserAddress, updateSession],
+    [
+      accountId,
+      beginUserUpdate,
+      changeUserAddress,
+      endUserUpdate,
+      hasCurrentIdentity,
+      identity,
+      requestIdentity,
+      setUserForIdentity,
+      updateSession,
+      user,
+    ],
   );
 
   const deleteAddress = useCallback(
     async (address: string): Promise<void> => {
-      if (!user) return;
+      if (!user || !hasCurrentIdentity() || accountId === undefined || identity === undefined || !requestIdentity)
+        return;
+      const expectedIdentity = identity;
+      const expectedRequestIdentity = requestIdentity;
 
       const requiresFallback = address === user.activeAddress?.address;
       const fallbackAddress =
@@ -181,6 +370,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
           : undefined;
 
       return deleteUserAddress(address).then(() => {
+        if (identityRef.current !== expectedIdentity || requestIdentityRef.current !== expectedRequestIdentity) return;
         if (requiresFallback) {
           fallbackAddress ? changeAddress(fallbackAddress) : deleteSession();
         } else {
@@ -188,62 +378,155 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
         }
       });
     },
-    [user, deleteUserAddress, changeAddress, deleteSession, reloadUser],
+    [
+      accountId,
+      changeAddress,
+      deleteSession,
+      deleteUserAddress,
+      hasCurrentIdentity,
+      identity,
+      reloadUser,
+      requestIdentity,
+      user,
+    ],
   );
 
   const deleteAccount = useCallback(async (): Promise<void> => {
-    if (!user) return;
+    if (!user || !hasCurrentIdentity() || identity === undefined || !requestIdentity) return;
+    const expectedRequestIdentity = requestIdentity;
 
-    return deleteUserAccount().then(deleteSession);
-  }, [user, deleteUserAccount, deleteSession]);
+    return deleteUserAccount().then(() => {
+      if (requestIdentityRef.current === expectedRequestIdentity) deleteSession();
+    });
+  }, [deleteSession, deleteUserAccount, hasCurrentIdentity, identity, requestIdentity, user]);
 
   const generateKeyCT = useCallback(
     async (types?: TransactionFilterKey[]): Promise<ApiKey | undefined> => {
-      if (!user) return;
+      if (!user || !hasCurrentIdentity() || accountId === undefined || identity === undefined || !requestIdentity)
+        return;
+      const expectedIdentity = identity;
+      const expectedRequestIdentity = requestIdentity;
+      const expectedAccountId = accountId;
 
-      setIsUserUpdating(true);
+      beginUserUpdate(expectedRequestIdentity);
       try {
         const key = await generateCTApiKey(types);
-        await getUser().then(setUser);
+        if (identityRef.current === expectedIdentity && requestIdentityRef.current === expectedRequestIdentity) {
+          const refreshed = await getUser();
+          setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, refreshed);
+        } else {
+          return undefined;
+        }
         return key;
       } finally {
-        setIsUserUpdating(false);
+        endUserUpdate(expectedRequestIdentity);
       }
     },
-    [user, generateCTApiKey, getUser],
+    [
+      accountId,
+      beginUserUpdate,
+      endUserUpdate,
+      generateCTApiKey,
+      getUser,
+      hasCurrentIdentity,
+      identity,
+      requestIdentity,
+      setUserForIdentity,
+      user,
+    ],
   );
 
   const deleteKeyCT = useCallback(async (): Promise<void> => {
-    if (!user) return;
+    if (!user || !hasCurrentIdentity() || accountId === undefined || identity === undefined || !requestIdentity) return;
+    const expectedIdentity = identity;
+    const expectedRequestIdentity = requestIdentity;
+    const expectedAccountId = accountId;
 
-    setIsUserUpdating(true);
+    beginUserUpdate(expectedRequestIdentity);
     deleteCTApiKey()
-      .then(() => getUser().then(setUser))
-      .finally(() => setIsUserUpdating(false));
-  }, [user, deleteCTApiKey, getUser]);
+      .then(async () => {
+        if (identityRef.current !== expectedIdentity || requestIdentityRef.current !== expectedRequestIdentity) return;
+        const refreshed = await getUser();
+        setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, refreshed);
+      })
+      .finally(() => endUserUpdate(expectedRequestIdentity));
+  }, [
+    accountId,
+    beginUserUpdate,
+    deleteCTApiKey,
+    endUserUpdate,
+    getUser,
+    hasCurrentIdentity,
+    identity,
+    requestIdentity,
+    setUserForIdentity,
+    user,
+  ]);
 
   const updateFilterCT = useCallback(
     async (types?: TransactionFilterKey[]): Promise<void> => {
-      if (!user) return;
+      if (!user || !hasCurrentIdentity() || accountId === undefined || identity === undefined || !requestIdentity)
+        return;
+      const expectedIdentity = identity;
+      const expectedRequestIdentity = requestIdentity;
+      const expectedAccountId = accountId;
 
-      setIsUserUpdating(true);
+      beginUserUpdate(expectedRequestIdentity);
       updateCTApiFilter(types)
-        .then(() => getUser().then(setUser))
-        .finally(() => setIsUserUpdating(false));
+        .then(async () => {
+          if (identityRef.current !== expectedIdentity || requestIdentityRef.current !== expectedRequestIdentity)
+            return;
+          const refreshed = await getUser();
+          setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, refreshed);
+        })
+        .finally(() => endUserUpdate(expectedRequestIdentity));
     },
-    [user, updateCTApiFilter, getUser],
+    [
+      accountId,
+      beginUserUpdate,
+      endUserUpdate,
+      getUser,
+      hasCurrentIdentity,
+      identity,
+      requestIdentity,
+      setUserForIdentity,
+      updateCTApiFilter,
+      user,
+    ],
   );
 
   const updateCallSettings = useCallback(
     async (preferredPhoneTimes?: PhoneCallTime[], acceptCall?: boolean): Promise<void> => {
-      if (!user) return;
+      if (!user || !hasCurrentIdentity() || accountId === undefined || identity === undefined || !requestIdentity)
+        return;
+      const expectedIdentity = identity;
+      const expectedRequestIdentity = requestIdentity;
+      const expectedAccountId = accountId;
 
-      setIsUserUpdating(true);
+      beginUserUpdate(expectedRequestIdentity);
       return updateCallSettingsApi(preferredPhoneTimes, acceptCall)
-        .then(setUser)
-        .finally(() => setIsUserUpdating(false));
+        .then((updated) => setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, updated))
+        .finally(() => endUserUpdate(expectedRequestIdentity));
     },
-    [user, updateCallSettingsApi],
+    [
+      accountId,
+      beginUserUpdate,
+      endUserUpdate,
+      hasCurrentIdentity,
+      identity,
+      requestIdentity,
+      setUserForIdentity,
+      updateCallSettingsApi,
+      user,
+    ],
+  );
+
+  const addSpecialCodeForCurrentIdentity = useCallback(
+    async (code: string): Promise<void> => {
+      if (!hasCurrentIdentity()) return;
+      return addSpecialCode(code);
+    },
+    [addSpecialCode, hasCurrentIdentity],
   );
 
   const context: UserInterface = useMemo(() => {
@@ -253,7 +536,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     return {
       user,
       refLink,
-      isUserLoading,
+      isUserLoading: isUserLoading || (!!identity && loadedIdentity !== identity),
       isUserUpdating,
       updateMail,
       verifyMail,
@@ -268,7 +551,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       changeAddress,
       deleteAddress,
       deleteAccount,
-      addSpecialCode,
+      addSpecialCode: addSpecialCodeForCurrentIdentity,
       reloadUser,
       filterCT: user?.apiFilterCT ?? user?.activeAddress?.apiFilterCT,
       keyCT: user?.apiKeyCT ?? user?.activeAddress?.apiKeyCT,
@@ -281,6 +564,8 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     user,
     refLink,
     isUserLoading,
+    identity,
+    loadedIdentity,
     isUserUpdating,
     updateMail,
     verifyMail,
@@ -291,7 +576,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     changeAddress,
     deleteAddress,
     deleteAccount,
-    addSpecialCode,
+    addSpecialCodeForCurrentIdentity,
     reloadUser,
     generateKeyCT,
     deleteKeyCT,

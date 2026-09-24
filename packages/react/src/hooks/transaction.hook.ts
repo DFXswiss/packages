@@ -3,6 +3,8 @@ import { ResponseType, useApi } from './api.hook';
 import {
   DetailTransaction,
   ExportType,
+  PaymentInfoRequestStatusResponse,
+  PaymentInfoRequestType,
   Transaction,
   TransactionHistoryQuery,
   TransactionRefundData,
@@ -17,6 +19,11 @@ import { PdfDocument } from '../definitions/buy';
 export interface TransactionInterface {
   getTransactions: () => Promise<Transaction[]>;
   getDetailTransactions: (from?: Date, to?: Date) => Promise<DetailTransaction[]>;
+  getTransactionDetailByUid: (uid: string) => Promise<DetailTransaction>;
+  getPaymentInfoRequestStatus: (
+    clientRequestId: string,
+    type: PaymentInfoRequestType,
+  ) => Promise<PaymentInfoRequestStatusResponse>;
   getTransactionByUid: (uid: string) => Promise<Transaction>;
   getTransactionByCkoId: (ckoId: string) => Promise<Transaction>;
   getTransactionByRequestId: (requestId: number) => Promise<Transaction>;
@@ -70,6 +77,27 @@ export function useTransaction(): TransactionInterface {
       });
     },
     [call, createFilterParams],
+  );
+
+  const getTransactionDetailByUid = useCallback(
+    async (uid: string): Promise<DetailTransaction> => {
+      return call<DetailTransaction>({
+        url: `${TransactionUrl.detailSingle}?uid=${encodeURIComponent(uid)}`,
+        method: 'GET',
+      });
+    },
+    [call],
+  );
+
+  const getPaymentInfoRequestStatus = useCallback(
+    async (clientRequestId: string, type: PaymentInfoRequestType): Promise<PaymentInfoRequestStatusResponse> => {
+      const query = new URLSearchParams({ clientRequestId, type });
+      return call<PaymentInfoRequestStatusResponse>({
+        url: `transaction/payment-info-request?${query.toString()}`,
+        method: 'GET',
+      });
+    },
+    [call],
   );
 
   const getTransactionByUid = useCallback(
@@ -170,6 +198,8 @@ export function useTransaction(): TransactionInterface {
     () => ({
       getTransactions,
       getDetailTransactions,
+      getTransactionDetailByUid,
+      getPaymentInfoRequestStatus,
       getTransactionByUid,
       getTransactionByCkoId,
       getTransactionByRequestId,
@@ -186,6 +216,8 @@ export function useTransaction(): TransactionInterface {
     [
       getTransactions,
       getDetailTransactions,
+      getTransactionDetailByUid,
+      getPaymentInfoRequestStatus,
       getTransactionByUid,
       getTransactionByCkoId,
       getTransactionByRequestId,

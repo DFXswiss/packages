@@ -247,6 +247,8 @@ export type {
   SwapPaymentInfo,
   ConfirmSwapData,
   // Transaction
+  PaymentInfoRequestStatusResponse,
+  PaymentInfoRequestType,
   PaymentMethod,
   UnassignedTransaction,
   NetworkStartTx,

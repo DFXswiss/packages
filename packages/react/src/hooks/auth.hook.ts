@@ -5,8 +5,7 @@ import { CallConfig, useApi } from './api.hook';
 import { ApiError } from '../definitions/error';
 
 export interface AuthInterface {
-  confirmAccountMerge: (code: string, authenticated?: boolean) => Promise<AccountMergeResponse | ApiJobResponse>;
-  getAnonymousJob: (uid: string) => Promise<ApiJobResponse>;
+  confirmAccountMerge: (code: string, authenticated?: boolean) => Promise<AccountMergeResponse>;
   getSignMessage: (address: string) => Promise<string>;
   authenticate: (
     address: string,
@@ -50,22 +49,6 @@ export interface AccountMergeResponse {
   accessToken?: string;
 }
 
-export enum ApiJobStatus {
-  PENDING = 'Pending',
-  PROCESSING = 'Processing',
-  COMPLETE = 'Complete',
-  RETRY = 'Retry',
-  FAILED = 'Failed',
-  DEAD_LETTER = 'DeadLetter',
-}
-
-export interface ApiJobResponse {
-  uid: string;
-  status: ApiJobStatus;
-  expectedSeconds: number;
-  error?: string;
-}
-
 interface SignUpParams {
   address: string;
   signature: string;
@@ -83,19 +66,12 @@ export function useAuth(): AuthInterface {
   const { call } = useApi();
 
   const confirmAccountMerge = useCallback(
-    async (code: string, authenticated = true): Promise<AccountMergeResponse | ApiJobResponse> => {
-      return call<AccountMergeResponse | ApiJobResponse>({
+    async (code: string, authenticated = true): Promise<AccountMergeResponse> => {
+      return call<AccountMergeResponse>({
         url: `auth/mail/confirm?code=${encodeURIComponent(code)}`,
         method: 'GET',
         ...(authenticated ? {} : { token: false }),
       });
-    },
-    [call],
-  );
-
-  const getAnonymousJob = useCallback(
-    async (uid: string): Promise<ApiJobResponse> => {
-      return call<ApiJobResponse>({ url: `job/${encodeURIComponent(uid)}`, method: 'GET', token: false });
     },
     [call],
   );
@@ -270,7 +246,6 @@ export function useAuth(): AuthInterface {
   return useMemo(
     () => ({
       confirmAccountMerge,
-      getAnonymousJob,
       getSignMessage,
       authenticate,
       signIn,
@@ -284,7 +259,6 @@ export function useAuth(): AuthInterface {
     }),
     [
       confirmAccountMerge,
-      getAnonymousJob,
       getSignMessage,
       authenticate,
       signIn,

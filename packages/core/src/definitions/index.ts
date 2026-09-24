@@ -178,6 +178,8 @@ export {
   ExportFormat,
 } from './transaction';
 export type {
+  PaymentInfoRequestStatusResponse,
+  PaymentInfoRequestType,
   PaymentMethod,
   UnassignedTransaction,
   NetworkStartTx,

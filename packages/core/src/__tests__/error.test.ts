@@ -42,4 +42,24 @@ describe('ApiException', () => {
     const error = new ApiException(401, 'Unauthorized');
     expect(error.switchToCode).toBeUndefined();
   });
+
+  it('exposes only validated payment-info conflict details', () => {
+    const error = new ApiException(409, 'Already exists', 'PAYMENT_INFO_ALREADY_EXISTS', undefined, {
+      existingUid: 'quote-123',
+      requestStatus: 'WaitingForPayment',
+      iban: 'must not be exposed',
+    });
+
+    expect(error.paymentInfoConflict).toEqual({ existingUid: 'quote-123', requestStatus: 'WaitingForPayment' });
+  });
+
+  it.each([
+    [400, 'PAYMENT_INFO_ALREADY_EXISTS', { requestStatus: 'Processing' }],
+    [409, 'OTHER_CONFLICT', { requestStatus: 'Processing' }],
+    [409, 'PAYMENT_INFO_ALREADY_EXISTS', { requestStatus: 'Other' }],
+    [409, 'PAYMENT_INFO_ALREADY_EXISTS', { requestStatus: 'Processing', existingUid: 42 }],
+  ])('does not expose untrusted conflict details for status %s', (status, code, details) => {
+    const error = new ApiException(status as number, 'Conflict', code as string, undefined, details);
+    expect(error.paymentInfoConflict).toBeUndefined();
+  });
 });

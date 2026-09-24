@@ -176,6 +176,26 @@ describe('DfxHttpClient', () => {
       });
     });
 
+    it('preserves typed payment-info conflict details from the API body', async () => {
+      const mockFetch = createMockFetch({
+        ok: false,
+        status: 409,
+        statusText: 'Conflict',
+        json: jest.fn().mockResolvedValue({
+          statusCode: 409,
+          message: 'Payment info already exists',
+          code: 'PAYMENT_INFO_ALREADY_EXISTS',
+          details: { existingUid: 'quote-123', requestStatus: 'Processing', iban: 'secret' },
+        }),
+      });
+      const client = new DfxHttpClient({ apiUrl: 'https://api.dfx.swiss/v1', fetchFn: mockFetch as any });
+
+      await expect(client.request({ url: 'buy/paymentInfos', method: 'PUT' })).rejects.toMatchObject({
+        statusCode: 409,
+        paymentInfoConflict: { existingUid: 'quote-123', requestStatus: 'Processing' },
+      });
+    });
+
     it('throws ApiException with status 0 on network error', async () => {
       const mockFetch = jest.fn().mockRejectedValue(new Error('fetch failed'));
       const client = new DfxHttpClient({ apiUrl: 'https://api.dfx.swiss/v1', fetchFn: mockFetch as any });

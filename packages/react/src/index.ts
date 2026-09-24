@@ -39,8 +39,7 @@ export { useRecommendation } from './hooks/recommendation.hook';
 export { CheckStatus, AmlReason } from './definitions/aml';
 export { RecommendationStatus, RecommendationType, RecommendationMethod } from './definitions/recommendation';
 export type { Recommendation, CreateRecommendation } from './definitions/recommendation';
-export type { AccountMergeResponse, ApiJobResponse } from './hooks/auth.hook';
-export { ApiJobStatus } from './hooks/auth.hook';
+export type { AccountMergeResponse } from './hooks/auth.hook';
 export {
   PendingReviewType,
   PendingReviewStatus,
@@ -219,6 +218,8 @@ export {
   CreditorData,
   TransactionFilterKey,
   TransactionUrl,
+  PaymentInfoRequestStatusResponse,
+  PaymentInfoRequestType,
 } from './definitions/transaction';
 export { Fees } from './definitions/fees';
 export {
