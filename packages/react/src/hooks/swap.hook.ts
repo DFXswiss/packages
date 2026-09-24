@@ -21,7 +21,8 @@ export function useSwap(): SwapInterface {
 
   const quote = useCallback(
     async (info: SwapPaymentInfo): Promise<Swap> => {
-      return call<Swap>({ url: SwapUrl.quote, method: 'PUT', data: info, token: false });
+      const { clientRequestId: _clientRequestId, ...quoteInfo } = info;
+      return call<Swap>({ url: SwapUrl.quote, method: 'PUT', data: quoteInfo, token: false });
     },
     [call],
   );

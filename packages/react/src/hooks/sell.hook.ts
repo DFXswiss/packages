@@ -18,7 +18,8 @@ export function useSell(): SellInterface {
 
   const quote = useCallback(
     async (info: SellPaymentInfo): Promise<Sell> => {
-      return call<Sell>({ url: SellUrl.quote, method: 'PUT', data: info, token: false });
+      const { clientRequestId: _clientRequestId, ...quoteInfo } = info;
+      return call<Sell>({ url: SellUrl.quote, method: 'PUT', data: quoteInfo, token: false });
     },
     [call],
   );

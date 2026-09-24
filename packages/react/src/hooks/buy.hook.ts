@@ -19,7 +19,8 @@ export function useBuy(): BuyInterface {
 
   const quote = useCallback(
     async (info: BuyPaymentInfo): Promise<Buy> => {
-      return call<Buy>({ url: BuyUrl.quote, method: 'PUT', data: info, token: false });
+      const { clientRequestId: _clientRequestId, ...quoteInfo } = info;
+      return call<Buy>({ url: BuyUrl.quote, method: 'PUT', data: quoteInfo, token: false });
     },
     [call],
   );

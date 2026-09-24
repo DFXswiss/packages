@@ -43,6 +43,8 @@ export interface SwapPaymentInfo {
   targetAmount?: number;
   receiverAddress?: string;
   externalTransactionId?: string;
+  /** UUID that makes retries of the same payment-info intent idempotent. */
+  clientRequestId?: string;
   exactPrice?: boolean;
 }
 

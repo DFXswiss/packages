@@ -36,6 +36,9 @@ import { useRecommendation } from '../hooks/recommendation.hook';
 import { useSell } from '../hooks/sell.hook';
 import { useSwap } from '../hooks/swap.hook';
 import type { CreateRecommendation } from '../definitions/recommendation';
+import type { BuyPaymentInfo } from '../definitions/buy';
+import type { SellPaymentInfo } from '../definitions/sell';
+import type { SwapPaymentInfo } from '../definitions/swap';
 
 describe('SDK endpoint methods', () => {
   beforeEach(() => {
@@ -100,19 +103,83 @@ describe('SDK endpoint methods', () => {
     });
   });
 
-  it('keeps all three quote endpoints public and sends each quote body unchanged', async () => {
-    const buyInfo = { currency: { id: 1 }, asset: { id: 2 }, amount: 3 };
-    const sellInfo = { currency: { id: 1 }, asset: { id: 2 }, amount: 3 };
-    const swapInfo = { sourceAsset: { id: 2 }, targetAsset: { id: 4 }, amount: 3 };
+  it('keeps the idempotency key out of all public quote requests', async () => {
+    const clientRequestId = 'cdab92dc-8f3f-4a90-bb37-a7026e12a9fa';
+    const buyInfo: BuyPaymentInfo = {
+      currency: { id: 1 } as BuyPaymentInfo['currency'],
+      asset: { id: 2 } as BuyPaymentInfo['asset'],
+      amount: 3,
+      clientRequestId,
+    };
+    const sellInfo: SellPaymentInfo = {
+      currency: { id: 1 } as SellPaymentInfo['currency'],
+      asset: { id: 2 } as SellPaymentInfo['asset'],
+      amount: 3,
+      clientRequestId,
+    };
+    const swapInfo: SwapPaymentInfo = {
+      sourceAsset: { id: 2 } as SwapPaymentInfo['sourceAsset'],
+      targetAsset: { id: 4 } as SwapPaymentInfo['targetAsset'],
+      amount: 3,
+      clientRequestId,
+    };
 
-    await useBuy().quote(buyInfo as never);
-    await useSell().quote(sellInfo as never);
-    await useSwap().quote(swapInfo as never);
+    await useBuy().quote(buyInfo);
+    await useSell().quote(sellInfo);
+    await useSwap().quote(swapInfo);
 
     expect(mockCall.mock.calls.map(([request]) => request)).toEqual([
-      { url: 'buy/quote', method: 'PUT', data: buyInfo, token: false },
-      { url: 'sell/quote', method: 'PUT', data: sellInfo, token: false },
-      { url: 'swap/quote', method: 'PUT', data: swapInfo, token: false },
+      {
+        url: 'buy/quote',
+        method: 'PUT',
+        data: { currency: { id: 1 }, asset: { id: 2 }, amount: 3 },
+        token: false,
+      },
+      {
+        url: 'sell/quote',
+        method: 'PUT',
+        data: { currency: { id: 1 }, asset: { id: 2 }, amount: 3 },
+        token: false,
+      },
+      {
+        url: 'swap/quote',
+        method: 'PUT',
+        data: { sourceAsset: { id: 2 }, targetAsset: { id: 4 }, amount: 3 },
+        token: false,
+      },
+    ]);
+  });
+
+  it('forwards the same client request UUID only with authenticated payment-info calls', async () => {
+    const clientRequestId = 'cdab92dc-8f3f-4a90-bb37-a7026e12a9fa';
+    const buyInfo: BuyPaymentInfo = {
+      currency: { id: 1 } as BuyPaymentInfo['currency'],
+      asset: { id: 2 } as BuyPaymentInfo['asset'],
+      amount: 3,
+      clientRequestId,
+    };
+    const sellInfo: SellPaymentInfo = {
+      iban: 'CH9300762011623852957',
+      currency: { id: 1 } as SellPaymentInfo['currency'],
+      asset: { id: 2 } as SellPaymentInfo['asset'],
+      amount: 3,
+      clientRequestId,
+    };
+    const swapInfo: SwapPaymentInfo = {
+      sourceAsset: { id: 2 } as SwapPaymentInfo['sourceAsset'],
+      targetAsset: { id: 4 } as SwapPaymentInfo['targetAsset'],
+      amount: 3,
+      clientRequestId,
+    };
+
+    await useBuy().receiveFor(buyInfo);
+    await useSell().receiveFor(sellInfo);
+    await useSwap().receiveFor(swapInfo);
+
+    expect(mockCall.mock.calls.map(([request]) => request)).toEqual([
+      { url: 'buy/paymentInfos', method: 'PUT', data: buyInfo },
+      { url: 'sell/paymentInfos', method: 'PUT', data: sellInfo },
+      { url: 'swap/paymentInfos', method: 'PUT', data: swapInfo },
     ]);
   });
 
