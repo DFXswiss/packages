@@ -35,6 +35,7 @@ import { usePaymentRoutes } from '../hooks/payment-routes.hook';
 import { useRecommendation } from '../hooks/recommendation.hook';
 import { useSell } from '../hooks/sell.hook';
 import { useSwap } from '../hooks/swap.hook';
+import type { CreateRecommendation } from '../definitions/recommendation';
 
 describe('SDK endpoint methods', () => {
   beforeEach(() => {
@@ -149,16 +150,22 @@ describe('SDK endpoint methods', () => {
     ]);
   });
 
-  it('loads recommendations and creates one with the supplied body', async () => {
+  it('loads recommendations and creates them with the supplied bodies', async () => {
     const recommendation = useRecommendation();
-    const body = { email: 'buyer@example.test', amount: 25, currency: 'CHF' };
+    const body: CreateRecommendation = {
+      recommendedAlias: 'Buyer',
+      recommendedMail: 'buyer@example.test',
+    };
+    const aliasOnlyBody: CreateRecommendation = { recommendedAlias: 'Another buyer' };
 
     await recommendation.getRecommendations();
-    await recommendation.createRecommendation(body as never);
+    await recommendation.createRecommendation(body);
+    await recommendation.createRecommendation(aliasOnlyBody);
 
     expect(mockCall.mock.calls.map(([request]) => request)).toEqual([
       { url: 'recommendation', method: 'GET' },
       { url: 'recommendation', method: 'POST', data: body },
+      { url: 'recommendation', method: 'POST', data: aliasOnlyBody },
     ]);
   });
 });
