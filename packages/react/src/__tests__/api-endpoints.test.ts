@@ -75,10 +75,39 @@ describe('SDK endpoint methods', () => {
     });
   });
 
+  it('returns the invoice PayRequest ID and external ID from the backend contract', async () => {
+    const payRequest = { id: 'pl_123', externalId: 'E2E invoice/12.5CHF' };
+    mockCall.mockResolvedValueOnce(payRequest);
+
+    const result = await usePaymentRoutes().createPaymentLinkInvoice({
+      routeId: 7,
+      amount: 12.5,
+      currency: 'CHF',
+      message: 'E2E invoice',
+      expiryDate: '2026-09-23T12:30:00.000Z',
+    });
+
+    const externalId: string = result.externalId;
+    expect(result).toEqual(payRequest);
+    expect(externalId).toBe(payRequest.externalId);
+  });
+
   it('loads payment-link history through the history GET endpoint', async () => {
     await usePaymentRoutes().getPaymentLinkHistory();
 
     expect(mockCall).toHaveBeenCalledWith({ url: 'paymentLink/history', method: 'GET' });
+  });
+
+  it('keeps the standard payment-route lookup active-only by default', async () => {
+    await usePaymentRoutes().getPaymentRoutes();
+
+    expect(mockCall).toHaveBeenCalledWith({ url: 'route', method: 'GET' });
+  });
+
+  it('opts into owner-scoped inactive sell routes only when requested', async () => {
+    await usePaymentRoutes().getPaymentRoutes({ includeInactiveSell: true });
+
+    expect(mockCall).toHaveBeenCalledWith({ url: 'route?includeInactiveSell=true', method: 'GET' });
   });
 
   it('loads one transaction request detail by its encoded UID', async () => {

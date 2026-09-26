@@ -20,7 +20,7 @@ import { Sell } from '../definitions/sell';
 import { CustomFile } from '../definitions/file';
 
 export interface PaymentRoutesInterface {
-  getPaymentRoutes: () => Promise<PaymentRoutes>;
+  getPaymentRoutes: (options?: GetPaymentRoutesOptions) => Promise<PaymentRoutes>;
   getPaymentLinks: (
     linkId?: string,
     externalLinkId?: string,
@@ -58,9 +58,14 @@ export interface PaymentRoutesInterface {
   ) => Promise<CustomFile>;
   createPosLink: (linkId?: string, externalLinkId?: string, externalPaymentId?: string) => Promise<PaymentLinkPos>;
   getPaymentLinkHistory: () => Promise<PaymentLinkHistory[]>;
-  createPaymentLinkInvoice: (query: PaymentLinkInvoiceQuery) => Promise<{ id: string | number }>;
+  createPaymentLinkInvoice: (query: PaymentLinkInvoiceQuery) => Promise<{ id: string | number; externalId: string }>;
   createSellPaymentRoute: (request: CreateSellPaymentRoute) => Promise<void>;
   activatePaymentRoute: (id: number, type: PaymentRouteType) => Promise<PaymentRoute>;
+}
+
+export interface GetPaymentRoutesOptions {
+  /** Include inactive sell routes for owner-scoped merchant route management. */
+  includeInactiveSell?: boolean;
 }
 
 export interface PaymentLinkHistory {
@@ -93,9 +98,13 @@ export interface CreateSellPaymentRoute {
 export function usePaymentRoutes(): PaymentRoutesInterface {
   const { call } = useApi();
 
-  const getPaymentRoutes = useCallback(async (): Promise<PaymentRoutes> => {
-    return call<PaymentRoutes>({ url: PaymentRoutesUrl.get, method: 'GET' });
-  }, [call]);
+  const getPaymentRoutes = useCallback(
+    async (options?: GetPaymentRoutesOptions): Promise<PaymentRoutes> => {
+      const query = Utils.buildQuery({ includeInactiveSell: options?.includeInactiveSell || undefined });
+      return call<PaymentRoutes>({ url: `${PaymentRoutesUrl.get}${query}`, method: 'GET' });
+    },
+    [call],
+  );
 
   const getPaymentLinkHistory = useCallback(async (): Promise<PaymentLinkHistory[]> => {
     return call<PaymentLinkHistory[]>({ url: 'paymentLink/history', method: 'GET' });
@@ -110,7 +119,10 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
         message: query.message,
         expiryDate: query.expiryDate,
       });
-      return call<{ id: string | number }>({ url: `${PaymentLinksUrl.payment}?${params.toString()}`, method: 'GET' });
+      return call<{ id: string | number; externalId: string }>({
+        url: `${PaymentLinksUrl.payment}?${params.toString()}`,
+        method: 'GET',
+      });
     },
     [call],
   );

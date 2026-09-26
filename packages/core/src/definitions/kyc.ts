@@ -236,7 +236,7 @@ export interface KycPersonalData {
 }
 
 export interface KycNationalityData {
-  country: Country;
+  nationality: Country;
 }
 
 export interface KycRecommendationData {

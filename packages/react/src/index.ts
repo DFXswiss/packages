@@ -24,7 +24,12 @@ export { useBuy } from './hooks/buy.hook';
 export { useCountry } from './hooks/country.hook';
 export { useFiat } from './hooks/fiat.hook';
 export { usePaymentRoutes } from './hooks/payment-routes.hook';
-export type { CreateSellPaymentRoute, PaymentLinkHistory, PaymentLinkInvoiceQuery } from './hooks/payment-routes.hook';
+export type {
+  CreateSellPaymentRoute,
+  GetPaymentRoutesOptions,
+  PaymentLinkHistory,
+  PaymentLinkInvoiceQuery,
+} from './hooks/payment-routes.hook';
 export { useSettings } from './hooks/settings.hook';
 export { useTransaction } from './hooks/transaction.hook';
 export { useLanguage } from './hooks/language.hook';

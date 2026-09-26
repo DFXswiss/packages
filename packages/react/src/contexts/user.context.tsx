@@ -19,6 +19,7 @@ interface UserInterface {
   user?: User;
   refLink?: string;
   isUserLoading: boolean;
+  userLoadError: boolean;
   isUserUpdating: boolean;
   updateMail: (mail: string) => Promise<void>;
   verifyMail: (token: string) => Promise<void>;
@@ -73,6 +74,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const identityRef = useRef(identity);
   const requestIdentityRef = useRef(requestIdentity);
   const accountIdRef = useRef(accountId);
+  const userLoadRequestRef = useRef(0);
   // Update during render so async completions and event handlers observe the
   // account/token-address scope represented by the tree about to be committed.
   identityRef.current = identity;
@@ -85,6 +87,9 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   );
   const [loadedIdentity, setLoadedIdentity] = useState<string>();
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
+  const [userLoadErrorIdentity, setUserLoadErrorIdentity] = useState<
+    { identity: string; requestIdentity: string } | undefined
+  >();
   const [userUpdateCounts, setUserUpdateCounts] = useState<UserUpdateCounts>({});
   const beginUserUpdate = useCallback(
     (requestIdentity: string) => setUserUpdateCounts((counts) => incrementUserUpdate(counts, requestIdentity)),
@@ -95,6 +100,14 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     [],
   );
   const isUserUpdating = isUserUpdatingForIdentity(userUpdateCounts, requestIdentity);
+  const userLoadError =
+    userLoadErrorIdentity !== undefined &&
+    isCurrentUserRequest(
+      userLoadErrorIdentity.identity,
+      userLoadErrorIdentity.requestIdentity,
+      identity,
+      requestIdentity,
+    );
 
   const setUserForIdentity = useCallback(
     (
@@ -147,11 +160,15 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     const requestIdentity = requestIdentityRef.current;
     const requestAccountId = accountIdRef.current;
     if (!requestAccountIdentity || !requestIdentity || requestAccountId === undefined) {
+      userLoadRequestRef.current += 1;
       setUserSnapshot(undefined);
       setLoadedIdentity(undefined);
+      setUserLoadErrorIdentity(undefined);
       setIsUserLoading(false);
       return;
     }
+    const requestId = ++userLoadRequestRef.current;
+    setUserLoadErrorIdentity(undefined);
     setIsUserLoading(true);
     try {
       const nextUser = await getUser();
@@ -161,10 +178,15 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
         setUserForIdentity(requestAccountIdentity, requestIdentity, requestAccountId, nextUser);
       }
     } catch {
-      // A failed load does not restore another account's cached data. The current
-      // account remains masked and can call reloadUser again when connectivity returns.
+      if (
+        requestId === userLoadRequestRef.current &&
+        isCurrentUserRequest(requestAccountIdentity, requestIdentity, identityRef.current, requestIdentityRef.current)
+      ) {
+        setUserLoadErrorIdentity({ identity: requestAccountIdentity, requestIdentity });
+      }
     } finally {
       if (
+        requestId === userLoadRequestRef.current &&
         isCurrentUserRequest(requestAccountIdentity, requestIdentity, identityRef.current, requestIdentityRef.current)
       ) {
         setLoadedIdentity(requestAccountIdentity);
@@ -179,6 +201,8 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     } else {
       setUserSnapshot(undefined);
       setLoadedIdentity(undefined);
+      setUserLoadErrorIdentity(undefined);
+      userLoadRequestRef.current += 1;
       setIsUserLoading(false);
     }
   }, [isLoggedIn, identity, requestIdentity, reloadUser]);
@@ -537,6 +561,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       user,
       refLink,
       isUserLoading: isUserLoading || (!!identity && loadedIdentity !== identity),
+      userLoadError,
       isUserUpdating,
       updateMail,
       verifyMail,
@@ -564,6 +589,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     user,
     refLink,
     isUserLoading,
+    userLoadError,
     identity,
     loadedIdentity,
     isUserUpdating,
