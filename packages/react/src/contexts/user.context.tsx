@@ -2,6 +2,7 @@ import { createContext, PropsWithChildren, useCallback, useContext, useEffect, u
 import { ApiKey, PhoneCallTime, UpdateUser, User, UserAddress } from '../definitions/user';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
+import { useAuthContext } from './auth.context';
 import { Language } from '../definitions/language';
 import { Fiat } from '../definitions/fiat';
 import { TransactionFilterKey } from '../definitions/transaction';
@@ -52,6 +53,7 @@ export function useUserContext(): UserInterface {
 
 export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const { isLoggedIn, session, updateSession, deleteSession } = useApiSession();
+  const { getAuthToken } = useAuthContext();
   const {
     getUser,
     updateUser: updateUserApi,
@@ -115,8 +117,10 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       expectedRequestIdentity: string,
       expectedAccountId: number,
       next: User | undefined | ((previous: User | undefined) => User | undefined),
+      isStillCurrent: () => boolean = () => true,
     ) => {
       if (
+        !isStillCurrent() ||
         !isCurrentUserRequest(
           expectedIdentity,
           expectedRequestIdentity,
@@ -127,6 +131,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
         return;
       setUserSnapshot((previous) => {
         if (
+          !isStillCurrent() ||
           !isCurrentUserRequest(
             expectedIdentity,
             expectedRequestIdentity,
@@ -173,6 +178,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     try {
       const nextUser = await getUser();
       if (
+        requestId === userLoadRequestRef.current &&
         isCurrentUserRequest(requestAccountIdentity, requestIdentity, identityRef.current, requestIdentityRef.current)
       ) {
         setUserForIdentity(requestAccountIdentity, requestIdentity, requestAccountId, nextUser);
@@ -352,16 +358,17 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
         return;
       const expectedIdentity = identity;
       const expectedRequestIdentity = requestIdentity;
-      const expectedAccountId = accountId;
+      const expectedAuthToken = getAuthToken();
 
       beginUserUpdate(expectedRequestIdentity);
       return changeUserAddress(address)
         .then(({ accessToken }) => {
-          if (requestIdentityRef.current !== expectedRequestIdentity) return;
-          setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, {
-            ...user,
-            activeAddress: user.addresses.find((a) => a.address === address),
-          });
+          if (
+            identityRef.current !== expectedIdentity ||
+            requestIdentityRef.current !== expectedRequestIdentity ||
+            getAuthToken() !== expectedAuthToken
+          )
+            return;
           updateSession(accessToken);
         })
         .finally(() => endUserUpdate(expectedRequestIdentity));
@@ -374,7 +381,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       hasCurrentIdentity,
       identity,
       requestIdentity,
-      setUserForIdentity,
+      getAuthToken,
       updateSession,
       user,
     ],
@@ -431,16 +438,31 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       const expectedIdentity = identity;
       const expectedRequestIdentity = requestIdentity;
       const expectedAccountId = accountId;
+      const expectedAuthToken = getAuthToken();
 
       beginUserUpdate(expectedRequestIdentity);
       try {
         const key = await generateCTApiKey(types);
-        if (identityRef.current === expectedIdentity && requestIdentityRef.current === expectedRequestIdentity) {
-          const refreshed = await getUser();
-          setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, refreshed);
-        } else {
+        if (
+          identityRef.current !== expectedIdentity ||
+          requestIdentityRef.current !== expectedRequestIdentity ||
+          getAuthToken() !== expectedAuthToken
+        )
           return undefined;
-        }
+        const refreshed = await getUser();
+        if (
+          identityRef.current !== expectedIdentity ||
+          requestIdentityRef.current !== expectedRequestIdentity ||
+          getAuthToken() !== expectedAuthToken
+        )
+          return undefined;
+        setUserForIdentity(
+          expectedIdentity,
+          expectedRequestIdentity,
+          expectedAccountId,
+          refreshed,
+          () => getAuthToken() === expectedAuthToken,
+        );
         return key;
       } finally {
         endUserUpdate(expectedRequestIdentity);
@@ -451,6 +473,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       beginUserUpdate,
       endUserUpdate,
       generateCTApiKey,
+      getAuthToken,
       getUser,
       hasCurrentIdentity,
       identity,
@@ -467,7 +490,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     const expectedAccountId = accountId;
 
     beginUserUpdate(expectedRequestIdentity);
-    deleteCTApiKey()
+    return deleteCTApiKey()
       .then(async () => {
         if (identityRef.current !== expectedIdentity || requestIdentityRef.current !== expectedRequestIdentity) return;
         const refreshed = await getUser();
@@ -496,7 +519,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       const expectedAccountId = accountId;
 
       beginUserUpdate(expectedRequestIdentity);
-      updateCTApiFilter(types)
+      return updateCTApiFilter(types)
         .then(async () => {
           if (identityRef.current !== expectedIdentity || requestIdentityRef.current !== expectedRequestIdentity)
             return;

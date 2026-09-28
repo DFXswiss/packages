@@ -7,7 +7,8 @@ export class SwapApi {
   constructor(private readonly http: DfxHttpClient) {}
 
   async quote(info: SwapPaymentInfo): Promise<Swap> {
-    return this.http.request<Swap>({ url: SwapUrl.quote, method: 'PUT', data: info, token: false });
+    const { clientRequestId: _clientRequestId, ...quoteInfo } = info;
+    return this.http.request<Swap>({ url: SwapUrl.quote, method: 'PUT', data: quoteInfo, token: false });
   }
 
   async createPaymentInfo(info: SwapPaymentInfo, includeTx = false): Promise<Swap> {

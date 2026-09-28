@@ -7,7 +7,8 @@ export class SellApi {
   constructor(private readonly http: DfxHttpClient) {}
 
   async quote(info: SellPaymentInfo): Promise<Sell> {
-    return this.http.request<Sell>({ url: SellUrl.quote, method: 'PUT', data: info, token: false });
+    const { clientRequestId: _clientRequestId, ...quoteInfo } = info;
+    return this.http.request<Sell>({ url: SellUrl.quote, method: 'PUT', data: quoteInfo, token: false });
   }
 
   async createPaymentInfo(info: SellPaymentInfo, includeTx = false): Promise<Sell> {
