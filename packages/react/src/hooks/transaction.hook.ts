@@ -93,7 +93,7 @@ export function useTransaction(): TransactionInterface {
     async (clientRequestId: string, type: PaymentInfoRequestType): Promise<PaymentInfoRequestStatusResponse> => {
       const query = new URLSearchParams({ clientRequestId, type });
       return call<PaymentInfoRequestStatusResponse>({
-        url: `transaction/payment-info-request?${query.toString()}`,
+        url: `${TransactionUrl.paymentInfoRequest}?${query.toString()}`,
         method: 'GET',
       });
     },

@@ -1,5 +1,6 @@
 export {
   buildKycUrl,
+  toKycNationalityRequest,
   KycLevel,
   AccountType,
   LegalEntity,

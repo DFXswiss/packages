@@ -27,7 +27,7 @@ export type { Buy, BuyPaymentInfo, PdfDocument, VirtualIban } from './buy';
 export { CountryUrl } from './country';
 export type { Country } from './country';
 export { ApiException } from './error';
-export type { ApiError } from './error';
+export type { ApiError, ApiErrorResponse, PaymentInfoConflictDetails, PaymentInfoRequestStatus } from './error';
 export type { Fees } from './fees';
 export { FiatUrl } from './fiat';
 export type { Fiat } from './fiat';
@@ -63,6 +63,7 @@ export {
   InvestmentDate,
   FundOrigin,
   isStepDone,
+  toKycNationalityRequest,
 } from './kyc';
 export type {
   TradingLimit,

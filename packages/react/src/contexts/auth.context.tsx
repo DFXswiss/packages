@@ -7,6 +7,7 @@ import { useStore } from '../hooks/store.hook';
 interface AuthInterface {
   session?: Session;
   getAuthToken: () => string | undefined;
+  getAuthTokenSession: (token?: string) => Session | undefined;
   setAuthToken: (authenticationToken?: string) => void;
   isInitialized: boolean;
   isLoggedIn: boolean;
@@ -89,15 +90,33 @@ export function AuthContextProvider(props: PropsWithChildren): JSX.Element {
     return tokenRef.current ?? authTokenStore.get();
   }, [authTokenStore]);
 
+  const getAuthTokenSession = useCallback(
+    (token?: string): Session | undefined => {
+      const authToken = token !== undefined ? token : (tokenRef.current ?? authTokenStore.get());
+      const decoded = decodeJwt(authToken);
+      return decoded
+        ? ({
+            address: decoded.address,
+            user: decoded.user,
+            account: decoded.account,
+            role: decoded.role,
+            blockchains: decoded.blockchains,
+          } as Session)
+        : undefined;
+    },
+    [authTokenStore],
+  );
+
   const context: AuthInterface = useMemo(
     () => ({
       session,
       getAuthToken,
+      getAuthTokenSession,
       setAuthToken,
       isInitialized,
       isLoggedIn,
     }),
-    [session, getAuthToken, setAuthToken, isInitialized, isLoggedIn],
+    [session, getAuthToken, getAuthTokenSession, setAuthToken, isInitialized, isLoggedIn],
   );
 
   return <AuthContext.Provider value={context}>{props.children}</AuthContext.Provider>;

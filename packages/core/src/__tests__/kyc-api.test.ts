@@ -18,9 +18,7 @@ describe('KycApi', () => {
       kycOrganizationAllowed: true,
     };
     const data: KycNationalityData = { nationality };
-    // @ts-expect-error The backend payload has no `country` field.
     const legacyData: KycNationalityData = { country: nationality };
-    expect(legacyData).toEqual({ country: nationality });
 
     const requestAbsolute = jest.fn().mockResolvedValue({ name: 'NationalityData' });
     const http = { requestAbsolute } as unknown as DfxHttpClient;
@@ -28,6 +26,16 @@ describe('KycApi', () => {
 
     await api.setNationalityData('kyc-code', 'https://api.dfx.swiss/v2/kyc/nationality', data);
 
+    expect(requestAbsolute).toHaveBeenCalledWith({
+      url: 'https://api.dfx.swiss/v2/kyc/nationality',
+      method: 'PUT',
+      data: { nationality },
+      token: false,
+      headers: { 'x-kyc-code': 'kyc-code' },
+    });
+
+    requestAbsolute.mockClear();
+    await api.setNationalityData('kyc-code', 'https://api.dfx.swiss/v2/kyc/nationality', legacyData);
     expect(requestAbsolute).toHaveBeenCalledWith({
       url: 'https://api.dfx.swiss/v2/kyc/nationality',
       method: 'PUT',

@@ -1,5 +1,7 @@
 import {
+  createUserRequestIdentity,
   decrementUserUpdate,
+  hasSameUserScope,
   incrementUserUpdate,
   isCurrentUserRequest,
   isUserUpdatingForIdentity,
@@ -16,39 +18,68 @@ describe('user context account isolation', () => {
   } as User;
 
   it('masks account A data synchronously when the session switches to account B', () => {
-    expect(userForSession({ identity: '101', user: userA }, '202', 'address-b')).toBeUndefined();
+    expect(
+      userForSession({ identity: '101:user-a:address-a:User', user: userA }, '202:user-b:address-b:User', 'address-b'),
+    ).toBeUndefined();
     expect(userForSession({ identity: '101', user: userA }, undefined, undefined)).toBeUndefined();
     expect(userForSession(undefined, undefined, undefined)).toBeUndefined();
   });
 
-  it('keeps the same account snapshot across address changes but rejects its late request', () => {
-    const snapshot = { identity: '101', user: userA };
+  it('masks a snapshot when user or address changes within the same account', () => {
+    const snapshot = { identity: '101:user-a:address-a:User', user: userA };
 
-    const sameAccount = userForSession(snapshot, '101', 'address-b');
-    expect(sameAccount?.addresses).toBe(userA.addresses);
-    expect(sameAccount?.activeAddress?.address).toBe('address-b');
+    expect(userForSession(snapshot, '101:user-a:address-b:User', 'address-b')).toBeUndefined();
+    expect(userForSession(snapshot, '101:user-b:address-a:User', 'address-a')).toBeUndefined();
     expect(isCurrentUserRequest('101', '101:user-a:address-a', '101', '101:user-a:address-b')).toBe(false);
     expect(isCurrentUserRequest('101', '101:user-a:address-a', '202', '202:user-b:address-b')).toBe(false);
     expect(isCurrentUserRequest('101', '101:user-a:address-a', '101', '101:user-a:address-a')).toBe(true);
   });
 
   it('matches EVM session addresses without case but keeps other chain addresses exact', () => {
+    const address = '0xAbCd00000000000000000000000000000000Ef12';
     const snapshot = {
-      identity: '101',
+      identity: createUserRequestIdentity('101', 'user-a', address, 'User'),
       user: {
         ...userA,
-        addresses: [{ address: '0xAbCd00000000000000000000000000000000Ef12' }, { address: 'bc1qCaseSensitive' }],
+        addresses: [{ address }, { address: 'bc1qCaseSensitive' }],
       } as User,
     };
 
-    expect(userForSession(snapshot, '101', '0xabcd00000000000000000000000000000000ef12')?.activeAddress?.address).toBe(
-      '0xAbCd00000000000000000000000000000000Ef12',
-    );
-    expect(userForSession(snapshot, '101', 'bc1qcasesensitive')?.activeAddress).toBeUndefined();
+    const lowerCaseAddress = '0xabcd00000000000000000000000000000000ef12';
+    expect(
+      userForSession(snapshot, createUserRequestIdentity('101', 'user-a', lowerCaseAddress, 'User'), lowerCaseAddress)
+        ?.activeAddress?.address,
+    ).toBe(address);
+    expect(
+      userForSession(
+        snapshot,
+        createUserRequestIdentity('101', 'user-a', 'bc1qcasesensitive', 'User'),
+        'bc1qcasesensitive',
+      )?.activeAddress,
+    ).toBeUndefined();
+  });
+
+  it('requires valid account and user claims and the same role for equal auth scopes', () => {
+    expect(hasSameUserScope({}, {})).toBe(false);
+    expect(hasSameUserScope({ account: 101, role: 'User' }, { account: 101, role: 'User' })).toBe(false);
+    expect(
+      hasSameUserScope(
+        { account: 101, user: 11, address: 'address-a', role: 'User' },
+        { account: 101, user: 11, address: 'address-a', role: 'User' },
+      ),
+    ).toBe(true);
+    expect(
+      hasSameUserScope(
+        { account: 101, user: 11, address: 'address-a', role: 'User' },
+        { account: 101, user: 11, address: 'address-a', role: 'Admin' },
+      ),
+    ).toBe(false);
   });
 
   it('hides the active address when the session has no address yet', () => {
-    expect(userForSession({ identity: '101', user: userA }, '101', undefined)?.activeAddress).toBeUndefined();
+    expect(
+      userForSession({ identity: '101:user-a::User', user: userA }, '101:user-a::User', undefined)?.activeAddress,
+    ).toBeUndefined();
   });
 
   it('keeps account B updating when an earlier account A operation completes', () => {

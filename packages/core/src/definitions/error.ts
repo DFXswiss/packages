@@ -15,6 +15,10 @@ export interface ApiError {
    * account (HTTP 401). Absent otherwise.
    */
   switchToCode?: string;
+  paymentInfoConflict?: PaymentInfoConflictDetails;
+}
+
+export interface ApiErrorResponse extends Pick<ApiError, 'statusCode' | 'message' | 'code' | 'switchToCode'> {
   details?: unknown;
 }
 

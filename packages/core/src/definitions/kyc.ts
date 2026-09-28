@@ -235,8 +235,14 @@ export interface KycPersonalData {
   organizationAddress?: KycAddress;
 }
 
-export interface KycNationalityData {
-  nationality: Country;
+export type KycNationalityData =
+  | { nationality: Country; country?: Country }
+  | { country: Country; nationality?: Country };
+
+export function toKycNationalityRequest(data: KycNationalityData): { nationality: Country } {
+  const nationality = data.nationality ?? data.country;
+  if (!nationality) throw new Error('KYC nationality is required');
+  return { nationality };
 }
 
 export interface KycRecommendationData {

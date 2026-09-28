@@ -28,7 +28,11 @@ export type {
   CreateSellPaymentRoute,
   GetPaymentRoutesOptions,
   PaymentLinkHistory,
+  PaymentLinkHistoryPayment,
+  PaymentLinkInvoiceRecipient,
+  PaymentLinkInvoiceResponse,
   PaymentLinkInvoiceQuery,
+  PaymentLinkTransferAmount,
 } from './hooks/payment-routes.hook';
 export { useSettings } from './hooks/settings.hook';
 export { useTransaction } from './hooks/transaction.hook';
@@ -66,7 +70,13 @@ export { Buy, BuyPaymentInfo, PdfDocument, BuyUrl } from './definitions/buy';
 export { PersonalIbanProvider } from './definitions/buy';
 export { VirtualIbanStatus, VirtualIban } from './definitions/buy';
 export { Country, CountryUrl } from './definitions/country';
-export { ApiError, ApiException } from './definitions/error';
+export { ApiException } from './definitions/error';
+export type {
+  ApiError,
+  ApiErrorResponse,
+  PaymentInfoConflictDetails,
+  PaymentInfoRequestStatus,
+} from './definitions/error';
 export { Fiat, FiatUrl } from './definitions/fiat';
 export { CustomFile } from './definitions/file';
 export {
@@ -166,6 +176,7 @@ export {
   MerchantCategory,
   GoodsType,
   GoodsCategory,
+  toKycNationalityRequest,
   isStepDone,
   buildKycUrl,
 } from './definitions/kyc';

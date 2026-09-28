@@ -10,7 +10,7 @@ jest.mock('react', () => {
 });
 
 jest.mock('../hooks/api.hook', () => ({
-  useApi: () => ({ call: mockCall }),
+  useApi: () => ({ call: mockCall, defaultUrl: 'https://api.dfx.swiss/v1' }),
 }));
 
 jest.mock('../contexts/auth.context', () => ({
@@ -36,10 +36,12 @@ jest.mock('../contexts/session.context', () => ({
 import { useAuth } from '../hooks/auth.hook';
 import { useBuy } from '../hooks/buy.hook';
 import { usePaymentRoutes } from '../hooks/payment-routes.hook';
+import type { CreateSellPaymentRoute } from '../hooks/payment-routes.hook';
 import { useRecommendation } from '../hooks/recommendation.hook';
 import { useSell } from '../hooks/sell.hook';
 import { useSwap } from '../hooks/swap.hook';
 import { useTransaction } from '../hooks/transaction.hook';
+import { useKyc } from '../hooks/kyc.hook';
 import type { CreateRecommendation } from '../definitions/recommendation';
 import type { BuyPaymentInfo } from '../definitions/buy';
 import type { SellPaymentInfo } from '../definitions/sell';
@@ -87,7 +89,7 @@ describe('SDK endpoint methods', () => {
       expiryDate: '2026-09-23T12:30:00.000Z',
     });
 
-    const externalId: string = result.externalId;
+    const externalId: string | undefined = result.externalId;
     expect(result).toEqual(payRequest);
     expect(externalId).toBe(payRequest.externalId);
   });
@@ -142,17 +144,40 @@ describe('SDK endpoint methods', () => {
 
   it('sends sell route creation and activation using their distinct API contracts', async () => {
     const routes = usePaymentRoutes();
-    const body = { iban: 'CH9300762011623852957', currency: { id: 17 }, blockchain: 'Bitcoin' };
+    const body: CreateSellPaymentRoute = {
+      iban: 'CH9300762011623852957',
+      currency: { id: 17 },
+      blockchain: 'Bitcoin',
+    };
+    const createdRoute = { id: 23 } as any;
+    mockCall.mockResolvedValueOnce(createdRoute);
 
-    await routes.createSellPaymentRoute(body);
+    const result = await routes.createSellPaymentRoute(body);
     await routes.activatePaymentRoute(23, 'sell');
 
+    expect(result).toBe(createdRoute);
     expect(mockCall.mock.calls[0][0]).toMatchObject({ url: '/sell', method: 'POST', data: body });
     expect(mockCall.mock.calls[1][0]).toMatchObject({
       url: '/sell/23',
       method: 'PUT',
       data: { active: true },
     });
+  });
+
+  it('keeps legacy KYC country inputs and sends the backend nationality field', async () => {
+    const originalFetch = global.fetch;
+    const fetchMock = jest.fn().mockResolvedValue({ ok: true, json: async () => ({}) });
+    global.fetch = fetchMock as unknown as typeof fetch;
+    try {
+      await useKyc().setNationalityData('kyc-code', 'https://api.dfx.swiss/v2/kyc/nationality', {
+        country: { id: 756, symbol: 'CH' } as any,
+      });
+
+      const init = fetchMock.mock.calls[0][1] as RequestInit;
+      expect(JSON.parse(init.body as string)).toEqual({ nationality: { id: 756, symbol: 'CH' } });
+    } finally {
+      global.fetch = originalFetch;
+    }
   });
 
   it('keeps the idempotency key out of all public quote requests', async () => {

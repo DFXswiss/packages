@@ -3,12 +3,14 @@ import { Blockchain } from './blockchain';
 import { Fees } from './fees';
 import { Fiat } from './fiat';
 import { PriceStep } from './price-step';
+import { PaymentInfoRequestStatus } from './error';
 
 export const TransactionUrl = {
   get: 'transaction',
   single: 'transaction/single',
   detail: 'transaction/detail',
   detailSingle: 'transaction/detail/single',
+  paymentInfoRequest: 'transaction/payment-info-request',
   csv: 'transaction/detail/csv',
   unassigned: 'transaction/unassigned',
   target: 'transaction/target',
@@ -61,7 +63,7 @@ export type PaymentInfoRequestType = 'Buy' | 'Sell' | 'Swap';
 
 export interface PaymentInfoRequestStatusResponse {
   existingUid?: string;
-  requestStatus: 'Processing' | 'Created' | 'WaitingForPayment' | 'Completed' | 'Unknown';
+  requestStatus: PaymentInfoRequestStatus;
 }
 
 export enum TransactionState {

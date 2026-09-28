@@ -4,6 +4,7 @@ export const AuthUrl = {
   signIn: 'auth/signIn',
   signUp: 'auth/signUp',
   signInWithMail: 'auth/mail',
+  confirmMail: 'auth/mail/confirm',
   tfa: 'auth/2fa',
   lnurl: 'lnurla',
   lnurlStatus: 'lnurla/status',

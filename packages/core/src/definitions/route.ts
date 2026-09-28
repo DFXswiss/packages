@@ -4,6 +4,7 @@ import { Fiat } from './fiat';
 
 export const PaymentRoutesUrl = { get: 'route' };
 export const PaymentLinksUrl = {
+  history: 'paymentLink/history',
   get: 'paymentLink',
   create: 'paymentLink',
   update: 'paymentLink',

@@ -29,6 +29,7 @@ import {
   UserName,
   UserData,
   buildKycUrl,
+  toKycNationalityRequest,
 } from '../definitions/kyc';
 import { Utils } from '../utils';
 import { DfxHttpClient } from './DfxHttpClient';
@@ -92,7 +93,7 @@ export class KycApi {
   }
 
   async setNationalityData(code: string, url: string, data: KycNationalityData): Promise<KycStepBase> {
-    return this.kycRequest<KycStepBase>(code, { url, method: 'PUT', data });
+    return this.kycRequest<KycStepBase>(code, { url, method: 'PUT', data: toKycNationalityRequest(data) });
   }
 
   async setRecommendationData(code: string, url: string, data: KycRecommendationData): Promise<KycStepBase> {

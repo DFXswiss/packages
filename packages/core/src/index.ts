@@ -78,6 +78,7 @@ export {
   InvestmentDate,
   FundOrigin,
   isStepDone,
+  toKycNationalityRequest,
   // Language
   LanguageUrl,
   // Route
@@ -150,6 +151,9 @@ export type {
   Country,
   // Error
   ApiError,
+  ApiErrorResponse,
+  PaymentInfoConflictDetails,
+  PaymentInfoRequestStatus,
   // Fees
   Fees,
   // Fiat

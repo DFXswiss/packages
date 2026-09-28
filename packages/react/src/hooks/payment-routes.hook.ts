@@ -1,18 +1,26 @@
 import { useCallback, useMemo } from 'react';
 import { ResponseType, useApi } from './api.hook';
 import { Utils } from '../utils';
+import { Blockchain } from '../definitions/blockchain';
 import {
   AssignPaymentLink,
   CreatePaymentLink,
   CreatePaymentLinkPayment,
   PaymentLink,
   PaymentLinkConfig,
+  PaymentLinkMode,
+  PaymentLinkPaymentMode,
+  PaymentLinkPaymentStatus,
   PaymentLinkPos,
+  PaymentLinkRecipient,
+  PaymentLinkStatus,
   PaymentLinksUrl,
   PaymentRoute,
   PaymentRoutes,
   PaymentRoutesUrl,
   PaymentRouteType,
+  PaymentStandardType,
+  SellRoute,
   UpdatePaymentLink,
   UpdatePaymentLinkConfig,
 } from '../definitions/route';
@@ -58,8 +66,8 @@ export interface PaymentRoutesInterface {
   ) => Promise<CustomFile>;
   createPosLink: (linkId?: string, externalLinkId?: string, externalPaymentId?: string) => Promise<PaymentLinkPos>;
   getPaymentLinkHistory: () => Promise<PaymentLinkHistory[]>;
-  createPaymentLinkInvoice: (query: PaymentLinkInvoiceQuery) => Promise<{ id: string | number; externalId: string }>;
-  createSellPaymentRoute: (request: CreateSellPaymentRoute) => Promise<void>;
+  createPaymentLinkInvoice: (query: PaymentLinkInvoiceQuery) => Promise<PaymentLinkInvoiceResponse>;
+  createSellPaymentRoute: (request: CreateSellPaymentRoute) => Promise<SellRoute>;
   activatePaymentRoute: (id: number, type: PaymentRouteType) => Promise<PaymentRoute>;
 }
 
@@ -69,16 +77,73 @@ export interface GetPaymentRoutesOptions {
 }
 
 export interface PaymentLinkHistory {
-  payments?: Array<{
-    id: string | number;
-    note?: string;
-    externalId?: string;
-    amount: number;
-    currency: string;
-    status: string;
-    date?: string;
-  }>;
-  totalCompletedAmount?: number;
+  id: number;
+  routeId: number;
+  externalId?: string;
+  label?: string;
+  webhookUrl?: string;
+  status: PaymentLinkStatus | 'Unassigned';
+  url: string;
+  lnurl: string;
+  frontendUrl: string;
+  recipient?: PaymentLinkInvoiceRecipient;
+  config?: PaymentLinkConfig;
+  mode?: PaymentLinkMode;
+  payments: PaymentLinkHistoryPayment[];
+  totalCompletedAmount: number;
+}
+
+export interface PaymentLinkHistoryPayment {
+  id: number;
+  externalId?: string;
+  note?: string;
+  status: PaymentLinkPaymentStatus;
+  amount: number;
+  currency: string;
+  mode: PaymentLinkPaymentMode;
+  date: string;
+  expiryDate: string;
+  txCount: number;
+  isConfirmed: boolean;
+  url: string;
+  lnurl: string;
+  frontendUrl: string;
+}
+
+export interface PaymentLinkInvoiceRecipient extends PaymentLinkRecipient {
+  registrationNumber?: string;
+  storeType?: string;
+  merchantCategory?: string;
+  goodsType?: string;
+  goodsCategory?: string;
+}
+
+export interface PaymentLinkTransferAmount {
+  method: Blockchain | string;
+  minFee: number;
+  assets: Array<{ asset: string; amount?: number }>;
+  available: boolean;
+}
+
+export interface PaymentLinkInvoiceResponse {
+  id: string;
+  externalId?: string;
+  displayName: string;
+  standard: PaymentStandardType;
+  possibleStandards: PaymentStandardType[];
+  displayQr: boolean;
+  recipient: PaymentLinkInvoiceRecipient;
+  mode: PaymentLinkMode;
+  route?: string;
+  currency?: string;
+  transferAmounts: PaymentLinkTransferAmount[];
+  tag: string;
+  callback: string;
+  minSendable: number;
+  maxSendable: number;
+  metadata: string;
+  quote: { id: string; expiration: string; payment: string };
+  requestedAmount: { asset: string; amount?: number };
 }
 
 export interface PaymentLinkInvoiceQuery {
@@ -107,11 +172,11 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
   );
 
   const getPaymentLinkHistory = useCallback(async (): Promise<PaymentLinkHistory[]> => {
-    return call<PaymentLinkHistory[]>({ url: 'paymentLink/history', method: 'GET' });
+    return call<PaymentLinkHistory[]>({ url: PaymentLinksUrl.history, method: 'GET' });
   }, [call]);
 
   const createPaymentLinkInvoice = useCallback(
-    async (query: PaymentLinkInvoiceQuery) => {
+    async (query: PaymentLinkInvoiceQuery): Promise<PaymentLinkInvoiceResponse> => {
       const params = new URLSearchParams({
         routeId: String(query.routeId),
         amount: String(query.amount),
@@ -119,7 +184,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
         message: query.message,
         expiryDate: query.expiryDate,
       });
-      return call<{ id: string | number; externalId: string }>({
+      return call<PaymentLinkInvoiceResponse>({
         url: `${PaymentLinksUrl.payment}?${params.toString()}`,
         method: 'GET',
       });
@@ -128,8 +193,8 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
   );
 
   const createSellPaymentRoute = useCallback(
-    async (request: CreateSellPaymentRoute): Promise<void> => {
-      return call<void>({ url: '/sell', method: 'POST', data: request });
+    async (request: CreateSellPaymentRoute): Promise<SellRoute> => {
+      return call<SellRoute>({ url: '/sell', method: 'POST', data: request });
     },
     [call],
   );

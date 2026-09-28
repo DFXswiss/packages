@@ -7,8 +7,11 @@ import { Language } from '../definitions/language';
 import { Fiat } from '../definitions/fiat';
 import { TransactionFilterKey } from '../definitions/transaction';
 import {
+  createUserRequestIdentity,
   decrementUserUpdate,
+  hasSameUserScope,
   incrementUserUpdate,
+  isMatchingAddress,
   isCurrentUserRequest,
   isUserUpdatingForIdentity,
   userForSession,
@@ -53,7 +56,7 @@ export function useUserContext(): UserInterface {
 
 export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const { isLoggedIn, session, updateSession, deleteSession } = useApiSession();
-  const { getAuthToken } = useAuthContext();
+  const { getAuthToken, getAuthTokenSession } = useAuthContext();
   const {
     getUser,
     updateUser: updateUserApi,
@@ -72,11 +75,14 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const accountId = isLoggedIn ? session?.account : undefined;
   const identity = accountId === undefined ? undefined : String(accountId);
   const requestIdentity =
-    identity === undefined ? undefined : `${identity}:${session?.user ?? ''}:${session?.address ?? ''}`;
+    identity === undefined
+      ? undefined
+      : createUserRequestIdentity(identity, session?.user, session?.address, session?.role);
   const identityRef = useRef(identity);
   const requestIdentityRef = useRef(requestIdentity);
   const accountIdRef = useRef(accountId);
   const userLoadRequestRef = useRef(0);
+  const addressChangeRequestRef = useRef(0);
   // Update during render so async completions and event handlers observe the
   // account/token-address scope represented by the tree about to be committed.
   identityRef.current = identity;
@@ -84,8 +90,8 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   accountIdRef.current = accountId;
   const [userSnapshot, setUserSnapshot] = useState<UserSnapshot>();
   const user = useMemo(
-    () => userForSession(userSnapshot, identity, session?.address),
-    [identity, session?.address, userSnapshot],
+    () => userForSession(userSnapshot, requestIdentity, session?.address),
+    [requestIdentity, session?.address, userSnapshot],
   );
   const [loadedIdentity, setLoadedIdentity] = useState<string>();
   const [isUserLoading, setIsUserLoading] = useState<boolean>(false);
@@ -140,10 +146,10 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
           )
         )
           return previous;
-        const current = previous?.identity === expectedIdentity ? previous.user : undefined;
+        const current = previous?.identity === expectedRequestIdentity ? previous.user : undefined;
         const nextUser = typeof next === 'function' ? next(current) : next;
         if (nextUser && nextUser.accountId !== expectedAccountId) return previous;
-        return nextUser ? { identity: expectedIdentity, user: nextUser } : undefined;
+        return nextUser ? { identity: expectedRequestIdentity, user: nextUser } : undefined;
       });
     },
     [],
@@ -156,6 +162,17 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       isCurrentUserRequest(identity, requestIdentity, identityRef.current, requestIdentityRef.current),
     [accountId, identity, requestIdentity],
   );
+  const isAuthScopeCurrent = useCallback(
+    (token?: string): boolean => {
+      const scopeToken = token ?? getAuthToken();
+      return !!scopeToken && hasSameUserScope(getAuthTokenSession(scopeToken), session);
+    },
+    [getAuthToken, getAuthTokenSession, session],
+  );
+  const getCurrentRequestToken = useCallback((): string | undefined => {
+    const token = getAuthToken();
+    return isAuthScopeCurrent(token) ? token : undefined;
+  }, [getAuthToken, isAuthScopeCurrent]);
 
   const refCode = user?.activeAddress?.refCode;
   const refLink = refCode && `${process.env.REACT_APP_REF_URL ?? 'https://dfx.swiss/app?code='}${refCode}`;
@@ -172,34 +189,64 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       setIsUserLoading(false);
       return;
     }
+    const requestToken = getCurrentRequestToken();
     const requestId = ++userLoadRequestRef.current;
     setUserLoadErrorIdentity(undefined);
-    setIsUserLoading(true);
-    try {
-      const nextUser = await getUser();
+    if (!requestToken) {
       if (
         requestId === userLoadRequestRef.current &&
         isCurrentUserRequest(requestAccountIdentity, requestIdentity, identityRef.current, requestIdentityRef.current)
+      ) {
+        setUserLoadErrorIdentity({ identity: requestAccountIdentity, requestIdentity });
+        setLoadedIdentity(requestIdentity);
+        setIsUserLoading(false);
+      }
+      return;
+    }
+    setIsUserLoading(true);
+    try {
+      const nextUser = await getUser(requestToken);
+      if (
+        requestId === userLoadRequestRef.current &&
+        isCurrentUserRequest(
+          requestAccountIdentity,
+          requestIdentity,
+          identityRef.current,
+          requestIdentityRef.current,
+        ) &&
+        isAuthScopeCurrent()
       ) {
         setUserForIdentity(requestAccountIdentity, requestIdentity, requestAccountId, nextUser);
       }
     } catch {
       if (
         requestId === userLoadRequestRef.current &&
-        isCurrentUserRequest(requestAccountIdentity, requestIdentity, identityRef.current, requestIdentityRef.current)
+        isCurrentUserRequest(
+          requestAccountIdentity,
+          requestIdentity,
+          identityRef.current,
+          requestIdentityRef.current,
+        ) &&
+        isAuthScopeCurrent()
       ) {
         setUserLoadErrorIdentity({ identity: requestAccountIdentity, requestIdentity });
       }
     } finally {
       if (
         requestId === userLoadRequestRef.current &&
-        isCurrentUserRequest(requestAccountIdentity, requestIdentity, identityRef.current, requestIdentityRef.current)
+        isCurrentUserRequest(
+          requestAccountIdentity,
+          requestIdentity,
+          identityRef.current,
+          requestIdentityRef.current,
+        ) &&
+        isAuthScopeCurrent()
       ) {
-        setLoadedIdentity(requestAccountIdentity);
+        setLoadedIdentity(requestIdentity);
         setIsUserLoading(false);
       }
     }
-  }, [getUser, setUserForIdentity]);
+  }, [getCurrentRequestToken, getUser, isAuthScopeCurrent, setUserForIdentity]);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -217,23 +264,29 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     async (update: UpdateUser, linkAction?: () => void): Promise<void> => {
       if (!user || !hasCurrentIdentity() || accountId === undefined || identity === undefined || !requestIdentity)
         return;
+      const requestToken = getCurrentRequestToken();
+      if (!requestToken) return;
       const expectedIdentity = identity;
       const expectedRequestIdentity = requestIdentity;
       const expectedAccountId = accountId;
 
       beginUserUpdate(expectedRequestIdentity);
-      return updateUserApi(update, linkAction)
-        .then((updated) => setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, updated))
+      return updateUserApi(update, linkAction, requestToken)
+        .then((updated) =>
+          setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, updated, isAuthScopeCurrent),
+        )
         .finally(() => endUserUpdate(expectedRequestIdentity));
     },
     [
       accountId,
       beginUserUpdate,
       endUserUpdate,
+      getCurrentRequestToken,
       hasCurrentIdentity,
       identity,
       requestIdentity,
       setUserForIdentity,
+      isAuthScopeCurrent,
       updateUserApi,
       user,
     ],
@@ -243,6 +296,8 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     async (mail: string): Promise<void> => {
       if (!user || !hasCurrentIdentity() || accountId === undefined || identity === undefined || !requestIdentity)
         return;
+      const requestToken = getCurrentRequestToken();
+      if (!requestToken) return;
       const expectedIdentity = identity;
       const expectedRequestIdentity = requestIdentity;
       const expectedAccountId = accountId;
@@ -252,13 +307,17 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       // effects that watch `user` and re-submit endlessly. A cleared state stays cleared: a refresh
       // landing after a logout must not put the signed-out user back.
       beginUserUpdate(expectedRequestIdentity);
-      return updateMailApi(mail)
+      return updateMailApi(mail, requestToken)
         .then(() => {
-          if (requestIdentityRef.current !== expectedRequestIdentity) return;
-          return getUser()
+          if (requestIdentityRef.current !== expectedRequestIdentity || !isAuthScopeCurrent()) return;
+          return getUser(requestToken)
             .then((refreshed) =>
-              setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, (previous) =>
-                previous && refreshed && refreshed.mail !== previous.mail ? refreshed : previous,
+              setUserForIdentity(
+                expectedIdentity,
+                expectedRequestIdentity,
+                expectedAccountId,
+                (previous) => (previous && refreshed && refreshed.mail !== previous.mail ? refreshed : previous),
+                isAuthScopeCurrent,
               ),
             )
             .catch(() => undefined);
@@ -269,9 +328,11 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       accountId,
       beginUserUpdate,
       endUserUpdate,
+      getCurrentRequestToken,
       getUser,
       hasCurrentIdentity,
       identity,
+      isAuthScopeCurrent,
       requestIdentity,
       setUserForIdentity,
       updateMailApi,
@@ -283,21 +344,27 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     async (token: string): Promise<void> => {
       if (!user || !hasCurrentIdentity() || accountId === undefined || identity === undefined || !requestIdentity)
         return;
+      const requestToken = getCurrentRequestToken();
+      if (!requestToken) return;
       const expectedIdentity = identity;
       const expectedRequestIdentity = requestIdentity;
       const expectedAccountId = accountId;
 
       beginUserUpdate(expectedRequestIdentity);
-      return verifyMailApi(token)
-        .then((updated) => setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, updated))
+      return verifyMailApi(token, requestToken)
+        .then((updated) =>
+          setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, updated, isAuthScopeCurrent),
+        )
         .finally(() => endUserUpdate(expectedRequestIdentity));
     },
     [
       accountId,
       beginUserUpdate,
       endUserUpdate,
+      getCurrentRequestToken,
       hasCurrentIdentity,
       identity,
+      isAuthScopeCurrent,
       requestIdentity,
       setUserForIdentity,
       user,
@@ -333,18 +400,24 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       const expectedIdentity = identity;
       const expectedRequestIdentity = requestIdentity;
       const expectedAccountId = accountId;
+      const requestToken = getCurrentRequestToken();
+      if (!requestToken) return;
 
       beginUserUpdate(expectedRequestIdentity);
-      return renameUserAddress(address, label)
-        .then((updated) => setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, updated))
+      return renameUserAddress(address, label, requestToken)
+        .then((updated) =>
+          setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, updated, isAuthScopeCurrent),
+        )
         .finally(() => endUserUpdate(expectedRequestIdentity));
     },
     [
       accountId,
       beginUserUpdate,
       endUserUpdate,
+      getCurrentRequestToken,
       hasCurrentIdentity,
       identity,
+      isAuthScopeCurrent,
       renameUserAddress,
       requestIdentity,
       setUserForIdentity,
@@ -358,15 +431,24 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
         return;
       const expectedIdentity = identity;
       const expectedRequestIdentity = requestIdentity;
-      const expectedAuthToken = getAuthToken();
+      const requestToken = getCurrentRequestToken();
+      if (!requestToken) return;
+      const addressChangeRequestId = ++addressChangeRequestRef.current;
+      const requestedScope = session ? { ...session, address } : undefined;
 
       beginUserUpdate(expectedRequestIdentity);
-      return changeUserAddress(address)
+      return changeUserAddress(address, requestToken)
         .then(({ accessToken }) => {
           if (
+            addressChangeRequestId !== addressChangeRequestRef.current ||
             identityRef.current !== expectedIdentity ||
             requestIdentityRef.current !== expectedRequestIdentity ||
-            getAuthToken() !== expectedAuthToken
+            getAuthToken() !== requestToken ||
+            !isAuthScopeCurrent(requestToken) ||
+            typeof accessToken !== 'string' ||
+            accessToken.length === 0 ||
+            !requestedScope ||
+            !hasSameUserScope(getAuthTokenSession(accessToken), requestedScope)
           )
             return;
           updateSession(accessToken);
@@ -379,9 +461,13 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       changeUserAddress,
       endUserUpdate,
       hasCurrentIdentity,
+      getCurrentRequestToken,
       identity,
-      requestIdentity,
       getAuthToken,
+      getAuthTokenSession,
+      isAuthScopeCurrent,
+      requestIdentity,
+      session,
       updateSession,
       user,
     ],
@@ -393,20 +479,26 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
         return;
       const expectedIdentity = identity;
       const expectedRequestIdentity = requestIdentity;
+      const requestToken = getCurrentRequestToken();
+      if (!requestToken) return;
 
-      const requiresFallback = address === user.activeAddress?.address;
+      const requiresFallback = isMatchingAddress(address, user.activeAddress?.address);
       const fallbackAddress =
         requiresFallback && user.addresses.length > 1
-          ? user.addresses.find((a) => a.address !== address)?.address
+          ? user.addresses.find((a) => !isMatchingAddress(a.address, address))?.address
           : undefined;
 
-      return deleteUserAddress(address).then(() => {
-        if (identityRef.current !== expectedIdentity || requestIdentityRef.current !== expectedRequestIdentity) return;
+      return deleteUserAddress(address, requestToken).then(() => {
+        if (
+          identityRef.current !== expectedIdentity ||
+          requestIdentityRef.current !== expectedRequestIdentity ||
+          !isAuthScopeCurrent()
+        )
+          return;
         if (requiresFallback) {
-          fallbackAddress ? changeAddress(fallbackAddress) : deleteSession();
-        } else {
-          reloadUser();
+          return fallbackAddress ? changeAddress(fallbackAddress) : deleteSession();
         }
+        return reloadUser();
       });
     },
     [
@@ -414,8 +506,10 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       changeAddress,
       deleteSession,
       deleteUserAddress,
+      getCurrentRequestToken,
       hasCurrentIdentity,
       identity,
+      isAuthScopeCurrent,
       reloadUser,
       requestIdentity,
       user,
@@ -424,12 +518,24 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
 
   const deleteAccount = useCallback(async (): Promise<void> => {
     if (!user || !hasCurrentIdentity() || identity === undefined || !requestIdentity) return;
-    const expectedRequestIdentity = requestIdentity;
+    const expectedAccountId = accountId;
+    const requestToken = getCurrentRequestToken();
+    if (!requestToken) return;
 
-    return deleteUserAccount().then(() => {
-      if (requestIdentityRef.current === expectedRequestIdentity) deleteSession();
+    return deleteUserAccount(requestToken).then(() => {
+      if (getAuthTokenSession()?.account === expectedAccountId) deleteSession();
     });
-  }, [deleteSession, deleteUserAccount, hasCurrentIdentity, identity, requestIdentity, user]);
+  }, [
+    accountId,
+    deleteSession,
+    deleteUserAccount,
+    getCurrentRequestToken,
+    getAuthTokenSession,
+    hasCurrentIdentity,
+    identity,
+    requestIdentity,
+    user,
+  ]);
 
   const generateKeyCT = useCallback(
     async (types?: TransactionFilterKey[]): Promise<ApiKey | undefined> => {
@@ -438,31 +544,31 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       const expectedIdentity = identity;
       const expectedRequestIdentity = requestIdentity;
       const expectedAccountId = accountId;
-      const expectedAuthToken = getAuthToken();
+      const requestToken = getCurrentRequestToken();
+      if (!requestToken) return undefined;
 
       beginUserUpdate(expectedRequestIdentity);
       try {
-        const key = await generateCTApiKey(types);
+        const key = await generateCTApiKey(types, requestToken);
         if (
           identityRef.current !== expectedIdentity ||
           requestIdentityRef.current !== expectedRequestIdentity ||
-          getAuthToken() !== expectedAuthToken
+          !isAuthScopeCurrent()
         )
           return undefined;
-        const refreshed = await getUser();
+        let refreshed: User | undefined;
+        try {
+          refreshed = await getUser(requestToken);
+        } catch {
+          return isAuthScopeCurrent() ? key : undefined;
+        }
         if (
           identityRef.current !== expectedIdentity ||
           requestIdentityRef.current !== expectedRequestIdentity ||
-          getAuthToken() !== expectedAuthToken
+          !isAuthScopeCurrent()
         )
           return undefined;
-        setUserForIdentity(
-          expectedIdentity,
-          expectedRequestIdentity,
-          expectedAccountId,
-          refreshed,
-          () => getAuthToken() === expectedAuthToken,
-        );
+        setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, refreshed, isAuthScopeCurrent);
         return key;
       } finally {
         endUserUpdate(expectedRequestIdentity);
@@ -473,7 +579,8 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       beginUserUpdate,
       endUserUpdate,
       generateCTApiKey,
-      getAuthToken,
+      getCurrentRequestToken,
+      isAuthScopeCurrent,
       getUser,
       hasCurrentIdentity,
       identity,
@@ -488,13 +595,20 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     const expectedIdentity = identity;
     const expectedRequestIdentity = requestIdentity;
     const expectedAccountId = accountId;
+    const requestToken = getCurrentRequestToken();
+    if (!requestToken) return;
 
     beginUserUpdate(expectedRequestIdentity);
-    return deleteCTApiKey()
+    return deleteCTApiKey(requestToken)
       .then(async () => {
-        if (identityRef.current !== expectedIdentity || requestIdentityRef.current !== expectedRequestIdentity) return;
-        const refreshed = await getUser();
-        setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, refreshed);
+        if (
+          identityRef.current !== expectedIdentity ||
+          requestIdentityRef.current !== expectedRequestIdentity ||
+          !isAuthScopeCurrent()
+        )
+          return;
+        const refreshed = await getUser(requestToken);
+        setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, refreshed, isAuthScopeCurrent);
       })
       .finally(() => endUserUpdate(expectedRequestIdentity));
   }, [
@@ -502,9 +616,11 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     beginUserUpdate,
     deleteCTApiKey,
     endUserUpdate,
+    getCurrentRequestToken,
     getUser,
     hasCurrentIdentity,
     identity,
+    isAuthScopeCurrent,
     requestIdentity,
     setUserForIdentity,
     user,
@@ -517,14 +633,26 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       const expectedIdentity = identity;
       const expectedRequestIdentity = requestIdentity;
       const expectedAccountId = accountId;
+      const requestToken = getCurrentRequestToken();
+      if (!requestToken) return;
 
       beginUserUpdate(expectedRequestIdentity);
-      return updateCTApiFilter(types)
+      return updateCTApiFilter(types, requestToken)
         .then(async () => {
-          if (identityRef.current !== expectedIdentity || requestIdentityRef.current !== expectedRequestIdentity)
+          if (
+            identityRef.current !== expectedIdentity ||
+            requestIdentityRef.current !== expectedRequestIdentity ||
+            !isAuthScopeCurrent()
+          )
             return;
-          const refreshed = await getUser();
-          setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, refreshed);
+          const refreshed = await getUser(requestToken);
+          setUserForIdentity(
+            expectedIdentity,
+            expectedRequestIdentity,
+            expectedAccountId,
+            refreshed,
+            isAuthScopeCurrent,
+          );
         })
         .finally(() => endUserUpdate(expectedRequestIdentity));
     },
@@ -532,9 +660,11 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       accountId,
       beginUserUpdate,
       endUserUpdate,
+      getCurrentRequestToken,
       getUser,
       hasCurrentIdentity,
       identity,
+      isAuthScopeCurrent,
       requestIdentity,
       setUserForIdentity,
       updateCTApiFilter,
@@ -549,18 +679,24 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       const expectedIdentity = identity;
       const expectedRequestIdentity = requestIdentity;
       const expectedAccountId = accountId;
+      const requestToken = getCurrentRequestToken();
+      if (!requestToken) return;
 
       beginUserUpdate(expectedRequestIdentity);
-      return updateCallSettingsApi(preferredPhoneTimes, acceptCall)
-        .then((updated) => setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, updated))
+      return updateCallSettingsApi(preferredPhoneTimes, acceptCall, requestToken)
+        .then((updated) =>
+          setUserForIdentity(expectedIdentity, expectedRequestIdentity, expectedAccountId, updated, isAuthScopeCurrent),
+        )
         .finally(() => endUserUpdate(expectedRequestIdentity));
     },
     [
       accountId,
       beginUserUpdate,
       endUserUpdate,
+      getCurrentRequestToken,
       hasCurrentIdentity,
       identity,
+      isAuthScopeCurrent,
       requestIdentity,
       setUserForIdentity,
       updateCallSettingsApi,
@@ -571,9 +707,11 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const addSpecialCodeForCurrentIdentity = useCallback(
     async (code: string): Promise<void> => {
       if (!hasCurrentIdentity()) return;
-      return addSpecialCode(code);
+      const requestToken = getCurrentRequestToken();
+      if (!requestToken) return;
+      return addSpecialCode(code, requestToken);
     },
-    [addSpecialCode, hasCurrentIdentity],
+    [addSpecialCode, getCurrentRequestToken, hasCurrentIdentity],
   );
 
   const context: UserInterface = useMemo(() => {
@@ -583,7 +721,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     return {
       user,
       refLink,
-      isUserLoading: isUserLoading || (!!identity && loadedIdentity !== identity),
+      isUserLoading: isUserLoading || (!!requestIdentity && loadedIdentity !== requestIdentity),
       userLoadError,
       isUserUpdating,
       updateMail,
@@ -613,7 +751,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     refLink,
     isUserLoading,
     userLoadError,
-    identity,
+    requestIdentity,
     loadedIdentity,
     isUserUpdating,
     updateMail,

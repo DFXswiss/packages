@@ -68,7 +68,7 @@ export function useAuth(): AuthInterface {
   const confirmAccountMerge = useCallback(
     async (code: string, authenticated = true): Promise<AccountMergeResponse> => {
       return call<AccountMergeResponse>({
-        url: `auth/mail/confirm?code=${encodeURIComponent(code)}`,
+        url: `${AuthUrl.confirmMail}?code=${encodeURIComponent(code)}`,
         method: 'GET',
         ...(authenticated ? {} : { token: false }),
       });

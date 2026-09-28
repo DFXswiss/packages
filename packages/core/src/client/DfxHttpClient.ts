@@ -1,4 +1,4 @@
-import { ApiError, ApiException } from '../definitions/error';
+import { ApiErrorResponse, ApiException } from '../definitions/error';
 import { Utils } from '../utils';
 
 export enum ResponseType {
@@ -106,7 +106,7 @@ export class DfxHttpClient {
       }
     }
 
-    const body: Partial<ApiError> | null = await response.json().catch(() => null);
+    const body: Partial<ApiErrorResponse> | null = await response.json().catch(() => null);
     throw new ApiException(
       body?.statusCode ?? response.status,
       body?.message ?? response.statusText ?? 'Unknown error',

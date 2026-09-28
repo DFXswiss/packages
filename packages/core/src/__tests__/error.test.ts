@@ -1,4 +1,5 @@
-import { ApiException } from '../definitions/error';
+import { ApiException } from '..';
+import type { ApiError, PaymentInfoConflictDetails, PaymentInfoRequestStatus } from '..';
 
 describe('ApiException', () => {
   it('has correct statusCode and message', () => {
@@ -44,13 +45,16 @@ describe('ApiException', () => {
   });
 
   it('exposes only validated payment-info conflict details', () => {
-    const error = new ApiException(409, 'Already exists', 'PAYMENT_INFO_ALREADY_EXISTS', undefined, {
+    const error: ApiError = new ApiException(409, 'Already exists', 'PAYMENT_INFO_ALREADY_EXISTS', undefined, {
       existingUid: 'quote-123',
       requestStatus: 'WaitingForPayment',
       iban: 'must not be exposed',
     });
 
-    expect(error.paymentInfoConflict).toEqual({ existingUid: 'quote-123', requestStatus: 'WaitingForPayment' });
+    const recovery: PaymentInfoConflictDetails | undefined = error.paymentInfoConflict;
+    const status: PaymentInfoRequestStatus | undefined = recovery?.requestStatus;
+    expect(recovery).toEqual({ existingUid: 'quote-123', requestStatus: 'WaitingForPayment' });
+    expect(status).toBe('WaitingForPayment');
   });
 
   it.each([
