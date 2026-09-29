@@ -80,6 +80,11 @@ export {
   isStepDone,
   // Language
   LanguageUrl,
+  // Recommendation
+  RecommendationUrl,
+  RecommendationStatus,
+  RecommendationType,
+  RecommendationMethod,
   // Route
   PaymentRoutesUrl,
   PaymentLinksUrl,
@@ -198,6 +203,9 @@ export type {
   Language,
   // Price Step
   PriceStep,
+  // Recommendation
+  Recommendation,
+  CreateRecommendation,
   // Route
   MinAmount,
   DepositDto,

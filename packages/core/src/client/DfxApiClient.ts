@@ -10,6 +10,7 @@ import { KycApi } from './KycApi';
 import { LanguageApi } from './LanguageApi';
 import { PaymentLinksApi } from './PaymentLinksApi';
 import { PaymentRoutesApi } from './PaymentRoutesApi';
+import { RecommendationApi } from './RecommendationApi';
 import { SellApi } from './SellApi';
 import { SettingsApi } from './SettingsApi';
 import { SupportApi } from './SupportApi';
@@ -38,6 +39,7 @@ export class DfxApiClient {
   readonly language: LanguageApi;
   readonly paymentLinks: PaymentLinksApi;
   readonly paymentRoutes: PaymentRoutesApi;
+  readonly recommendation: RecommendationApi;
   readonly sell: SellApi;
   readonly settings: SettingsApi;
   readonly support: SupportApi;
@@ -62,6 +64,7 @@ export class DfxApiClient {
     this.language = new LanguageApi(this.http);
     this.paymentLinks = new PaymentLinksApi(this.http);
     this.paymentRoutes = new PaymentRoutesApi(this.http);
+    this.recommendation = new RecommendationApi(this.http);
     this.sell = new SellApi(this.http);
     this.settings = new SettingsApi(this.http);
     this.support = new SupportApi(this.http);

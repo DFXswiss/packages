@@ -104,6 +104,8 @@ export type {
 export { LanguageUrl } from './language';
 export type { Language } from './language';
 export type { PriceStep } from './price-step';
+export { RecommendationUrl, RecommendationStatus, RecommendationType, RecommendationMethod } from './recommendation';
+export type { Recommendation, CreateRecommendation } from './recommendation';
 export {
   PaymentRoutesUrl,
   PaymentLinksUrl,
