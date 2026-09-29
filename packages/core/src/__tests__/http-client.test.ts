@@ -66,6 +66,25 @@ describe('DfxHttpClient', () => {
       );
     });
 
+    it('treats 202 Accepted as success and returns the parsed JSON body', async () => {
+      const body = {
+        uid: 'J7f3a9c2e1b8d4a60',
+        group: 'AccountMerge',
+        status: 'Pending',
+        expectedSeconds: 65,
+      };
+      const mockFetch = createMockFetch({
+        ok: true,
+        status: 202,
+        json: jest.fn().mockResolvedValue(body),
+      });
+      const client = new DfxHttpClient({ apiUrl: 'https://api.dfx.swiss/v1', fetchFn: mockFetch as any });
+
+      const result = await client.request({ url: 'job/J7f3a9c2e1b8d4a60', method: 'GET' });
+
+      expect(result).toEqual(body);
+    });
+
     it('normalizes a leading-slash path to a single-slash URL', async () => {
       const mockFetch = createMockFetch({
         ok: true,

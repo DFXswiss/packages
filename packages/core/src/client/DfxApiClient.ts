@@ -6,6 +6,7 @@ import { BankAccountApi } from './BankAccountApi';
 import { BuyApi } from './BuyApi';
 import { CountryApi } from './CountryApi';
 import { FiatApi } from './FiatApi';
+import { JobApi } from './JobApi';
 import { KycApi } from './KycApi';
 import { LanguageApi } from './LanguageApi';
 import { PaymentLinksApi } from './PaymentLinksApi';
@@ -34,6 +35,7 @@ export class DfxApiClient {
   readonly buy: BuyApi;
   readonly country: CountryApi;
   readonly fiat: FiatApi;
+  readonly job: JobApi;
   readonly kyc: KycApi;
   readonly language: LanguageApi;
   readonly paymentLinks: PaymentLinksApi;
@@ -58,6 +60,7 @@ export class DfxApiClient {
     this.buy = new BuyApi(this.http);
     this.country = new CountryApi(this.http);
     this.fiat = new FiatApi(this.http);
+    this.job = new JobApi(this.http);
     this.kyc = new KycApi(this.http);
     this.language = new LanguageApi(this.http);
     this.paymentLinks = new PaymentLinksApi(this.http);
