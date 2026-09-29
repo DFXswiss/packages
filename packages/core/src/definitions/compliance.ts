@@ -60,6 +60,7 @@ export interface CallQueueItem {
   ip?: string;
   ipCountry?: string;
   phoneCallStatus?: PhoneCallStatus;
+  phoneCallTimes?: string;
   date: string;
 }
 
