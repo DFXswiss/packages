@@ -3,6 +3,7 @@ import {
   decrementUserUpdate,
   hasSameUserScope,
   incrementUserUpdate,
+  isMatchingAddress,
   isCurrentUserRequest,
   isUserUpdatingForIdentity,
   userForSession,
@@ -59,6 +60,19 @@ describe('user context account isolation', () => {
     ).toBeUndefined();
   });
 
+  it('normalizes optional identity claims and requires both address claims to be valid before folding case', () => {
+    expect(createUserRequestIdentity('account')).toBe('account:::');
+    expect(createUserRequestIdentity('account', 17, 'bc1qCaseSensitive', 'User')).toBe(
+      'account:17:bc1qCaseSensitive:User',
+    );
+    expect(isMatchingAddress('0xAbC123', '0xabc123')).toBe(true);
+    expect(isMatchingAddress('bc1qExample', 'bc1qExample')).toBe(true);
+    expect(isMatchingAddress('bc1qExample', 'bc1qexample')).toBe(false);
+    expect(isMatchingAddress(undefined, undefined)).toBe(true);
+    expect(isMatchingAddress(undefined, 'address')).toBe(false);
+    expect(isMatchingAddress('0xAbC', '0xabc!')).toBe(false);
+  });
+
   it('requires valid account and user claims and the same role for equal auth scopes', () => {
     expect(hasSameUserScope({}, {})).toBe(false);
     expect(hasSameUserScope({ account: 101, role: 'User' }, { account: 101, role: 'User' })).toBe(false);
@@ -72,6 +86,29 @@ describe('user context account isolation', () => {
       hasSameUserScope(
         { account: 101, user: 11, address: 'address-a', role: 'User' },
         { account: 101, user: 11, address: 'address-a', role: 'Admin' },
+      ),
+    ).toBe(false);
+    expect(hasSameUserScope(undefined, {})).toBe(false);
+    expect(hasSameUserScope({ account: 0, user: 11, role: 'User' }, { account: 0, user: 11, role: 'User' })).toBe(
+      false,
+    );
+    expect(hasSameUserScope({ account: 1.5, user: 11, role: 'User' }, { account: 1.5, user: 11, role: 'User' })).toBe(
+      false,
+    );
+    expect(hasSameUserScope({ account: 101, user: 0, role: 'User' }, { account: 101, user: 0, role: 'User' })).toBe(
+      false,
+    );
+    expect(hasSameUserScope({ account: 101, user: 11, role: '' }, { account: 101, user: 11, role: '' })).toBe(false);
+    expect(
+      hasSameUserScope(
+        { account: 101, user: 11, address: '', role: 'User' },
+        { account: 101, user: 11, address: '', role: 'User' },
+      ),
+    ).toBe(false);
+    expect(
+      hasSameUserScope(
+        { account: 101, user: 11, address: 123, role: 'User' },
+        { account: 101, user: 11, address: 123, role: 'User' },
       ),
     ).toBe(false);
   });
@@ -96,5 +133,6 @@ describe('user context account isolation', () => {
     expect(counts['account-a:address-a']).toBeUndefined();
     expect(isUserUpdatingForIdentity(counts, 'account-b:address-b')).toBe(true);
     expect(isUserUpdatingForIdentity(counts, undefined)).toBe(false);
+    expect(decrementUserUpdate({}, 'absent')).toEqual({});
   });
 });
