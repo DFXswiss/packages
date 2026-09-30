@@ -108,7 +108,10 @@ describe('useApi response and failure contracts', () => {
       statusCode: 409,
       message: 'Payment already exists',
       code: 'PAYMENT_INFO_ALREADY_EXISTS',
-      paymentInfoConflict: { existingUid: 'existing-uid', requestStatus: 'WaitingForPayment' },
+    });
+    expect((error as ApiException).paymentInfoConflict).toEqual({
+      existingUid: 'existing-uid',
+      requestStatus: 'WaitingForPayment',
     });
     expect(error).not.toHaveProperty('details');
   });
