@@ -23,6 +23,8 @@ export { useBank } from './hooks/bank.hook';
 export { useBuy } from './hooks/buy.hook';
 export { useCountry } from './hooks/country.hook';
 export { useFiat } from './hooks/fiat.hook';
+export { useJob } from './hooks/job.hook';
+export type { JobInterface } from './hooks/job.hook';
 export { usePaymentRoutes } from './hooks/payment-routes.hook';
 export type {
   CreateSellPaymentRoute,
@@ -79,6 +81,8 @@ export type {
 } from './definitions/error';
 export { Fiat, FiatUrl } from './definitions/fiat';
 export { CustomFile } from './definitions/file';
+export { JobStatus, isJobResponse, isJobTerminal } from './definitions/job';
+export type { JobResponse } from './definitions/job';
 export {
   MinAmount,
   DepositDto,

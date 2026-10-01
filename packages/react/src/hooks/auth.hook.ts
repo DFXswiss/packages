@@ -3,9 +3,10 @@ import { AuthUrl, AuthWalletType, LnurlAuth, LnurlAuthStatus, SignIn, SignMessag
 import { TfaLevel, TfaSetup } from '../definitions/kyc';
 import { CallConfig, useApi } from './api.hook';
 import { ApiError } from '../definitions/error';
+import { JobResponse } from '../definitions/job';
 
 export interface AuthInterface {
-  confirmAccountMerge: (code: string, authenticated?: boolean) => Promise<AccountMergeResponse>;
+  confirmAccountMerge: (code: string, authenticated?: boolean) => Promise<AccountMergeResponse | JobResponse>;
   getSignMessage: (address: string) => Promise<string>;
   authenticate: (
     address: string,
@@ -66,8 +67,8 @@ export function useAuth(): AuthInterface {
   const { call } = useApi();
 
   const confirmAccountMerge = useCallback(
-    async (code: string, authenticated = true): Promise<AccountMergeResponse> => {
-      return call<AccountMergeResponse>({
+    async (code: string, authenticated = true): Promise<AccountMergeResponse | JobResponse> => {
+      return call<AccountMergeResponse | JobResponse>({
         url: `${AuthUrl.confirmMail}?code=${encodeURIComponent(code)}`,
         method: 'GET',
         ...(authenticated ? {} : { token: false }),

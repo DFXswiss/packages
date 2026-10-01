@@ -34,6 +34,9 @@ jest.mock('../contexts/session.context', () => ({
 }));
 
 import { useAuth } from '../hooks/auth.hook';
+import { useJob } from '../hooks/job.hook';
+import { JobStatus } from '../definitions/job';
+import type { AccountMergeResponse, JobResponse } from '../index';
 import { useBuy } from '../hooks/buy.hook';
 import { usePaymentRoutes } from '../hooks/payment-routes.hook';
 import type { CreateSellPaymentRoute } from '../hooks/payment-routes.hook';
@@ -275,6 +278,51 @@ describe('SDK endpoint methods', () => {
       method: 'GET',
       token: false,
     });
+  });
+
+  it('returns typed job tickets and completed account merge responses unchanged', async () => {
+    type MergeResult = Awaited<ReturnType<ReturnType<typeof useAuth>['confirmAccountMerge']>>;
+    const ticket: Extract<MergeResult, JobResponse> = {
+      uid: 'merge-job',
+      status: JobStatus.PROCESSING,
+      expectedSeconds: 10,
+    };
+    const completed: Extract<MergeResult, AccountMergeResponse> = { kycHash: 'kyc', accessToken: 'access' };
+    mockCall.mockResolvedValueOnce(ticket).mockResolvedValueOnce(completed);
+
+    const auth = useAuth();
+    await expect(auth.confirmAccountMerge('merge-code', false)).resolves.toBe(ticket);
+    await expect(auth.confirmAccountMerge('merge-code', false)).resolves.toBe(completed);
+    expect(mockCall.mock.calls.map(([request]) => request)).toEqual([
+      { url: 'auth/mail/confirm?code=merge-code', method: 'GET', token: false },
+      { url: 'auth/mail/confirm?code=merge-code', method: 'GET', token: false },
+    ]);
+  });
+
+  it('loads an encoded job UID anonymously by default and returns its ticket', async () => {
+    const ticket: JobResponse = { uid: 'a/b', status: JobStatus.PROCESSING, expectedSeconds: 10 };
+    mockCall.mockResolvedValueOnce(ticket);
+
+    await expect(useJob().getJob('a/b')).resolves.toBe(ticket);
+
+    expect(mockCall.mock.calls).toEqual([[{ url: 'job/a%2Fb', method: 'GET', token: false }]]);
+  });
+
+  it.each([
+    [false, { url: 'job/a%2Fb', method: 'GET', token: false }],
+    [true, { url: 'job/a%2Fb', method: 'GET' }],
+  ])('loads an encoded job UID with authenticated=%s', async (authenticated, request) => {
+    await useJob().getJob('a/b', authenticated);
+
+    expect(mockCall.mock.calls).toEqual([[request]]);
+  });
+
+  it('propagates job lookup failures without retrying', async () => {
+    const failure = { statusCode: 404, message: 'Job not found' };
+    mockCall.mockRejectedValueOnce(failure);
+
+    await expect(useJob().getJob('missing')).rejects.toBe(failure);
+    expect(mockCall.mock.calls).toEqual([[{ url: 'job/missing', method: 'GET', token: false }]]);
   });
 
   it('routes recommendation actions by the supplied recommendation ID', async () => {

@@ -2,9 +2,33 @@ import * as sdk from '../index';
 import * as kycDefinitions from '../definitions/kyc';
 import * as transactionDefinitions from '../definitions/transaction';
 import * as errorDefinitions from '../definitions/error';
+import * as jobDefinitions from '../definitions/job';
+import { useJob } from '../hooks/job.hook';
 import type { Country } from '../definitions/country';
 
 describe('React package public exports', () => {
+  it('exports the job hook, helpers, statuses, and response interfaces from the package barrel', () => {
+    const hook: () => sdk.JobInterface = sdk.useJob;
+    const ticket: sdk.JobResponse = { uid: 'job', status: sdk.JobStatus.PENDING, expectedSeconds: 10 };
+    const completed: sdk.AccountMergeResponse = { kycHash: 'kyc', accessToken: 'access' };
+
+    expect(hook).toBe(useJob);
+    expect(sdk.JobStatus).toBe(jobDefinitions.JobStatus);
+    expect(sdk.JobStatus).toEqual({
+      PENDING: 'Pending',
+      PROCESSING: 'Processing',
+      COMPLETE: 'Complete',
+      RETRY: 'Retry',
+      FAILED: 'Failed',
+      DEAD_LETTER: 'DeadLetter',
+    });
+    expect(sdk.isJobResponse).toBe(jobDefinitions.isJobResponse);
+    expect(sdk.isJobTerminal).toBe(jobDefinitions.isJobTerminal);
+    expect(sdk.isJobResponse(ticket)).toBe(true);
+    expect(sdk.isJobResponse(completed)).toBe(false);
+    expect(sdk.isJobTerminal(sdk.JobStatus.RETRY)).toBe(false);
+  });
+
   it('exports the KYC nationality request converter from the package barrel', () => {
     const nationality = { id: 756, symbol: 'CH' } as Country;
     expect(sdk.toKycNationalityRequest({ nationality })).toEqual({ nationality });

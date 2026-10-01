@@ -32,6 +32,8 @@ export type { Fees } from './fees';
 export { FiatUrl } from './fiat';
 export type { Fiat } from './fiat';
 export type { CustomFile } from './file';
+export { JobStatus, isJobResponse, isJobTerminal } from './job';
+export type { JobResponse } from './job';
 export { UserRole } from './jwt';
 export type { Jwt } from './jwt';
 export {
