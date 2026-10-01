@@ -62,6 +62,14 @@ export class UserApi {
     });
   }
 
+  async reactivateAddress(address: string): Promise<SignIn> {
+    return this.http.request<SignIn>({
+      url: `${UserUrl.addresses}/${encodeURIComponent(address)}/reactivate`,
+      method: 'POST',
+      version: 'v2',
+    });
+  }
+
   async delete(): Promise<void> {
     return this.http.request({ url: UserUrl.delete, method: 'DELETE', version: 'v2' });
   }
