@@ -1,4 +1,5 @@
-import { ApiException } from '../definitions/error';
+import { ApiException } from '..';
+import type { ApiError, PaymentInfoConflictDetails, PaymentInfoRequestStatus } from '..';
 
 describe('ApiException', () => {
   it('has correct statusCode and message', () => {
@@ -41,5 +42,52 @@ describe('ApiException', () => {
   it('leaves switchToCode undefined when not provided', () => {
     const error = new ApiException(401, 'Unauthorized');
     expect(error.switchToCode).toBeUndefined();
+  });
+
+  it('exposes only validated payment-info conflict details', () => {
+    const error: ApiError = new ApiException(409, 'Already exists', 'PAYMENT_INFO_ALREADY_EXISTS', undefined, {
+      existingUid: 'quote-123',
+      requestStatus: 'WaitingForPayment',
+      iban: 'must not be exposed',
+    });
+
+    const recovery: PaymentInfoConflictDetails | undefined = error.paymentInfoConflict;
+    const status: PaymentInfoRequestStatus | undefined = recovery?.requestStatus;
+    expect(recovery).toEqual({ existingUid: 'quote-123', requestStatus: 'WaitingForPayment' });
+    expect(status).toBe('WaitingForPayment');
+  });
+
+  it.each([
+    [400, 'PAYMENT_INFO_ALREADY_EXISTS', { requestStatus: 'Processing' }],
+    [409, 'OTHER_CONFLICT', { requestStatus: 'Processing' }],
+    [409, 'PAYMENT_INFO_ALREADY_EXISTS', { requestStatus: 'Other' }],
+    [409, 'PAYMENT_INFO_ALREADY_EXISTS', { requestStatus: 'Processing', existingUid: 42 }],
+    [409, 'PAYMENT_INFO_ALREADY_EXISTS', { requestStatus: 'Processing', existingUid: '' }],
+    [409, 'PAYMENT_INFO_ALREADY_EXISTS', { requestStatus: 'Processing', existingUid: 'x'.repeat(129) }],
+    [409, 'PAYMENT_INFO_ALREADY_EXISTS', null],
+    [409, 'PAYMENT_INFO_ALREADY_EXISTS', 'not-an-object'],
+  ])('does not expose untrusted conflict details for status %s', (status, code, details) => {
+    const error = new ApiException(status as number, 'Conflict', code as string, undefined, details);
+    expect(error.paymentInfoConflict).toBeUndefined();
+  });
+
+  it.each(['Processing', 'Created', 'WaitingForPayment', 'Completed', 'Unknown'])(
+    'accepts the safe status %s',
+    (requestStatus) => {
+      const error = new ApiException(409, 'Conflict', 'PAYMENT_INFO_ALREADY_EXISTS', undefined, {
+        requestStatus,
+        existingUid: 'payment-info-uid',
+      });
+
+      expect(error.paymentInfoConflict).toEqual({ existingUid: 'payment-info-uid', requestStatus });
+    },
+  );
+
+  it('accepts an omitted uid without inventing one', () => {
+    const error = new ApiException(409, 'Conflict', 'PAYMENT_INFO_ALREADY_EXISTS', undefined, {
+      requestStatus: 'Processing',
+    });
+
+    expect(error.paymentInfoConflict).toEqual({ requestStatus: 'Processing' });
   });
 });

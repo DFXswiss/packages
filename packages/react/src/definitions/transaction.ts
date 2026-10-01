@@ -11,6 +11,8 @@ export {
 } from '@dfx.swiss/core';
 
 export type {
+  PaymentInfoRequestStatusResponse,
+  PaymentInfoRequestType,
   PaymentMethod,
   UnassignedTransaction,
   NetworkStartTx,

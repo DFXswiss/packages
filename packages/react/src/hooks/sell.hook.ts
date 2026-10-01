@@ -6,6 +6,7 @@ import { Transaction } from '../definitions/transaction';
 import { useApi } from './api.hook';
 
 export interface SellInterface {
+  quote: (info: SellPaymentInfo) => Promise<Sell>;
   receiveFor: (info: SellPaymentInfo, includeTx?: boolean) => Promise<Sell>;
   confirmSell: (id: number, data: ConfirmSellData) => Promise<Transaction>;
   currencies?: Fiat[];
@@ -14,6 +15,14 @@ export interface SellInterface {
 export function useSell(): SellInterface {
   const { call } = useApi();
   const { currencies } = useFiatContext();
+
+  const quote = useCallback(
+    async (info: SellPaymentInfo): Promise<Sell> => {
+      const { clientRequestId: _clientRequestId, ...quoteInfo } = info;
+      return call<Sell>({ url: SellUrl.quote, method: 'PUT', data: quoteInfo, token: false });
+    },
+    [call],
+  );
 
   const receiveFor = useCallback(
     async (info: SellPaymentInfo, includeTx = false): Promise<Sell> => {
@@ -33,9 +42,10 @@ export function useSell(): SellInterface {
   return useMemo(
     () => ({
       receiveFor,
+      quote,
       confirmSell,
       currencies: currencies?.filter((c) => c.buyable || c.cardBuyable || c.instantBuyable),
     }),
-    [receiveFor, confirmSell, currencies],
+    [receiveFor, quote, confirmSell, currencies],
   );
 }

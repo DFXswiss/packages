@@ -1,8 +1,12 @@
 import { BuyApi } from '../client/BuyApi';
+import { SellApi } from '../client/SellApi';
+import { SwapApi } from '../client/SwapApi';
 import { DfxHttpClient } from '../client/DfxHttpClient';
 import { Asset } from '../definitions/asset';
 import { Buy, BuyPaymentInfo, PersonalIbanProvider, VirtualIban } from '../definitions/buy';
 import { Fiat } from '../definitions/fiat';
+import { SellPaymentInfo } from '../definitions/sell';
+import { SwapPaymentInfo } from '../definitions/swap';
 
 function createMockHttpClient(response?: any) {
   const requestMock = jest.fn().mockResolvedValue(response);
@@ -18,6 +22,37 @@ function createMockHttpClient(response?: any) {
 }
 
 describe('BuyApi', () => {
+  it('omits clientRequestId from quote requests but retains it for payment-info creation', async () => {
+    const mockHttp = createMockHttpClient({} as Buy);
+    const api = new BuyApi(mockHttp);
+    const paymentInfo = { currency: 'CHF', clientRequestId: 'client-request-1' } as unknown as BuyPaymentInfo;
+
+    await api.quote(paymentInfo);
+
+    expect(mockHttp.request).toHaveBeenLastCalledWith({
+      url: 'buy/quote',
+      method: 'PUT',
+      data: { currency: 'CHF' },
+      token: false,
+    });
+
+    await api.createPaymentInfo(paymentInfo);
+    expect(mockHttp.request).toHaveBeenLastCalledWith({
+      url: 'buy/paymentInfos',
+      method: 'PUT',
+      data: paymentInfo,
+    });
+  });
+
+  it('confirms a payment-info request for the transaction id', async () => {
+    const mockHttp = createMockHttpClient(undefined);
+    const api = new BuyApi(mockHttp);
+
+    await api.confirm(72);
+
+    expect(mockHttp.request).toHaveBeenCalledWith({ url: 'buy/paymentInfos/72/confirm', method: 'PUT' });
+  });
+
   describe('getPersonalIbans', () => {
     it('requests the personal IBAN list', async () => {
       const response: VirtualIban[] = [
@@ -98,6 +133,82 @@ describe('BuyApi', () => {
           data: expect.objectContaining({ personalIbanProvider: 'Yapeal' }),
         }),
       );
+    });
+  });
+});
+
+describe('SellApi and SwapApi quote requests', () => {
+  it('omits clientRequestId from sell quote payloads', async () => {
+    const mockHttp = createMockHttpClient({});
+    const api = new SellApi(mockHttp);
+    const paymentInfo = { asset: 'BTC', clientRequestId: 'client-request-2' } as unknown as SellPaymentInfo;
+
+    await api.quote(paymentInfo);
+
+    expect(mockHttp.request).toHaveBeenCalledWith({
+      url: 'sell/quote',
+      method: 'PUT',
+      data: { asset: 'BTC' },
+      token: false,
+    });
+
+    await api.createPaymentInfo(paymentInfo);
+    expect(mockHttp.request).toHaveBeenLastCalledWith({
+      url: 'sell/paymentInfos',
+      method: 'PUT',
+      data: paymentInfo,
+    });
+
+    await api.createPaymentInfo(paymentInfo, true);
+    expect(mockHttp.request).toHaveBeenLastCalledWith({
+      url: 'sell/paymentInfos?includeTx=true',
+      method: 'PUT',
+      data: paymentInfo,
+    });
+
+    const confirmation = { txHash: '0xsigned' };
+    await api.confirm(12, confirmation);
+    expect(mockHttp.request).toHaveBeenLastCalledWith({
+      url: 'sell/paymentInfos/12/confirm',
+      method: 'PUT',
+      data: confirmation,
+    });
+  });
+
+  it('omits clientRequestId from swap quote payloads', async () => {
+    const mockHttp = createMockHttpClient({});
+    const api = new SwapApi(mockHttp);
+    const paymentInfo = { asset: 'BTC', clientRequestId: 'client-request-3' } as unknown as SwapPaymentInfo;
+
+    await api.quote(paymentInfo);
+
+    expect(mockHttp.request).toHaveBeenCalledWith({
+      url: 'swap/quote',
+      method: 'PUT',
+      data: { asset: 'BTC' },
+      token: false,
+    });
+
+    await api.createPaymentInfo(paymentInfo);
+    expect(mockHttp.request).toHaveBeenLastCalledWith({
+      url: 'swap/paymentInfos',
+      method: 'PUT',
+      data: paymentInfo,
+    });
+
+    await api.createPaymentInfo(paymentInfo, true);
+    expect(mockHttp.request).toHaveBeenLastCalledWith({
+      url: 'swap/paymentInfos?includeTx=true',
+      method: 'PUT',
+      data: paymentInfo,
+    });
+
+    const confirmation = { txHash: '0xsigned' };
+    await api.confirm(13, confirmation);
+    expect(mockHttp.request).toHaveBeenLastCalledWith({
+      url: 'swap/paymentInfos/13/confirm',
+      method: 'POST',
+      data: confirmation,
     });
   });
 });

@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import {
   buildKycUrl,
+  toKycNationalityRequest,
   KycFileData,
   KycContactData,
   KycFinancialQuestions,
@@ -204,7 +205,7 @@ export function useKyc(): KycInterface {
 
   const setNationalityData = useCallback(
     async (code: string, url: string, data: KycNationalityData): Promise<KycStepBase> => {
-      return call({ url, code, method: 'PUT', data });
+      return call({ url, code, method: 'PUT', data: toKycNationalityRequest(data) });
     },
     [call],
   );

@@ -85,6 +85,8 @@ export interface BuyPaymentInfo {
   targetAddress?: string;
   paymentMethod?: FiatPaymentMethod;
   externalTransactionId?: string;
+  /** UUID that makes retries of the same payment-info intent idempotent. */
+  clientRequestId?: string;
   exactPrice?: boolean;
   /**
    * Explicit personal IBAN provider (e.g. PersonalIbanProvider.FRICK / "Frick").

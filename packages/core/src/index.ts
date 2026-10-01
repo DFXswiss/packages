@@ -47,6 +47,10 @@ export {
   ApiException,
   // Fiat
   FiatUrl,
+  // Job
+  JobStatus,
+  isJobResponse,
+  isJobTerminal,
   // JWT
   UserRole,
   // KYC
@@ -78,6 +82,7 @@ export {
   InvestmentDate,
   FundOrigin,
   isStepDone,
+  toKycNationalityRequest,
   // Language
   LanguageUrl,
   // Route
@@ -150,12 +155,17 @@ export type {
   Country,
   // Error
   ApiError,
+  ApiErrorResponse,
+  PaymentInfoConflictDetails,
+  PaymentInfoRequestStatus,
   // Fees
   Fees,
   // Fiat
   Fiat,
   // File
   CustomFile,
+  // Job
+  JobResponse,
   // JWT
   Jwt,
   // KYC
@@ -247,6 +257,8 @@ export type {
   SwapPaymentInfo,
   ConfirmSwapData,
   // Transaction
+  PaymentInfoRequestStatusResponse,
+  PaymentInfoRequestType,
   PaymentMethod,
   UnassignedTransaction,
   NetworkStartTx,

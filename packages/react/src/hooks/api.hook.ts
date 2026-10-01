@@ -1,7 +1,8 @@
 import { Utils } from '@dfx.swiss/core';
 import { useCallback, useMemo } from 'react';
 import { useAuthContext } from '../contexts/auth.context';
-import { ApiError, ApiException } from '../definitions/error';
+import { hasSameUserScope } from '../contexts/user-identity';
+import { ApiError, ApiErrorResponse, ApiException } from '../definitions/error';
 
 export interface ApiInterface {
   defaultUrl: string;
@@ -31,7 +32,7 @@ interface SpecialHandling {
 }
 
 export function useApi(): ApiInterface {
-  const { getAuthToken, setAuthToken } = useAuthContext();
+  const { getAuthToken, getAuthTokenSession, setAuthToken } = useAuthContext();
 
   const url = process.env.REACT_APP_API_URL ?? 'https://api.dfx.swiss';
   const defaultVersion = 'v1';
@@ -73,12 +74,13 @@ export function useApi(): ApiInterface {
           return response
             .json()
             .catch(() => null)
-            .then((body: Partial<ApiError> | null) => {
+            .then((body: Partial<ApiErrorResponse> | null) => {
               throw new ApiException(
                 body?.statusCode ?? response.status,
                 body?.message ?? response.statusText ?? 'Unknown error',
                 body?.code,
                 body?.switchToCode,
+                body?.details,
               );
             });
         });
@@ -88,17 +90,26 @@ export function useApi(): ApiInterface {
 
   const call = useCallback(
     async function callApi<T>(config: CallConfig): Promise<T> {
-      config.token ??= getAuthToken();
+      const requestToken = config.token ?? getAuthToken();
+      const requestConfig = { ...config, token: requestToken };
+      const requestSession = typeof requestToken === 'string' ? getAuthTokenSession(requestToken) : undefined;
 
-      return fetchFrom<T>(config).catch((error: ApiError) => {
+      return fetchFrom<T>(requestConfig).catch((error: ApiError) => {
         if (error.statusCode === 401) {
-          if (config.token === getAuthToken()) {
+          const currentToken = getAuthToken();
+          if (typeof requestToken === 'string' && requestToken.length > 0 && requestToken === currentToken) {
             setAuthToken(undefined);
-          } else {
-            // Use named function to avoid stale closure
+          } else if (
+            config.method === 'GET' &&
+            typeof requestToken === 'string' &&
+            requestToken.length > 0 &&
+            typeof currentToken === 'string' &&
+            currentToken.length > 0 &&
+            hasSameUserScope(requestSession, getAuthTokenSession(currentToken))
+          ) {
             return callApi<T>({
-              ...config,
-              token: getAuthToken(),
+              ...requestConfig,
+              token: currentToken,
             });
           }
         }
@@ -106,7 +117,7 @@ export function useApi(): ApiInterface {
         throw error;
       });
     },
-    [getAuthToken, setAuthToken, fetchFrom],
+    [getAuthToken, getAuthTokenSession, setAuthToken, fetchFrom],
   );
 
   function buildInit(

@@ -8,6 +8,7 @@ import { useSessionContext } from '../contexts/session.context';
 import { Transaction } from '../definitions/transaction';
 
 export interface SwapInterface {
+  quote: (info: SwapPaymentInfo) => Promise<Swap>;
   receiveFor: (info: SwapPaymentInfo, includeTx?: boolean) => Promise<Swap>;
   confirmSwap: (id: number, data: ConfirmSwapData) => Promise<Transaction>;
 }
@@ -17,6 +18,14 @@ export function useSwap(): SwapInterface {
   const { changeUserAddress } = useUser();
   const { user } = useUserContext();
   const { tokenStore } = useSessionContext();
+
+  const quote = useCallback(
+    async (info: SwapPaymentInfo): Promise<Swap> => {
+      const { clientRequestId: _clientRequestId, ...quoteInfo } = info;
+      return call<Swap>({ url: SwapUrl.quote, method: 'PUT', data: quoteInfo, token: false });
+    },
+    [call],
+  );
 
   const receiveFor = useCallback(
     async (info: SwapPaymentInfo, includeTx = false): Promise<Swap> => {
@@ -50,5 +59,5 @@ export function useSwap(): SwapInterface {
     [call],
   );
 
-  return useMemo(() => ({ receiveFor, confirmSwap }), [receiveFor, confirmSwap]);
+  return useMemo(() => ({ quote, receiveFor, confirmSwap }), [quote, receiveFor, confirmSwap]);
 }

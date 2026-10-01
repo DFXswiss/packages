@@ -78,6 +78,8 @@ export interface SellPaymentInfo {
   sourceAddress?: string;
   paymentMethod?: string;
   externalTransactionId?: string;
+  /** UUID that makes retries of the same payment-info intent idempotent. */
+  clientRequestId?: string;
   exactPrice?: boolean;
 }
 

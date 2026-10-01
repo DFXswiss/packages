@@ -23,7 +23,19 @@ export { useBank } from './hooks/bank.hook';
 export { useBuy } from './hooks/buy.hook';
 export { useCountry } from './hooks/country.hook';
 export { useFiat } from './hooks/fiat.hook';
+export { useJob } from './hooks/job.hook';
+export type { JobInterface } from './hooks/job.hook';
 export { usePaymentRoutes } from './hooks/payment-routes.hook';
+export type {
+  CreateSellPaymentRoute,
+  GetPaymentRoutesOptions,
+  PaymentLinkHistory,
+  PaymentLinkHistoryPayment,
+  PaymentLinkInvoiceRecipient,
+  PaymentLinkInvoiceResponse,
+  PaymentLinkInvoiceQuery,
+  PaymentLinkTransferAmount,
+} from './hooks/payment-routes.hook';
 export { useSettings } from './hooks/settings.hook';
 export { useTransaction } from './hooks/transaction.hook';
 export { useLanguage } from './hooks/language.hook';
@@ -32,9 +44,13 @@ export { useSell } from './hooks/sell.hook';
 export { useUser } from './hooks/user.hook';
 export { useSwap } from './hooks/swap.hook';
 export { useSupportChat } from './hooks/support.hook';
+export { useRecommendation } from './hooks/recommendation.hook';
 
 // Definitions
 export { CheckStatus, AmlReason } from './definitions/aml';
+export { RecommendationStatus, RecommendationType, RecommendationMethod } from './definitions/recommendation';
+export type { Recommendation, CreateRecommendation } from './definitions/recommendation';
+export type { AccountMergeResponse } from './hooks/auth.hook';
 export {
   PendingReviewType,
   PendingReviewStatus,
@@ -56,9 +72,17 @@ export { Buy, BuyPaymentInfo, PdfDocument, BuyUrl } from './definitions/buy';
 export { PersonalIbanProvider } from './definitions/buy';
 export { VirtualIbanStatus, VirtualIban } from './definitions/buy';
 export { Country, CountryUrl } from './definitions/country';
-export { ApiError, ApiException } from './definitions/error';
+export { ApiException } from './definitions/error';
+export type {
+  ApiError,
+  ApiErrorResponse,
+  PaymentInfoConflictDetails,
+  PaymentInfoRequestStatus,
+} from './definitions/error';
 export { Fiat, FiatUrl } from './definitions/fiat';
 export { CustomFile } from './definitions/file';
+export { JobStatus, isJobResponse, isJobTerminal } from './definitions/job';
+export type { JobResponse } from './definitions/job';
 export {
   MinAmount,
   DepositDto,
@@ -156,6 +180,7 @@ export {
   MerchantCategory,
   GoodsType,
   GoodsCategory,
+  toKycNationalityRequest,
   isStepDone,
   buildKycUrl,
 } from './definitions/kyc';
@@ -213,6 +238,8 @@ export {
   CreditorData,
   TransactionFilterKey,
   TransactionUrl,
+  PaymentInfoRequestStatusResponse,
+  PaymentInfoRequestType,
 } from './definitions/transaction';
 export { Fees } from './definitions/fees';
 export {
