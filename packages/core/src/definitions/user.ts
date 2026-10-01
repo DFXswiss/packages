@@ -79,6 +79,8 @@ export interface UserAddress {
   apiKeyCT?: string;
   apiFilterCT?: TransactionFilterKey[];
   isCustody: boolean;
+  // true when the user deleted this address; such an address can be reactivated
+  isDeleted?: boolean;
 }
 
 export interface UserKyc {
