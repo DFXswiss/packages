@@ -14,6 +14,7 @@ export interface UserInterface {
   changeUserAddress: (address: string) => Promise<SignIn>;
   renameUserAddress: (address: string, label: string) => Promise<User | undefined>;
   deleteUserAddress: (address: string) => Promise<void>;
+  reactivateUserAddress: (address: string) => Promise<SignIn>;
   deleteUserAccount: () => Promise<void>;
   addSpecialCode: (code: string) => Promise<void>;
   generateCTApiKey: (types?: TransactionFilterKey[]) => Promise<ApiKey>;
@@ -90,6 +91,14 @@ export function useUser(): UserInterface {
     });
   }
 
+  async function reactivateUserAddress(address: string): Promise<SignIn> {
+    return call<SignIn>({
+      url: `${UserUrl.addresses}/${address}/reactivate`,
+      version: 'v2',
+      method: 'POST',
+    });
+  }
+
   async function deleteUserAccount(): Promise<void> {
     return call({
       url: UserUrl.delete,
@@ -143,6 +152,7 @@ export function useUser(): UserInterface {
       changeUserAddress,
       renameUserAddress,
       deleteUserAddress,
+      reactivateUserAddress,
       deleteUserAccount,
       addSpecialCode,
       generateCTApiKey,

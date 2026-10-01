@@ -23,6 +23,7 @@ interface UserInterface {
   renameAddress: (address: string, label: string) => Promise<void>;
   changeAddress: (address: string) => Promise<void>;
   deleteAddress: (address: string) => Promise<void>;
+  reactivateAddress: (address: string) => Promise<void>;
   deleteAccount: () => Promise<void>;
   addSpecialCode: (code: string) => Promise<void>;
   reloadUser: () => Promise<void>;
@@ -51,6 +52,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     renameUserAddress,
     changeUserAddress,
     deleteUserAddress,
+    reactivateUserAddress,
     deleteUserAccount,
     generateCTApiKey,
     deleteCTApiKey,
@@ -191,6 +193,17 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     [user, deleteUserAddress, changeAddress, deleteSession, reloadUser],
   );
 
+  const reactivateAddress = useCallback(
+    async (address: string): Promise<void> => {
+      setIsUserUpdating(true);
+      return reactivateUserAddress(address)
+        .then(({ accessToken }) => updateSession(accessToken))
+        .then(() => reloadUser())
+        .finally(() => setIsUserUpdating(false));
+    },
+    [reactivateUserAddress, updateSession, reloadUser],
+  );
+
   const deleteAccount = useCallback(async (): Promise<void> => {
     if (!user) return;
 
@@ -267,6 +280,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       renameAddress,
       changeAddress,
       deleteAddress,
+      reactivateAddress,
       deleteAccount,
       addSpecialCode,
       reloadUser,
@@ -290,6 +304,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     renameAddress,
     changeAddress,
     deleteAddress,
+    reactivateAddress,
     deleteAccount,
     addSpecialCode,
     reloadUser,
