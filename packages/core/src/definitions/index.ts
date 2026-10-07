@@ -16,7 +16,7 @@ export type {
 export { AssetUrl, AssetType, AssetCategory } from './asset';
 export type { Asset } from './asset';
 export { AuthUrl, AuthWalletType } from './auth';
-export type { SignMessage, SignIn, LnurlAuth, LnurlAuthStatus } from './auth';
+export type { SignMessage, SignIn, LnurlAuth, LnurlAuthStatus, MailLoginCode } from './auth';
 export { BankUrl, ReceiveIbanStatus } from './bank';
 export type { Bank, ReceiveIbanCheck } from './bank';
 export { BankAccountUrl } from './bank-account';

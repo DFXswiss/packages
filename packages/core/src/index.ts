@@ -136,6 +136,7 @@ export type {
   SignIn,
   LnurlAuth,
   LnurlAuthStatus,
+  MailLoginCode,
   // Bank
   Bank,
   ReceiveIbanCheck,
