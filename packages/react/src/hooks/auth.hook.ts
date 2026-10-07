@@ -218,6 +218,7 @@ export function useAuth(): AuthInterface {
         url: AuthUrl.signInWithMail,
         method: 'POST',
         data: { mail, redirectUri, recommendationCode, wallet, withCode: true },
+        token: false,
       });
     },
     [call],
@@ -229,6 +230,7 @@ export function useAuth(): AuthInterface {
         url: AuthUrl.signInWithMailCode,
         method: 'POST',
         data: { secret, code },
+        token: false,
       });
     },
     [call],
