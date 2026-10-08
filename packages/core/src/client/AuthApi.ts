@@ -1,4 +1,12 @@
-import { AuthUrl, AuthWalletType, SignMessage, SignIn, LnurlAuth, LnurlAuthStatus } from '../definitions/auth';
+import {
+  AuthUrl,
+  AuthWalletType,
+  SignMessage,
+  SignIn,
+  LnurlAuth,
+  LnurlAuthStatus,
+  MailLoginCode,
+} from '../definitions/auth';
 import { ApiException } from '../definitions/error';
 import { TfaLevel, TfaSetup } from '../definitions/kyc';
 import { Utils } from '../utils';
@@ -80,6 +88,29 @@ export class AuthApi {
       url: AuthUrl.signInWithMail,
       method: 'POST',
       data: { mail, redirectUri, recommendationCode, wallet },
+      token: false,
+    });
+  }
+
+  async requestMailLoginCode(
+    mail: string,
+    redirectUri?: string,
+    recommendationCode?: string,
+    wallet?: string,
+  ): Promise<MailLoginCode> {
+    return this.http.request({
+      url: AuthUrl.signInWithMail,
+      method: 'POST',
+      data: { mail, redirectUri, recommendationCode, wallet, withCode: true },
+      token: false,
+    });
+  }
+
+  async signInWithMailCode(secret: string, code: string): Promise<SignIn> {
+    return this.http.request({
+      url: AuthUrl.signInWithMailCode,
+      method: 'POST',
+      data: { secret, code },
       token: false,
     });
   }
