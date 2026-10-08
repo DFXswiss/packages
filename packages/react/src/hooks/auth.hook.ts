@@ -1,5 +1,13 @@
 import { useCallback, useMemo } from 'react';
-import { AuthUrl, AuthWalletType, LnurlAuth, LnurlAuthStatus, SignIn, SignMessage } from '../definitions/auth';
+import {
+  AuthUrl,
+  AuthWalletType,
+  LnurlAuth,
+  LnurlAuthStatus,
+  MailLoginCode,
+  SignIn,
+  SignMessage,
+} from '../definitions/auth';
 import { TfaLevel, TfaSetup } from '../definitions/kyc';
 import { CallConfig, useApi } from './api.hook';
 import { ApiError } from '../definitions/error';
@@ -36,6 +44,13 @@ export interface AuthInterface {
     language?: string,
   ) => Promise<SignIn>;
   signInWithMail: (mail: string, redirectUri?: string, recommendationCode?: string, wallet?: string) => Promise<void>;
+  requestMailLoginCode: (
+    mail: string,
+    redirectUri?: string,
+    recommendationCode?: string,
+    wallet?: string,
+  ) => Promise<MailLoginCode>;
+  signInWithMailCode: (secret: string, code: string) => Promise<SignIn>;
   check2fa: (level?: TfaLevel) => Promise<TfaSetup>;
   setup2fa: (level?: TfaLevel) => Promise<TfaSetup>;
   verify2fa: (token: string) => Promise<void>;
@@ -192,6 +207,35 @@ export function useAuth(): AuthInterface {
     [call],
   );
 
+  const requestMailLoginCode = useCallback(
+    async (
+      mail: string,
+      redirectUri?: string,
+      recommendationCode?: string,
+      wallet?: string,
+    ): Promise<MailLoginCode> => {
+      return call({
+        url: AuthUrl.signInWithMail,
+        method: 'POST',
+        data: { mail, redirectUri, recommendationCode, wallet, withCode: true },
+        token: false,
+      });
+    },
+    [call],
+  );
+
+  const signInWithMailCode = useCallback(
+    async (secret: string, code: string): Promise<SignIn> => {
+      return call({
+        url: AuthUrl.signInWithMailCode,
+        method: 'POST',
+        data: { secret, code },
+        token: false,
+      });
+    },
+    [call],
+  );
+
   const check2fa = useCallback(
     async (level?: TfaLevel): Promise<TfaSetup> => {
       const url = level ? `${AuthUrl.tfa}?level=${level}` : AuthUrl.tfa;
@@ -233,6 +277,8 @@ export function useAuth(): AuthInterface {
       signIn,
       signUp,
       signInWithMail,
+      requestMailLoginCode,
+      signInWithMailCode,
       check2fa,
       setup2fa,
       verify2fa,
@@ -245,6 +291,8 @@ export function useAuth(): AuthInterface {
       signIn,
       signUp,
       signInWithMail,
+      requestMailLoginCode,
+      signInWithMailCode,
       check2fa,
       setup2fa,
       verify2fa,

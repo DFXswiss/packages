@@ -188,7 +188,15 @@ export {
   UpdateUser,
   ApiKey,
 } from './definitions/user';
-export { SignIn, LnurlAuth, LnurlAuthStatus, AuthUrl, AuthWalletType, SignMessage } from './definitions/auth';
+export {
+  SignIn,
+  LnurlAuth,
+  LnurlAuthStatus,
+  MailLoginCode,
+  AuthUrl,
+  AuthWalletType,
+  SignMessage,
+} from './definitions/auth';
 export {
   FiatPaymentMethod,
   CryptoPaymentMethod,

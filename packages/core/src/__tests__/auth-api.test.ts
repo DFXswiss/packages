@@ -56,4 +56,61 @@ describe('AuthApi', () => {
       expect(mockHttp.request).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('mail login', () => {
+    it('signInWithMail does not request a login code', async () => {
+      const mockHttp = createMockHttpClient([{ resolve: undefined }]);
+      const api = new AuthApi(mockHttp);
+
+      await api.signInWithMail('user@example.com', 'https://example.com/redirect', 'recommendation', 'wallet');
+
+      expect(mockHttp.request).toHaveBeenCalledWith({
+        url: 'auth/mail',
+        method: 'POST',
+        data: {
+          mail: 'user@example.com',
+          redirectUri: 'https://example.com/redirect',
+          recommendationCode: 'recommendation',
+          wallet: 'wallet',
+        },
+        token: false,
+      });
+    });
+
+    it('requests a mail login code', async () => {
+      const response = { secret: 'mail-login-secret' };
+      const mockHttp = createMockHttpClient([{ resolve: response }]);
+      const api = new AuthApi(mockHttp);
+
+      await expect(
+        api.requestMailLoginCode('user@example.com', 'https://example.com/redirect', 'recommendation', 'wallet'),
+      ).resolves.toEqual(response);
+      expect(mockHttp.request).toHaveBeenCalledWith({
+        url: 'auth/mail',
+        method: 'POST',
+        data: {
+          mail: 'user@example.com',
+          redirectUri: 'https://example.com/redirect',
+          recommendationCode: 'recommendation',
+          wallet: 'wallet',
+          withCode: true,
+        },
+        token: false,
+      });
+    });
+
+    it('signs in with a mail login code', async () => {
+      const response = { accessToken: 'access-token' };
+      const mockHttp = createMockHttpClient([{ resolve: response }]);
+      const api = new AuthApi(mockHttp);
+
+      await expect(api.signInWithMailCode('mail-login-secret', '123456')).resolves.toEqual(response);
+      expect(mockHttp.request).toHaveBeenCalledWith({
+        url: 'auth/mail/code',
+        method: 'POST',
+        data: { secret: 'mail-login-secret', code: '123456' },
+        token: false,
+      });
+    });
+  });
 });

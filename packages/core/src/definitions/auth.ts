@@ -4,10 +4,15 @@ export const AuthUrl = {
   signIn: 'auth/signIn',
   signUp: 'auth/signUp',
   signInWithMail: 'auth/mail',
+  signInWithMailCode: 'auth/mail/code',
   tfa: 'auth/2fa',
   lnurl: 'lnurla',
   lnurlStatus: 'lnurla/status',
 };
+
+export interface MailLoginCode {
+  secret: string;
+}
 
 export interface SignMessage {
   message: string;

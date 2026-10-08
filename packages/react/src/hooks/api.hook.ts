@@ -91,7 +91,7 @@ export function useApi(): ApiInterface {
       config.token ??= getAuthToken();
 
       return fetchFrom<T>(config).catch((error: ApiError) => {
-        if (error.statusCode === 401) {
+        if (error.statusCode === 401 && config.token !== false) {
           if (config.token === getAuthToken()) {
             setAuthToken(undefined);
           } else {
