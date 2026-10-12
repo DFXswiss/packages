@@ -197,11 +197,15 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
 
   const reactivateAddress = useCallback(
     async (address: string): Promise<void> => {
+      const initialToken = getAuthToken();
+
       setIsUserUpdating(true);
       return reactivateUserAddress(address)
         .then(({ accessToken }) => {
+          // an answer that lands after a logout or another session change must not replace that session or its user
+          if (getAuthToken() !== initialToken) return;
+
           updateSession(accessToken);
-          // a reload that lands after a logout or a newer session must not replace the user
           return getUser().then((refreshed) => {
             if (getAuthToken() === accessToken) setUser(refreshed);
           });
