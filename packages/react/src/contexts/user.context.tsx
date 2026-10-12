@@ -198,10 +198,10 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       setIsUserUpdating(true);
       return reactivateUserAddress(address)
         .then(({ accessToken }) => updateSession(accessToken))
-        .then(() => reloadUser())
+        .then(() => getUser().then(setUser))
         .finally(() => setIsUserUpdating(false));
     },
-    [reactivateUserAddress, updateSession, reloadUser],
+    [reactivateUserAddress, updateSession, getUser],
   );
 
   const deleteAccount = useCallback(async (): Promise<void> => {

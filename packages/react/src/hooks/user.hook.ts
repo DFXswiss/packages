@@ -93,7 +93,7 @@ export function useUser(): UserInterface {
 
   async function reactivateUserAddress(address: string): Promise<SignIn> {
     return call<SignIn>({
-      url: `${UserUrl.addresses}/${address}/reactivate`,
+      url: `${UserUrl.addresses}/${encodeURIComponent(address)}/reactivate`,
       version: 'v2',
       method: 'POST',
     });
