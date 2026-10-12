@@ -1,16 +1,19 @@
-const mockSetState = jest.fn();
+const mockSetUser = jest.fn();
+const mockSetIsUserLoading = jest.fn();
+const mockSetIsUserUpdating = jest.fn();
 const mockReactivateUserAddress = jest.fn();
 const mockGetUser = jest.fn();
 const mockUpdateSession = jest.fn();
 
 let authToken: string | undefined;
+let stateSetters: jest.Mock[] = [];
 
 jest.mock('react', () => ({
   ...jest.requireActual('react'),
   useCallback: (fn: unknown) => fn,
   useMemo: (factory: () => unknown) => factory(),
   useEffect: () => undefined,
-  useState: (initial: unknown) => [initial, mockSetState],
+  useState: (initial: unknown) => [initial, stateSetters.shift()],
 }));
 
 jest.mock('../hooks/api-session.hook', () => ({
@@ -28,6 +31,8 @@ jest.mock('../hooks/user.hook', () => ({
 import { UserContextProvider } from '../contexts/user.context';
 
 function reactivateAddress(address: string): Promise<void> {
+  // useState order in the provider: user, isUserLoading, isUserUpdating
+  stateSetters = [mockSetUser, mockSetIsUserLoading, mockSetIsUserUpdating];
   return UserContextProvider({}).props.value.reactivateAddress(address);
 }
 
@@ -49,7 +54,9 @@ describe('UserContextProvider', () => {
 
       expect(mockReactivateUserAddress).toHaveBeenCalledWith('0xabc');
       expect(mockUpdateSession).toHaveBeenCalledWith('new-token');
-      expect(mockSetState.mock.calls).toEqual([[true], [user], [false]]);
+      expect(mockSetUser.mock.calls).toEqual([[user]]);
+      expect(mockSetIsUserUpdating.mock.calls).toEqual([[true], [false]]);
+      expect(mockSetIsUserLoading).not.toHaveBeenCalled();
     });
 
     it('leaves the session untouched when it changed before the answer', async () => {
@@ -62,7 +69,8 @@ describe('UserContextProvider', () => {
 
       expect(mockUpdateSession).not.toHaveBeenCalled();
       expect(mockGetUser).not.toHaveBeenCalled();
-      expect(mockSetState.mock.calls).toEqual([[true], [false]]);
+      expect(mockSetUser).not.toHaveBeenCalled();
+      expect(mockSetIsUserUpdating.mock.calls).toEqual([[true], [false]]);
     });
 
     it('drops the reloaded user when the session changed during the reload', async () => {
@@ -74,7 +82,8 @@ describe('UserContextProvider', () => {
 
       await reactivateAddress('0xabc');
 
-      expect(mockSetState.mock.calls).toEqual([[true], [false]]);
+      expect(mockSetUser).not.toHaveBeenCalled();
+      expect(mockSetIsUserUpdating.mock.calls).toEqual([[true], [false]]);
     });
 
     it('rejects and resets the busy flag when the reload fails', async () => {
@@ -83,7 +92,8 @@ describe('UserContextProvider', () => {
 
       await expect(reactivateAddress('0xabc')).rejects.toThrow('reload failed');
 
-      expect(mockSetState.mock.calls).toEqual([[true], [false]]);
+      expect(mockSetUser).not.toHaveBeenCalled();
+      expect(mockSetIsUserUpdating.mock.calls).toEqual([[true], [false]]);
     });
   });
 });
