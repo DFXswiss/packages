@@ -2,6 +2,7 @@ import { createContext, PropsWithChildren, useCallback, useContext, useEffect, u
 import { ApiKey, PhoneCallTime, UpdateUser, User, UserAddress } from '../definitions/user';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
+import { useAuthContext } from './auth.context';
 import { Language } from '../definitions/language';
 import { Fiat } from '../definitions/fiat';
 import { TransactionFilterKey } from '../definitions/transaction';
@@ -43,6 +44,7 @@ export function useUserContext(): UserInterface {
 
 export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const { isLoggedIn, updateSession, deleteSession } = useApiSession();
+  const { getAuthToken } = useAuthContext();
   const {
     getUser,
     updateUser: updateUserApi,
@@ -197,11 +199,16 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     async (address: string): Promise<void> => {
       setIsUserUpdating(true);
       return reactivateUserAddress(address)
-        .then(({ accessToken }) => updateSession(accessToken))
-        .then(() => getUser().then(setUser))
+        .then(({ accessToken }) => {
+          updateSession(accessToken);
+          // a reload that lands after a logout or a newer session must not replace the user
+          return getUser().then((refreshed) => {
+            if (getAuthToken() === accessToken) setUser(refreshed);
+          });
+        })
         .finally(() => setIsUserUpdating(false));
     },
-    [reactivateUserAddress, updateSession, getUser],
+    [reactivateUserAddress, updateSession, getUser, getAuthToken],
   );
 
   const deleteAccount = useCallback(async (): Promise<void> => {
