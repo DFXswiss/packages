@@ -2,6 +2,7 @@ import { createContext, PropsWithChildren, useCallback, useContext, useEffect, u
 import { ApiKey, PhoneCallTime, UpdateUser, User, UserAddress } from '../definitions/user';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
+import { useAuthContext } from './auth.context';
 import { Language } from '../definitions/language';
 import { Fiat } from '../definitions/fiat';
 import { TransactionFilterKey } from '../definitions/transaction';
@@ -22,6 +23,7 @@ interface UserInterface {
   custodyAddresses: UserAddress[];
   renameAddress: (address: string, label: string) => Promise<void>;
   changeAddress: (address: string) => Promise<void>;
+  reactivateAddress: () => Promise<void>;
   deleteAddress: (address: string) => Promise<void>;
   deleteAccount: () => Promise<void>;
   addSpecialCode: (code: string) => Promise<void>;
@@ -42,6 +44,7 @@ export function useUserContext(): UserInterface {
 
 export function UserContextProvider(props: PropsWithChildren): JSX.Element {
   const { isLoggedIn, updateSession, deleteSession } = useApiSession();
+  const { getAuthToken } = useAuthContext();
   const {
     getUser,
     updateUser: updateUserApi,
@@ -50,6 +53,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     addSpecialCode,
     renameUserAddress,
     changeUserAddress,
+    reactivateUserAddress,
     deleteUserAddress,
     deleteUserAccount,
     generateCTApiKey,
@@ -170,6 +174,24 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     [user, changeUserAddress, updateSession],
   );
 
+  const reactivateAddress = useCallback(async (): Promise<void> => {
+    // The signed-in address was deleted. The new token is the one that opens the guarded routes again. A session that
+    // was ended or switched while the request ran stays as it is, and so does the user that belongs to it.
+    const token = getAuthToken();
+
+    setIsUserUpdating(true);
+    try {
+      const { accessToken } = await reactivateUserAddress();
+      if (getAuthToken() !== token) return;
+
+      updateSession(accessToken);
+      const reloaded = await getUser();
+      if (getAuthToken() === accessToken) setUser(reloaded);
+    } finally {
+      setIsUserUpdating(false);
+    }
+  }, [getAuthToken, reactivateUserAddress, updateSession, getUser]);
+
   const deleteAddress = useCallback(
     async (address: string): Promise<void> => {
       if (!user) return;
@@ -266,6 +288,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       custodyAddresses,
       renameAddress,
       changeAddress,
+      reactivateAddress,
       deleteAddress,
       deleteAccount,
       addSpecialCode,
@@ -289,6 +312,7 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
     updateCurrency,
     renameAddress,
     changeAddress,
+    reactivateAddress,
     deleteAddress,
     deleteAccount,
     addSpecialCode,
