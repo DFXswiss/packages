@@ -45,6 +45,12 @@ export class UserApi {
     return this.http.request<SignIn>({ url: UserUrl.changeAddress, method: 'POST', data: { address } });
   }
 
+  // Restores the signed-in address after it was deleted. Use the returned token from then on: the previous one still
+  // carries the deleted status and keeps failing every route that requires an active address.
+  async reactivateAddress(): Promise<SignIn> {
+    return this.http.request<SignIn>({ url: UserUrl.reactivate, method: 'PUT', version: 'v2' });
+  }
+
   async renameAddress(address: string, label: string): Promise<User> {
     return this.http.request<User>({
       url: `${UserUrl.addresses}/${encodeURIComponent(address)}`,
