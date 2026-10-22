@@ -16,6 +16,7 @@ export const UserUrl = {
   apiKey: 'user/apiKey',
   apiFilter: 'user/apiFilter',
   changeAddress: 'user/change',
+  reactivate: 'user/reactivate',
   specialCodes: 'user/specialCodes',
   profile: 'user/profile',
 };
@@ -24,6 +25,7 @@ export enum UserStatus {
   NA = 'NA',
   ACTIVE = 'Active',
   BLOCKED = 'Blocked',
+  DELETED = 'Deleted',
 }
 
 export enum PhoneCallTime {
@@ -79,6 +81,7 @@ export interface UserAddress {
   apiKeyCT?: string;
   apiFilterCT?: TransactionFilterKey[];
   isCustody: boolean;
+  status: UserStatus;
 }
 
 export interface UserKyc {

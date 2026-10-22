@@ -12,6 +12,7 @@ export interface UserInterface {
   updateMail: (mail: string) => Promise<void>;
   verifyMail: (token: string) => Promise<User>;
   changeUserAddress: (address: string) => Promise<SignIn>;
+  reactivateUserAddress: () => Promise<SignIn>;
   renameUserAddress: (address: string, label: string) => Promise<User | undefined>;
   deleteUserAddress: (address: string) => Promise<void>;
   deleteUserAccount: () => Promise<void>;
@@ -82,6 +83,14 @@ export function useUser(): UserInterface {
     });
   }
 
+  async function reactivateUserAddress(): Promise<SignIn> {
+    return call<SignIn>({
+      url: UserUrl.reactivate,
+      version: 'v2',
+      method: 'PUT',
+    });
+  }
+
   async function deleteUserAddress(address: string): Promise<void> {
     return call({
       url: `${UserUrl.addresses}/${address}`,
@@ -141,6 +150,7 @@ export function useUser(): UserInterface {
       updateMail,
       verifyMail,
       changeUserAddress,
+      reactivateUserAddress,
       renameUserAddress,
       deleteUserAddress,
       deleteUserAccount,
