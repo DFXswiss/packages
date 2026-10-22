@@ -92,13 +92,14 @@ export function useApi(): ApiInterface {
 
       return fetchFrom<T>(config).catch((error: ApiError) => {
         if (error.statusCode === 401 && config.token !== false) {
-          if (config.token === getAuthToken()) {
+          const currentToken = getAuthToken();
+          if (config.token === currentToken) {
             setAuthToken(undefined);
-          } else {
+          } else if (currentToken) {
             // Use named function to avoid stale closure
             return callApi<T>({
               ...config,
-              token: getAuthToken(),
+              token: currentToken,
             });
           }
         }
