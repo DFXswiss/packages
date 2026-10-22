@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { ApiKey, PhoneCallTime, UpdateUser, User, UserAddress } from '../definitions/user';
+import { ApiKey, PhoneCallTime, UpdateUser, User, UserAddress, UserStatus } from '../definitions/user';
 import { useUser } from '../hooks/user.hook';
 import { useApiSession } from '../hooks/api-session.hook';
 import { useAuthContext } from './auth.context';
@@ -185,8 +185,21 @@ export function UserContextProvider(props: PropsWithChildren): JSX.Element {
       if (getAuthToken() !== token) return;
 
       updateSession(accessToken);
-      const reloaded = await getUser();
-      if (getAuthToken() === accessToken) setUser(reloaded);
+      try {
+        const reloaded = await getUser();
+        if (getAuthToken() === accessToken) setUser(reloaded);
+      } catch (error) {
+        // The address is active again even though the reload failed. Keeping the deleted status would offer a
+        // reactivation the API now refuses.
+        if (getAuthToken() === accessToken) {
+          setUser((prev) =>
+            prev?.activeAddress
+              ? { ...prev, activeAddress: { ...prev.activeAddress, status: UserStatus.ACTIVE } }
+              : prev,
+          );
+        }
+        throw error;
+      }
     } finally {
       setIsUserUpdating(false);
     }

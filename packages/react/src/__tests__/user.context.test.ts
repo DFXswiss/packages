@@ -97,13 +97,33 @@ describe('UserContextProvider', () => {
       expect(mockSetIsUserUpdating.mock.calls).toEqual([[true], [false]]);
     });
 
-    it('keeps the new session but rejects when the reload fails', async () => {
+    it('keeps the new session, marks the active address as active and rejects when the reload fails', async () => {
       mockReactivateUserAddress.mockResolvedValue({ accessToken: 'new-token' });
       mockGetUser.mockRejectedValue(new Error('reload failed'));
 
       await expect(reactivateAddress()).rejects.toThrow('reload failed');
 
       expect(mockUpdateSession).toHaveBeenCalledWith('new-token');
+      expect(mockSetUser).toHaveBeenCalledTimes(1);
+      const update = mockSetUser.mock.calls[0][0];
+      const previous = { mail: 'user@example.com', activeAddress: { address: '0xabc', status: 'Deleted' } };
+      expect(update(previous)).toEqual({
+        mail: 'user@example.com',
+        activeAddress: { address: '0xabc', status: 'Active' },
+      });
+      expect(update(undefined)).toBeUndefined();
+      expect(mockSetIsUserUpdating.mock.calls).toEqual([[true], [false]]);
+    });
+
+    it('leaves the user untouched when the reload fails after the session changed', async () => {
+      mockReactivateUserAddress.mockResolvedValue({ accessToken: 'new-token' });
+      mockGetUser.mockImplementation(async () => {
+        authToken = 'other-token';
+        throw new Error('reload failed');
+      });
+
+      await expect(reactivateAddress()).rejects.toThrow('reload failed');
+
       expect(mockSetUser).not.toHaveBeenCalled();
       expect(mockSetIsUserUpdating.mock.calls).toEqual([[true], [false]]);
     });
