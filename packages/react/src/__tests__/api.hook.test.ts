@@ -60,4 +60,38 @@ describe('useApi', () => {
     expect(mockSetAuthToken).toHaveBeenCalledTimes(1);
     expect(mockSetAuthToken).toHaveBeenCalledWith(undefined);
   });
+
+  it('does not resend a 401 request without a token when a parallel request already cleared the session', async () => {
+    mockGetAuthToken.mockReturnValueOnce('stored-session').mockReturnValue(undefined);
+    const api = useApi();
+
+    await expect(api.call({ url: 'user', method: 'GET' })).rejects.toMatchObject({ statusCode: 401 });
+
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+    const init = mockFetch.mock.calls[0][1] as RequestInit;
+    expect((init.headers as Record<string, string>).Authorization).toBe('Bearer stored-session');
+    expect(mockSetAuthToken).not.toHaveBeenCalled();
+  });
+
+  it('retries a 401 request once with the new token when the session was refreshed in the meantime', async () => {
+    mockGetAuthToken.mockReturnValueOnce('stored-session').mockReturnValue('refreshed-session');
+    mockFetch
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+        statusText: 'Unauthorized',
+        json: async () => ({ statusCode: 401, message: 'Unauthorized' }),
+      })
+      .mockResolvedValueOnce({ ok: true, status: 200, json: async () => ({ id: 1 }) });
+    const api = useApi();
+
+    await expect(api.call({ url: 'user', method: 'GET' })).resolves.toEqual({ id: 1 });
+
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+    const firstInit = mockFetch.mock.calls[0][1] as RequestInit;
+    const retryInit = mockFetch.mock.calls[1][1] as RequestInit;
+    expect((firstInit.headers as Record<string, string>).Authorization).toBe('Bearer stored-session');
+    expect((retryInit.headers as Record<string, string>).Authorization).toBe('Bearer refreshed-session');
+    expect(mockSetAuthToken).not.toHaveBeenCalled();
+  });
 });
