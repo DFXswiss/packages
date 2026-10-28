@@ -18,9 +18,10 @@ pins. Keep public APIs stable where possible and flag breaking changes explicitl
 npm install
 ```
 
-Dependencies across the workspace are managed with npm workspaces + Lerna. CI runs on
-Node 16.x (see `.github/workflows/pr.yaml`); `@dfx.swiss/bip322-multisig` additionally
-declares `engines.node >= 18`.
+Dependencies across the workspace are managed with npm workspaces + Lerna. PR CI and
+publishing run on Node 22.x (see `.github/workflows/pr.yaml` and `publish.yaml`); use
+Node 22 locally as well (Lerna 9 requires Node `^20.19 || ^22.12 || >=24`).
+`@dfx.swiss/bip322-multisig` additionally declares `engines.node >= 18`.
 
 ## Build & Test
 
