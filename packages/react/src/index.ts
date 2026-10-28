@@ -173,6 +173,9 @@ export { Swap, SwapPaymentInfo, ConfirmSwapData, SwapUrl } from './definitions/s
 export { Session } from './definitions/session';
 export {
   User,
+  UserCapabilities,
+  CreateSupportTicketCapability,
+  TradeCapability,
   UserStatus,
   UserAddress,
   UserKyc,
@@ -184,6 +187,7 @@ export {
   UserAddressInfo,
   PhoneCallTime,
   PhoneCallStatus,
+  MissingPrerequisite,
   UserUrl,
   UpdateUser,
   ApiKey,

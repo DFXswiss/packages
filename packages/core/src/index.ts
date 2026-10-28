@@ -120,6 +120,7 @@ export {
   UserStatus,
   PhoneCallTime,
   PhoneCallStatus,
+  MissingPrerequisite,
 } from './definitions';
 
 export type {
@@ -269,6 +270,9 @@ export type {
   UserAddress,
   UserKyc,
   UserPaymentLink,
+  CreateSupportTicketCapability,
+  TradeCapability,
+  UserCapabilities,
   User,
   UpdateUser,
   ApiKey,

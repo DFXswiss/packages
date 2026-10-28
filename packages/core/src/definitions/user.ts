@@ -97,6 +97,40 @@ export interface UserPaymentLink {
   active: boolean;
 }
 
+/** The single prerequisite blocking a capability. Present when `available` is false. */
+export enum MissingPrerequisite {
+  EMAIL = 'Email',
+  KYC = 'Kyc',
+}
+
+/** Gate for creating a support ticket. */
+export interface CreateSupportTicketCapability {
+  available: boolean;
+  missingPrerequisite?: MissingPrerequisite;
+}
+
+/**
+ * Whether the active address may trade at the account's current KYC level. `available: false` means no amount is
+ * tradable until the missing prerequisite is met, so the trading limit must not be presented as usable.
+ */
+export interface TradeCapability {
+  available: boolean;
+  missingPrerequisite?: MissingPrerequisite;
+}
+
+/**
+ * Per-action capability flags. Clients render UI affordances from this object instead of inferring them from KYC
+ * step status.
+ */
+export interface UserCapabilities {
+  canEditName: boolean;
+  canEditMail: boolean;
+  canEditPhone: boolean;
+  canEditAddress: boolean;
+  createSupportTicket?: CreateSupportTicketCapability;
+  trade?: TradeCapability;
+}
+
 export interface User {
   accountId: number;
   accountType: AccountType;
@@ -105,6 +139,11 @@ export interface User {
   language: Language;
   currency: Fiat;
   tradingLimit: TradingLimit;
+  /**
+   * Per-action capability flags. Clients render UI affordances from this object instead of inferring them from KYC
+   * step status. Absent when the client is pinned to an API version that does not emit them.
+   */
+  capabilities?: UserCapabilities;
   kyc: UserKyc;
   volumes: Volumes;
   addresses: UserAddress[];

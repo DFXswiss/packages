@@ -1,4 +1,4 @@
-export { UserUrl, UserStatus, PhoneCallTime, PhoneCallStatus } from '@dfx.swiss/core';
+export { UserUrl, UserStatus, PhoneCallTime, PhoneCallStatus, MissingPrerequisite } from '@dfx.swiss/core';
 
 export type {
   VolumeInformation,
@@ -7,6 +7,9 @@ export type {
   UserAddress,
   UserKyc,
   UserPaymentLink,
+  CreateSupportTicketCapability,
+  TradeCapability,
+  UserCapabilities,
   User,
   UpdateUser,
   ApiKey,

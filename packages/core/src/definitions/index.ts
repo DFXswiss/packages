@@ -193,7 +193,7 @@ export type {
   TransactionRefundTarget,
   TransactionFilterKey,
 } from './transaction';
-export { UserUrl, UserStatus, PhoneCallTime, PhoneCallStatus } from './user';
+export { UserUrl, UserStatus, PhoneCallTime, PhoneCallStatus, MissingPrerequisite } from './user';
 export type {
   VolumeInformation,
   Volumes,
@@ -201,6 +201,9 @@ export type {
   UserAddress,
   UserKyc,
   UserPaymentLink,
+  CreateSupportTicketCapability,
+  TradeCapability,
+  UserCapabilities,
   User,
   UpdateUser,
   ApiKey,
