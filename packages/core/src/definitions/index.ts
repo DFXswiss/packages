@@ -209,3 +209,46 @@ export type {
   UserAddressInfo,
   UserProfile,
 } from './user';
+export { ChainUrl } from './chain';
+export type { ChainFamily, ChainCapabilities, ChainInfo, EvmFeeModel, NativeAssetInfo } from './chain';
+export { PasskeyUrl, passkeyWalletUrl } from './passkey';
+export type {
+  PasskeyAddress,
+  PasskeyAddressFamily,
+  PasskeyAssertionParams,
+  PasskeyAuthResponse,
+  PasskeyChallenge,
+  PasskeyCredentialProof,
+  PasskeyCredentialStatus,
+  PasskeyCredentialStatusResult,
+  PasskeyDerivationVersion,
+  PasskeyDiagnosticParams,
+  PasskeyLinkResponse,
+  PasskeyRevocationReason,
+  PasskeyWallet,
+  ClaimPasskeyParams,
+  LinkPasskeyAddressParams,
+  RegisterPasskeyParams,
+  RevokePasskeyByAssertionParams,
+} from './passkey';
+export { WalletDataUrl } from './wallet-data';
+export type {
+  BitcoinAddressStats,
+  BitcoinFeeEstimates,
+  BitcoinTransactionStatus,
+  BitcoinUtxo,
+  Bip353LookupResult,
+  EnsLookupResult,
+  EnsReverseLookupResult,
+  EvmApproval,
+  EvmApprovalType,
+  EvmNftPage,
+  EvmRpcRequest,
+  EvmTokenBalance,
+  EvmTransfer,
+  EvmTransferCategory,
+  EvmTransferPage,
+  Outspend,
+  WalletDataListId,
+  WalletPrice,
+} from './wallet-data';

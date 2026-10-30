@@ -82,6 +82,8 @@ export interface UserAddress {
   apiFilterCT?: TransactionFilterKey[];
   isCustody: boolean;
   status: UserStatus;
+  /** Set when the address belongs to a passkey seed wallet (D14). */
+  passkey?: { credentialId: string; path: string };
 }
 
 export interface UserKyc {
