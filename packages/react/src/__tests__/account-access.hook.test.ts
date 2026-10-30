@@ -18,7 +18,7 @@ describe('useAccountAccess', () => {
   });
 
   it('sets provisional approval and returns the account-access information', async () => {
-    const response = { id: 42, provisionalApprovalDate: new Date('2026-10-30'), vipUserIds: [] };
+    const response = { id: 42, provisionalApprovalDate: '2026-10-30T08:00:00.000Z', vipUserIds: [] };
     mockCall.mockResolvedValue(response);
 
     const accountAccess = useAccountAccess();

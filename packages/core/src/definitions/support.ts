@@ -130,7 +130,8 @@ export interface SetAccountAccess {
 
 export interface AccountAccessInfo {
   id: number;
-  provisionalApprovalDate?: Date;
+  /** ISO date string as sent by the API. */
+  provisionalApprovalDate?: string;
   vipUserIds: number[];
 }
 

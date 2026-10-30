@@ -22,7 +22,7 @@ describe('SupportApi', () => {
     it('sends the account-access update and returns its response', async () => {
       const response = {
         id: 42,
-        provisionalApprovalDate: new Date('2026-10-30'),
+        provisionalApprovalDate: '2026-10-30T08:00:00.000Z',
         vipUserIds: [7],
       };
       const mockHttp = createMockHttpClient({ resolve: response });
