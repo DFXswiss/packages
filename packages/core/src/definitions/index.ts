@@ -163,6 +163,8 @@ export type {
   LimitRequestIssue,
   CreateSupportMessage,
   CreateSupportIssue,
+  SetAccountAccess,
+  AccountAccessInfo,
 } from './support';
 export { SwapUrl } from './swap';
 export type { Swap, SwapPaymentInfo, ConfirmSwapData } from './swap';

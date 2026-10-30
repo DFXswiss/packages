@@ -35,6 +35,7 @@ export { usePasskeyApi } from './hooks/passkey.hook';
 export type { PasskeyInterface } from './hooks/passkey.hook';
 export { useChainApi } from './hooks/chain.hook';
 export { useSupportChat } from './hooks/support.hook';
+export { useAccountAccess } from './hooks/account-access.hook';
 
 // Definitions
 export { CheckStatus, AmlReason } from './definitions/aml';
@@ -245,6 +246,8 @@ export {
   Department,
   Reaction,
   SupportUrl,
+  SetAccountAccess,
+  AccountAccessInfo,
 } from './definitions/support';
 
 // Utils & Validations
