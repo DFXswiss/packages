@@ -80,3 +80,11 @@ export type { DfxDataOptions } from './providers/dfx-data';
 export { PricePolicy, PRICE_STALE_MS } from './providers/price';
 export { Blocklists } from './providers/blocklist';
 export type { WalletSnapshot, SnapshotAsset, SnapshotBlocklists } from './providers/snapshot';
+
+// Session and flows (§8, D5, X24)
+export { PasskeyAuth, PasskeyRefusedError } from './session/passkey-auth';
+export type { WalletState, AuthResult, PasskeyRefusal, RegisterExtras } from './session/passkey-auth';
+export { IdleLock } from './session/idle-lock';
+export type { IdleDelay, IdleLockOptions } from './session/idle-lock';
+export { TabLock } from './session/tab-lock';
+export type { LockManagerLike } from './session/tab-lock';
