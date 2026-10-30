@@ -25,3 +25,11 @@ export type { SeedPublicData } from './derivation/public-data';
 export { encodeSparkAddress, decodeSparkAddress } from './derivation/spark-keys';
 export { seedCheck } from './derivation/seed-check';
 export type { EvmAddress } from './derivation/evm-keys';
+
+// Signing (§8.5, §9.3, D31)
+export { LOGIN_TEMPLATES, buildLoginMessage } from './signing/login-messages';
+export type { LoginTemplate } from './signing/login-messages';
+export { LoginAutoSigner, LoginMessageMismatchError, eip191MessageHash } from './signing/auto-signer';
+export { SPARK_LOGIN_TAG, sparkLoginDigestV1, verifySparkLogin } from './signing/spark-login';
+export { bitcoinMessageMagicHash, verifyBitcoinMessage } from './signing/bitcoin-message';
+export { isDfxLoginText } from './signing/login-text-guard';
