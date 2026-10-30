@@ -31,10 +31,8 @@ export function AssetContextProvider(props: AssetContextProviderProps): JSX.Elem
   const [assetsLoading, setAssetsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const chains = Object.values(Blockchain).filter((c) => c !== Blockchain.DEFICHAIN);
-
     setAssetsLoading(true);
-    getApiAssets(chains, props.includePrivateAssets ?? false)
+    getApiAssets(undefined, props.includePrivateAssets ?? false)
       .then(updateAssets)
       .finally(() => setAssetsLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps

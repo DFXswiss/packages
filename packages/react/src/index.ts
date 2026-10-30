@@ -31,6 +31,9 @@ export { useKyc } from './hooks/kyc.hook';
 export { useSell } from './hooks/sell.hook';
 export { useUser } from './hooks/user.hook';
 export { useSwap } from './hooks/swap.hook';
+export { usePasskeyApi } from './hooks/passkey.hook';
+export type { PasskeyInterface } from './hooks/passkey.hook';
+export { useChainApi } from './hooks/chain.hook';
 export { useSupportChat } from './hooks/support.hook';
 
 // Definitions
