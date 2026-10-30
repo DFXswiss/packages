@@ -15,3 +15,13 @@ export {
   createDefaultKeyValueStore,
 } from './util/kv-store';
 export type { KeyValueStore, IndexedDbKeyValueStoreOptions } from './util/kv-store';
+
+// Derivation v1 (§7.1, §7.2)
+export { DERIVATION_V1, PRF_OUTPUT_BYTES, prfInputV1, mnemonicFromPrfV1, normalizeMnemonicV1 } from './derivation/v1';
+export { KeyRing } from './derivation/keyring';
+export type { KeyRingOptions, BitcoinAccountInfo, BitcoinAddressInfo, SparkIdentityInfo } from './derivation/keyring';
+export { seedPublicData } from './derivation/public-data';
+export type { SeedPublicData } from './derivation/public-data';
+export { encodeSparkAddress, decodeSparkAddress } from './derivation/spark-keys';
+export { seedCheck } from './derivation/seed-check';
+export type { EvmAddress } from './derivation/evm-keys';

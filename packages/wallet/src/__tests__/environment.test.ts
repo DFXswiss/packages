@@ -14,14 +14,17 @@ describe('environment', () => {
     for (const value of ['PRD', 'stg', '', undefined, null, 1]) expect(isWalletEnv(value)).toBe(false);
   });
 
-  it('pins the RP IDs', () => {
-    expect(RP_IDS).toEqual({ prd: 'app.dfx.swiss', dev: 'dev-app.dfx.swiss', loc: 'localhost' });
+  it('pins the RP IDs to the app hosts of the environments', () => {
+    expect(RP_IDS).toEqual({ prd: 'app.dfx.swiss', dev: 'dev.app.dfx.swiss', loc: 'localhost' });
   });
 
-  it('keeps every non-production RP ID outside the production RP scope', () => {
+  it('keeps every non-production RP ID strictly below the production RP scope', () => {
+    // WebAuthn RP scope only grows downward: a passkey of a deeper RP ID never satisfies a ceremony of a
+    // shallower one, so DEV inside the production subtree is safe. What must never happen is a non-production
+    // RP ID equal to or above the production one - that would make its passkeys valid in PRD ceremonies.
     for (const env of ['dev', 'loc'] as WalletEnv[]) {
       expect(RP_IDS[env]).not.toBe(RP_IDS.prd);
-      expect(RP_IDS[env].endsWith(`.${RP_IDS.prd}`)).toBe(false);
+      expect(RP_IDS.prd.endsWith(`.${RP_IDS[env]}`)).toBe(false);
     }
   });
 
