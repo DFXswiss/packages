@@ -1,0 +1,25 @@
+{
+  "name": "dfx-wallet-derivation-kat",
+  "private": true,
+  "description": "Generates the derivation v1 known-answer vectors of @dfx.swiss/wallet with independent libraries. Not a workspace member, not run in CI.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "setup": "npm install --no-package-lock --ignore-scripts",
+    "generate": "node generate.mjs"
+  },
+  "dependencies": {
+    "@breeztech/breez-sdk-spark": "0.27.2",
+    "@buildonspark/spark-sdk": "0.14.0",
+    "bech32": "2.0.0",
+    "bip32": "5.0.1",
+    "bip39": "3.1.2",
+    "bitcoinjs-lib": "7.0.5",
+    "bitcoinjs-message": "2.2.0",
+    "ethers": "6.17.0",
+    "tiny-secp256k1": "2.2.5"
+  }
+}

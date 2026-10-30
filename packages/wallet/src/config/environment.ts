@@ -11,13 +11,15 @@ export function isWalletEnv(value: unknown): value is WalletEnv {
 }
 
 /**
- * WebAuthn relying-party ID per environment. The RP ID is the app host, never the apex `dfx.swiss`, and DEV
- * has its own host outside the production RP scope. A passkey is bound to its RP ID forever, so these values
- * must never change for an existing environment.
+ * WebAuthn relying-party ID per environment. The RP ID is the app host, never the apex `dfx.swiss`. DEV is the
+ * existing DEV Pages host `dev.app.dfx.swiss`, a subdomain of the production host: WebAuthn RP scope only
+ * grows downward, so a DEV passkey (rpId `dev.app.dfx.swiss`) can never satisfy a PRD ceremony, which pins
+ * `app.dfx.swiss`, and every ceremony always passes its own environment's RP ID. A passkey is bound to its
+ * RP ID forever, so these values must never change for an existing environment.
  */
 export const RP_IDS: Readonly<Record<WalletEnv, string>> = Object.freeze({
   prd: 'app.dfx.swiss',
-  dev: 'dev-app.dfx.swiss',
+  dev: 'dev.app.dfx.swiss',
   loc: 'localhost',
 });
 
