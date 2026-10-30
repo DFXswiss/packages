@@ -72,3 +72,11 @@ export { passkeyDiagnostic } from './passkey/diagnostics';
 export type { PasskeyDiagnostic, PasskeyDiagnosticInput } from './passkey/diagnostics';
 export { credentialToJSON } from './passkey/webauthn-json';
 export type { WebAuthnJson } from './passkey/webauthn-json';
+
+// Providers (D8, D23, D32, §9.2)
+export { ChainRegistry } from './providers/chain-registry';
+export { DfxData, ProviderUnavailableError } from './providers/dfx-data';
+export type { DfxDataOptions } from './providers/dfx-data';
+export { PricePolicy, PRICE_STALE_MS } from './providers/price';
+export { Blocklists } from './providers/blocklist';
+export type { WalletSnapshot, SnapshotAsset, SnapshotBlocklists } from './providers/snapshot';
