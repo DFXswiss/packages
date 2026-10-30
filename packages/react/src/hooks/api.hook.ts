@@ -23,6 +23,8 @@ export interface CallConfig {
   responseType?: ResponseType;
   specialHandling?: SpecialHandling;
   token?: string | false;
+  /** Passkey calls carry their own in-memory token: a 401 must neither clear the session nor retry. */
+  skipAuthHandling?: boolean;
 }
 
 interface SpecialHandling {
@@ -91,7 +93,7 @@ export function useApi(): ApiInterface {
       config.token ??= getAuthToken();
 
       return fetchFrom<T>(config).catch((error: ApiError) => {
-        if (error.statusCode === 401 && config.token !== false) {
+        if (!config.skipAuthHandling && error.statusCode === 401 && config.token !== false) {
           const currentToken = getAuthToken();
           if (config.token === currentToken) {
             setAuthToken(undefined);

@@ -1,0 +1,44 @@
+{
+  "private": false,
+  "name": "@dfx.swiss/wallet",
+  "version": "0.1.0",
+  "description": "Self-custodial passkey seed wallet core for the DFX.swiss app (Bitcoin, EVM, Spark)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DFXswiss/packages.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -b ./tsconfig.build.json",
+    "clean": "rm -rf ./dist/ && rm -rf ./tsconfig.build.tsbuildinfo",
+    "test": "jest",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write src",
+    "format:check": "prettier --check src",
+    "pack": "npm pack"
+  },
+  "dependencies": {
+    "@dfx.swiss/core": "^0.7.4",
+    "@noble/curves": "~1.9.1",
+    "@noble/hashes": "~1.8.0",
+    "@scure/base": "~1.2.5",
+    "@scure/bip32": "1.7.0",
+    "@scure/bip39": "1.6.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.4.9",
+    "typescript": "^5.4.5"
+  }
+}

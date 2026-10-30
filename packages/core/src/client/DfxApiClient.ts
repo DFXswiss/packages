@@ -1,5 +1,8 @@
 import { DfxHttpClient } from './DfxHttpClient';
 import { AuthApi } from './AuthApi';
+import { ChainApi } from './ChainApi';
+import { PasskeyApi } from './PasskeyApi';
+import { WalletDataApi } from './WalletDataApi';
 import { AssetApi } from './AssetApi';
 import { BankApi } from './BankApi';
 import { BankAccountApi } from './BankAccountApi';
@@ -28,6 +31,9 @@ export class DfxApiClient {
   private readonly http: DfxHttpClient;
 
   readonly auth: AuthApi;
+  readonly chain: ChainApi;
+  readonly passkey: PasskeyApi;
+  readonly walletData: WalletDataApi;
   readonly asset: AssetApi;
   readonly bank: BankApi;
   readonly bankAccount: BankAccountApi;
@@ -52,6 +58,9 @@ export class DfxApiClient {
     });
 
     this.auth = new AuthApi(this.http);
+    this.chain = new ChainApi(this.http);
+    this.passkey = new PasskeyApi(this.http);
+    this.walletData = new WalletDataApi(this.http);
     this.asset = new AssetApi(this.http);
     this.bank = new BankApi(this.http);
     this.bankAccount = new BankAccountApi(this.http);

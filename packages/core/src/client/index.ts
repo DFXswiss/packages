@@ -22,3 +22,6 @@ export { SupportApi } from './SupportApi';
 export { SwapApi } from './SwapApi';
 export { TransactionApi } from './TransactionApi';
 export { UserApi } from './UserApi';
+export { ChainApi } from './ChainApi';
+export { PasskeyApi } from './PasskeyApi';
+export { WalletDataApi, EsploraApi } from './WalletDataApi';
