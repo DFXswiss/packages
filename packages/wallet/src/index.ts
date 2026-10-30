@@ -33,3 +33,42 @@ export { LoginAutoSigner, LoginMessageMismatchError, eip191MessageHash } from '.
 export { SPARK_LOGIN_TAG, sparkLoginDigestV1, verifySparkLogin } from './signing/spark-login';
 export { bitcoinMessageMagicHash, verifyBitcoinMessage } from './signing/bitcoin-message';
 export { isDfxLoginText } from './signing/login-text-guard';
+
+// Passkey (§6, §8.3, §8.4, §11.4)
+export {
+  checkPasskeyPlatform,
+  isInAppBrowser,
+  openInSystemBrowser,
+  iosInstalledVersion,
+  androidInstalledVersion,
+} from './passkey/platform';
+export type { PlatformReport, PlatformHost } from './passkey/platform';
+export { PasskeyCeremonies } from './passkey/ceremonies';
+export type {
+  CeremonyCredentials,
+  CeremonyWindow,
+  PendingSeedPasskey,
+  CreatedSeedPasskey,
+  SeedAssertion,
+} from './passkey/ceremonies';
+export {
+  PasskeyError,
+  EmbeddedContextError,
+  WrongOriginError,
+  PlatformUnsupportedError,
+  InAppBrowserError,
+  CrossDeviceRegistrationError,
+  PrfMismatchError,
+  PrfUnavailableError,
+  CeremonySupersededError,
+  CeremonyCancelledError,
+  UserActivationMissingError,
+  classifyWebAuthnError,
+} from './passkey/errors';
+export type { WebAuthnErrorKind } from './passkey/errors';
+export { CredentialCache } from './passkey/credential-cache';
+export type { CachedPasskeyCredential, CredentialStorage } from './passkey/credential-cache';
+export { passkeyDiagnostic } from './passkey/diagnostics';
+export type { PasskeyDiagnostic, PasskeyDiagnosticInput } from './passkey/diagnostics';
+export { credentialToJSON } from './passkey/webauthn-json';
+export type { WebAuthnJson } from './passkey/webauthn-json';
