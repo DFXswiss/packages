@@ -2,6 +2,8 @@ import { Limit, InvestmentDate, FundOrigin } from './kyc';
 
 export const SupportUrl = {
   supportIssue: 'support/issue',
+  provisionalApproval: (userDataId: number) => `support/${userDataId}/provisionalApproval`,
+  vip: (userDataId: number) => `support/${userDataId}/vip`,
   createMessage: (uid: string) => `support/issue/${uid}/message`,
   getIssue: (uid: string, fromMessageId?: number) =>
     `support/issue/${uid}${fromMessageId ? `?fromMessageId=${fromMessageId}` : ''}`,
@@ -120,6 +122,16 @@ export interface SupportIssue {
   messages: SupportMessage[];
   transaction?: SupportIssueTransaction;
   limitRequest?: SupportIssueLimitRequest;
+}
+
+export interface SetAccountAccess {
+  enabled: boolean;
+}
+
+export interface AccountAccessInfo {
+  id: number;
+  provisionalApprovalDate?: Date;
+  vipUserIds: number[];
 }
 
 // --- CREATE INTERFACES --- //

@@ -54,6 +54,8 @@ export interface Buy {
   sepaInstant: boolean;
   /** Bank name (e.g. for personal IBAN); optional for backward compatibility. */
   bank?: string;
+  /** True when deposit details are shown on a provisional approval; the quote itself stays invalid (`isValid: false`). */
+  provisionalApproval?: boolean;
   routeId: number;
   remittanceInfo?: string;
   fees: Fees;

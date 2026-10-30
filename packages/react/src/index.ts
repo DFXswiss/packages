@@ -32,6 +32,7 @@ export { useSell } from './hooks/sell.hook';
 export { useUser } from './hooks/user.hook';
 export { useSwap } from './hooks/swap.hook';
 export { useSupportChat } from './hooks/support.hook';
+export { useAccountAccess } from './hooks/account-access.hook';
 
 // Definitions
 export { CheckStatus, AmlReason } from './definitions/aml';
@@ -242,6 +243,8 @@ export {
   Department,
   Reaction,
   SupportUrl,
+  SetAccountAccess,
+  AccountAccessInfo,
 } from './definitions/support';
 
 // Utils & Validations

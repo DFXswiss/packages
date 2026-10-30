@@ -243,6 +243,8 @@ export type {
   LimitRequestIssue,
   CreateSupportMessage,
   CreateSupportIssue,
+  SetAccountAccess,
+  AccountAccessInfo,
   // Swap
   Swap,
   SwapPaymentInfo,
