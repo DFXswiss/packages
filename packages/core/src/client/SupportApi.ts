@@ -5,6 +5,7 @@ import {
   CreateSupportMessage,
   SupportMessage,
   BlobContent,
+  AccountAccessInfo,
 } from '../definitions/support';
 import { DfxHttpClient, ResponseType } from './DfxHttpClient';
 
@@ -17,6 +18,22 @@ export class SupportApi {
 
   async listIssues(): Promise<SupportIssue[]> {
     return this.http.request<SupportIssue[]>({ url: SupportUrl.supportIssue, method: 'GET' });
+  }
+
+  async setProvisionalApproval(userDataId: number, enabled: boolean): Promise<AccountAccessInfo> {
+    return this.http.request<AccountAccessInfo>({
+      url: SupportUrl.provisionalApproval(userDataId),
+      method: 'PUT',
+      data: { enabled },
+    });
+  }
+
+  async setVip(userDataId: number, enabled: boolean): Promise<AccountAccessInfo> {
+    return this.http.request<AccountAccessInfo>({
+      url: SupportUrl.vip(userDataId),
+      method: 'PUT',
+      data: { enabled },
+    });
   }
 
   async getIssue(uid: string, fromMessageId?: number): Promise<SupportIssue> {

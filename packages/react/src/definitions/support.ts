@@ -20,4 +20,6 @@ export type {
   LimitRequestIssue,
   CreateSupportMessage,
   CreateSupportIssue,
+  SetAccountAccess,
+  AccountAccessInfo,
 } from '@dfx.swiss/core';
