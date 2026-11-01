@@ -56,11 +56,14 @@ function fakeCredential(prf: Uint8Array | undefined, id = CREDENTIAL_ID): Public
   } as unknown as PublicKeyCredential;
 }
 
-function fakeWindow(): CeremonyWindow {
+function fakeWindow(): CeremonyWindow & { signalUnknown: jest.Mock } {
+  const signalUnknown = jest.fn();
   return {
     location: { hostname: 'app.dfx.swiss' },
     navigator: { userAgent: 'TestBrowser/1.0', userActivation: { isActive: true } },
-  };
+    PublicKeyCredential: { signalUnknownCredential: signalUnknown },
+    signalUnknown,
+  } as CeremonyWindow & { signalUnknown: jest.Mock };
 }
 
 function wallet(seedCheckAddress: string): PasskeyWallet {
@@ -129,16 +132,25 @@ function auth(
   cache: CredentialCache;
   registerFinish: jest.Mock;
   claimFinish: jest.Mock;
+  signalUnknown: jest.Mock;
 } {
   const cache = new CredentialCache(new MemoryStorage(), 'dfx.wallet.credentials.v1', 'app.dfx.swiss');
   const client = api(behavior);
+  const win = fakeWindow();
   const flow = new PasskeyAuth({
     api: client,
-    ceremonies: new PasskeyCeremonies('prd', credentials, fakeWindow()),
+    ceremonies: new PasskeyCeremonies('prd', credentials, win),
     env: 'prd' as WalletEnv,
     cache,
   });
-  return { flow, credentials, cache, registerFinish: client.registerFinish, claimFinish: client.claimFinish };
+  return {
+    flow,
+    credentials,
+    cache,
+    registerFinish: client.registerFinish,
+    claimFinish: client.claimFinish,
+    signalUnknown: win.signalUnknown,
+  };
 }
 
 class MemoryStorage {
@@ -156,7 +168,7 @@ class MemoryStorage {
 
 describe('register', () => {
   it('runs the 2-tap ceremony, proves the seed and unlocks the wallet', async () => {
-    const { flow, credentials, cache, registerFinish } = auth();
+    const { flow, credentials, cache, registerFinish, signalUnknown } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
 
@@ -169,6 +181,9 @@ describe('register', () => {
 
     const entry = cache.list().find((e) => e.state === 'active');
     expect(entry?.publicData?.seedCheckAddress).toBe(fixture.vectors[0].evm[0].address);
+    expect(entry?.credentialId).toBe(base64url(CREDENTIAL_ID));
+    expect(entry?.credentialId).not.toBe('Y3JlZGVudGlhbC1pZA');
+    expect(signalUnknown).not.toHaveBeenCalled();
 
     const createdOptions = credentials.created[0].publicKey as PublicKeyCredentialCreationOptions;
     expect(new Uint8Array(createdOptions.challenge)).toEqual(new Uint8Array(48)); // base64url of 64 'A'
@@ -185,6 +200,36 @@ describe('register', () => {
     const assertOptions = credentials.got[0].publicKey as PublicKeyCredentialRequestOptions;
     expect(new Uint8Array(assertOptions.challenge as BufferSource)).toEqual(new Uint8Array(48));
     expect(new Uint8Array(assertOptions.allowCredentials![0].id as BufferSource)).toEqual(CREDENTIAL_ID);
+  });
+
+  it('unlocks against the credential id cached at register', async () => {
+    const { flow, credentials, cache } = auth();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+
+    await flow.register({ mail: 'user@example.com' });
+
+    credentials.nextGet = fakeCredential(PRF);
+    const result = await flow.unlock();
+
+    expect(result.state).toBe('unlocked');
+    const entry = cache.list().find((e) => e.state === 'active');
+    expect(entry?.credentialId).toBe(base64url(CREDENTIAL_ID));
+  });
+
+  it('aborts the pending credential when registerFinish rejects', async () => {
+    const { flow, credentials, cache, registerFinish, signalUnknown } = auth();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const failure = new Error('register failed');
+    registerFinish.mockRejectedValueOnce(failure);
+
+    await expect(flow.register({ mail: 'user@example.com' })).rejects.toBe(failure);
+    expect(cache.list()).toEqual([]);
+    expect(signalUnknown).toHaveBeenCalledWith({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: 'app.dfx.swiss',
+    });
   });
 
   it('refuses a server challenge of another RP ID', async () => {
@@ -377,6 +422,22 @@ describe('claim and link', () => {
     );
     expect(claimFinish.mock.calls[0][0]).not.toHaveProperty('mail');
     expect(credentials.got).toHaveLength(1);
+  });
+
+  it('aborts the pending credential when claimFinish rejects', async () => {
+    const { flow, credentials, cache, claimFinish, signalUnknown } = auth();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const failure = new Error('claim failed');
+    claimFinish.mockRejectedValueOnce(failure);
+
+    await expect(flow.claim('fresh-token')).rejects.toBe(failure);
+    expect(cache.list()).toEqual([]);
+    expect(signalUnknown).toHaveBeenCalledWith({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: 'app.dfx.swiss',
+    });
+    expect(claimFinish).toHaveBeenCalledWith(expect.anything(), 'fresh-token');
   });
 
   it('links the EVM seed check address with a login signature', async () => {

@@ -5,7 +5,7 @@
  */
 export interface PasskeyDiagnosticInput {
   stage: string;
-  outcome: 'started' | 'completed' | 'failed' | 'aborted';
+  outcome: 'completed' | 'failed' | 'aborted';
   errorName?: string;
   message?: string;
   attachment?: string | null;
@@ -22,9 +22,23 @@ export type PasskeyDiagnostic = Record<string, unknown>;
 /** Message characters diagnostics may carry; anything else (urls, keys, base64 blobs) is dropped. */
 const SAFE_MESSAGE = /^[A-Za-z0-9 .,:;'()_-]{1,120}$/;
 
+function diagnosticOutcome(outcome: PasskeyDiagnosticInput['outcome']): 'Success' | 'Failure' | 'Aborted' {
+  switch (outcome) {
+    case 'completed':
+      return 'Success';
+    case 'failed':
+      return 'Failure';
+    case 'aborted':
+      return 'Aborted';
+  }
+}
+
 /** Builds the sanitized diagnostic record; the app forwards it to `POST auth/passkey/diagnostics`. */
 export function passkeyDiagnostic(input: PasskeyDiagnosticInput): PasskeyDiagnostic {
-  const record: PasskeyDiagnostic = { stage: String(input.stage).slice(0, 64), outcome: input.outcome };
+  const record: PasskeyDiagnostic = {
+    stage: String(input.stage).slice(0, 64),
+    outcome: diagnosticOutcome(input.outcome),
+  };
   if (input.errorName !== undefined) record['errorName'] = String(input.errorName).slice(0, 64);
   if (input.message !== undefined)
     record['message'] = SAFE_MESSAGE.test(input.message) ? input.message : '<unavailable>';

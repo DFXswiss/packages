@@ -5,6 +5,7 @@ import { equalBytes } from '../util/bytes';
 import { randomBytes } from '../util/random';
 import { CeremonyGate, CeremonyRun } from './ceremony-gate';
 import {
+  CeremonySupersededError,
   CrossDeviceRegistrationError,
   EmbeddedContextError,
   PasskeyError,
@@ -286,8 +287,13 @@ export class PasskeyCeremonies {
     const controller = allowSignal ? new AbortController() : undefined;
 
     const run = this.gate.begin(() => controller?.abort());
-    const result = await action(controller?.signal);
-    return { result, run };
+    try {
+      const result = await action(controller?.signal);
+      return { result, run };
+    } catch (error) {
+      if (!run.isCurrent()) throw new CeremonySupersededError();
+      throw error;
+    }
   }
 
   private withSignal<T extends { signal?: AbortSignal }>(options: T, signal: AbortSignal | undefined): T {

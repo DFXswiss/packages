@@ -20,11 +20,13 @@ class FakeCredentials implements CeremonyCredentials {
   readonly got: CredentialRequestOptions[] = [];
   nextCreate: PublicKeyCredential | null = null;
   nextGet: PublicKeyCredential | null = null;
+  createError?: Error;
   createHook?: () => Promise<void>;
 
   async create(options: CredentialCreationOptions): Promise<PublicKeyCredential | null> {
     this.created.push(options);
     await this.createHook?.();
+    if (this.createError) throw this.createError;
     return this.nextCreate;
   }
 
@@ -332,6 +334,31 @@ describe('superseding and signals', () => {
     iosCredentials.nextCreate = attestationCredential({ prf: PRF_A });
     await ceremonies(iosCredentials, iosWindow).createCredential({ challenge: new Uint8Array(32) });
     expect(iosCredentials.created[0].signal).toBeUndefined();
+  });
+
+  it('turns a superseded WebAuthn AbortError into CeremonySupersededError', async () => {
+    const credentials = new FakeCredentials();
+    let release!: (value: void) => void;
+    credentials.createHook = () => new Promise<void>((resolve) => (release = resolve));
+    const abortError = new Error('The operation was aborted.');
+    abortError.name = 'AbortError';
+    credentials.createError = abortError;
+    const instance = ceremonies(credentials);
+
+    const pending = instance.createCredential({ challenge: new Uint8Array(32) });
+    instance.cancel();
+    release();
+
+    await expect(pending).rejects.toThrow(CeremonySupersededError);
+  });
+
+  it('forwards a WebAuthn error while the ceremony is still current', async () => {
+    const credentials = new FakeCredentials();
+    const notAllowed = new Error('not allowed');
+    notAllowed.name = 'NotAllowedError';
+    credentials.createError = notAllowed;
+
+    await expect(ceremonies(credentials).createCredential({ challenge: new Uint8Array(32) })).rejects.toBe(notAllowed);
   });
 });
 

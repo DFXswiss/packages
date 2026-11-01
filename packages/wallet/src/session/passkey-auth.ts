@@ -79,17 +79,23 @@ export class PasskeyAuth {
     const keys = keysFromPrf(created.prfOutput, this.deps.env);
     const proof = this.seedProof(keys);
 
-    const response = await this.deps.api.passkey.registerFinish({
-      challengeId: challenge.challengeId,
-      credential: created.attestation,
-      userHandle: base64UrlEncode(created.userHandle),
-      derivationVersion: 'V1',
-      assertion: created.assertion,
-      ...proof,
-      ...extras,
-    });
+    let response: { accessToken: string; wallet: PasskeyWallet };
+    try {
+      response = await this.deps.api.passkey.registerFinish({
+        challengeId: challenge.challengeId,
+        credential: created.attestation,
+        userHandle: base64UrlEncode(created.userHandle),
+        derivationVersion: 'V1',
+        assertion: created.assertion,
+        ...proof,
+        ...extras,
+      });
+    } catch (error) {
+      await pending.abort();
+      throw error;
+    }
 
-    this.cacheWallet(response.wallet, keys);
+    this.cacheWallet(response.wallet, keys, created.credentialId);
     return { accessToken: response.accessToken, wallet: response.wallet, keys, state: 'unlocked' };
   }
 
@@ -110,7 +116,7 @@ export class PasskeyAuth {
     const state: WalletState = seedCheck(keys.evm(0).address, response.wallet.seedCheckAddress)
       ? 'unlocked'
       : 'seed-mismatch';
-    if (state === 'unlocked') this.cacheWallet(response.wallet, keys);
+    if (state === 'unlocked') this.cacheWallet(response.wallet, keys, assertion.credentialId);
     return { ...response, keys, state };
   }
 
@@ -139,19 +145,27 @@ export class PasskeyAuth {
     const created = await pending.confirm();
 
     const keys = keysFromPrf(created.prfOutput, this.deps.env);
-    const response = await this.deps.api.passkey.claimFinish(
-      {
-        challengeId: challenge.challengeId,
-        credential: created.attestation,
-        userHandle: base64UrlEncode(created.userHandle),
-        derivationVersion: 'V1',
-        assertion: created.assertion,
-        ...this.seedProof(keys),
-      },
-      freshLoginToken,
-    );
+    const proof = this.seedProof(keys);
 
-    this.cacheWallet(response.wallet, keys);
+    let response: { accessToken: string; wallet: PasskeyWallet };
+    try {
+      response = await this.deps.api.passkey.claimFinish(
+        {
+          challengeId: challenge.challengeId,
+          credential: created.attestation,
+          userHandle: base64UrlEncode(created.userHandle),
+          derivationVersion: 'V1',
+          assertion: created.assertion,
+          ...proof,
+        },
+        freshLoginToken,
+      );
+    } catch (error) {
+      await pending.abort();
+      throw error;
+    }
+
+    this.cacheWallet(response.wallet, keys, created.credentialId);
     return { accessToken: response.accessToken, wallet: response.wallet, keys, state: 'unlocked' };
   }
 
@@ -270,9 +284,9 @@ export class PasskeyAuth {
     }
   }
 
-  private cacheWallet(wallet: PasskeyWallet, keys: KeyRing): void {
+  private cacheWallet(wallet: PasskeyWallet, keys: KeyRing, credentialId: Uint8Array): void {
     this.deps.cache?.put({
-      credentialId: wallet.credentialId,
+      credentialId: base64UrlEncode(credentialId),
       rpId: RP_IDS[this.deps.env],
       state: wallet.status === 'Active' ? 'active' : 'revoked',
       seedCheckAddress: wallet.seedCheckAddress,

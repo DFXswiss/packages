@@ -17,7 +17,7 @@ describe('passkeyDiagnostic', () => {
     });
     expect(record).toEqual({
       stage: 'register.confirm',
-      outcome: 'failed',
+      outcome: 'Failure',
       errorName: 'NotAllowedError',
       message: 'The operation either timed out or was not allowed.',
       attachment: 'platform',
@@ -45,6 +45,10 @@ describe('passkeyDiagnostic', () => {
   });
 
   it('omits optional fields entirely when not given', () => {
-    expect(passkeyDiagnostic({ stage: 's', outcome: 'completed' })).toEqual({ stage: 's', outcome: 'completed' });
+    expect(passkeyDiagnostic({ stage: 's', outcome: 'completed' })).toEqual({ stage: 's', outcome: 'Success' });
+  });
+
+  it('maps aborted to the API Aborted literal', () => {
+    expect(passkeyDiagnostic({ stage: 's', outcome: 'aborted' })).toEqual({ stage: 's', outcome: 'Aborted' });
   });
 });
