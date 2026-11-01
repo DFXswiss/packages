@@ -83,9 +83,7 @@ interface ApiBehavior {
   authenticateReject?: ApiException;
 }
 
-function api(
-  behavior: ApiBehavior = {},
-): DfxApiClient & {
+function api(behavior: ApiBehavior = {}): DfxApiClient & {
   registerFinish: jest.Mock;
   authenticateFinish: jest.Mock;
   claimFinish: jest.Mock;
