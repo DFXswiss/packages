@@ -38,6 +38,7 @@ export class PasskeyRefusedError extends WalletError {
 }
 
 export interface RegisterExtras {
+  mail: string;
   language?: string;
   usedRef?: string;
   recommendationCode?: string;
@@ -64,7 +65,7 @@ export class PasskeyAuth {
   constructor(private readonly deps: PasskeyAuthDeps) {}
 
   /** Registers a new passkey wallet (2-tap ceremony, seed proof for EVM and Spark, D22). */
-  async register(extras?: RegisterExtras): Promise<AuthResult> {
+  async register(extras: RegisterExtras): Promise<AuthResult> {
     const challenge = await this.deps.api.passkey.registerBegin();
     this.checkRpId(challenge.rpId);
 
@@ -75,6 +76,11 @@ export class PasskeyAuth {
     });
     const created = await pending.confirm();
 
+    const assertion = await this.deps.ceremonies.assert({
+      challenge: base64UrlDecode(challenge.challenge),
+      credentialId: created.credentialId,
+    });
+
     const keys = keysFromPrf(created.prfOutput, this.deps.env);
     const proof = this.seedProof(keys);
 
@@ -83,6 +89,7 @@ export class PasskeyAuth {
       credential: created.attestation,
       userHandle: base64UrlEncode(created.userHandle),
       derivationVersion: 'V1',
+      assertion: assertion.assertion,
       ...proof,
       ...extras,
     });
@@ -138,6 +145,11 @@ export class PasskeyAuth {
     });
     const created = await pending.confirm();
 
+    const assertion = await this.deps.ceremonies.assert({
+      challenge: base64UrlDecode(challenge.challenge),
+      credentialId: created.credentialId,
+    });
+
     const keys = keysFromPrf(created.prfOutput, this.deps.env);
     const response = await this.deps.api.passkey.claimFinish(
       {
@@ -145,6 +157,7 @@ export class PasskeyAuth {
         credential: created.attestation,
         userHandle: base64UrlEncode(created.userHandle),
         derivationVersion: 'V1',
+        assertion: assertion.assertion,
         ...this.seedProof(keys),
       },
       freshLoginToken,

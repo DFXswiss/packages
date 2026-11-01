@@ -58,16 +58,19 @@ export interface PasskeyCredentialProof {
   sparkAddress: string;
   /** D31 signature, 128 hex chars. */
   sparkSignature: string;
+  /** WebAuthn authentication assertion against the same server challenge. */
+  assertion: Record<string, unknown>;
 }
 
 export interface RegisterPasskeyParams extends PasskeyCredentialProof {
+  mail: string;
   language?: string;
   usedRef?: string;
   recommendationCode?: string;
   specialCode?: string;
 }
 
-/** Claim sends exactly the same proof as register, into an existing account. */
+/** Claim sends the same proof as register, into an existing account; it does not send mail. */
 export type ClaimPasskeyParams = PasskeyCredentialProof;
 
 /** An authentication assertion (backend `PasskeyAssertionDto`). */

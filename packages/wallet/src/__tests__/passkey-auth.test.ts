@@ -85,42 +85,62 @@ interface ApiBehavior {
 
 function api(
   behavior: ApiBehavior = {},
-): DfxApiClient & { registerFinish: jest.Mock; authenticateFinish: jest.Mock; link: jest.Mock } {
+): DfxApiClient & {
+  registerFinish: jest.Mock;
+  authenticateFinish: jest.Mock;
+  claimFinish: jest.Mock;
+  link: jest.Mock;
+} {
   const challenge = { challengeId: 'c'.repeat(64), challenge: 'A'.repeat(64), rpId: 'app.dfx.swiss', timeout: 600000 };
+  const registerFinish = jest.fn(async () => ({ accessToken: 'register-token', wallet: wallet('pending') }));
+  const authenticateFinish = jest.fn(async () => {
+    if (behavior.authenticateReject) throw behavior.authenticateReject;
+    return { accessToken: 'login-token', wallet: wallet(behavior.walletSeedCheckAddress ?? '') };
+  });
+  const claimFinish = jest.fn(async () => ({ accessToken: 'claim-token', wallet: wallet('pending') }));
+  const link = jest.fn(async () => ({
+    accessToken: 'link-token',
+    address: { address: '0x1', family: 'Evm', path: "m/44'/60'/0'/0/0", status: 'Active', blockchains: [] },
+  }));
   return {
     passkey: {
       registerBegin: async () => challenge,
-      registerFinish: async () => ({ accessToken: 'register-token', wallet: wallet('pending') }),
+      registerFinish,
       authenticateBegin: async () => challenge,
-      authenticateFinish: async () => {
-        if (behavior.authenticateReject) throw behavior.authenticateReject;
-        return { accessToken: 'login-token', wallet: wallet(behavior.walletSeedCheckAddress ?? '') };
-      },
+      authenticateFinish,
       claimBegin: async () => challenge,
-      claimFinish: async () => ({ accessToken: 'claim-token', wallet: wallet('pending') }),
-      link: async () => ({
-        accessToken: 'link-token',
-        address: { address: '0x1', family: 'Evm', path: "m/44'/60'/0'/0/0", status: 'Active', blockchains: [] },
-      }),
+      claimFinish,
+      link,
       revokeBegin: async () => challenge,
       revokeFinish: async () => wallet('x'),
       credentialStatus: async () => [],
     },
+    registerFinish,
+    authenticateFinish,
+    claimFinish,
+    link,
   } as never;
 }
 
 function auth(
   behavior: ApiBehavior = {},
   credentials = new FakeCredentials(),
-): { flow: PasskeyAuth; credentials: FakeCredentials; cache: CredentialCache } {
+): {
+  flow: PasskeyAuth;
+  credentials: FakeCredentials;
+  cache: CredentialCache;
+  registerFinish: jest.Mock;
+  claimFinish: jest.Mock;
+} {
   const cache = new CredentialCache(new MemoryStorage(), 'dfx.wallet.credentials.v1', 'app.dfx.swiss');
+  const client = api(behavior);
   const flow = new PasskeyAuth({
-    api: api(behavior),
+    api: client,
     ceremonies: new PasskeyCeremonies('prd', credentials, fakeWindow()),
     env: 'prd' as WalletEnv,
     cache,
   });
-  return { flow, credentials, cache };
+  return { flow, credentials, cache, registerFinish: client.registerFinish, claimFinish: client.claimFinish };
 }
 
 class MemoryStorage {
@@ -138,11 +158,11 @@ class MemoryStorage {
 
 describe('register', () => {
   it('runs the 2-tap ceremony, proves the seed and unlocks the wallet', async () => {
-    const { flow, credentials, cache } = auth();
+    const { flow, credentials, cache, registerFinish } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
 
-    const result = await flow.register();
+    const result = await flow.register({ mail: 'user@example.com' });
 
     expect(result.state).toBe('unlocked');
     expect(result.accessToken).toBe('register-token');
@@ -154,6 +174,17 @@ describe('register', () => {
 
     const createdOptions = credentials.created[0].publicKey as PublicKeyCredentialCreationOptions;
     expect(new Uint8Array(createdOptions.challenge)).toEqual(new Uint8Array(48)); // base64url of 64 'A'
+
+    expect(registerFinish).toHaveBeenCalledWith(
+      expect.objectContaining({
+        mail: 'user@example.com',
+        assertion: expect.objectContaining({ id: 'test-credential' }),
+      }),
+    );
+
+    const assertOptions = credentials.got[1].publicKey as PublicKeyCredentialRequestOptions;
+    expect(new Uint8Array(assertOptions.challenge as BufferSource)).toEqual(new Uint8Array(48));
+    expect(new Uint8Array(assertOptions.allowCredentials![0].id as BufferSource)).toEqual(CREDENTIAL_ID);
   });
 
   it('refuses a server challenge of another RP ID', async () => {
@@ -172,7 +203,7 @@ describe('register', () => {
       cache,
     });
 
-    await expect(flow.register()).rejects.toMatchObject({ code: 'wrong-origin' });
+    await expect(flow.register({ mail: 'user@example.com' })).rejects.toMatchObject({ code: 'wrong-origin' });
   });
 });
 
@@ -281,13 +312,20 @@ describe('unlock, export and revoke', () => {
 
 describe('claim and link', () => {
   it('claims into an existing account with the fresh login token', async () => {
-    const { flow, credentials } = auth();
+    const { flow, credentials, claimFinish } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
 
     const result = await flow.claim('fresh-token');
     expect(result.state).toBe('unlocked');
     expect(result.accessToken).toBe('claim-token');
+    expect(claimFinish).toHaveBeenCalledWith(
+      expect.objectContaining({
+        assertion: expect.objectContaining({ id: 'test-credential' }),
+      }),
+      'fresh-token',
+    );
+    expect(claimFinish.mock.calls[0][0]).not.toHaveProperty('mail');
   });
 
   it('links the EVM seed check address with a login signature', async () => {

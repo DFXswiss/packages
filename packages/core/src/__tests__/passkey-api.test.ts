@@ -20,6 +20,7 @@ const proof = {
   signature: '0xabc',
   sparkAddress: 'spark1pgss9qfk8ygtphqqzkj2yhn43k3s7r3g8z822ffvpcm38ym094800574x5numh',
   sparkSignature: 'ab'.repeat(64),
+  assertion: { id: 'assert' },
 };
 
 describe('PasskeyApi', () => {
@@ -33,12 +34,12 @@ describe('PasskeyApi', () => {
     await api.authenticateBegin();
     expect(lastCall(mock)).toMatchObject({ url: 'auth/passkey/authenticate/begin', method: 'POST', token: false });
 
-    await api.registerFinish({ ...proof });
+    await api.registerFinish({ ...proof, mail: 'user@example.com' });
     expect(lastCall(mock)).toMatchObject({
       url: 'auth/passkey/register/finish',
       method: 'POST',
       token: false,
-      data: proof,
+      data: { ...proof, mail: 'user@example.com' },
     });
 
     await api.authenticateFinish({ challengeId: 'x', credential: {} });
@@ -63,7 +64,12 @@ describe('PasskeyApi', () => {
     expect(lastCall(mock)).toMatchObject({ url: 'auth/passkey/claim/begin', method: 'POST', token: 'account-token' });
 
     await api.claimFinish({ ...proof }, 'account-token');
-    expect(lastCall(mock)).toMatchObject({ url: 'auth/passkey/claim/finish', method: 'POST', token: 'account-token' });
+    expect(lastCall(mock)).toMatchObject({
+      url: 'auth/passkey/claim/finish',
+      method: 'POST',
+      token: 'account-token',
+      data: proof,
+    });
 
     const link = { address: 'bc1q…', signature: 'sig', family: 'Bitcoin' as const, path: "m/84'/0'/0'/0/0" };
     await api.link(link, 'passkey-token');
