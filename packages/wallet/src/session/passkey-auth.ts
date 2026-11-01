@@ -76,11 +76,6 @@ export class PasskeyAuth {
     });
     const created = await pending.confirm();
 
-    const assertion = await this.deps.ceremonies.assert({
-      challenge: base64UrlDecode(challenge.challenge),
-      credentialId: created.credentialId,
-    });
-
     const keys = keysFromPrf(created.prfOutput, this.deps.env);
     const proof = this.seedProof(keys);
 
@@ -89,7 +84,7 @@ export class PasskeyAuth {
       credential: created.attestation,
       userHandle: base64UrlEncode(created.userHandle),
       derivationVersion: 'V1',
-      assertion: assertion.assertion,
+      assertion: created.assertion,
       ...proof,
       ...extras,
     });
@@ -121,17 +116,15 @@ export class PasskeyAuth {
 
   /** Unlocks an already authenticated session with a fresh PRF assertion (§6.2, §11.4). */
   async unlock(): Promise<{ keys?: KeyRing; state: WalletState }> {
-    const cached = this.deps.cache
-      ?.list()
-      .filter((entry) => entry.state === 'active' && entry.publicData)
-      .map((entry) => entry.publicData!.seedCheckAddress);
-    const expected = cached?.[cached.length - 1];
-
     const assertion = await this.deps.ceremonies.assert({});
     if (!assertion.prfOutput) return { state: 'locked' };
 
+    const credentialId = base64UrlEncode(assertion.credentialId);
+    const entry = this.deps.cache?.list().find((candidate) => candidate.credentialId === credentialId);
+    if (!entry || entry.state !== 'active' || !entry.publicData) return { state: 'locked' };
+
     const keys = keysFromPrf(assertion.prfOutput, this.deps.env);
-    if (expected !== undefined && !seedCheck(keys.evm(0).address, expected)) return { keys, state: 'seed-mismatch' };
+    if (!seedCheck(keys.evm(0).address, entry.publicData.seedCheckAddress)) return { keys, state: 'seed-mismatch' };
     return { keys, state: 'unlocked' };
   }
 
@@ -145,11 +138,6 @@ export class PasskeyAuth {
     });
     const created = await pending.confirm();
 
-    const assertion = await this.deps.ceremonies.assert({
-      challenge: base64UrlDecode(challenge.challenge),
-      credentialId: created.credentialId,
-    });
-
     const keys = keysFromPrf(created.prfOutput, this.deps.env);
     const response = await this.deps.api.passkey.claimFinish(
       {
@@ -157,7 +145,7 @@ export class PasskeyAuth {
         credential: created.attestation,
         userHandle: base64UrlEncode(created.userHandle),
         derivationVersion: 'V1',
-        assertion: assertion.assertion,
+        assertion: created.assertion,
         ...this.seedProof(keys),
       },
       freshLoginToken,

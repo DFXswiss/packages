@@ -177,10 +177,12 @@ describe('register', () => {
       expect.objectContaining({
         mail: 'user@example.com',
         assertion: expect.objectContaining({ id: 'test-credential' }),
+        credential: expect.objectContaining({ id: 'test-credential' }),
       }),
     );
 
-    const assertOptions = credentials.got[1].publicKey as PublicKeyCredentialRequestOptions;
+    expect(credentials.got).toHaveLength(1);
+    const assertOptions = credentials.got[0].publicKey as PublicKeyCredentialRequestOptions;
     expect(new Uint8Array(assertOptions.challenge as BufferSource)).toEqual(new Uint8Array(48));
     expect(new Uint8Array(assertOptions.allowCredentials![0].id as BufferSource)).toEqual(CREDENTIAL_ID);
   });
@@ -247,28 +249,39 @@ describe('login', () => {
   });
 });
 
+function cachedPublicData(vector: (typeof fixture.vectors)[number]) {
+  return {
+    seedCheckAddress: vector.evm[0].address as `0x${string}`,
+    evm: [{ index: 0, address: vector.evm[0].address as `0x${string}` }],
+    bitcoin: {
+      network: 'mainnet' as const,
+      xpub: vector.bitcoin.mainnet.xpub,
+      fingerprint: vector.masterFingerprint,
+      receive0: vector.bitcoin.mainnet.receive[0].address,
+    },
+    spark: {
+      identityPubkey: vector.spark.identityPublicKey,
+      address: vector.spark.address,
+    },
+  };
+}
+
 describe('unlock, export and revoke', () => {
   it('unlocks against the cached seed check address', async () => {
     const { flow, credentials, cache } = auth();
     cache.put({
-      credentialId: 'id',
+      credentialId: base64url(CREDENTIAL_ID),
       rpId: 'app.dfx.swiss',
       state: 'active',
-      publicData: {
-        seedCheckAddress: fixture.vectors[0].evm[0].address as `0x${string}`,
-        evm: [{ index: 0, address: fixture.vectors[0].evm[0].address as `0x${string}` }],
-        bitcoin: {
-          network: 'mainnet',
-          xpub: fixture.vectors[0].bitcoin.mainnet.xpub,
-          fingerprint: fixture.vectors[0].masterFingerprint,
-          receive0: fixture.vectors[0].bitcoin.mainnet.receive[0].address,
-        },
-        spark: {
-          identityPubkey: fixture.vectors[0].spark.identityPublicKey,
-          address: fixture.vectors[0].spark.address,
-        },
-      },
+      publicData: cachedPublicData(fixture.vectors[0]),
       createdAt: 1,
+    });
+    cache.put({
+      credentialId: 'decoy-credential',
+      rpId: 'app.dfx.swiss',
+      state: 'active',
+      publicData: cachedPublicData(fixture.vectors[1]),
+      createdAt: 2,
     });
     credentials.nextGet = fakeCredential(PRF);
 
@@ -279,6 +292,45 @@ describe('unlock, export and revoke', () => {
     credentials.nextGet = fakeCredential(OTHER_PRF);
     const mismatch = await flow.unlock();
     expect(mismatch.state).toBe('seed-mismatch');
+  });
+
+  it('stays locked without PRF output', async () => {
+    const { flow, credentials, cache } = auth();
+    cache.put({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: 'app.dfx.swiss',
+      state: 'active',
+      publicData: cachedPublicData(fixture.vectors[0]),
+      createdAt: 1,
+    });
+    credentials.nextGet = fakeCredential(undefined);
+
+    const result = await flow.unlock();
+    expect(result.state).toBe('locked');
+    expect(result.keys).toBeUndefined();
+  });
+
+  it('stays locked when the cache has no matching active credential', async () => {
+    const { flow, credentials, cache } = auth();
+    cache.put({
+      credentialId: 'other-id',
+      rpId: 'app.dfx.swiss',
+      state: 'active',
+      publicData: cachedPublicData(fixture.vectors[0]),
+      createdAt: 1,
+    });
+    cache.put({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: 'app.dfx.swiss',
+      state: 'revoked',
+      publicData: cachedPublicData(fixture.vectors[0]),
+      createdAt: 2,
+    });
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.unlock();
+    expect(result.state).toBe('locked');
+    expect(result.keys).toBeUndefined();
   });
 
   it('exports the 12 words behind a fresh local challenge', async () => {
@@ -324,6 +376,7 @@ describe('claim and link', () => {
       'fresh-token',
     );
     expect(claimFinish.mock.calls[0][0]).not.toHaveProperty('mail');
+    expect(credentials.got).toHaveLength(1);
   });
 
   it('links the EVM seed check address with a login signature', async () => {

@@ -13,7 +13,7 @@ import {
   UserActivationMissingError,
   WrongOriginError,
 } from './errors';
-import { PrfClientInputs, PrfClientResults, WebAuthnJson, credentialToJSON } from './webauthn-json';
+import { PrfClientInputs, PrfClientResults, WebAuthnJson, bytesToBase64Url, credentialToJSON } from './webauthn-json';
 
 /** Credentials surface the ceremonies drive (the browser's, or a fake in tests). */
 export interface CeremonyCredentials {
@@ -26,7 +26,7 @@ export interface CeremonyWindow {
   location: { hostname: string };
   navigator: { userAgent: string; userActivation?: { isActive: boolean } };
   PublicKeyCredential?: {
-    signalUnknownCredential?: (input: { credentialId: BufferSource; rpHint?: string }) => Promise<void>;
+    signalUnknownCredential?: (input: { credentialId: string; rpId: string }) => Promise<void>;
   };
 }
 
@@ -44,6 +44,8 @@ export interface CreatedSeedPasskey {
   userHandle: Uint8Array;
   /** The `create()` result serialized for the API (PRF results stripped). */
   attestation: WebAuthnJson;
+  /** The confirming `get()` result serialized for the API (PRF results stripped). */
+  assertion: WebAuthnJson;
   prfOutput: Uint8Array;
   attachment: AuthenticatorAttachment | null;
   transports: string[];
@@ -101,6 +103,16 @@ function userHandleLabel(now = new Date()): string {
   return `DFX Wallet ${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
 }
 
+/** Browser `navigator.credentials` when both `create` and `get` exist; otherwise a dummy that resolves null. */
+function defaultCredentials(): CeremonyCredentials {
+  const credentials = (globalThis as { navigator?: { credentials?: { create?: unknown; get?: unknown } } }).navigator
+    ?.credentials;
+  if (typeof credentials?.create === 'function' && typeof credentials?.get === 'function') {
+    return credentials as CeremonyCredentials;
+  }
+  return { create: async () => null, get: async () => null };
+}
+
 /**
  * The wallet's passkey ceremonies. Every option is built locally — only the challenge comes from the
  * server — and exactly one ceremony runs at a time; a newer call or `cancel()` supersedes the running one.
@@ -111,11 +123,7 @@ export class PasskeyCeremonies {
 
   constructor(
     private readonly env: WalletEnv,
-    private readonly credentials: CeremonyCredentials = (
-      globalThis.navigator as unknown as CeremonyCredentials | undefined
-    )?.create
-      ? (globalThis.navigator as unknown as CeremonyCredentials)
-      : { create: async () => null, get: async () => null },
+    private readonly credentials: CeremonyCredentials = defaultCredentials(),
     private readonly win: CeremonyWindow = (globalThis as unknown as CeremonyWindow) ?? {
       location: { hostname: '' },
       navigator: { userAgent: '' },
@@ -170,17 +178,25 @@ export class PasskeyCeremonies {
     const attestation = credentialToJSON(credential);
     const prfFromCreate = readPrfFirst(credential);
 
-    const derivePrf = (id: Uint8Array) => this.derivePrf(id);
+    const derivePrf = (id: Uint8Array) => this.derivePrf(id, input.challenge);
     const signalUnknown = (id: Uint8Array) => this.signalUnknownCredential(id);
     return {
       credentialId,
       async confirm(): Promise<CreatedSeedPasskey> {
-        const prfOutput = await derivePrf(credentialId);
+        const { prfOutput, credential: assertionCredential } = await derivePrf(credentialId);
         if (prfFromCreate && !equalBytes(prfOutput, prfFromCreate)) {
           await signalUnknown(credentialId);
           throw new PrfMismatchError();
         }
-        return { credentialId, userHandle, attestation, prfOutput, attachment, transports };
+        return {
+          credentialId,
+          userHandle,
+          attestation,
+          assertion: credentialToJSON(assertionCredential),
+          prfOutput,
+          attachment,
+          transports,
+        };
       },
       async abort(): Promise<void> {
         await signalUnknown(credentialId);
@@ -223,8 +239,8 @@ export class PasskeyCeremonies {
   async signalUnknownCredential(credentialId: Uint8Array): Promise<void> {
     try {
       await this.win.PublicKeyCredential?.signalUnknownCredential?.({
-        credentialId: source(credentialId),
-        rpHint: RP_IDS[this.env],
+        credentialId: bytesToBase64Url(credentialId),
+        rpId: RP_IDS[this.env],
       });
     } catch {
       // signalling is advisory; a rejection must never break the ceremony
@@ -237,11 +253,14 @@ export class PasskeyCeremonies {
   }
 
   /** Tap 2 helper: the confirming `get()` restricted to the new credential; PRF output is mandatory. */
-  private async derivePrf(credentialId: Uint8Array): Promise<Uint8Array> {
+  private async derivePrf(
+    credentialId: Uint8Array,
+    challenge: Uint8Array,
+  ): Promise<{ prfOutput: Uint8Array; credential: PublicKeyCredential }> {
     this.requireActivation();
     const options: CredentialRequestOptions = {
       publicKey: {
-        challenge: source(randomBytes(32)),
+        challenge: source(challenge),
         rpId: RP_IDS[this.env],
         allowCredentials: [{ type: 'public-key', id: source(credentialId) }],
         userVerification: 'required',
@@ -252,11 +271,11 @@ export class PasskeyCeremonies {
     const { result, run } = await this.call((signal) => this.credentials.get(this.withSignal(options, signal)));
     run.checkCurrent();
     const prfOutput = result ? readPrfFirst(result) : undefined;
-    if (!prfOutput) {
+    if (!prfOutput || !result) {
       await this.signalUnknownCredential(credentialId);
       throw new PrfUnavailableError();
     }
-    return prfOutput;
+    return { prfOutput, credential: result };
   }
 
   /** Runs one gated WebAuthn call: user gesture, superseding, and the platform-appropriate signal. */

@@ -102,7 +102,9 @@ describe('TabLock', () => {
         }
         if (options.ifAvailable) {
           if (holders.length > 0) {
-            resolveRequest(undefined);
+            void Promise.resolve(callback(null))
+              .catch(() => undefined)
+              .finally(() => resolveRequest(undefined));
             return;
           }
           holders.push(holder);
@@ -126,6 +128,8 @@ describe('TabLock', () => {
 
     const second = new TabLock(manager as never);
     expect(await second.acquire()).toBe('busy');
+    expect(second.isHeld).toBe(false);
+    expect(first.isHeld).toBe(true);
 
     first.release();
     await flush();

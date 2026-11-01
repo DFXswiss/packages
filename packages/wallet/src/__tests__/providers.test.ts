@@ -142,12 +142,14 @@ describe('PricePolicy', () => {
       { assetId: 1, currency: 'CHF', price: 50000, isValid: true, timestamp: new Date(fresh - 60_000).toISOString() },
       { assetId: 2, currency: 'CHF', price: 3, isValid: true, timestamp: new Date(fresh - 10 * 60_000).toISOString() },
       { assetId: 3, currency: 'CHF', price: Number.NaN, isValid: true, timestamp: new Date(fresh).toISOString() },
-    ]).prices([1, 2, 3, 4], 'CHF');
+      { assetId: 5, currency: 'CHF', price: 99, isValid: false, timestamp: new Date(fresh).toISOString() },
+    ]).prices([1, 2, 3, 4, 5], 'CHF');
 
     expect(prices.get(1)).toEqual({ price: 50000, stale: false });
     expect(prices.get(2)).toEqual({ price: 3, stale: true });
     expect(prices.has(3)).toBe(false);
     expect(prices.has(4)).toBe(false);
+    expect(prices.has(5)).toBe(false);
   });
 
   it('returns an empty map when the capability is unavailable', async () => {
@@ -158,6 +160,25 @@ describe('PricePolicy', () => {
     } as unknown as WalletDataApi;
     const prices = await new PricePolicy(walletData).prices([1], 'CHF');
     expect(prices.size).toBe(0);
+  });
+
+  it('returns an empty map on ApiException', async () => {
+    const walletData = {
+      prices: async () => {
+        throw new ApiError(500, 'down');
+      },
+    } as unknown as WalletDataApi;
+    const prices = await new PricePolicy(walletData).prices([1], 'CHF');
+    expect(prices.size).toBe(0);
+  });
+
+  it('rethrows other errors', async () => {
+    const walletData = {
+      prices: async () => {
+        throw new Error('boom');
+      },
+    } as unknown as WalletDataApi;
+    await expect(new PricePolicy(walletData).prices([1], 'CHF')).rejects.toThrow('boom');
   });
 });
 

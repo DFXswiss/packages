@@ -7,6 +7,7 @@ import {
   PrfMismatchError,
   PrfUnavailableError,
 } from '../passkey/errors';
+import { bytesToBase64Url, credentialToJSON } from '../passkey/webauthn-json';
 
 const HOSTNAME = 'app.dfx.swiss';
 const CREDENTIAL_ID = new Uint8Array([1, 2, 3, 4]);
@@ -127,7 +128,10 @@ describe('createCredential', () => {
     await expect(ceremonies(credentials, win).createCredential({ challenge: new Uint8Array(32) })).rejects.toThrow(
       CrossDeviceRegistrationError,
     );
-    expect(win.signalUnknown).toHaveBeenCalledWith({ credentialId: CREDENTIAL_ID, rpHint: 'app.dfx.swiss' });
+    expect(win.signalUnknown).toHaveBeenCalledWith({
+      credentialId: bytesToBase64Url(CREDENTIAL_ID),
+      rpId: 'app.dfx.swiss',
+    });
   });
 
   it('aborts and signals on hybrid transports even with platform attachment', async () => {
@@ -144,7 +148,8 @@ describe('createCredential', () => {
   it('confirm() returns the PRF output of the confirming get()', async () => {
     const credentials = new FakeCredentials();
     credentials.nextCreate = attestationCredential({ prf: PRF_A });
-    const pending = await ceremonies(credentials).createCredential({ challenge: new Uint8Array(32) });
+    const challenge = new Uint8Array(32).fill(9);
+    const pending = await ceremonies(credentials).createCredential({ challenge });
 
     credentials.nextGet = assertionCredential({ prf: PRF_A });
     const created = await pending.confirm();
@@ -158,11 +163,12 @@ describe('createCredential', () => {
     expect(created.transports).toEqual(['internal']);
     // The attestation JSON carries the create() result, without PRF bytes.
     expect(created.attestation['clientExtensionResults']).toEqual({});
+    expect(created.assertion).toEqual(credentialToJSON(credentials.nextGet));
 
     const getOptions = credentials.got[0].publicKey as PublicKeyCredentialRequestOptions;
     expect(getOptions.rpId).toBe('app.dfx.swiss');
     expect(getOptions.allowCredentials).toEqual([{ type: 'public-key', id: CREDENTIAL_ID }]);
-    expect(new Uint8Array(getOptions.challenge)).toHaveLength(32);
+    expect(new Uint8Array(getOptions.challenge)).toEqual(challenge);
     expect((getOptions.extensions as { prf: { eval: { first: Uint8Array } } }).prf.eval.first).toEqual(prfInputV1());
   });
 
@@ -204,7 +210,10 @@ describe('createCredential', () => {
     const pending = await ceremonies(credentials, win).createCredential({ challenge: new Uint8Array(32) });
 
     await pending.abort();
-    expect(win.signalUnknown).toHaveBeenCalledWith({ credentialId: CREDENTIAL_ID, rpHint: 'app.dfx.swiss' });
+    expect(win.signalUnknown).toHaveBeenCalledWith({
+      credentialId: bytesToBase64Url(CREDENTIAL_ID),
+      rpId: 'app.dfx.swiss',
+    });
   });
 });
 
@@ -282,7 +291,12 @@ describe('superseding and signals', () => {
     const instance = ceremonies(credentials);
 
     const first = instance.createCredential({ challenge: new Uint8Array(32) });
+    const inFlight = credentials.created[0].signal;
+    expect(inFlight).toBeInstanceOf(AbortSignal);
+    expect(inFlight?.aborted).toBe(false);
+
     const second = instance.assert({});
+    expect(inFlight?.aborted).toBe(true);
     release();
 
     await expect(first).rejects.toThrow(CeremonySupersededError);
@@ -318,5 +332,41 @@ describe('superseding and signals', () => {
     iosCredentials.nextCreate = attestationCredential({ prf: PRF_A });
     await ceremonies(iosCredentials, iosWindow).createCredential({ challenge: new Uint8Array(32) });
     expect(iosCredentials.created[0].signal).toBeUndefined();
+  });
+});
+
+describe('default credentials', () => {
+  const originalNavigator = globalThis.navigator;
+
+  afterEach(() => {
+    Object.defineProperty(globalThis, 'navigator', { configurable: true, value: originalNavigator });
+  });
+
+  it('uses navigator.credentials when create and get are functions', async () => {
+    const get = jest.fn(async () => assertionCredential({ prf: PRF_A }));
+    const create = jest.fn(async () => null);
+    const navCreate = jest.fn();
+    Object.defineProperty(globalThis, 'navigator', {
+      configurable: true,
+      value: { credentials: { create, get }, create: navCreate },
+    });
+
+    const instance = new PasskeyCeremonies('prd', undefined, fakeWindow());
+    await instance.assert({});
+
+    expect(get).toHaveBeenCalled();
+    expect(navCreate).not.toHaveBeenCalled();
+  });
+
+  it('uses the dummy when navigator has create but no credentials', async () => {
+    const navCreate = jest.fn(async () => attestationCredential({}));
+    Object.defineProperty(globalThis, 'navigator', {
+      configurable: true,
+      value: { create: navCreate },
+    });
+
+    const instance = new PasskeyCeremonies('prd', undefined, fakeWindow());
+    await expect(instance.assert({})).rejects.toMatchObject({ code: 'no-credential' });
+    expect(navCreate).not.toHaveBeenCalled();
   });
 });

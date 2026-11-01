@@ -84,13 +84,16 @@ export class EsploraApi {
     });
   }
 
-  tipHeight(): Promise<number> {
-    return this.http.request<number>({
+  async tipHeight(): Promise<number> {
+    const raw = await this.http.request<string>({
       url: `${WalletDataUrl.esplora(this.blockchain)}/blocks/tip/height`,
       method: 'GET',
       token: false,
       responseType: ResponseType.TEXT,
     });
+    const height = Number(raw);
+    if (!Number.isFinite(height)) throw new Error('Tip height is not a finite number');
+    return height;
   }
 
   feeEstimates(): Promise<BitcoinFeeEstimates> {

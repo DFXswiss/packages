@@ -22,7 +22,7 @@ describe('ChainApi', () => {
 
 describe('WalletDataApi', () => {
   it('exposes both Bitcoin networks Esplora-shaped', async () => {
-    const mock = createMockHttpClient({});
+    const mock = createMockHttpClient('840000');
     const api = new WalletDataApi(mock);
 
     await api.bitcoin.utxos('bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu');
@@ -31,11 +31,16 @@ describe('WalletDataApi', () => {
       token: false,
     });
 
-    await api.bitcoinTestnet4.tipHeight();
+    await expect(api.bitcoinTestnet4.tipHeight()).resolves.toBe(840000);
     expect(lastCall(mock)).toMatchObject({
       url: 'walletData/esplora/BitcoinTestnet4/blocks/tip/height',
       responseType: ResponseType.TEXT,
     });
+  });
+
+  it('rejects a non-numeric tip height body', async () => {
+    const mock = createMockHttpClient('not-a-number');
+    await expect(new WalletDataApi(mock).bitcoin.tipHeight()).rejects.toThrow('Tip height is not a finite number');
   });
 
   it('broadcasts raw transactions as text/plain and returns the txid as text', async () => {

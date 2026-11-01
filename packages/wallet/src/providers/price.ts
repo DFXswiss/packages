@@ -1,4 +1,5 @@
 import type { WalletDataApi, WalletPrice } from '@dfx.swiss/core';
+import { ApiException } from '@dfx.swiss/core';
 import { ProviderUnavailableError } from './dfx-data';
 
 /** A price older than this is stale; a stale price must not enter a fiat amount (§9.6). */
@@ -32,12 +33,13 @@ export class PricePolicy {
     try {
       remote = await this.walletData.prices({ assetIds: ids, currency });
     } catch (error) {
-      if (error instanceof ProviderUnavailableError) return new Map();
+      if (error instanceof ProviderUnavailableError || error instanceof ApiException) return new Map();
       throw error;
     }
 
     const result = new Map<number, { price: number; stale: boolean }>();
     for (const entry of remote) {
+      if (entry.isValid !== true) continue;
       if (typeof entry.price !== 'number' || !Number.isFinite(entry.price)) continue;
       const timestamp = Date.parse(entry.timestamp);
       result.set(entry.assetId, {

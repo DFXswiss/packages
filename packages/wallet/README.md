@@ -23,7 +23,7 @@ and the networks follow from it and are compiled-in constants:
 | Environment | RP ID               | Login message prefix | Bitcoin  | EVM chains | Spark   |
 | ----------- | ------------------- | -------------------- | -------- | ---------- | ------- |
 | `prd`       | `app.dfx.swiss`     | none                 | mainnet  | mainnets   | mainnet |
-| `dev`       | `dev-app.dfx.swiss` | `[dev]_`             | testnet4 | testnets   | mainnet |
+| `dev`       | `dev.app.dfx.swiss` | `[dev]_`             | testnet4 | testnets   | mainnet |
 | `loc`       | `localhost`         | `[loc]_`             | testnet4 | testnets   | mainnet |
 
 ```typescript

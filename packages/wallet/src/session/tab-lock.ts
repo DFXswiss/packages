@@ -45,7 +45,11 @@ export class TabLock {
       };
 
       void locks
-        .request(this.name, { ifAvailable: true }, async () => {
+        .request(this.name, { ifAvailable: true }, async (lock) => {
+          if (lock == null) {
+            finish('busy');
+            return;
+          }
           this.held = true;
           finish('acquired');
           await new Promise<void>((resolveRelease) => (this.releaseResolver = resolveRelease));

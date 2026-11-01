@@ -23,6 +23,7 @@ export class CeremonyGate {
 
   /** Begins a new run, superseding the previous one. */
   begin(onCancel?: () => void): CeremonyRun {
+    this.cancelActive();
     const id = ++this.next;
     this.current = id;
     if (onCancel) this.cancelHandlers.set(id, new Set([onCancel]));
