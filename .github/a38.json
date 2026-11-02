@@ -1,0 +1,64 @@
+{
+  "schema": "a38/v1",
+  "standard": "A38",
+  "documentation": "docs/a38.md",
+  "mode": "enforce",
+  "jobs": [
+    {
+      "id": "build",
+      "name": "Lint, build and test",
+      "timeout_s": 2400,
+      "workflow": ".github/workflows/pr.yaml",
+      "job": "build",
+      "executor": {
+        "adapter": "commands",
+        "config": {
+          "env": {
+            "CI": "true"
+          },
+          "npm": {
+            "node_major": 16,
+            "canaries": [
+              "eslint/package.json",
+              "lerna/package.json",
+              "prettier/package.json"
+            ]
+          },
+          "steps": [
+            ["npx", "lerna", "run", "lint"],
+            ["npx", "lerna", "run", "format:check"],
+            ["npx", "lerna", "run", "build"],
+            ["npx", "lerna", "run", "test"]
+          ]
+        }
+      }
+    }
+  ],
+  "exclusions": [
+    {
+      "workflow": ".github/workflows/publish.yaml",
+      "job": "publish",
+      "reason": "Publishes package versions to npm. Credentials and a release path, not an author-measured test."
+    },
+    {
+      "workflow": ".github/workflows/storybook.yml",
+      "job": "build",
+      "reason": "Deploys Storybook to the CDN. Credentials path, not local author CI."
+    },
+    {
+      "workflow": ".github/workflows/auto-release-pr.yaml",
+      "job": "create-release-pr",
+      "reason": "Housekeeping bot that opens the develop to main release pull request. Not author CI."
+    },
+    {
+      "workflow": ".github/workflows/main-from-develop.yml",
+      "job": "only-develop",
+      "reason": "Main-branch ancestry policy (head must be this repo's develop). External policy gate, not a code or test suite."
+    },
+    {
+      "workflow": ".github/workflows/a38-guard.yml",
+      "job": "guard",
+      "reason": "A38 report guard bot itself (trusted base audit of the author report). Not part of the measured local suite."
+    }
+  ]
+}
