@@ -3,6 +3,7 @@ import {
   androidInstalledVersion,
   checkPasskeyPlatform,
   iosInstalledVersion,
+  ipadDesktopInstalledVersion,
   isInAppBrowser,
   openInSystemBrowser,
 } from '../passkey/platform';
@@ -103,6 +104,57 @@ describe('checkPasskeyPlatform', () => {
       navigator: { userAgent: ANDROID_8_UA, credentials: { create: () => null, get: () => null } },
     });
     expect(await checkPasskeyPlatform('prd', android8)).toMatchObject({ reason: 'os-too-old', os: '8.1.0' });
+
+    const ipad17 = host({
+      navigator: {
+        userAgent:
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15',
+        platform: 'MacIntel',
+        maxTouchPoints: 5,
+        credentials: { create: () => null, get: () => null },
+      },
+    });
+    expect(await checkPasskeyPlatform('prd', ipad17)).toMatchObject({ reason: 'os-too-old', os: '17.4' });
+
+    const ipad18 = host({
+      navigator: {
+        userAgent:
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Safari/605.1.15',
+        platform: 'MacIntel',
+        maxTouchPoints: 5,
+        credentials: { create: () => null, get: () => null },
+      },
+    });
+    expect(await checkPasskeyPlatform('prd', ipad18)).toMatchObject({ available: true, os: '18.2' });
+
+    const ipadUnknown = await checkPasskeyPlatform(
+      'prd',
+      host({
+        navigator: {
+          userAgent: MAC_UA,
+          platform: 'MacIntel',
+          maxTouchPoints: 5,
+          credentials: { create: () => null, get: () => null },
+        },
+      }),
+    );
+    expect(ipadUnknown.available).toBe(true);
+    expect(ipadUnknown.reason).toBeUndefined();
+
+    const macSafari17 = await checkPasskeyPlatform(
+      'prd',
+      host({
+        navigator: {
+          userAgent:
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15',
+          platform: 'MacIntel',
+          maxTouchPoints: 0,
+          credentials: { create: () => null, get: () => null },
+        },
+      }),
+    );
+    expect(macSafari17.available).toBe(true);
+    expect(macSafari17.reason).toBeUndefined();
   });
 
   it('soft-gates PRF: false hides the tile, absent stays unknown', async () => {
@@ -123,6 +175,22 @@ describe('OS version readers', () => {
     expect(iosInstalledVersion(IPHONE_18_UA)).toBe('18.1');
     expect(iosInstalledVersion(IPHONE_17_UA)).toBe('17.5');
     expect(iosInstalledVersion(MAC_UA)).toBeNull();
+    expect(
+      ipadDesktopInstalledVersion({
+        userAgent:
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15',
+        platform: 'MacIntel',
+        maxTouchPoints: 5,
+      }),
+    ).toBe('17.4');
+    expect(
+      ipadDesktopInstalledVersion({
+        userAgent:
+          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15',
+        platform: 'MacIntel',
+        maxTouchPoints: 0,
+      }),
+    ).toBeNull();
   });
 
   it('prefers high-entropy Android data over the frozen UA', async () => {

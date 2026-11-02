@@ -14,6 +14,7 @@ import {
   UserActivationMissingError,
   WrongOriginError,
 } from './errors';
+import { isIpadDesktopMode } from './platform';
 import { PrfClientInputs, PrfClientResults, WebAuthnJson, bytesToBase64Url, credentialToJSON } from './webauthn-json';
 
 /** Credentials surface the ceremonies drive (the browser's, or a fake in tests). */
@@ -294,9 +295,7 @@ export class PasskeyCeremonies {
     action: (signal: AbortSignal | undefined) => Promise<T>,
   ): Promise<{ result: T; run: CeremonyRun }> {
     const nav = this.win.navigator;
-    // iPadOS desktop mode reports a Macintosh user agent. Touch points tell it apart from desktop Safari.
-    const ipadDesktop = nav.platform === 'MacIntel' && (nav.maxTouchPoints ?? 0) > 1;
-    const allowSignal = !ipadDesktop && !/iPhone|iPad|iPod/i.test(nav.userAgent);
+    const allowSignal = !isIpadDesktopMode(nav) && !/iPhone|iPad|iPod/i.test(nav.userAgent);
     const controller = allowSignal ? new AbortController() : undefined;
 
     const run = this.gate.begin(() => controller?.abort());

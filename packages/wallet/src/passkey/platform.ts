@@ -17,6 +17,9 @@ export interface PlatformHost {
     userAgent: string;
     credentials?: { create?: unknown; get?: unknown };
     userAgentData?: { getHighEntropyValues?: (hints: string[]) => Promise<Record<string, string>> };
+    /** Present when the host can tell iPadOS desktop mode from desktop Safari. */
+    platform?: string;
+    maxTouchPoints?: number;
   };
   location: { hostname: string; href: string; origin: string; pathname: string };
   open?: (url: string, target?: string, features?: string) => unknown;
@@ -65,6 +68,28 @@ export function iosInstalledVersion(userAgent: string): string | null {
   if (!IOS_UA.test(userAgent)) return null;
   const match = /\bOS (\d+)[_.](\d+)(?:[_.](\d+))?/.exec(userAgent);
   if (!match) return null;
+  return match[3] === undefined ? `${match[1]}.${match[2]}` : `${match[1]}.${match[2]}.${match[3]}`;
+}
+
+/** iPadOS desktop mode reports a Macintosh UA. Touch points tell it apart from desktop Safari. */
+export function isIpadDesktopMode(nav: { platform?: string; maxTouchPoints?: number }): boolean {
+  return nav.platform === 'MacIntel' && (nav.maxTouchPoints ?? 0) > 1;
+}
+
+/**
+ * Installed iPadOS version in desktop mode. That UA drops the iPad token and puts the OS major in
+ * Safari's `Version/`. A real Mac has no touch points, so its Safari version is not an iPadOS release.
+ * Null when this is not iPad desktop mode or the token is missing — the floor must not guess.
+ */
+export function ipadDesktopInstalledVersion(nav: {
+  userAgent: string;
+  platform?: string;
+  maxTouchPoints?: number;
+}): string | null {
+  if (!isIpadDesktopMode(nav)) return null;
+  const match = /\bVersion\/(\d+)(?:\.(\d+))?(?:\.(\d+))?/.exec(nav.userAgent);
+  if (!match) return null;
+  if (match[2] === undefined) return match[1];
   return match[3] === undefined ? `${match[1]}.${match[2]}` : `${match[1]}.${match[2]}.${match[3]}`;
 }
 
@@ -138,7 +163,7 @@ export async function checkPasskeyPlatform(env: WalletEnv, win?: PlatformHost): 
   }
 
   const ua = h.navigator.userAgent;
-  const ios = iosInstalledVersion(ua);
+  const ios = iosInstalledVersion(ua) ?? ipadDesktopInstalledVersion(h.navigator);
   if (ios !== null && Number(ios.split('.')[0]) < 18)
     return { available: false, reason: 'os-too-old', prf: 'unknown', os: ios };
   const android = await androidInstalledVersion(h);
