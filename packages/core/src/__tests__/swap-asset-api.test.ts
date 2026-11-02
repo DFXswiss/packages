@@ -13,7 +13,7 @@ function lastCall(mock: ReturnType<typeof createMockHttpClient>) {
 }
 
 describe('SwapApi.confirm', () => {
-  it('confirms with PUT (backend @Put paymentInfos/:id/confirm, intern#352)', async () => {
+  it('confirms with PUT (backend @Put paymentInfos/:id/confirm)', async () => {
     const mock = createMockHttpClient({});
     await new SwapApi(mock).confirm(5, {} as never);
     expect(lastCall(mock)).toMatchObject({ method: 'PUT' });
