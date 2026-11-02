@@ -85,9 +85,9 @@ every initial held fork `pull_request` run. `dfx pr guard` is
 
 This is a **public** repository. GitHub-hosted runners still execute PR CI
 (check name `Lint, build and test`). A38 does not replace that GitHub check.
-The author report runs the same four Lerna tasks that job runs at full scope:
-`npx lerna run lint`, `npx lerna run format:check`, `npx lerna run build`, and
-`npx lerna run test`. Publish, Storybook deploy, the release bot, and the
+The author report runs the same four Lerna tasks that job runs at full scope,
+on Node 16, the major in `.github/workflows/pr.yaml`: `npx lerna run lint`,
+`npx lerna run format:check`, `npx lerna run build`, and `npx lerna run test`. Publish, Storybook deploy, the release bot, and the
 main-branch ancestry check are excluded.
 
 Draft pull requests run the GitHub PR CI job. GitHub holds fork runs from
