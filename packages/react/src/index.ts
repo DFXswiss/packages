@@ -31,9 +31,9 @@ export { useKyc } from './hooks/kyc.hook';
 export { useSell } from './hooks/sell.hook';
 export { useUser } from './hooks/user.hook';
 export { useSwap } from './hooks/swap.hook';
-export { usePasskeyApi } from './hooks/passkey.hook';
+export { usePasskey } from './hooks/passkey.hook';
 export type { PasskeyInterface } from './hooks/passkey.hook';
-export { useChainApi } from './hooks/chain.hook';
+export { useChain } from './hooks/chain.hook';
 export { useSupportChat } from './hooks/support.hook';
 export { useAccountAccess } from './hooks/account-access.hook';
 
@@ -192,6 +192,10 @@ export {
   UpdateUser,
   ApiKey,
 } from './definitions/user';
+export { PasskeyUrl, passkeyWalletUrl } from './definitions/passkey';
+export type { PasskeyWallet, PasskeyRevocationReason } from './definitions/passkey';
+export { ChainUrl } from './definitions/chain';
+export type { ChainInfo } from './definitions/chain';
 export {
   SignIn,
   LnurlAuth,

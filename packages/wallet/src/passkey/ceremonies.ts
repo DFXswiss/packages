@@ -159,8 +159,13 @@ export class PasskeyCeremonies {
     };
 
     const { result, run } = await this.call((signal) => this.credentials.create(this.withSignal(options, signal)));
-    run.checkCurrent();
     const credential = result;
+    try {
+      run.checkCurrent();
+    } catch (error) {
+      if (credential) await this.signalUnknownCredential(copy(credential.rawId));
+      throw error;
+    }
     if (!credential) throw new PasskeyError('no-credential', 'The authenticator returned no credential');
 
     const rawAttachment = credential.authenticatorAttachment;

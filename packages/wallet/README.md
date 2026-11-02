@@ -12,8 +12,8 @@ device; the DFX API never receives them and cannot sign.
 npm install @dfx.swiss/wallet
 ```
 
-The package ships ES2020 ES modules for browsers and needs no Node polyfills. The Breez SDK (Spark) and WalletConnect
-are loaded on demand through dynamic `import()`, so they end up in separate bundler chunks.
+The package ships ES2020 ES modules for browsers and needs no Node polyfills. It does not depend on the Breez SDK or
+WalletConnect.
 
 ## Environments
 

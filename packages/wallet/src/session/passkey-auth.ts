@@ -1,17 +1,17 @@
 import type { DfxApiClient, PasskeyAddress, PasskeyWallet } from '@dfx.swiss/core';
 import { ApiException } from '@dfx.swiss/core';
 import type { WalletEnv } from '../config/environment';
-import { RP_IDS, WALLET_NETWORKS } from '../config/environment';
+import { RP_IDS, SIGN_MESSAGE_PREFIX, WALLET_NETWORKS } from '../config/environment';
 import { CredentialCache } from '../passkey/credential-cache';
-import type { PasskeyCeremonies } from '../passkey/ceremonies';
+import type { CreatedSeedPasskey, PasskeyCeremonies, PendingSeedPasskey } from '../passkey/ceremonies';
 import { base64UrlDecode, base64UrlEncode } from '../util/bytes';
 import { WalletError } from '../util/errors';
-import { KeyRing } from '../derivation/keyring';
+import { KeyRing, withPrivateKey } from '../derivation/keyring';
 import { seedPublicData } from '../derivation/public-data';
 import { mnemonicFromPrfV1 } from '../derivation/v1';
 import { seedCheck } from '../derivation/seed-check';
-import { LoginAutoSigner } from '../signing/auto-signer';
-import { buildLoginMessage } from '../signing/login-messages';
+import { LoginAutoSigner, signEip191 } from '../signing/auto-signer';
+import { LOGIN_TEMPLATES, buildLoginMessage } from '../signing/login-messages';
 
 /** Wallet states the flows produce (§8.2). */
 export type WalletState = 'locked' | 'unlocked' | 'seed-mismatch' | 'compromised' | 'open-elsewhere';
@@ -74,25 +74,41 @@ export class PasskeyAuth {
       challenge: base64UrlDecode(challenge.challenge),
       excludeCredentialIds: excludeIds,
     });
-    const created = await pending.confirm();
+    const created = await this.confirmOrAbort(pending);
 
     const keys = keysFromPrf(created.prfOutput, this.deps.env);
     const proof = this.seedProof(keys);
-
-    let response: { accessToken: string; wallet: PasskeyWallet };
-    try {
-      response = await this.deps.api.passkey.registerFinish({
-        challengeId: challenge.challengeId,
+    const finish = (challengeId: string, assertion: Record<string, unknown>) =>
+      this.deps.api.passkey.registerFinish({
+        challengeId,
         credential: created.attestation,
         userHandle: base64UrlEncode(created.userHandle),
         derivationVersion: 'V1',
-        assertion: created.assertion,
+        assertion,
         ...proof,
         ...extras,
       });
+
+    let response: { accessToken: string; wallet: PasskeyWallet };
+    try {
+      response = await finish(challenge.challengeId, created.assertion);
     } catch (error) {
-      await pending.abort();
-      throw error;
+      if (this.isDefinitiveRejection(error)) {
+        await pending.abort();
+        throw error;
+      }
+      try {
+        const retry = await this.deps.api.passkey.registerBegin();
+        this.checkRpId(retry.rpId);
+        const assertion = await this.deps.ceremonies.assert({
+          challenge: base64UrlDecode(retry.challenge),
+          credentialId: created.credentialId,
+        });
+        response = await finish(retry.challengeId, assertion.assertion);
+      } catch (retryError) {
+        if (this.isDefinitiveRejection(retryError)) await pending.abort();
+        throw retryError;
+      }
     }
 
     this.cacheWallet(response.wallet, keys, created.credentialId);
@@ -142,27 +158,82 @@ export class PasskeyAuth {
     const pending = await this.deps.ceremonies.createCredential({
       challenge: base64UrlDecode(challenge.challenge),
     });
-    const created = await pending.confirm();
+    const created = await this.confirmOrAbort(pending);
 
     const keys = keysFromPrf(created.prfOutput, this.deps.env);
     const proof = this.seedProof(keys);
-
-    let response: { accessToken: string; wallet: PasskeyWallet };
-    try {
-      response = await this.deps.api.passkey.claimFinish(
+    const finish = (
+      challengeId: string,
+      assertion: Record<string, unknown>,
+      signatures: { signature: string; sparkSignature: string },
+    ) =>
+      this.deps.api.passkey.claimFinish(
         {
-          challengeId: challenge.challengeId,
+          challengeId,
           credential: created.attestation,
           userHandle: base64UrlEncode(created.userHandle),
           derivationVersion: 'V1',
-          assertion: created.assertion,
-          ...proof,
+          assertion,
+          address: proof.address,
+          sparkAddress: proof.sparkAddress,
+          ...signatures,
         },
         freshLoginToken,
       );
+
+    let response: { accessToken: string; wallet: PasskeyWallet };
+    try {
+      response = await finish(challenge.challengeId, created.assertion, {
+        signature: proof.signature,
+        sparkSignature: proof.sparkSignature,
+      });
     } catch (error) {
-      await pending.abort();
-      throw error;
+      if (this.isAddressExists(error)) {
+        try {
+          const retry = await this.deps.api.passkey.claimBegin(freshLoginToken);
+          this.checkRpId(retry.rpId);
+          const assertion = await this.deps.ceremonies.assert({
+            challenge: base64UrlDecode(retry.challenge),
+            credentialId: created.credentialId,
+          });
+          const claimText =
+            SIGN_MESSAGE_PREFIX[this.deps.env] +
+            LOGIN_TEMPLATES.general +
+            'passkey-claim\n' +
+            retry.challenge +
+            '\n' +
+            proof.address;
+          const signature = withPrivateKey(keys, { family: 'evm', index: 0 }, (privateKey) =>
+            signEip191(claimText, privateKey),
+          );
+          response = await finish(retry.challengeId, assertion.assertion, {
+            signature,
+            sparkSignature: proof.sparkSignature,
+          });
+        } catch (retryError) {
+          if (this.isDefinitiveRejection(retryError)) await pending.abort();
+          throw retryError;
+        }
+      } else if (this.isDefinitiveRejection(error)) {
+        await pending.abort();
+        throw error;
+      } else {
+        try {
+          const retry = await this.deps.api.passkey.claimBegin(freshLoginToken);
+          this.checkRpId(retry.rpId);
+          const assertion = await this.deps.ceremonies.assert({
+            challenge: base64UrlDecode(retry.challenge),
+            credentialId: created.credentialId,
+          });
+          response = await finish(retry.challengeId, assertion.assertion, {
+            signature: proof.signature,
+            sparkSignature: proof.sparkSignature,
+          });
+        } catch (retryError) {
+          if (this.isDefinitiveRejection(retryError)) await pending.abort();
+          throw retryError;
+        }
+      }
     }
 
     this.cacheWallet(response.wallet, keys, created.credentialId);
@@ -217,10 +288,9 @@ export class PasskeyAuth {
   /** Reduced D14 check: the server records of this wallet must match the local derivations. */
   verifyServerAddresses(wallet: PasskeyWallet, keys: KeyRing): { address: string; family: string; matches: boolean }[] {
     const local = new Map<string, boolean>();
-    local.set(keys.evm(0).address.toLowerCase(), true);
     local.set(keys.bitcoinAddress(0, 0).address.toLowerCase(), true);
     local.set(keys.sparkIdentity().address.toLowerCase(), true);
-    for (let index = 1; index < 20; index++) local.set(keys.evm(index).address.toLowerCase(), true);
+    for (let index = 0; index < 100; index++) local.set(keys.evm(index).address.toLowerCase(), true);
 
     return wallet.addresses.map((record) => ({
       address: record.address,
@@ -237,7 +307,7 @@ export class PasskeyAuth {
       return await this.deps.api.passkey.authenticateFinish({ challengeId, credential: assertion });
     } catch (error) {
       if (error instanceof ApiException && error.statusCode === 403) {
-        throw new PasskeyRefusedError({ statusCode: 403, code: error.code, message: error.message });
+        throw new PasskeyRefusedError({ statusCode: 403, code: error.code ?? error.message, message: error.message });
       }
       throw error;
     }
@@ -282,6 +352,27 @@ export class PasskeyAuth {
         `The server expects RP ID ${rpId}, this wallet uses ${RP_IDS[this.deps.env]}`,
       );
     }
+  }
+
+  private async confirmOrAbort(pending: PendingSeedPasskey): Promise<CreatedSeedPasskey> {
+    try {
+      return await pending.confirm();
+    } catch (error) {
+      await pending.abort();
+      throw error;
+    }
+  }
+
+  private isAddressExists(error: unknown): boolean {
+    return (
+      error instanceof ApiException &&
+      error.statusCode === 409 &&
+      (error.code === 'AddressExists' || error.message === 'AddressExists')
+    );
+  }
+
+  private isDefinitiveRejection(error: unknown): boolean {
+    return error instanceof ApiException && error.statusCode >= 400 && error.statusCode < 500;
   }
 
   private cacheWallet(wallet: PasskeyWallet, keys: KeyRing, credentialId: Uint8Array): void {

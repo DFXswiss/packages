@@ -16,7 +16,7 @@ export class LoginMessageMismatchError extends WalletError {
 }
 
 /** How many EVM accounts are scanned when matching a login address (the wallet uses index 0 by default). */
-const EVM_ADDRESS_SCAN = 20;
+const EVM_ADDRESS_SCAN = 100;
 
 const EIP_191_PREFIX = 'Ethereum Signed Message:\n';
 
@@ -27,7 +27,7 @@ export function eip191MessageHash(message: string): Uint8Array {
 }
 
 /** EIP-191 signature as the DFX API expects it: 0x-prefixed lowercase hex r‖s‖v, v = 27 + recovery id. */
-function signEip191(message: string, privateKey: Uint8Array): string {
+export function signEip191(message: string, privateKey: Uint8Array): string {
   const signature = secp256k1.sign(eip191MessageHash(message), privateKey);
   return `0x${bytesToHex(concatBytes(signature.toBytes('compact'), new Uint8Array([27 + signature.recovery])))}`;
 }

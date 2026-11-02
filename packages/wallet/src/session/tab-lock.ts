@@ -74,7 +74,8 @@ export class TabLock {
     void locks
       .request(this.name, { steal: true }, async () => {
         this.held = true;
-        await new Promise<void>(() => undefined); // holds until the next steal takes it over
+        await new Promise<void>((resolveRelease) => (this.releaseResolver = resolveRelease));
+        this.held = false;
       })
       .catch(() => this.onStolen());
   }

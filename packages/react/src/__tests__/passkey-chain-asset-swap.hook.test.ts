@@ -12,8 +12,8 @@ jest.mock('../contexts/auth.context', () => ({
 }));
 
 import { useApi } from '../hooks/api.hook';
-import { useChainApi } from '../hooks/chain.hook';
-import { usePasskeyApi } from '../hooks/passkey.hook';
+import { useChain } from '../hooks/chain.hook';
+import { usePasskey } from '../hooks/passkey.hook';
 import { useAsset } from '../hooks/asset.hook';
 import { useSwap } from '../hooks/swap.hook';
 
@@ -66,26 +66,33 @@ describe('skipAuthHandling', () => {
   });
 });
 
-describe('usePasskeyApi', () => {
+describe('usePasskey', () => {
   it('carries the explicit token and skips auth handling', async () => {
-    await usePasskeyApi().backupSeen(3, 'passkey-token');
+    await usePasskey().backupSeen(3, 'passkey-token');
     const [url, init] = lastCall();
     expect(url).toContain('passkey/wallets/3/backupSeen');
     expect(init.method).toBe('PUT');
     expect((init.headers as Record<string, string>).Authorization).toBe('Bearer passkey-token');
   });
 
+  it('lists wallets', async () => {
+    await usePasskey().wallets();
+    const [url, init] = lastCall();
+    expect(url).toContain('passkey/wallets');
+    expect(init.method).toBe('GET');
+  });
+
   it('revokes with the reason body', async () => {
-    await usePasskeyApi().revoke(3, 'Lost', 'passkey-token');
+    await usePasskey().revoke(3, 'Lost', 'passkey-token');
     const [url, init] = lastCall();
     expect(url).toContain('passkey/wallets/3/revoke');
     expect(JSON.parse(init.body as string)).toEqual({ reason: 'Lost' });
   });
 });
 
-describe('useChainApi', () => {
+describe('useChain', () => {
   it('lists the classification without a token', async () => {
-    await useChainApi().list();
+    await useChain().list();
     const [url, init] = lastCall();
     expect(url).toContain('walletData/chains');
     expect((init.headers as Record<string, string>).Authorization).toBe('');

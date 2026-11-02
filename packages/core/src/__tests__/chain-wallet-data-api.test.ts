@@ -99,4 +99,35 @@ describe('WalletDataApi', () => {
 
     for (const call of (mock.request as jest.Mock).mock.calls) expect(call[0].token).toBe(false);
   });
+
+  it('reads recommended fees as GET without a token', async () => {
+    const mock = createMockHttpClient({});
+    await new WalletDataApi(mock).bitcoin.recommendedFees();
+    expect(lastCall(mock)).toMatchObject({
+      url: 'walletData/esplora/Bitcoin/v1/fees/recommended',
+      method: 'GET',
+      token: false,
+    });
+    expect(lastCall(mock).url).toMatch(/\/v1\/fees\/recommended$/);
+  });
+
+  it('reads a lightning address as GET without a token', async () => {
+    const mock = createMockHttpClient({});
+    await new WalletDataApi(mock).lightningAddress('user@example.com');
+    expect(lastCall(mock)).toMatchObject({
+      url: 'walletData/lightningAddress/user@example.com',
+      method: 'GET',
+      token: false,
+    });
+  });
+
+  it('calls an lnurl callback as GET without a token', async () => {
+    const mock = createMockHttpClient({});
+    await new WalletDataApi(mock).lnurlCallback('https://cb.example');
+    expect(lastCall(mock)).toMatchObject({
+      url: 'walletData/lnurl/callback?url=https%3A%2F%2Fcb.example',
+      method: 'GET',
+      token: false,
+    });
+  });
 });

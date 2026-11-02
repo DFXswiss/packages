@@ -20,13 +20,13 @@ describe('passkeyDiagnostic', () => {
       outcome: 'Failure',
       errorName: 'NotAllowedError',
       message: 'The operation either timed out or was not allowed.',
-      attachment: 'platform',
+      authenticatorAttachment: 'platform',
       transports: ['internal'],
       backupEligible: true,
       backedUp: false,
-      prf: true,
+      prfPresent: true,
       os: '18.1',
-      clientCapabilities: { 'extension:prf': true, conditionalCreate: false },
+      clientCapabilities: JSON.stringify({ 'extension:prf': true, conditionalCreate: false }),
     });
   });
 
@@ -41,7 +41,7 @@ describe('passkeyDiagnostic', () => {
     expect(record['message']).toBe('<unavailable>');
     expect((record['stage'] as string).length).toBeLessThanOrEqual(64);
     expect((record['transports'] as string[]).length).toBeLessThanOrEqual(8);
-    expect(record['clientCapabilities']).toEqual({ 'extension:prf': true });
+    expect(record['clientCapabilities']).toBe(JSON.stringify({ 'extension:prf': true }));
   });
 
   it('omits optional fields entirely when not given', () => {

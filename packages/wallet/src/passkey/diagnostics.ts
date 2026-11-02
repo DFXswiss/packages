@@ -33,7 +33,7 @@ function diagnosticOutcome(outcome: PasskeyDiagnosticInput['outcome']): 'Success
   }
 }
 
-/** Builds the sanitized diagnostic record; the app forwards it to `POST auth/passkey/diagnostics`. */
+/** Builds the sanitized diagnostic record; the app forwards it to `POST passkey/diagnostics`. */
 export function passkeyDiagnostic(input: PasskeyDiagnosticInput): PasskeyDiagnostic {
   const record: PasskeyDiagnostic = {
     stage: String(input.stage).slice(0, 64),
@@ -42,19 +42,23 @@ export function passkeyDiagnostic(input: PasskeyDiagnosticInput): PasskeyDiagnos
   if (input.errorName !== undefined) record['errorName'] = String(input.errorName).slice(0, 64);
   if (input.message !== undefined)
     record['message'] = SAFE_MESSAGE.test(input.message) ? input.message : '<unavailable>';
-  if (input.attachment !== undefined) record['attachment'] = input.attachment;
+  if (input.attachment !== undefined) record['authenticatorAttachment'] = input.attachment;
   if (input.transports !== undefined)
     record['transports'] = input.transports.filter((t) => typeof t === 'string').slice(0, 8);
   if (input.backupEligible !== undefined) record['backupEligible'] = input.backupEligible;
   if (input.backedUp !== undefined) record['backedUp'] = input.backedUp;
-  if (input.prf !== undefined) record['prf'] = input.prf;
+  if (input.prf !== undefined) record['prfPresent'] = input.prf;
   if (input.os !== undefined) record['os'] = String(input.os).slice(0, 32);
   if (input.clientCapabilities !== undefined) {
-    record['clientCapabilities'] = Object.fromEntries(
-      Object.entries(input.clientCapabilities)
-        .filter(([, value]) => typeof value === 'boolean')
-        .slice(0, 16),
-    );
+    const entries = Object.entries(input.clientCapabilities)
+      .filter(([, value]) => typeof value === 'boolean')
+      .slice(0, 16);
+    let serialized = JSON.stringify(Object.fromEntries(entries));
+    while (serialized.length > 1024 && entries.length > 0) {
+      entries.pop();
+      serialized = JSON.stringify(Object.fromEntries(entries));
+    }
+    record['clientCapabilities'] = serialized;
   }
   return record;
 }

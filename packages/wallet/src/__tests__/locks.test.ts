@@ -97,7 +97,12 @@ describe('TabLock', () => {
         if (options.steal) {
           for (const existing of holders.splice(0)) existing.rejectRequest(new Error('stolen'));
           holders.push(holder);
-          void Promise.resolve(callback({})).catch(() => undefined);
+          void Promise.resolve(callback({}))
+            .catch(() => undefined)
+            .finally(() => {
+              const index = holders.indexOf(holder);
+              if (index >= 0) holders.splice(index, 1);
+            });
           return; // stays pending while the callback holds the lock
         }
         if (options.ifAvailable) {
@@ -150,5 +155,22 @@ describe('TabLock', () => {
     expect(second.isHeld).toBe(true);
     expect(first.isHeld).toBe(false);
     expect(onLost).toHaveBeenCalledTimes(1);
+  });
+
+  it('release after takeOver frees the lock so another tab can acquire', async () => {
+    const manager = locks();
+    const first = new TabLock(manager as never);
+    await first.acquire();
+
+    const second = new TabLock(manager as never);
+    second.takeOver();
+    await flush();
+    expect(second.isHeld).toBe(true);
+
+    second.release();
+    await flush();
+
+    const third = new TabLock(manager as never);
+    expect(await third.acquire()).toBe('acquired');
   });
 });

@@ -9,7 +9,7 @@ export interface PasskeyInterface {
   revoke: (id: number, reason: PasskeyRevocationReason, token: string) => Promise<PasskeyWallet>;
 }
 
-export function usePasskeyApi(): PasskeyInterface {
+export function usePasskey(): PasskeyInterface {
   const { call } = useApi();
 
   const wallets = useCallback(

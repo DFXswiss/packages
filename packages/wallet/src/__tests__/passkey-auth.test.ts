@@ -87,17 +87,21 @@ interface ApiBehavior {
 }
 
 function api(behavior: ApiBehavior = {}): DfxApiClient & {
+  registerBegin: jest.Mock;
   registerFinish: jest.Mock;
   authenticateFinish: jest.Mock;
+  claimBegin: jest.Mock;
   claimFinish: jest.Mock;
   link: jest.Mock;
 } {
   const challenge = { challengeId: 'c'.repeat(64), challenge: 'A'.repeat(64), rpId: 'app.dfx.swiss', timeout: 600000 };
+  const registerBegin = jest.fn(async () => challenge);
   const registerFinish = jest.fn(async () => ({ accessToken: 'register-token', wallet: wallet('pending') }));
   const authenticateFinish = jest.fn(async () => {
     if (behavior.authenticateReject) throw behavior.authenticateReject;
     return { accessToken: 'login-token', wallet: wallet(behavior.walletSeedCheckAddress ?? '') };
   });
+  const claimBegin = jest.fn(async () => challenge);
   const claimFinish = jest.fn(async () => ({ accessToken: 'claim-token', wallet: wallet('pending') }));
   const link = jest.fn(async () => ({
     accessToken: 'link-token',
@@ -105,19 +109,21 @@ function api(behavior: ApiBehavior = {}): DfxApiClient & {
   }));
   return {
     passkey: {
-      registerBegin: async () => challenge,
+      registerBegin,
       registerFinish,
       authenticateBegin: async () => challenge,
       authenticateFinish,
-      claimBegin: async () => challenge,
+      claimBegin,
       claimFinish,
       link,
       revokeBegin: async () => challenge,
       revokeFinish: async () => wallet('x'),
       credentialStatus: async () => [],
     },
+    registerBegin,
     registerFinish,
     authenticateFinish,
+    claimBegin,
     claimFinish,
     link,
   } as never;
@@ -130,7 +136,9 @@ function auth(
   flow: PasskeyAuth;
   credentials: FakeCredentials;
   cache: CredentialCache;
+  registerBegin: jest.Mock;
   registerFinish: jest.Mock;
+  claimBegin: jest.Mock;
   claimFinish: jest.Mock;
   signalUnknown: jest.Mock;
 } {
@@ -147,7 +155,9 @@ function auth(
     flow,
     credentials,
     cache,
+    registerBegin: client.registerBegin,
     registerFinish: client.registerFinish,
+    claimBegin: client.claimBegin,
     claimFinish: client.claimFinish,
     signalUnknown: win.signalUnknown,
   };
@@ -221,7 +231,7 @@ describe('register', () => {
     const { flow, credentials, cache, registerFinish, signalUnknown } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
-    const failure = new Error('register failed');
+    const failure = new ApiException(400, 'Bad Request');
     registerFinish.mockRejectedValueOnce(failure);
 
     await expect(flow.register({ mail: 'user@example.com' })).rejects.toBe(failure);
@@ -230,6 +240,20 @@ describe('register', () => {
       credentialId: base64url(CREDENTIAL_ID),
       rpId: 'app.dfx.swiss',
     });
+  });
+
+  it('retries registerBegin and registerFinish once on a lost response and keeps the credential', async () => {
+    const { flow, credentials, registerBegin, registerFinish, signalUnknown } = auth();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    registerFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
+
+    const result = await flow.register({ mail: 'user@example.com' });
+
+    expect(result.state).toBe('unlocked');
+    expect(registerBegin).toHaveBeenCalledTimes(2);
+    expect(registerFinish).toHaveBeenCalledTimes(2);
+    expect(signalUnknown).not.toHaveBeenCalled();
   });
 
   it('refuses a server challenge of another RP ID', async () => {
@@ -428,7 +452,7 @@ describe('claim and link', () => {
     const { flow, credentials, cache, claimFinish, signalUnknown } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
-    const failure = new Error('claim failed');
+    const failure = new ApiException(400, 'Bad Request');
     claimFinish.mockRejectedValueOnce(failure);
 
     await expect(flow.claim('fresh-token')).rejects.toBe(failure);
@@ -438,6 +462,24 @@ describe('claim and link', () => {
       rpId: 'app.dfx.swiss',
     });
     expect(claimFinish).toHaveBeenCalledWith(expect.anything(), 'fresh-token');
+  });
+
+  it('retries claimFinish with an EVM claim signature when the address already exists', async () => {
+    const { flow, credentials, claimFinish, signalUnknown } = auth();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    claimFinish.mockRejectedValueOnce(new ApiException(409, 'AddressExists'));
+
+    const result = await flow.claim('fresh-token');
+
+    expect(result.state).toBe('unlocked');
+    expect(claimFinish).toHaveBeenCalledTimes(2);
+    expect(signalUnknown).not.toHaveBeenCalled();
+
+    const first = claimFinish.mock.calls[0][0] as { signature: string; sparkSignature: string };
+    const second = claimFinish.mock.calls[1][0] as { signature: string; sparkSignature: string };
+    expect(second.signature).not.toBe(first.signature);
+    expect(second.sparkSignature).toBe(first.sparkSignature);
   });
 
   it('links the EVM seed check address with a login signature', async () => {
