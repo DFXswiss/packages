@@ -106,7 +106,8 @@ export class PasskeyAuth {
         });
         response = await finish(retry.challengeId, assertion.assertion);
       } catch (retryError) {
-        if (this.isDefinitiveRejection(retryError)) await pending.abort();
+        // AddressExists means the lost finish was stored. Any other 4xx was not.
+        if (this.isDefinitiveRejection(retryError) && !this.isAddressExists(retryError)) await pending.abort();
         throw retryError;
       }
     }
@@ -181,39 +182,38 @@ export class PasskeyAuth {
         freshLoginToken,
       );
 
-    let response: { accessToken: string; wallet: PasskeyWallet };
-    try {
-      response = await finish(challenge.challengeId, created.assertion, {
-        signature: proof.signature,
+    const originalSignatures = { signature: proof.signature, sparkSignature: proof.sparkSignature };
+
+    // The server already has this address, so the credential stays. A later 4xx is not a delete.
+    const claimWithNewSignature = async (): Promise<{ accessToken: string; wallet: PasskeyWallet }> => {
+      const retry = await this.deps.api.passkey.claimBegin(freshLoginToken);
+      this.checkRpId(retry.rpId);
+      const assertion = await this.deps.ceremonies.assert({
+        challenge: base64UrlDecode(retry.challenge),
+        credentialId: created.credentialId,
+      });
+      const claimText =
+        SIGN_MESSAGE_PREFIX[this.deps.env] +
+        LOGIN_TEMPLATES.general +
+        'passkey-claim\n' +
+        retry.challenge +
+        '\n' +
+        proof.address;
+      const signature = withPrivateKey(keys, { family: 'evm', index: 0 }, (privateKey) =>
+        signEip191(claimText, privateKey),
+      );
+      return finish(retry.challengeId, assertion.assertion, {
+        signature,
         sparkSignature: proof.sparkSignature,
       });
+    };
+
+    let response: { accessToken: string; wallet: PasskeyWallet };
+    try {
+      response = await finish(challenge.challengeId, created.assertion, originalSignatures);
     } catch (error) {
       if (this.isAddressExists(error)) {
-        try {
-          const retry = await this.deps.api.passkey.claimBegin(freshLoginToken);
-          this.checkRpId(retry.rpId);
-          const assertion = await this.deps.ceremonies.assert({
-            challenge: base64UrlDecode(retry.challenge),
-            credentialId: created.credentialId,
-          });
-          const claimText =
-            SIGN_MESSAGE_PREFIX[this.deps.env] +
-            LOGIN_TEMPLATES.general +
-            'passkey-claim\n' +
-            retry.challenge +
-            '\n' +
-            proof.address;
-          const signature = withPrivateKey(keys, { family: 'evm', index: 0 }, (privateKey) =>
-            signEip191(claimText, privateKey),
-          );
-          response = await finish(retry.challengeId, assertion.assertion, {
-            signature,
-            sparkSignature: proof.sparkSignature,
-          });
-        } catch (retryError) {
-          if (this.isDefinitiveRejection(retryError)) await pending.abort();
-          throw retryError;
-        }
+        response = await claimWithNewSignature();
       } else if (this.isDefinitiveRejection(error)) {
         await pending.abort();
         throw error;
@@ -225,13 +225,16 @@ export class PasskeyAuth {
             challenge: base64UrlDecode(retry.challenge),
             credentialId: created.credentialId,
           });
-          response = await finish(retry.challengeId, assertion.assertion, {
-            signature: proof.signature,
-            sparkSignature: proof.sparkSignature,
-          });
+          response = await finish(retry.challengeId, assertion.assertion, originalSignatures);
         } catch (retryError) {
-          if (this.isDefinitiveRejection(retryError)) await pending.abort();
-          throw retryError;
+          if (this.isAddressExists(retryError)) {
+            response = await claimWithNewSignature();
+          } else if (this.isDefinitiveRejection(retryError)) {
+            await pending.abort();
+            throw retryError;
+          } else {
+            throw retryError;
+          }
         }
       }
     }

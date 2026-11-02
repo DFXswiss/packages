@@ -261,6 +261,19 @@ describe('register', () => {
     expect(signalUnknown).not.toHaveBeenCalled();
   });
 
+  it('keeps the credential when the registration retry reports the address already exists', async () => {
+    const { flow, credentials, registerFinish, signalUnknown } = auth();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const exists = new ApiException(409, 'AddressExists');
+    registerFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
+    registerFinish.mockRejectedValueOnce(exists);
+
+    await expect(flow.register({ mail: 'user@example.com' })).rejects.toBe(exists);
+    expect(signalUnknown).not.toHaveBeenCalled();
+    expect(registerFinish).toHaveBeenCalledTimes(2);
+  });
+
   it('asks credentialStatus in batches of ten and excludes every known id', async () => {
     const { flow, credentials, cache, credentialStatus } = auth();
     const ids = Array.from({ length: 11 }, (_, index) => base64url(new Uint8Array([index + 1])));
@@ -523,6 +536,55 @@ describe('claim and link', () => {
     const second = claimFinish.mock.calls[1][0] as { signature: string; sparkSignature: string };
     expect(second.signature).not.toBe(first.signature);
     expect(second.sparkSignature).toBe(first.sparkSignature);
+  });
+
+  it('keeps the credential when a lost claim response is followed by AddressExists', async () => {
+    const { flow, credentials, claimFinish, signalUnknown } = auth();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    claimFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
+    claimFinish.mockRejectedValueOnce(new ApiException(409, 'AddressExists'));
+
+    const result = await flow.claim('fresh-token');
+
+    expect(result.state).toBe('unlocked');
+    expect(claimFinish).toHaveBeenCalledTimes(3);
+    expect(signalUnknown).not.toHaveBeenCalled();
+
+    const first = claimFinish.mock.calls[0][0] as { signature: string };
+    const retry = claimFinish.mock.calls[1][0] as { signature: string };
+    const resigned = claimFinish.mock.calls[2][0] as { signature: string };
+    expect(retry.signature).toBe(first.signature);
+    expect(resigned.signature).not.toBe(first.signature);
+  });
+
+  it('does not drop the credential when the resigned claim still reports AddressExists', async () => {
+    const { flow, credentials, claimFinish, signalUnknown } = auth();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const exists = new ApiException(409, 'AddressExists');
+    claimFinish.mockRejectedValueOnce(exists);
+    claimFinish.mockRejectedValueOnce(exists);
+
+    await expect(flow.claim('fresh-token')).rejects.toBe(exists);
+    expect(claimFinish).toHaveBeenCalledTimes(2);
+    expect(signalUnknown).not.toHaveBeenCalled();
+  });
+
+  it('aborts the claim retry when the server rejects it for another reason', async () => {
+    const { flow, credentials, cache, claimFinish, signalUnknown } = auth();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const failure = new ApiException(400, 'Bad Request');
+    claimFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
+    claimFinish.mockRejectedValueOnce(failure);
+
+    await expect(flow.claim('fresh-token')).rejects.toBe(failure);
+    expect(cache.list()).toEqual([]);
+    expect(signalUnknown).toHaveBeenCalledWith({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: 'app.dfx.swiss',
+    });
   });
 
   it('links the EVM seed check address with a login signature', async () => {
