@@ -1,12 +1,14 @@
 import type { DfxApiClient, PasskeyWallet } from '@dfx.swiss/core';
 import { ApiException } from '@dfx.swiss/core';
 import fixture from './fixtures/derivation-v1.json';
-import type { WalletEnv } from '../config/environment';
-import { KeyRing } from '../derivation/keyring';
+import { SIGN_MESSAGE_PREFIX, type WalletEnv } from '../config/environment';
+import { KeyRing, withPrivateKey } from '../derivation/keyring';
 import { PasskeyCeremonies } from '../passkey/ceremonies';
 import type { CeremonyCredentials, CeremonyWindow } from '../passkey/ceremonies';
 import { CredentialCache } from '../passkey/credential-cache';
 import { PasskeyAuth, PasskeyRefusedError } from '../session/passkey-auth';
+import { signEip191 } from '../signing/auto-signer';
+import { LOGIN_TEMPLATES } from '../signing/login-messages';
 import { WalletError } from '../util/errors';
 
 const PRF = hexToBytes(fixture.vectors[0].prfOutput);
@@ -259,6 +261,21 @@ describe('register', () => {
     expect(registerBegin).toHaveBeenCalledTimes(2);
     expect(registerFinish).toHaveBeenCalledTimes(2);
     expect(signalUnknown).not.toHaveBeenCalled();
+  });
+
+  it('aborts the registration retry when the server rejects it for another reason', async () => {
+    const { flow, credentials, registerFinish, signalUnknown } = auth();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const failure = new ApiException(400, 'Bad Request');
+    registerFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
+    registerFinish.mockRejectedValueOnce(failure);
+
+    await expect(flow.register({ mail: 'user@example.com' })).rejects.toBe(failure);
+    expect(signalUnknown).toHaveBeenCalledWith({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: 'app.dfx.swiss',
+    });
   });
 
   it('keeps the credential when the registration retry reports the address already exists', async () => {
@@ -521,9 +538,12 @@ describe('claim and link', () => {
   });
 
   it('retries claimFinish with an EVM claim signature when the address already exists', async () => {
-    const { flow, credentials, claimFinish, signalUnknown } = auth();
+    const { flow, credentials, claimBegin, claimFinish, signalUnknown } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
+    const retryChallenge = 'B'.repeat(64);
+    claimBegin.mockResolvedValueOnce(ceremonyChallenge('c', 'A'));
+    claimBegin.mockResolvedValueOnce(ceremonyChallenge('d', 'B'));
     claimFinish.mockRejectedValueOnce(new ApiException(409, 'AddressExists'));
 
     const result = await flow.claim('fresh-token');
@@ -532,16 +552,23 @@ describe('claim and link', () => {
     expect(claimFinish).toHaveBeenCalledTimes(2);
     expect(signalUnknown).not.toHaveBeenCalled();
 
-    const first = claimFinish.mock.calls[0][0] as { signature: string; sparkSignature: string };
-    const second = claimFinish.mock.calls[1][0] as { signature: string; sparkSignature: string };
+    const first = claimFinish.mock.calls[0][0] as { challengeId: string; signature: string; sparkSignature: string };
+    const second = claimFinish.mock.calls[1][0] as { challengeId: string; signature: string; sparkSignature: string };
+    expect(first.challengeId).toBe('c'.repeat(64));
+    expect(second.challengeId).toBe('d'.repeat(64));
+    expect(second.signature).toBe(claimSignature(retryChallenge));
     expect(second.signature).not.toBe(first.signature);
     expect(second.sparkSignature).toBe(first.sparkSignature);
   });
 
   it('keeps the credential when a lost claim response is followed by AddressExists', async () => {
-    const { flow, credentials, claimFinish, signalUnknown } = auth();
+    const { flow, credentials, claimBegin, claimFinish, signalUnknown } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
+    const resignedChallenge = 'C'.repeat(64);
+    claimBegin.mockResolvedValueOnce(ceremonyChallenge('c', 'A'));
+    claimBegin.mockResolvedValueOnce(ceremonyChallenge('d', 'B'));
+    claimBegin.mockResolvedValueOnce(ceremonyChallenge('e', 'C'));
     claimFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
     claimFinish.mockRejectedValueOnce(new ApiException(409, 'AddressExists'));
 
@@ -551,11 +578,14 @@ describe('claim and link', () => {
     expect(claimFinish).toHaveBeenCalledTimes(3);
     expect(signalUnknown).not.toHaveBeenCalled();
 
-    const first = claimFinish.mock.calls[0][0] as { signature: string };
-    const retry = claimFinish.mock.calls[1][0] as { signature: string };
-    const resigned = claimFinish.mock.calls[2][0] as { signature: string };
+    const first = claimFinish.mock.calls[0][0] as { challengeId: string; signature: string };
+    const retry = claimFinish.mock.calls[1][0] as { challengeId: string; signature: string };
+    const resigned = claimFinish.mock.calls[2][0] as { challengeId: string; signature: string };
+    expect(retry.challengeId).toBe('d'.repeat(64));
     expect(retry.signature).toBe(first.signature);
-    expect(resigned.signature).not.toBe(first.signature);
+    expect(resigned.challengeId).toBe('e'.repeat(64));
+    expect(resigned.signature).toBe(claimSignature(resignedChallenge));
+    expect(resigned.signature).not.toBe(claimSignature('B'.repeat(64)));
   });
 
   it('does not drop the credential when the resigned claim still reports AddressExists', async () => {
@@ -596,6 +626,23 @@ describe('claim and link', () => {
     expect(result.address.family).toBe('Evm');
   });
 });
+
+function ceremonyChallenge(idChar: string, challengeChar: string) {
+  return {
+    challengeId: idChar.repeat(64),
+    challenge: challengeChar.repeat(64),
+    rpId: 'app.dfx.swiss',
+    timeout: 600000,
+  };
+}
+
+/** The EIP-191 claim signature over this challenge, using the same PRF key as the flow. */
+function claimSignature(challenge: string): string {
+  const keys = KeyRing.fromMnemonic(fixture.vectors[0].mnemonic, { bitcoinNetwork: 'mainnet' });
+  const address = keys.evm(0).address;
+  const claimText = SIGN_MESSAGE_PREFIX.prd + LOGIN_TEMPLATES.general + 'passkey-claim\n' + challenge + '\n' + address;
+  return withPrivateKey(keys, { family: 'evm', index: 0 }, (privateKey) => signEip191(claimText, privateKey));
+}
 
 function base64url(bytes: Uint8Array): string {
   let binary = '';
