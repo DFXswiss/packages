@@ -216,10 +216,15 @@ export class PasskeyCeremonies {
     };
   }
 
-  /** A login assertion with PRF output when the authenticator provides it. */
-  async assert(input: { challenge?: Uint8Array; credentialId?: Uint8Array }): Promise<SeedAssertion> {
+  /** A login assertion with PRF output when the authenticator provides it.
+   * `continueCeremony` is only for a retry inside a ceremony that already ran create(). */
+  async assert(input: {
+    challenge?: Uint8Array;
+    credentialId?: Uint8Array;
+    continueCeremony?: boolean;
+  }): Promise<SeedAssertion> {
     this.requireTopLevelOrigin();
-    this.requireActivation();
+    if (!input.continueCeremony) this.requireActivation();
 
     const options: CredentialRequestOptions = {
       publicKey: {

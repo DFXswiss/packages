@@ -284,6 +284,22 @@ describe('guards', () => {
     await expect(ceremonies(new FakeCredentials(), win).assert({})).rejects.toMatchObject({ code: 'embedded-context' });
   });
 
+  it('continues a ceremony after transient activation has expired', async () => {
+    const credentials = new FakeCredentials();
+    credentials.nextGet = assertionCredential({ prf: PRF_A });
+    const activation = { isActive: false };
+    const win = fakeWindow({ navigator: { userAgent: 'TestBrowser/1.0', userActivation: activation } });
+
+    const assertion = await ceremonies(credentials, win).assert({
+      credentialId: CREDENTIAL_ID,
+      continueCeremony: true,
+    });
+
+    expect(new Uint8Array(assertion.prfOutput!)).toEqual(PRF_A);
+    expect(credentials.got).toHaveLength(1);
+    expect(win.signalUnknown).not.toHaveBeenCalled();
+  });
+
   it('refuses to start without user activation', async () => {
     const win = fakeWindow({ navigator: { userAgent: 'TestBrowser/1.0', userActivation: { isActive: false } } });
     await expect(ceremonies(new FakeCredentials(), win).assert({})).rejects.toMatchObject({

@@ -25,11 +25,13 @@ const CREDENTIAL_ID = new Uint8Array([9, 9, 9]);
 class FakeCredentials implements CeremonyCredentials {
   nextCreate: PublicKeyCredential | null = null;
   nextGet: PublicKeyCredential | null = null;
+  createHook?: () => void;
   readonly created: CredentialCreationOptions[] = [];
   readonly got: CredentialRequestOptions[] = [];
 
   async create(options: CredentialCreationOptions): Promise<PublicKeyCredential | null> {
     this.created.push(options);
+    this.createHook?.();
     return this.nextCreate;
   }
 
@@ -58,11 +60,13 @@ function fakeCredential(prf: Uint8Array | undefined, id = CREDENTIAL_ID): Public
   } as unknown as PublicKeyCredential;
 }
 
-function fakeWindow(): CeremonyWindow & { signalUnknown: jest.Mock } {
+function fakeWindow(
+  activation: { isActive: boolean } = { isActive: true },
+): CeremonyWindow & { signalUnknown: jest.Mock } {
   const signalUnknown = jest.fn();
   return {
     location: { hostname: 'app.dfx.swiss' },
-    navigator: { userAgent: 'TestBrowser/1.0', userActivation: { isActive: true } },
+    navigator: { userAgent: 'TestBrowser/1.0', userActivation: activation },
     PublicKeyCredential: { signalUnknownCredential: signalUnknown },
     signalUnknown,
   } as CeremonyWindow & { signalUnknown: jest.Mock };
@@ -147,10 +151,12 @@ function auth(
   claimFinish: jest.Mock;
   credentialStatus: jest.Mock;
   signalUnknown: jest.Mock;
+  activation: { isActive: boolean };
 } {
   const cache = new CredentialCache(new MemoryStorage(), 'dfx.wallet.credentials.v1', 'app.dfx.swiss');
   const client = api(behavior);
-  const win = fakeWindow();
+  const activation = { isActive: true };
+  const win = fakeWindow(activation);
   const flow = new PasskeyAuth({
     api: client,
     ceremonies: new PasskeyCeremonies('prd', credentials, win),
@@ -167,6 +173,14 @@ function auth(
     claimFinish: client.claimFinish,
     credentialStatus: client.credentialStatus,
     signalUnknown: win.signalUnknown,
+    activation,
+  };
+}
+
+/** The create dialog spends the gesture before a later retry can call get(). */
+function expireAfterCreate(credentials: FakeCredentials, activation: { isActive: boolean }): void {
+  credentials.createHook = () => {
+    activation.isActive = false;
   };
 }
 
@@ -250,9 +264,10 @@ describe('register', () => {
   });
 
   it('retries registerBegin and registerFinish once on a lost response and keeps the credential', async () => {
-    const { flow, credentials, registerBegin, registerFinish, signalUnknown } = auth();
+    const { flow, credentials, activation, registerBegin, registerFinish, signalUnknown } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
+    expireAfterCreate(credentials, activation);
     registerFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
 
     const result = await flow.register({ mail: 'user@example.com' });
@@ -260,13 +275,15 @@ describe('register', () => {
     expect(result.state).toBe('unlocked');
     expect(registerBegin).toHaveBeenCalledTimes(2);
     expect(registerFinish).toHaveBeenCalledTimes(2);
+    expect(credentials.got).toHaveLength(2);
     expect(signalUnknown).not.toHaveBeenCalled();
   });
 
   it('aborts the registration retry when the server rejects it for another reason', async () => {
-    const { flow, credentials, registerFinish, signalUnknown } = auth();
+    const { flow, credentials, activation, registerFinish, signalUnknown } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
+    expireAfterCreate(credentials, activation);
     const failure = new ApiException(400, 'Bad Request');
     registerFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
     registerFinish.mockRejectedValueOnce(failure);
@@ -279,9 +296,10 @@ describe('register', () => {
   });
 
   it('keeps the credential when the registration retry reports the address already exists', async () => {
-    const { flow, credentials, registerFinish, signalUnknown } = auth();
+    const { flow, credentials, activation, registerFinish, signalUnknown } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
+    expireAfterCreate(credentials, activation);
     const exists = new ApiException(409, 'AddressExists');
     registerFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
     registerFinish.mockRejectedValueOnce(exists);
@@ -538,9 +556,10 @@ describe('claim and link', () => {
   });
 
   it('retries claimFinish with an EVM claim signature when the address already exists', async () => {
-    const { flow, credentials, claimBegin, claimFinish, signalUnknown } = auth();
+    const { flow, credentials, activation, claimBegin, claimFinish, signalUnknown } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
+    expireAfterCreate(credentials, activation);
     const retryChallenge = 'B'.repeat(64);
     claimBegin.mockResolvedValueOnce(ceremonyChallenge('c', 'A'));
     claimBegin.mockResolvedValueOnce(ceremonyChallenge('d', 'B'));
@@ -559,12 +578,14 @@ describe('claim and link', () => {
     expect(second.signature).toBe(claimSignature(retryChallenge));
     expect(second.signature).not.toBe(first.signature);
     expect(second.sparkSignature).toBe(first.sparkSignature);
+    expect(credentials.got.length).toBeGreaterThan(1);
   });
 
   it('keeps the credential when a lost claim response is followed by AddressExists', async () => {
-    const { flow, credentials, claimBegin, claimFinish, signalUnknown } = auth();
+    const { flow, credentials, activation, claimBegin, claimFinish, signalUnknown } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
+    expireAfterCreate(credentials, activation);
     const resignedChallenge = 'C'.repeat(64);
     claimBegin.mockResolvedValueOnce(ceremonyChallenge('c', 'A'));
     claimBegin.mockResolvedValueOnce(ceremonyChallenge('d', 'B'));
@@ -589,9 +610,10 @@ describe('claim and link', () => {
   });
 
   it('does not drop the credential when the resigned claim still reports AddressExists', async () => {
-    const { flow, credentials, claimFinish, signalUnknown } = auth();
+    const { flow, credentials, activation, claimFinish, signalUnknown } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
+    expireAfterCreate(credentials, activation);
     const exists = new ApiException(409, 'AddressExists');
     claimFinish.mockRejectedValueOnce(exists);
     claimFinish.mockRejectedValueOnce(exists);
@@ -602,9 +624,10 @@ describe('claim and link', () => {
   });
 
   it('aborts the claim retry when the server rejects it for another reason', async () => {
-    const { flow, credentials, cache, claimFinish, signalUnknown } = auth();
+    const { flow, credentials, activation, cache, claimFinish, signalUnknown } = auth();
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
+    expireAfterCreate(credentials, activation);
     const failure = new ApiException(400, 'Bad Request');
     claimFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
     claimFinish.mockRejectedValueOnce(failure);

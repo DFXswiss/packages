@@ -103,6 +103,7 @@ export class PasskeyAuth {
         const assertion = await this.deps.ceremonies.assert({
           challenge: base64UrlDecode(retry.challenge),
           credentialId: created.credentialId,
+          continueCeremony: true,
         });
         response = await finish(retry.challengeId, assertion.assertion);
       } catch (retryError) {
@@ -191,6 +192,7 @@ export class PasskeyAuth {
       const assertion = await this.deps.ceremonies.assert({
         challenge: base64UrlDecode(retry.challenge),
         credentialId: created.credentialId,
+        continueCeremony: true,
       });
       const claimText =
         SIGN_MESSAGE_PREFIX[this.deps.env] +
@@ -224,6 +226,7 @@ export class PasskeyAuth {
           const assertion = await this.deps.ceremonies.assert({
             challenge: base64UrlDecode(retry.challenge),
             credentialId: created.credentialId,
+            continueCeremony: true,
           });
           response = await finish(retry.challengeId, assertion.assertion, originalSignatures);
         } catch (retryError) {
