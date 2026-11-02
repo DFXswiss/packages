@@ -1,0 +1,59 @@
+# A38 report guard. Trusted-base audit of the author-measured local CI report.
+# Does not check out the pull request. Does not execute scripts from the PR.
+# The composite action is pinned to a full commit SHA of DFXswiss/agent.
+# Merge this installation onto the default branch to activate it.
+
+name: dfx pr guard
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited, ready_for_review]
+  issue_comment:
+    types: [created, edited, deleted]
+  schedule:
+    - cron: '17,47 * * * *'
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request number
+        required: false
+        type: string
+      all_open:
+        description: Reconcile every open pull request
+        required: false
+        type: boolean
+        default: false
+  workflow_run:
+    # Completion of this CI workflow can change readiness.
+    # Never include this guard workflow.
+    workflows: ["PR CI"]
+    types: [completed]
+
+concurrency:
+  group: ${{ (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.all_open)) && format('a38-pr-guard-sweep-{0}', github.repository) || format('a38-pr-guard-event-{0}-{1}', github.repository, github.event.workflow_run.head_sha || github.event.pull_request.head.sha || github.event.issue.number || github.event.inputs.pr || github.run_id) }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  statuses: write
+  actions: write
+  checks: read
+
+jobs:
+  guard:
+    name: dfx pr guard
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.all_open)) && 45 || 10 }}
+    steps:
+      # No actions/checkout of the PR. The composite action loads trusted code
+      # from its own action_path (DFXswiss/agent) and reads the base manifest
+      # and head workflow YAML via the GitHub API as data only.
+      - name: dfx pr guard
+        uses: DFXswiss/agent/.github/actions/a38-guard@5a9c1be2c03a85e3844a48e0da57df6118915d35
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          pr: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.pr || '' }}
+          all_open: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.all_open) }}

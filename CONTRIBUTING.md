@@ -72,6 +72,43 @@ Tests use **Jest** with **ts-jest**. Test files live under `src/__tests__/` and 
 `@dfx.swiss/bip322-multisig` currently define a `test` script; add or extend tests when
 you change or add functionality in those packages.
 
+## A38
+
+This repository requires A38 according to the canonical A38 standard in
+[DFXswiss/agent](https://github.com/DFXswiss/agent/blob/5a9c1be2c03a85e3844a48e0da57df6118915d35/docs/a38.md)
+at commit `5a9c1be2c03a85e3844a48e0da57df6118915d35`. Repo job selection:
+`.github/a38.json`. Target-branch applicability and fork workflow approval:
+`.github/pr-guard.json`. `workflow_approval.workflows` stays a required field
+there but no longer filters: after a fresh enforce pass the guard approves
+every initial held fork `pull_request` run. `dfx pr guard` is
+[wired in](https://github.com/DFXswiss/agent/blob/5a9c1be2c03a85e3844a48e0da57df6118915d35/docs/a38-guard.md#how-fork-github-actions-are-meant-to-work).
+
+This is a **public** repository. GitHub-hosted runners still execute PR CI
+(check name `Lint, build and test`). A38 does not replace that GitHub check.
+The author report runs the same four Lerna tasks that job runs at full scope:
+`npx lerna run lint`, `npx lerna run format:check`, `npx lerna run build`, and
+`npx lerna run test`. Publish, Storybook deploy, the release bot, and the
+main-branch ancestry check are excluded.
+
+Draft pull requests run the GitHub PR CI job. GitHub holds fork runs from
+external contributors as `action_required`. Ready does not start CI. After a
+fresh A38 enforce pass on the current head, `dfx pr guard` approves those
+waiting initial runs, then sets Ready when the review rule below is met,
+required GitHub jobs are green, and the PR is mergeable.
+
+Two reviews are required before Ready. One review is enough only when the
+pull request opener is listed in one_review_authors in the trusted
+.github/pr-guard.json on the default branch. A missing file, a missing key,
+or an empty list keeps two reviews required. An entry that exists only on
+the pull request head does not count.
+
+The newest well-formed second review comment that covers the current head
+returns a Ready pull request to draft when its `blocks_merge` is true and it
+counts at least one defect; a newer well-formed second review with
+`blocks_merge` false clears that. The merger does not click Approve and run
+workflows. Do not ask a maintainer to approve workflow runs. Post the A38
+report on the current head.
+
 ## Git & pull requests
 
 - Branch off **`develop`**; open pull requests against **`develop`**. The `main`
