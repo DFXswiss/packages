@@ -115,6 +115,15 @@ describe('useAsset', () => {
     expect(url).toContain('blockchains=Ethereum');
     expect((init.headers as Record<string, string>).Authorization).toBe('Bearer session');
   });
+
+  it('stays anonymous when private assets are requested without a chain filter', async () => {
+    mockGetAuthToken.mockReturnValue('session');
+    await useAsset().getAssets(undefined, true);
+    const [url, init] = lastCall();
+    expect(url).toContain('includePrivate=true');
+    expect(url).not.toContain('blockchains');
+    expect((init.headers as Record<string, string>).Authorization).toBe('');
+  });
 });
 
 describe('useSwap confirm', () => {

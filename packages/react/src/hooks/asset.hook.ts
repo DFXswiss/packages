@@ -27,8 +27,9 @@ export function useAsset(): AssetInterface {
       return call<Asset[]>({
         url: `${AssetUrl.get}?${chainQuery}includePrivate=${includePrivate}`,
         method: 'GET',
-        // Without a chain filter the request is the public asset list (no JWT, no jwt.blockchains fallback).
-        token: includePrivate ? undefined : false,
+        // The session token goes out only with an explicit chain filter. Without one, the list stays
+        // anonymous, so jwt.blockchains cannot narrow it.
+        token: blockchains?.length && includePrivate ? undefined : false,
       });
     },
     [call],
