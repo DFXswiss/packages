@@ -196,6 +196,20 @@ describe('createCredential', () => {
     expect(win.signalUnknown).toHaveBeenCalled();
   });
 
+  it('confirm() still runs the second tap after transient activation has expired', async () => {
+    const credentials = new FakeCredentials();
+    credentials.nextCreate = attestationCredential({ prf: PRF_A });
+    const activation = { isActive: true };
+    const win = fakeWindow({ navigator: { userAgent: 'TestBrowser/1.0', userActivation: activation } });
+    const pending = await ceremonies(credentials, win).createCredential({ challenge: new Uint8Array(32) });
+
+    activation.isActive = false;
+    credentials.nextGet = assertionCredential({ prf: PRF_A });
+    await expect(pending.confirm()).resolves.toMatchObject({ prfOutput: PRF_A });
+    expect(credentials.got).toHaveLength(1);
+    expect(win.signalUnknown).not.toHaveBeenCalled();
+  });
+
   it('confirm() succeeds when only the confirming get() provides PRF', async () => {
     const credentials = new FakeCredentials();
     credentials.nextCreate = attestationCredential({});

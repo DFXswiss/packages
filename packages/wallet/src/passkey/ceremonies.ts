@@ -264,12 +264,12 @@ export class PasskeyCeremonies {
     this.gate.cancelActive();
   }
 
-  /** Tap 2 helper: the confirming `get()` restricted to the new credential; PRF output is mandatory. */
+  /** Tap 2 helper: the confirming `get()` restricted to the new credential; PRF output is mandatory.
+   * The gesture that opened tap 1 does not survive that dialog, so this prompt is not gated on it. */
   private async derivePrf(
     credentialId: Uint8Array,
     challenge: Uint8Array,
   ): Promise<{ prfOutput: Uint8Array; credential: PublicKeyCredential }> {
-    this.requireActivation();
     const options: CredentialRequestOptions = {
       publicKey: {
         challenge: source(challenge),
