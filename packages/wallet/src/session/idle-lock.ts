@@ -24,7 +24,7 @@ export class IdleLock {
   private stopped = false;
 
   constructor(private readonly options: IdleLockOptions) {
-    this.events = options.target ?? (globalThis as unknown as EventTarget);
+    this.events = options.target ?? defaultIdleTarget();
     this.now = options.now ?? Date.now;
     this.lastActivity = this.now();
     this.start();
@@ -56,14 +56,19 @@ export class IdleLock {
 
   private onVisibility = (): void => {
     if (this.stopped) return;
-    const document = this.events as unknown as { visibilityState?: string };
-    if (this.options.delay === 'tab' && document.visibilityState === 'hidden') this.lock();
-    if (document.visibilityState === 'visible') this.check();
+    const state = this.visibilityState();
+    if (this.options.delay === 'tab' && state === 'hidden') this.lock();
+    if (state === 'visible') this.check();
   };
 
   private check(): void {
     if (this.stopped) return;
+    if (this.visibilityState() === 'hidden') return;
     if (typeof this.options.delay === 'number' && this.now() - this.lastActivity >= this.options.delay) this.lock();
+  }
+
+  private visibilityState(): string | undefined {
+    return (this.events as unknown as { visibilityState?: string }).visibilityState;
   }
 
   private lock(): void {
@@ -71,4 +76,10 @@ export class IdleLock {
     this.stop();
     this.options.onIdle();
   }
+}
+
+/** `visibilitychange` fires on `document` and does not bubble to `window`. */
+function defaultIdleTarget(): EventTarget {
+  if (typeof document !== 'undefined') return document;
+  return globalThis as unknown as EventTarget;
 }

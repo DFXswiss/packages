@@ -193,9 +193,16 @@ export {
   ApiKey,
 } from './definitions/user';
 export { PasskeyUrl, passkeyWalletUrl } from './definitions/passkey';
-export type { PasskeyWallet, PasskeyRevocationReason } from './definitions/passkey';
+export type {
+  PasskeyAddress,
+  PasskeyAddressFamily,
+  PasskeyCredentialStatus,
+  PasskeyDerivationVersion,
+  PasskeyRevocationReason,
+  PasskeyWallet,
+} from './definitions/passkey';
 export { ChainUrl } from './definitions/chain';
-export type { ChainInfo } from './definitions/chain';
+export type { ChainCapabilities, ChainFamily, ChainInfo, EvmFeeModel, NativeAssetInfo } from './definitions/chain';
 export {
   SignIn,
   LnurlAuth,

@@ -68,6 +68,21 @@ describe('IdleLock', () => {
     expect(onIdle).toHaveBeenCalledTimes(1);
   });
 
+  it('does not lock a numeric delay while hidden and locks once the page is visible again', () => {
+    const target = new FakeEventTarget();
+    const onIdle = jest.fn();
+    let now = 0;
+    new IdleLock({ delay: 60_000, onIdle, target, now: () => now });
+
+    target.hide();
+    now += 90_000;
+    jest.advanceTimersByTime(90_000);
+    expect(onIdle).not.toHaveBeenCalled();
+
+    target.show();
+    expect(onIdle).toHaveBeenCalledTimes(1);
+  });
+
   it("locks on hidden in 'tab' mode and stops afterwards", () => {
     const target = new FakeEventTarget();
     const onIdle = jest.fn();

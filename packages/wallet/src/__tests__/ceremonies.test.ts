@@ -334,6 +334,32 @@ describe('superseding and signals', () => {
     iosCredentials.nextCreate = attestationCredential({ prf: PRF_A });
     await ceremonies(iosCredentials, iosWindow).createCredential({ challenge: new Uint8Array(32) });
     expect(iosCredentials.created[0].signal).toBeUndefined();
+
+    const ipadDesktop = fakeWindow({
+      navigator: {
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.1 Safari/605.1.15',
+        platform: 'MacIntel',
+        maxTouchPoints: 5,
+        userActivation: { isActive: true },
+      },
+    });
+    const ipadCredentials = new FakeCredentials();
+    ipadCredentials.nextCreate = attestationCredential({ prf: PRF_A });
+    await ceremonies(ipadCredentials, ipadDesktop).createCredential({ challenge: new Uint8Array(32) });
+    expect(ipadCredentials.created[0].signal).toBeUndefined();
+
+    const desktopSafari = fakeWindow({
+      navigator: {
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.1 Safari/605.1.15',
+        platform: 'MacIntel',
+        maxTouchPoints: 0,
+        userActivation: { isActive: true },
+      },
+    });
+    const desktopCredentials = new FakeCredentials();
+    desktopCredentials.nextCreate = attestationCredential({ prf: PRF_A });
+    await ceremonies(desktopCredentials, desktopSafari).createCredential({ challenge: new Uint8Array(32) });
+    expect(desktopCredentials.created[0].signal).toBeInstanceOf(AbortSignal);
   });
 
   it('turns a superseded WebAuthn AbortError into CeremonySupersededError', async () => {

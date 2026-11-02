@@ -93,6 +93,7 @@ function api(behavior: ApiBehavior = {}): DfxApiClient & {
   claimBegin: jest.Mock;
   claimFinish: jest.Mock;
   link: jest.Mock;
+  credentialStatus: jest.Mock;
 } {
   const challenge = { challengeId: 'c'.repeat(64), challenge: 'A'.repeat(64), rpId: 'app.dfx.swiss', timeout: 600000 };
   const registerBegin = jest.fn(async () => challenge);
@@ -107,6 +108,7 @@ function api(behavior: ApiBehavior = {}): DfxApiClient & {
     accessToken: 'link-token',
     address: { address: '0x1', family: 'Evm', path: "m/44'/60'/0'/0/0", status: 'Active', blockchains: [] },
   }));
+  const credentialStatus = jest.fn(async () => []);
   return {
     passkey: {
       registerBegin,
@@ -118,7 +120,7 @@ function api(behavior: ApiBehavior = {}): DfxApiClient & {
       link,
       revokeBegin: async () => challenge,
       revokeFinish: async () => wallet('x'),
-      credentialStatus: async () => [],
+      credentialStatus,
     },
     registerBegin,
     registerFinish,
@@ -126,6 +128,7 @@ function api(behavior: ApiBehavior = {}): DfxApiClient & {
     claimBegin,
     claimFinish,
     link,
+    credentialStatus,
   } as never;
 }
 
@@ -140,6 +143,7 @@ function auth(
   registerFinish: jest.Mock;
   claimBegin: jest.Mock;
   claimFinish: jest.Mock;
+  credentialStatus: jest.Mock;
   signalUnknown: jest.Mock;
 } {
   const cache = new CredentialCache(new MemoryStorage(), 'dfx.wallet.credentials.v1', 'app.dfx.swiss');
@@ -159,6 +163,7 @@ function auth(
     registerFinish: client.registerFinish,
     claimBegin: client.claimBegin,
     claimFinish: client.claimFinish,
+    credentialStatus: client.credentialStatus,
     signalUnknown: win.signalUnknown,
   };
 }
@@ -254,6 +259,44 @@ describe('register', () => {
     expect(registerBegin).toHaveBeenCalledTimes(2);
     expect(registerFinish).toHaveBeenCalledTimes(2);
     expect(signalUnknown).not.toHaveBeenCalled();
+  });
+
+  it('asks credentialStatus in batches of ten and excludes every known id', async () => {
+    const { flow, credentials, cache, credentialStatus } = auth();
+    const ids = Array.from({ length: 11 }, (_, index) => base64url(new Uint8Array([index + 1])));
+    for (const credentialId of ids) {
+      cache.put({ credentialId, rpId: 'app.dfx.swiss', state: 'active', createdAt: 1 });
+    }
+    credentialStatus.mockImplementation(async (batch: string[]) =>
+      batch.map((credentialId) => ({ credentialId, status: 'Active' })),
+    );
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+
+    await flow.register({ mail: 'user@example.com' });
+
+    expect(credentialStatus).toHaveBeenCalledTimes(2);
+    expect(credentialStatus.mock.calls[0][0]).toEqual(ids.slice(0, 10));
+    expect(credentialStatus.mock.calls[1][0]).toEqual(ids.slice(10));
+    const created = credentials.created[0].publicKey as PublicKeyCredentialCreationOptions;
+    expect(created.excludeCredentials).toHaveLength(11);
+  });
+
+  it('keeps every cached id in excludeCredentials when credentialStatus fails', async () => {
+    const { flow, credentials, cache, credentialStatus } = auth();
+    const ids = Array.from({ length: 11 }, (_, index) => base64url(new Uint8Array([index + 1])));
+    for (const credentialId of ids) {
+      cache.put({ credentialId, rpId: 'app.dfx.swiss', state: 'active', createdAt: 1 });
+    }
+    credentialStatus.mockRejectedValue(new Error('offline'));
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+
+    await flow.register({ mail: 'user@example.com' });
+
+    expect(credentialStatus).toHaveBeenCalledTimes(1);
+    const created = credentials.created[0].publicKey as PublicKeyCredentialCreationOptions;
+    expect(created.excludeCredentials).toHaveLength(11);
   });
 
   it('refuses a server challenge of another RP ID', async () => {

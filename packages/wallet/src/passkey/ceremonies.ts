@@ -25,7 +25,12 @@ export interface CeremonyCredentials {
 /** Window surface the ceremonies inspect. */
 export interface CeremonyWindow {
   location: { hostname: string };
-  navigator: { userAgent: string; userActivation?: { isActive: boolean } };
+  navigator: {
+    userAgent: string;
+    userActivation?: { isActive: boolean };
+    platform?: string;
+    maxTouchPoints?: number;
+  };
   PublicKeyCredential?: {
     signalUnknownCredential?: (input: { credentialId: string; rpId: string }) => Promise<void>;
   };
@@ -288,7 +293,10 @@ export class PasskeyCeremonies {
   private async call<T>(
     action: (signal: AbortSignal | undefined) => Promise<T>,
   ): Promise<{ result: T; run: CeremonyRun }> {
-    const allowSignal = !/iPhone|iPad|iPod/i.test(this.win.navigator.userAgent);
+    const nav = this.win.navigator;
+    // iPadOS desktop mode reports a Macintosh user agent. Touch points tell it apart from desktop Safari.
+    const ipadDesktop = nav.platform === 'MacIntel' && (nav.maxTouchPoints ?? 0) > 1;
+    const allowSignal = !ipadDesktop && !/iPhone|iPad|iPod/i.test(nav.userAgent);
     const controller = allowSignal ? new AbortController() : undefined;
 
     const run = this.gate.begin(() => controller?.abort());

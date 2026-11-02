@@ -1,4 +1,4 @@
-// Public API. The Breez and WalletConnect SDKs are never imported here at runtime; they load on demand.
+// Public API. This package does not depend on the Breez or WalletConnect SDKs.
 
 // Environment
 export { WALLET_ENVS, isWalletEnv, RP_IDS, SIGN_MESSAGE_PREFIX, WALLET_NETWORKS } from './config/environment';
@@ -20,6 +20,7 @@ export type { KeyValueStore, IndexedDbKeyValueStoreOptions } from './util/kv-sto
 export { DERIVATION_V1, PRF_OUTPUT_BYTES, prfInputV1, mnemonicFromPrfV1, normalizeMnemonicV1 } from './derivation/v1';
 export { KeyRing } from './derivation/keyring';
 export type { KeyRingOptions, BitcoinAccountInfo, BitcoinAddressInfo, SparkIdentityInfo } from './derivation/keyring';
+export type { BitcoinChain } from './derivation/bitcoin-keys';
 export { seedPublicData } from './derivation/public-data';
 export type { SeedPublicData } from './derivation/public-data';
 export { encodeSparkAddress, decodeSparkAddress } from './derivation/spark-keys';

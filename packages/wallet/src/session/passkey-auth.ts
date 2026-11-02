@@ -331,14 +331,20 @@ export class PasskeyAuth {
     };
   }
 
+  /** Server accepts at most ten ids per status call; anything past that must be a later request. */
   private async activeExcludeIds(): Promise<string[]> {
     const cache = this.deps.cache;
     if (!cache) return [];
     const ids = cache.activeIds();
     if (ids.length === 0) return [];
     try {
-      const statuses = await this.deps.api.passkey.credentialStatus(ids.slice(0, 10));
-      const known = new Set(statuses.filter((s) => s.status !== 'Unknown').map((s) => s.credentialId));
+      const known = new Set<string>();
+      for (let offset = 0; offset < ids.length; offset += 10) {
+        const statuses = await this.deps.api.passkey.credentialStatus(ids.slice(offset, offset + 10));
+        for (const status of statuses) {
+          if (status.status !== 'Unknown') known.add(status.credentialId);
+        }
+      }
       return ids.filter((id) => known.has(id));
     } catch {
       return ids;
