@@ -137,6 +137,26 @@ describe('OS version readers', () => {
     });
     expect(await androidInstalledVersion(frozen)).toBe('15');
   });
+
+  it('ignores a non-Android platformVersion, including the empty Linux value', async () => {
+    const linux = host({
+      navigator: {
+        userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36',
+        userAgentData: { getHighEntropyValues: async () => ({ platform: 'Linux', platformVersion: '' }) },
+      },
+    });
+    expect(await androidInstalledVersion(linux)).toBeNull();
+    expect(await checkPasskeyPlatform('prd', linux)).toMatchObject({ available: true });
+
+    const kernel = host({
+      navigator: {
+        userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36',
+        userAgentData: { getHighEntropyValues: async () => ({ platform: 'Linux', platformVersion: '6.8.0' }) },
+      },
+    });
+    expect(await androidInstalledVersion(kernel)).toBeNull();
+    expect(await checkPasskeyPlatform('prd', kernel)).toMatchObject({ available: true });
+  });
 });
 
 describe('openInSystemBrowser', () => {

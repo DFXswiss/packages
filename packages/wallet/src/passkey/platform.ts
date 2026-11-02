@@ -89,9 +89,16 @@ export async function androidInstalledVersion(win?: PlatformHost): Promise<strin
   const read = h.navigator.userAgentData?.getHighEntropyValues;
   if (typeof read === 'function') {
     try {
-      const values = await read.call(h.navigator.userAgentData, ['platformVersion']);
-      const platformVersion = typeof values['platformVersion'] === 'string' ? values['platformVersion'] : null;
-      if (platformVersion !== null) return platformVersion.split('.')[0] || platformVersion;
+      const values = await read.call(h.navigator.userAgentData, ['platform', 'platformVersion']);
+      const platform = typeof values['platform'] === 'string' ? values['platform'] : '';
+      const platformVersion = typeof values['platformVersion'] === 'string' ? values['platformVersion'].trim() : '';
+      const platformIsAndroid = /android/i.test(platform);
+      // Linux reports an empty platformVersion; macOS and Windows report their own. Neither is an Android release.
+      const platformIsOther = platform !== '' && !platformIsAndroid;
+      const uaIsAndroid = ANDROID_UA.test(h.navigator.userAgent);
+      if (!platformIsOther && platformVersion !== '' && (platformIsAndroid || uaIsAndroid)) {
+        return platformVersion.split('.')[0] || platformVersion;
+      }
     } catch {
       // fall through to the UA token
     }
