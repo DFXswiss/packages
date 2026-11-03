@@ -170,6 +170,15 @@ describe('TabLock', () => {
     expect(second.isHeld).toBe(true);
     expect(first.isHeld).toBe(false);
     expect(onLost).toHaveBeenCalledTimes(1);
+
+    first.takeOver();
+    await flush();
+    expect(first.isHeld).toBe(true);
+
+    second.takeOver();
+    await flush();
+    expect(onLost).toHaveBeenCalledTimes(2);
+    expect(first.isHeld).toBe(false);
   });
 
   it('release after takeOver frees the lock so another tab can acquire', async () => {

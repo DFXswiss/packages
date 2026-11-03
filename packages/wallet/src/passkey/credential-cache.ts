@@ -40,12 +40,14 @@ class MemoryStorage implements CredentialStorage {
  */
 export class CredentialCache {
   private readonly key: string;
+  private storage: CredentialStorage;
 
   constructor(
-    private readonly storage: CredentialStorage = defaultStorage(),
+    storage: CredentialStorage = defaultStorage(),
     key = 'dfx.wallet.credentials.v1',
     private readonly rpId: string = '',
   ) {
+    this.storage = storage;
     this.key = `${key}.${this.rpId}`;
   }
 
@@ -86,7 +88,15 @@ export class CredentialCache {
   }
 
   private write(all: CachedPasskeyCredential[]): void {
-    this.storage.setItem(this.key, JSON.stringify(all));
+    const payload = JSON.stringify(all);
+    try {
+      this.storage.setItem(this.key, payload);
+    } catch {
+      // The cache is optional. A locked or full store must not fail a login that already succeeded.
+      if (this.storage instanceof MemoryStorage) return;
+      this.storage = new MemoryStorage();
+      this.storage.setItem(this.key, payload);
+    }
   }
 }
 

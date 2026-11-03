@@ -92,6 +92,6 @@ export class TabLock {
 
   private onStolen(): void {
     this.held = false;
-    for (const handler of this.lostHandlers.splice(0)) handler();
+    for (const handler of this.lostHandlers) handler();
   }
 }

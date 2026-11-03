@@ -18,6 +18,19 @@ function entry(credentialId: string, state: CachedPasskeyCredential['state'] = '
 }
 
 describe('CredentialCache', () => {
+  it('keeps the entry when the store throws on write', () => {
+    const storage: CredentialStorage = {
+      getItem: () => null,
+      setItem: () => {
+        throw new Error('quota');
+      },
+      removeItem: () => undefined,
+    };
+    const cache = new CredentialCache(storage, 'dfx.wallet.credentials.v1', 'app.dfx.swiss');
+    expect(() => cache.put(entry('id-1'))).not.toThrow();
+    expect(cache.list()).toEqual([entry('id-1')]);
+  });
+
   it('stores entries per RP ID and keeps them across instances', () => {
     const storage = new MemoryStorage();
     const cache = new CredentialCache(storage, 'dfx.wallet.credentials.v1', 'app.dfx.swiss');

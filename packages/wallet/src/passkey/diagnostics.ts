@@ -22,6 +22,15 @@ export type PasskeyDiagnostic = Record<string, unknown>;
 /** Message characters diagnostics may carry; anything else (urls, keys, base64 blobs) is dropped. */
 const SAFE_MESSAGE = /^[A-Za-z0-9 .,:;'()_-]{1,120}$/;
 
+/** Hex, a base64url blob, or a 12-word phrase is a secret, not a diagnostic sentence. */
+function isSecretShaped(message: string): boolean {
+  const compact = message.replace(/\s+/g, '');
+  if (/^[0-9a-fA-F]{32,}$/.test(compact)) return true;
+  if (!message.includes(' ') && /^[A-Za-z0-9_-]{32,}$/.test(message)) return true;
+  const words = message.trim().split(/\s+/);
+  return words.length >= 12 && words.every((word) => /^[a-z]+$/.test(word));
+}
+
 function diagnosticOutcome(outcome: PasskeyDiagnosticInput['outcome']): 'Success' | 'Failure' | 'Aborted' {
   switch (outcome) {
     case 'completed':
@@ -41,7 +50,8 @@ export function passkeyDiagnostic(input: PasskeyDiagnosticInput): PasskeyDiagnos
   };
   if (input.errorName !== undefined) record['errorName'] = String(input.errorName).slice(0, 64);
   if (input.message !== undefined)
-    record['message'] = SAFE_MESSAGE.test(input.message) ? input.message : '<unavailable>';
+    record['message'] =
+      SAFE_MESSAGE.test(input.message) && !isSecretShaped(input.message) ? input.message : '<unavailable>';
   if (input.attachment !== undefined) record['authenticatorAttachment'] = input.attachment;
   if (input.transports !== undefined)
     record['transports'] = input.transports.filter((t) => typeof t === 'string').slice(0, 8);

@@ -39,6 +39,12 @@ describe('passkeyDiagnostic', () => {
       clientCapabilities: { 'extension:prf': true, corrupt: 'not-boolean' },
     } as Parameters<typeof passkeyDiagnostic>[0]);
     expect(record['message']).toBe('<unavailable>');
+    const mnemonic = 'abandon '.repeat(11) + 'about';
+    const hexKey = 'ab'.repeat(32);
+    const prf = `${'Z'.repeat(20)}_${'Y'.repeat(22)}`;
+    expect(passkeyDiagnostic({ stage: 's', outcome: 'failed', message: mnemonic })['message']).toBe('<unavailable>');
+    expect(passkeyDiagnostic({ stage: 's', outcome: 'failed', message: hexKey })['message']).toBe('<unavailable>');
+    expect(passkeyDiagnostic({ stage: 's', outcome: 'failed', message: prf })['message']).toBe('<unavailable>');
     expect((record['stage'] as string).length).toBeLessThanOrEqual(64);
     expect((record['transports'] as string[]).length).toBeLessThanOrEqual(8);
     expect(record['clientCapabilities']).toBe(JSON.stringify({ 'extension:prf': true }));

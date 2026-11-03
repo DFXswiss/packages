@@ -43,6 +43,13 @@ describe('WalletDataApi', () => {
     await expect(new WalletDataApi(mock).bitcoin.tipHeight()).rejects.toThrow('Tip height is not a finite number');
   });
 
+  it('rejects an empty, negative or fractional tip height', async () => {
+    for (const body of ['', '   ', '-1', '1.5']) {
+      const mock = createMockHttpClient(body);
+      await expect(new WalletDataApi(mock).bitcoin.tipHeight()).rejects.toThrow('Tip height is not a finite number');
+    }
+  });
+
   it('broadcasts raw transactions as text/plain and returns the txid as text', async () => {
     const mock = createMockHttpClient('txid');
     await new WalletDataApi(mock).bitcoin.broadcast('deadbeef');

@@ -92,8 +92,10 @@ export class EsploraApi {
       token: false,
       responseType: ResponseType.TEXT,
     });
-    const height = Number(raw);
-    if (!Number.isFinite(height)) throw new Error('Tip height is not a finite number');
+    const text = String(raw).trim();
+    if (!/^(?:0|[1-9]\d*)$/.test(text)) throw new Error('Tip height is not a finite number');
+    const height = Number(text);
+    if (!Number.isSafeInteger(height)) throw new Error('Tip height is not a finite number');
     return height;
   }
 
