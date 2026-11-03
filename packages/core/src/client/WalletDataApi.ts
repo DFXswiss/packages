@@ -1,6 +1,7 @@
 import {
   BitcoinAddressStats,
   BitcoinFeeEstimates,
+  EsploraFeeEstimates,
   BitcoinTransactionStatus,
   BitcoinUtxo,
   Bip353LookupResult,
@@ -96,8 +97,8 @@ export class EsploraApi {
     return height;
   }
 
-  feeEstimates(): Promise<BitcoinFeeEstimates> {
-    return this.http.request<BitcoinFeeEstimates>({
+  feeEstimates(): Promise<EsploraFeeEstimates> {
+    return this.http.request<EsploraFeeEstimates>({
       url: `${WalletDataUrl.esplora(this.blockchain)}/fee-estimates`,
       method: 'GET',
       token: false,

@@ -41,7 +41,7 @@ export interface BitcoinTransactionStatus {
   block_time?: number;
 }
 
-/** mempool.space fee shape (sat/vB). */
+/** mempool.space `/v1/fees/recommended` shape (sat/vB). Not the Esplora `/fee-estimates` map. */
 export interface BitcoinFeeEstimates {
   fastestFee: number;
   halfHourFee: number;
@@ -49,6 +49,9 @@ export interface BitcoinFeeEstimates {
   economyFee?: number;
   minimumFee?: number;
 }
+
+/** Esplora `/fee-estimates`: confirmation target in blocks mapped to sat/vB. */
+export type EsploraFeeEstimates = Record<string, number>;
 
 export interface Outspend {
   spent: boolean;

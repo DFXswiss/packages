@@ -268,6 +268,19 @@ describe('register', () => {
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
     expireAfterCreate(credentials, activation);
+    registerBegin
+      .mockResolvedValueOnce({
+        challengeId: 'c'.repeat(64),
+        challenge: 'A'.repeat(64),
+        rpId: 'app.dfx.swiss',
+        timeout: 600000,
+      })
+      .mockResolvedValueOnce({
+        challengeId: 'd'.repeat(64),
+        challenge: 'B'.repeat(64),
+        rpId: 'app.dfx.swiss',
+        timeout: 600000,
+      });
     registerFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
 
     const result = await flow.register({ mail: 'user@example.com' });
@@ -275,6 +288,11 @@ describe('register', () => {
     expect(result.state).toBe('unlocked');
     expect(registerBegin).toHaveBeenCalledTimes(2);
     expect(registerFinish).toHaveBeenCalledTimes(2);
+    const first = registerFinish.mock.calls[0][0] as { challengeId: string; credential: unknown };
+    const second = registerFinish.mock.calls[1][0] as { challengeId: string; credential: unknown };
+    expect(first.challengeId).toBe('c'.repeat(64));
+    expect(second.challengeId).toBe('d'.repeat(64));
+    expect(second.credential).toBe(first.credential);
     expect(credentials.got).toHaveLength(2);
     expect(signalUnknown).not.toHaveBeenCalled();
   });
@@ -499,6 +517,87 @@ describe('unlock, export and revoke', () => {
 
     const words = await flow.exportMnemonic();
     expect(words).toEqual(fixture.vectors[0].mnemonic.split(' '));
+    const options = credentials.got[0].publicKey as PublicKeyCredentialRequestOptions;
+    expect(options.allowCredentials).toBeUndefined();
+  });
+
+  it('pins the only stored passkey when exporting the phrase', async () => {
+    const { flow, credentials, cache } = auth();
+    cache.put({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: 'app.dfx.swiss',
+      state: 'active',
+      publicData: cachedPublicData(fixture.vectors[0]),
+      createdAt: 1,
+    });
+    credentials.nextGet = fakeCredential(PRF);
+
+    const words = await flow.exportMnemonic();
+
+    expect(words).toEqual(fixture.vectors[0].mnemonic.split(' '));
+    const options = credentials.got[0].publicKey as PublicKeyCredentialRequestOptions;
+    expect(new Uint8Array(options.allowCredentials![0].id as BufferSource)).toEqual(CREDENTIAL_ID);
+  });
+
+  it('refuses to guess which passkey to export when several are stored', async () => {
+    const { flow, credentials, cache } = auth();
+    cache.put({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: 'app.dfx.swiss',
+      state: 'active',
+      publicData: cachedPublicData(fixture.vectors[0]),
+      createdAt: 1,
+    });
+    cache.put({
+      credentialId: 'decoy-credential',
+      rpId: 'app.dfx.swiss',
+      state: 'active',
+      publicData: cachedPublicData(fixture.vectors[1]),
+      createdAt: 2,
+    });
+
+    await expect(flow.exportMnemonic()).rejects.toMatchObject({ code: 'credential-ambiguous' });
+    expect(credentials.got).toHaveLength(0);
+  });
+
+  it('exports the passkey the caller names when several are stored', async () => {
+    const { flow, credentials, cache } = auth();
+    const chosen = new Uint8Array([7, 7, 7]);
+    cache.put({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: 'app.dfx.swiss',
+      state: 'active',
+      publicData: cachedPublicData(fixture.vectors[0]),
+      createdAt: 1,
+    });
+    cache.put({
+      credentialId: base64url(chosen),
+      rpId: 'app.dfx.swiss',
+      state: 'active',
+      publicData: cachedPublicData(fixture.vectors[1]),
+      createdAt: 2,
+    });
+    credentials.nextGet = fakeCredential(OTHER_PRF, chosen);
+
+    const words = await flow.exportMnemonic(chosen);
+
+    expect(words).toEqual(fixture.vectors[1].mnemonic.split(' '));
+    const options = credentials.got[0].publicKey as PublicKeyCredentialRequestOptions;
+    expect(new Uint8Array(options.allowCredentials![0].id as BufferSource)).toEqual(chosen);
+  });
+
+  it('refuses an export whose phrase does not match the stored wallet', async () => {
+    const { flow, credentials, cache } = auth();
+    cache.put({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: 'app.dfx.swiss',
+      state: 'active',
+      publicData: cachedPublicData(fixture.vectors[0]),
+      createdAt: 1,
+    });
+    credentials.nextGet = fakeCredential(OTHER_PRF);
+
+    await expect(flow.exportMnemonic()).rejects.toMatchObject({ code: 'seed-mismatch' });
   });
 
   it('refuses the export without PRF', async () => {
@@ -507,6 +606,31 @@ describe('unlock, export and revoke', () => {
 
     await expect(flow.exportMnemonic()).rejects.toMatchObject({ code: 'prf-unavailable' });
     expect(new WalletError('prf-unavailable')).toBeInstanceOf(WalletError);
+  });
+
+  it('matches a server address only together with its family and path', () => {
+    const keys = KeyRing.fromMnemonic(fixture.vectors[0].mnemonic, { bitcoinNetwork: 'mainnet' });
+    try {
+      const evm = keys.evm(0);
+      const { flow } = auth();
+      const record = {
+        address: evm.address,
+        family: 'Evm' as const,
+        path: evm.path,
+        status: 'Active' as const,
+        blockchains: [],
+      };
+      const rows = flow.verifyServerAddresses(
+        {
+          ...wallet(evm.address),
+          addresses: [record, { ...record, family: 'Bitcoin' }, { ...record, path: "m/44'/60'/0'/0/1" }],
+        },
+        keys,
+      );
+      expect(rows.map((row) => row.matches)).toEqual([true, false, false]);
+    } finally {
+      keys.wipe();
+    }
   });
 
   it('revokes and marks the credential revoked in the cache', async () => {

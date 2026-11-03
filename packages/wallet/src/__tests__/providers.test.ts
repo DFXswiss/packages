@@ -186,6 +186,9 @@ describe('Blocklists', () => {
   it('matches locally from the snapshot and refreshes best-effort', async () => {
     const lists = new Blocklists(SNAPSHOT.blocklists);
     expect(lists.isPhishingDomain('evil.EXAMPLE')).toBe(true);
+    expect(lists.isPhishingDomain('evil.example.')).toBe(true);
+    expect(lists.isPhishingDomain('login.evil.example')).toBe(true);
+    expect(lists.isPhishingDomain('notevil.example')).toBe(false);
     expect(lists.isPhishingDomain('ok.example')).toBe(false);
     expect(lists.isScamAddress('0xDEAD')).toBe(true);
 

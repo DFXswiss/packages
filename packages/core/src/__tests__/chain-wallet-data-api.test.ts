@@ -100,6 +100,16 @@ describe('WalletDataApi', () => {
     for (const call of (mock.request as jest.Mock).mock.calls) expect(call[0].token).toBe(false);
   });
 
+  it('reads Esplora fee estimates as GET without a token', async () => {
+    const mock = createMockHttpClient({});
+    await new WalletDataApi(mock).bitcoin.feeEstimates();
+    expect(lastCall(mock)).toMatchObject({
+      url: 'walletData/esplora/Bitcoin/fee-estimates',
+      method: 'GET',
+      token: false,
+    });
+  });
+
   it('reads recommended fees as GET without a token', async () => {
     const mock = createMockHttpClient({});
     await new WalletDataApi(mock).bitcoin.recommendedFees();

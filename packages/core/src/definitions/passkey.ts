@@ -45,7 +45,10 @@ export interface PasskeyChallenge {
 /** The credential proof shared by register and claim (backend `PasskeyCredentialProofDto`). */
 export interface PasskeyCredentialProof {
   challengeId: string;
-  /** `RegistrationResponseJSON`, WebAuthn Level 3 shape, PRF results stripped. */
+  /**
+   * `RegistrationResponseJSON`, WebAuthn Level 3 shape, PRF results stripped. Checked against the
+   * challenge inside its own clientData. `challengeId` belongs to `assertion`, not to this object.
+   */
   credential: Record<string, unknown>;
   /** Base64url of the client-generated user handle. */
   userHandle: string;
@@ -58,7 +61,7 @@ export interface PasskeyCredentialProof {
   sparkAddress: string;
   /** D31 signature, 128 hex chars. */
   sparkSignature: string;
-  /** WebAuthn authentication assertion against the same server challenge. */
+  /** WebAuthn authentication assertion against the server challenge of `challengeId`. */
   assertion: Record<string, unknown>;
 }
 

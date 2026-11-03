@@ -4,7 +4,7 @@ import type { WalletEnv } from '../config/environment';
 import { RP_IDS, SIGN_MESSAGE_PREFIX, WALLET_NETWORKS } from '../config/environment';
 import { CredentialCache } from '../passkey/credential-cache';
 import type { CreatedSeedPasskey, PasskeyCeremonies, PendingSeedPasskey } from '../passkey/ceremonies';
-import { base64UrlDecode, base64UrlEncode } from '../util/bytes';
+import { base64UrlDecode, base64UrlEncode, equalBytes } from '../util/bytes';
 import { WalletError } from '../util/errors';
 import { KeyRing, withPrivateKey } from '../derivation/keyring';
 import { seedPublicData } from '../derivation/public-data';
@@ -16,7 +16,11 @@ import { LOGIN_TEMPLATES, buildLoginMessage } from '../signing/login-messages';
 /** Wallet states the flows produce (§8.2). */
 export type WalletState = 'locked' | 'unlocked' | 'seed-mismatch' | 'compromised' | 'open-elsewhere';
 
-/** Result of a passkey flow: the in-memory account token, the server wallet view and, when verified, the keys. */
+/**
+ * Result of a passkey flow: the in-memory account token and the server wallet view. `keys` is set
+ * whenever the ceremony returned PRF output, including a seed mismatch, so the caller can show the
+ * derived address. `state` is `unlocked` only after the seed check passes.
+ */
 export interface AuthResult {
   accessToken: string;
   wallet: PasskeyWallet;
@@ -98,6 +102,7 @@ export class PasskeyAuth {
         throw error;
       }
       try {
+        // The original attestation stays. Only the new assertion is bound to the retry challenge.
         const retry = await this.deps.api.passkey.registerBegin();
         this.checkRpId(retry.rpId);
         const assertion = await this.deps.ceremonies.assert({
@@ -284,25 +289,62 @@ export class PasskeyAuth {
     return wallet;
   }
 
-  /** The 12 words, only behind a fresh local challenge (G5); the server is never involved. */
-  async exportMnemonic(): Promise<string[]> {
-    const assertion = await this.deps.ceremonies.assert({});
+  /**
+   * The 12 words, only behind a fresh local challenge (G5); the server is never involved.
+   * One stored active passkey is pinned. Several stored passkeys need `credentialId`, so the
+   * authenticator cannot return another wallet. No stored passkey stays discoverable.
+   */
+  async exportMnemonic(credentialId?: Uint8Array): Promise<string[]> {
+    const pinned = credentialId ?? this.onlyActiveCredentialId();
+    const assertion = await this.deps.ceremonies.assert(pinned ? { credentialId: pinned } : {});
     if (!assertion.prfOutput) throw new WalletError('prf-unavailable', 'The passkey cannot derive the seed');
-    return mnemonicFromPrfV1(assertion.prfOutput).split(' ');
+    if (pinned && !equalBytes(assertion.credentialId, pinned)) {
+      throw new WalletError('credential-mismatch', 'The authenticator returned a different passkey');
+    }
+
+    const keys = keysFromPrf(assertion.prfOutput, this.deps.env);
+    try {
+      const id = base64UrlEncode(assertion.credentialId);
+      const expected = this.deps.cache?.list().find((entry) => entry.credentialId === id)?.publicData?.seedCheckAddress;
+      if (expected && !seedCheck(keys.evm(0).address, expected)) {
+        throw new WalletError('seed-mismatch', 'The passkey does not match the stored wallet');
+      }
+      return keys.mnemonic().split(' ');
+    } finally {
+      keys.wipe();
+    }
   }
 
-  /** Reduced D14 check: the server records of this wallet must match the local derivations. */
+  /** Server records must match family, path and address of the local derivations (bitcoin 0/0, Spark, EVM 0..99). */
   verifyServerAddresses(wallet: PasskeyWallet, keys: KeyRing): { address: string; family: string; matches: boolean }[] {
-    const local = new Map<string, boolean>();
-    local.set(keys.bitcoinAddress(0, 0).address.toLowerCase(), true);
-    local.set(keys.sparkIdentity().address.toLowerCase(), true);
-    for (let index = 0; index < 100; index++) local.set(keys.evm(index).address.toLowerCase(), true);
+    const local = new Map<string, { family: PasskeyAddress['family']; path: string }>();
+    const bitcoin = keys.bitcoinAddress(0, 0);
+    local.set(bitcoin.address.toLowerCase(), { family: 'Bitcoin', path: bitcoin.path });
+    const spark = keys.sparkIdentity();
+    local.set(spark.address.toLowerCase(), { family: 'Spark', path: spark.path });
+    for (let index = 0; index < 100; index++) {
+      const account = keys.evm(index);
+      local.set(account.address.toLowerCase(), { family: 'Evm', path: account.path });
+    }
 
-    return wallet.addresses.map((record) => ({
-      address: record.address,
-      family: record.family,
-      matches: local.get(record.address.toLowerCase()) === true,
-    }));
+    return wallet.addresses.map((record) => {
+      const expected = local.get(record.address.toLowerCase());
+      return {
+        address: record.address,
+        family: record.family,
+        matches: expected !== undefined && expected.family === record.family && expected.path === record.path,
+      };
+    });
+  }
+
+  /** The one active passkey on this origin. Several active passkeys are not a guess. */
+  private onlyActiveCredentialId(): Uint8Array | undefined {
+    const active = this.deps.cache?.list().filter((entry) => entry.state === 'active') ?? [];
+    if (active.length > 1) {
+      throw new WalletError('credential-ambiguous', 'Pass the passkey to export when several are stored');
+    }
+    if (active.length === 0) return undefined;
+    return base64UrlDecode(active[0].credentialId);
   }
 
   private async finishAuthentication(

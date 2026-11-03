@@ -235,6 +235,7 @@ export { WalletDataUrl } from './wallet-data';
 export type {
   BitcoinAddressStats,
   BitcoinFeeEstimates,
+  EsploraFeeEstimates,
   BitcoinTransactionStatus,
   BitcoinUtxo,
   Bip353LookupResult,
