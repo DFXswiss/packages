@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.build.json",
+  "include": ["./src/**/*.ts", "./src/**/*.json"],
+  "exclude": ["./src/__tests__/**"],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "target": "es2020",
+    "lib": ["dom", "dom.iterable", "es2022"],
+    "skipLibCheck": true
+  },
+  "references": [{ "path": "../core/tsconfig.build.json" }]
+}

@@ -34,6 +34,9 @@ const user = await client.user.get();
 | Property | Description |
 |----------|-------------|
 | `auth` | Authentication (wallet, email, LNURL) |
+| `chain` | Chain classification |
+| `passkey` | Passkey wallet ceremonies and account links |
+| `walletData` | Public wallet data (balances, prices, lookups) |
 | `asset` | Asset listing and filtering |
 | `bank` | Bank operations |
 | `bankAccount` | Bank account management |

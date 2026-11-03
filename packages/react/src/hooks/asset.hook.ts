@@ -4,7 +4,7 @@ import { useApi } from './api.hook';
 import { Blockchain } from '../definitions/blockchain';
 
 export interface AssetInterface {
-  getAssets: (blockchains: Blockchain[], includePrivate: boolean) => Promise<Asset[]>;
+  getAssets: (blockchains?: Blockchain[], includePrivate?: boolean) => Promise<Asset[]>;
   getAsset: (assets?: Asset[], identifier?: string) => Asset | undefined;
   isSameAsset: (asset: Asset, identifier: string) => boolean;
 }
@@ -22,10 +22,14 @@ export function useAsset(): AssetInterface {
   }, []);
 
   const getAssets = useCallback(
-    async (blockchains: Blockchain[], includePrivate: boolean): Promise<Asset[]> => {
+    async (blockchains?: Blockchain[], includePrivate = false): Promise<Asset[]> => {
+      const chainQuery = blockchains?.length ? `blockchains=${blockchains.join(',')}&` : '';
       return call<Asset[]>({
-        url: `${AssetUrl.get}?blockchains=${blockchains.join(',')}&includePrivate=${includePrivate}`,
+        url: `${AssetUrl.get}?${chainQuery}includePrivate=${includePrivate}`,
         method: 'GET',
+        // The session token goes out only with an explicit chain filter. Without one, the list stays
+        // anonymous, so jwt.blockchains cannot narrow it.
+        token: blockchains?.length && includePrivate ? undefined : false,
       });
     },
     [call],
