@@ -1,12 +1,7 @@
 import type { WalletEnv } from '../config/environment';
 import { prfInputV1 } from '../derivation/v1';
 import { CeremonyCredentials, CeremonyWindow, PasskeyCeremonies } from '../passkey/ceremonies';
-import {
-  CrossDeviceRegistrationError,
-  CeremonySupersededError,
-  PrfMismatchError,
-  PrfUnavailableError,
-} from '../passkey/errors';
+import { CeremonySupersededError, PrfMismatchError, PrfUnavailableError } from '../passkey/errors';
 import { bytesToBase64Url, credentialToJSON } from '../passkey/webauthn-json';
 
 const HOSTNAME = 'app.dfx.swiss';
@@ -122,29 +117,36 @@ describe('createCredential', () => {
     expect((options.extensions as { prf: { eval: { first: Uint8Array } } }).prf.eval.first).toEqual(prfInputV1());
   });
 
-  it('aborts and signals when the credential was created cross-platform', async () => {
+  it('keeps a cross-platform credential and confirms it', async () => {
     const credentials = new FakeCredentials();
     credentials.nextCreate = attestationCredential({ attachment: 'cross-platform', prf: PRF_A });
     const win = fakeWindow();
+    const pending = await ceremonies(credentials, win).createCredential({ challenge: new Uint8Array(32) });
 
-    await expect(ceremonies(credentials, win).createCredential({ challenge: new Uint8Array(32) })).rejects.toThrow(
-      CrossDeviceRegistrationError,
-    );
-    expect(win.signalUnknown).toHaveBeenCalledWith({
-      credentialId: bytesToBase64Url(CREDENTIAL_ID),
-      rpId: 'app.dfx.swiss',
-    });
+    credentials.nextGet = assertionCredential({ prf: PRF_A });
+    const created = await pending.confirm();
+
+    expect(created.attachment).toBe('cross-platform');
+    expect(new Uint8Array(created.prfOutput)).toEqual(PRF_A);
+    expect(win.signalUnknown).not.toHaveBeenCalled();
   });
 
-  it('aborts and signals on hybrid transports even with platform attachment', async () => {
+  it('keeps a platform credential that also reports the hybrid transport', async () => {
     const credentials = new FakeCredentials();
-    credentials.nextCreate = attestationCredential({ attachment: 'platform', transports: ['hybrid'] });
+    credentials.nextCreate = attestationCredential({
+      attachment: 'platform',
+      transports: ['internal', 'hybrid'],
+      prf: PRF_A,
+    });
     const win = fakeWindow();
+    const pending = await ceremonies(credentials, win).createCredential({ challenge: new Uint8Array(32) });
 
-    await expect(ceremonies(credentials, win).createCredential({ challenge: new Uint8Array(32) })).rejects.toThrow(
-      CrossDeviceRegistrationError,
-    );
-    expect(win.signalUnknown).toHaveBeenCalled();
+    credentials.nextGet = assertionCredential({ prf: PRF_A });
+    const created = await pending.confirm();
+
+    expect(created.attachment).toBe('platform');
+    expect(created.transports).toEqual(['internal', 'hybrid']);
+    expect(win.signalUnknown).not.toHaveBeenCalled();
   });
 
   it('confirm() returns the PRF output of the confirming get()', async () => {

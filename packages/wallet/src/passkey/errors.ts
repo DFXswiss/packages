@@ -31,13 +31,6 @@ export class InAppBrowserError extends PasskeyError {
   }
 }
 
-/** A cross-platform (hybrid/roaming) credential may never hold the wallet seed (D21). */
-export class CrossDeviceRegistrationError extends PasskeyError {
-  constructor() {
-    super('cross-device-registration', 'The passkey was created cross-platform; wallet seeds stay on-device');
-  }
-}
-
 /** `create` and `get` returned different PRF outputs for the same credential. */
 export class PrfMismatchError extends PasskeyError {
   constructor() {

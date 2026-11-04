@@ -6,7 +6,6 @@ import { randomBytes } from '../util/random';
 import { CeremonyGate, CeremonyRun } from './ceremony-gate';
 import {
   CeremonySupersededError,
-  CrossDeviceRegistrationError,
   EmbeddedContextError,
   PasskeyError,
   PrfMismatchError,
@@ -179,10 +178,6 @@ export class PasskeyCeremonies {
       rawAttachment === 'platform' || rawAttachment === 'cross-platform' ? rawAttachment : null;
     const transports: string[] =
       ((credential.response as AuthenticatorAttestationResponse).getTransports?.() as string[] | undefined) ?? [];
-    if (attachment === 'cross-platform' || transports.includes('hybrid')) {
-      await this.signalUnknownCredential(copy(credential.rawId));
-      throw new CrossDeviceRegistrationError();
-    }
 
     const credentialId = copy(credential.rawId);
     // The attestation response carries no user handle; the server gets the id this wallet generated.
