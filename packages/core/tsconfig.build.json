@@ -5,6 +5,9 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "lib": ["dom", "dom.iterable", "esnext"]
+    "lib": ["dom", "dom.iterable", "esnext"],
+    // Compiled as a project reference by the wallet's newer TypeScript.
+    // The repository @types packages disagree with that library.
+    "skipLibCheck": true
   }
 }
