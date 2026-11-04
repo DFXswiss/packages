@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@dfx.swiss/wallet",
-  "version": "0.1.1-beta.2",
+  "version": "0.1.1-beta.3",
   "description": "Self-custodial passkey seed wallet core for the DFX.swiss app (Bitcoin, EVM, Spark)",
   "license": "MIT",
   "repository": {
