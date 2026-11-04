@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: "16.x"
+  NODE_VERSION: "24.x"
   AZURE_ACCOUNT_NAME: "stdfxstbdev"
   AZURE_CDN_PROFILE: "cdnp-dfx-stb-dev"
   AZURE_CDN_ENDPOINT: "cdne-dfx-stb-dev"
