@@ -8,7 +8,8 @@ import type { CeremonyCredentials, CeremonyWindow } from '../passkey/ceremonies'
 import { CredentialCache } from '../passkey/credential-cache';
 import { PasskeyAuth, PasskeyRefusedError } from '../session/passkey-auth';
 import { signEip191 } from '../signing/auto-signer';
-import { LOGIN_TEMPLATES } from '../signing/login-messages';
+import { signBitcoinMessageBip137 } from '../signing/bitcoin-message';
+import { buildLoginMessage, LOGIN_TEMPLATES } from '../signing/login-messages';
 import { WalletError } from '../util/errors';
 
 const PRF = hexToBytes(fixture.vectors[0].prfOutput);
@@ -771,6 +772,84 @@ describe('claim and link', () => {
     const result = await flow.link('evm', 'token', keys);
     expect(result.accessToken).toBe('link-token');
     expect(result.address.family).toBe('Evm');
+    expect(keys.wiped).toBe(false);
+    keys.wipe();
+  });
+
+  it('links the mainnet Bitcoin login address from a testnet wallet and still checks it', async () => {
+    const mnemonic = fixture.vectors[0].mnemonic;
+    const receive = KeyRing.fromMnemonic(mnemonic, { bitcoinNetwork: 'testnet4' });
+    const login = KeyRing.fromMnemonic(mnemonic, { bitcoinNetwork: 'mainnet' });
+    const client = api();
+    const flow = new PasskeyAuth({
+      api: client,
+      ceremonies: new PasskeyCeremonies('stg', new FakeCredentials(), fakeWindow()),
+      env: 'stg',
+    });
+    const wipe = jest.spyOn(KeyRing.prototype, 'wipe');
+
+    try {
+      const result = await flow.link('bitcoin', 'token', receive);
+      expect(result.accessToken).toBe('link-token');
+      const sent = client.link.mock.calls[0][0] as {
+        address: string;
+        path: string;
+        family: string;
+        signature: string;
+      };
+      const address = login.bitcoinAddress(0, 0).address;
+      const message = buildLoginMessage('stg', address);
+      const signature = withPrivateKey(login, { family: 'bitcoin', chain: 0, index: 0 }, (privateKey) =>
+        signBitcoinMessageBip137(message, privateKey),
+      );
+      expect(sent).toEqual({ address, signature, family: 'Bitcoin', path: "m/84'/0'/0'/0/0" });
+      expect(sent.address).not.toBe(receive.bitcoinAddress(0, 0).address);
+      expect(receive.wiped).toBe(false);
+      expect(wipe).toHaveBeenCalledTimes(1);
+
+      const record = {
+        address,
+        family: 'Bitcoin' as const,
+        path: "m/84'/0'/0'/0/0",
+        status: 'Active' as const,
+        blockchains: [] as string[],
+      };
+      const rows = flow.verifyServerAddresses({ ...wallet(login.evm(0).address), addresses: [record] }, receive);
+      expect(rows.map((row) => row.matches)).toEqual([true]);
+      expect(wipe).toHaveBeenCalledTimes(2);
+      expect(receive.wiped).toBe(false);
+
+      client.link.mockRejectedValueOnce(new Error('link failed'));
+      await expect(flow.link('bitcoin', 'token', receive)).rejects.toThrow('link failed');
+      expect(wipe).toHaveBeenCalledTimes(3);
+      expect(receive.wiped).toBe(false);
+    } finally {
+      wipe.mockRestore();
+      receive.wipe();
+      login.wipe();
+    }
+  });
+
+  it('keeps a mainnet Bitcoin login on the same key ring', async () => {
+    const keys = KeyRing.fromMnemonic(fixture.vectors[0].mnemonic, { bitcoinNetwork: 'mainnet' });
+    const client = api();
+    const flow = new PasskeyAuth({
+      api: client,
+      ceremonies: new PasskeyCeremonies('prd', new FakeCredentials(), fakeWindow()),
+      env: 'prd',
+    });
+    const wipe = jest.spyOn(KeyRing.prototype, 'wipe');
+    try {
+      await flow.link('bitcoin', 'token', keys);
+      const sent = client.link.mock.calls[0][0] as { path: string; address: string };
+      expect(sent.path).toBe("m/84'/0'/0'/0/0");
+      expect(sent.address).toBe(keys.bitcoinAddress(0, 0).address);
+      expect(wipe).not.toHaveBeenCalled();
+      expect(keys.wiped).toBe(false);
+    } finally {
+      wipe.mockRestore();
+      keys.wipe();
+    }
   });
 });
 

@@ -60,6 +60,17 @@ function keysFromPrf(prfOutput: Uint8Array, env: WalletEnv): KeyRing {
   return KeyRing.fromMnemonic(mnemonicFromPrfV1(prfOutput), { bitcoinNetwork: WALLET_NETWORKS[env].bitcoin });
 }
 
+function releaseNothing(): void {
+  return undefined;
+}
+
+/** Mainnet BIP-84 receive index 0. A testnet ring keeps its receive keys and lends a wiped login ring. */
+function bitcoinLoginRing(keys: KeyRing): { ring: KeyRing; release: () => void } {
+  if (keys.bitcoinNetwork === 'mainnet') return { ring: keys, release: releaseNothing };
+  const ring = KeyRing.fromMnemonic(keys.mnemonic(), { bitcoinNetwork: 'mainnet' });
+  return { ring, release: () => ring.wipe() };
+}
+
 /**
  * The passkey account flows (§8): register, login, unlock, claim, link, revoke and the seed export. The
  * account token never leaves memory; the seed is derived only from a PRF output of a ceremony of this
@@ -251,27 +262,35 @@ export class PasskeyAuth {
     return { accessToken: response.accessToken, wallet: response.wallet, keys, state: 'unlocked' };
   }
 
-  /** Links another derived address of the unlocked wallet (§8.5); EVM index i or the Bitcoin login address. */
+  /**
+   * Links another derived address of the unlocked wallet (§8.5): an EVM index, or the Bitcoin login
+   * address. That login address is mainnet BIP-84 receive index 0 in every environment.
+   */
   async link(
     family: 'evm' | 'bitcoin',
     accessToken: string,
     keys: KeyRing,
     evmIndex = 0,
   ): Promise<{ accessToken: string; address: PasskeyAddress }> {
-    const address = family === 'evm' ? keys.evm(evmIndex).address : keys.bitcoinAddress(0, 0).address;
-    const signer = new LoginAutoSigner(keys, this.deps.env);
-    const signature = signer.sign(family, address, buildLoginMessage(this.deps.env, address));
+    const login = family === 'bitcoin' ? bitcoinLoginRing(keys) : { ring: keys, release: releaseNothing };
+    try {
+      const address = family === 'evm' ? login.ring.evm(evmIndex).address : login.ring.bitcoinAddress(0, 0).address;
+      const signer = new LoginAutoSigner(login.ring, this.deps.env);
+      const signature = signer.sign(family, address, buildLoginMessage(this.deps.env, address));
 
-    const response = await this.deps.api.passkey.link(
-      {
-        address,
-        signature,
-        family: family === 'evm' ? 'Evm' : 'Bitcoin',
-        path: family === 'evm' ? keys.evm(evmIndex).path : keys.bitcoinAddress(0, 0).path,
-      },
-      accessToken,
-    );
-    return { accessToken: response.accessToken, address: response.address };
+      const response = await this.deps.api.passkey.link(
+        {
+          address,
+          signature,
+          family: family === 'evm' ? 'Evm' : 'Bitcoin',
+          path: family === 'evm' ? login.ring.evm(evmIndex).path : login.ring.bitcoinAddress(0, 0).path,
+        },
+        accessToken,
+      );
+      return { accessToken: response.accessToken, address: response.address };
+    } finally {
+      login.release();
+    }
   }
 
   /** Revokes the wallet by proving the credential one last time (D11). */
@@ -315,26 +334,31 @@ export class PasskeyAuth {
     }
   }
 
-  /** Server records must match family, path and address of the local derivations (bitcoin 0/0, Spark, EVM 0..99). */
+  /** Server records must match family, path and address of the local derivations (Bitcoin login, Spark, EVM 0..99). */
   verifyServerAddresses(wallet: PasskeyWallet, keys: KeyRing): { address: string; family: string; matches: boolean }[] {
-    const local = new Map<string, { family: PasskeyAddress['family']; path: string }>();
-    const bitcoin = keys.bitcoinAddress(0, 0);
-    local.set(bitcoin.address.toLowerCase(), { family: 'Bitcoin', path: bitcoin.path });
-    const spark = keys.sparkIdentity();
-    local.set(spark.address.toLowerCase(), { family: 'Spark', path: spark.path });
-    for (let index = 0; index < 100; index++) {
-      const account = keys.evm(index);
-      local.set(account.address.toLowerCase(), { family: 'Evm', path: account.path });
-    }
+    const login = bitcoinLoginRing(keys);
+    try {
+      const local = new Map<string, { family: PasskeyAddress['family']; path: string }>();
+      const bitcoin = login.ring.bitcoinAddress(0, 0);
+      local.set(bitcoin.address.toLowerCase(), { family: 'Bitcoin', path: bitcoin.path });
+      const spark = login.ring.sparkIdentity();
+      local.set(spark.address.toLowerCase(), { family: 'Spark', path: spark.path });
+      for (let index = 0; index < 100; index++) {
+        const account = login.ring.evm(index);
+        local.set(account.address.toLowerCase(), { family: 'Evm', path: account.path });
+      }
 
-    return wallet.addresses.map((record) => {
-      const expected = local.get(record.address.toLowerCase());
-      return {
-        address: record.address,
-        family: record.family,
-        matches: expected !== undefined && expected.family === record.family && expected.path === record.path,
-      };
-    });
+      return wallet.addresses.map((record) => {
+        const expected = local.get(record.address.toLowerCase());
+        return {
+          address: record.address,
+          family: record.family,
+          matches: expected !== undefined && expected.family === record.family && expected.path === record.path,
+        };
+      });
+    } finally {
+      login.release();
+    }
   }
 
   /** The one active passkey on this origin. Several active passkeys are not a guess. */

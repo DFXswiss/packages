@@ -56,6 +56,8 @@ export interface WalletNetworks {
 /**
  * Networks per environment, matching the chain list rule of the DFX API: PRD uses Bitcoin mainnet and EVM
  * mainnets only; DEV, STG and LOC use Bitcoin testnet4 and EVM test chains only; Spark is mainnet everywhere.
+ * These Bitcoin networks are the receive and change accounts. The Bitcoin login and link address is mainnet
+ * BIP-84 receive index 0 in every environment, because the API can verify only a mainnet address.
  */
 export const WALLET_NETWORKS: Readonly<Record<WalletEnv, Readonly<WalletNetworks>>> = Object.freeze({
   prd: Object.freeze({ bitcoin: 'mainnet', spark: 'mainnet', evm: 'mainnet' }),
