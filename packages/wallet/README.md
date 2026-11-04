@@ -17,13 +17,14 @@ WalletConnect.
 
 ## Environments
 
-The app build selects the environment (`'prd'`, `'dev'` or `'loc'`). The WebAuthn RP ID, the DFX login message prefix
+The app build selects the environment (`'prd'`, `'dev'`, `'stg'` or `'loc'`). The WebAuthn RP ID, the DFX login message prefix
 and the networks follow from it and are compiled-in constants:
 
 | Environment | RP ID               | Login message prefix | Bitcoin  | EVM chains | Spark   |
 | ----------- | ------------------- | -------------------- | -------- | ---------- | ------- |
 | `prd`       | `app.dfx.swiss`     | none                 | mainnet  | mainnets   | mainnet |
 | `dev`       | `dev.app.dfx.swiss` | `[dev]_`             | testnet4 | testnets   | mainnet |
+| `stg`       | `stg.app.dfx.swiss` | `[stg]_`             | testnet4 | testnets   | mainnet |
 | `loc`       | `localhost`         | `[loc]_`             | testnet4 | testnets   | mainnet |
 
 ```typescript
