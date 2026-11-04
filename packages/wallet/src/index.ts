@@ -58,7 +58,6 @@ export {
   WrongOriginError,
   PlatformUnsupportedError,
   InAppBrowserError,
-  CrossDeviceRegistrationError,
   PrfMismatchError,
   PrfUnavailableError,
   CeremonySupersededError,
