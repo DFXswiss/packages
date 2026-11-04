@@ -27,6 +27,10 @@ and the networks follow from it and are compiled-in constants:
 | `stg`       | `stg.app.dfx.swiss` | `[stg]_`             | testnet4 | testnets   | mainnet |
 | `loc`       | `localhost`         | `[loc]_`             | testnet4 | testnets   | mainnet |
 
+The Bitcoin column is the receive and change network. Linking a Bitcoin address, and the Bitcoin login
+address, stay on mainnet BIP-84 receive index 0 in every environment. The API verifies only a mainnet address,
+so a testnet receive address cannot be linked.
+
 ```typescript
 import { RP_IDS, SIGN_MESSAGE_PREFIX, WALLET_NETWORKS } from '@dfx.swiss/wallet';
 
