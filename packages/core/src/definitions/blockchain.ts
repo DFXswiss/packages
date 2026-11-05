@@ -24,6 +24,8 @@ export enum Blockchain {
   TRON = 'Tron',
   CITREA = 'Citrea',
   CITREA_TESTNET = 'CitreaTestnet',
+  BITCOIN_TESTNET4 = 'BitcoinTestnet4',
+  PLASMA = 'Plasma',
 
   DEFICHAIN = 'DeFiChain',
 }

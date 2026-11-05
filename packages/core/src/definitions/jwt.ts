@@ -23,4 +23,8 @@ export interface Jwt {
   account: number;
   role: UserRole;
   blockchains: Blockchain[];
+  /** Passkey credential id; only on tokens minted by a passkey ceremony or obtained from one. */
+  passkeyCredential?: number;
+  /** Unix seconds of the authentication that started this session; forwarded on every re-mint. */
+  authTime?: number;
 }

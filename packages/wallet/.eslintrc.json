@@ -1,0 +1,24 @@
+{
+  "rules": {
+    "@typescript-eslint/no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["@breeztech/*", "@reown/*", "@walletconnect/*"],
+            "message": "Load the Breez and WalletConnect SDKs only through the dynamic import() in their loader module.",
+            "allowTypeImports": true
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["src/spark/loader.ts", "src/walletconnect/loader.ts"],
+      "rules": {
+        "@typescript-eslint/no-restricted-imports": "off"
+      }
+    }
+  ]
+}

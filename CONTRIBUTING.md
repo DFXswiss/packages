@@ -7,6 +7,7 @@ packages to npm:
 - `@dfx.swiss/react`
 - `@dfx.swiss/react-components`
 - `@dfx.swiss/bip322-multisig`
+- `@dfx.swiss/wallet`
 
 The packages are consumed as pinned npm dependencies by other DFX.swiss apps (e.g.
 `DFXswiss/app`), so breaking changes ripple downstream through those version
@@ -18,9 +19,10 @@ pins. Keep public APIs stable where possible and flag breaking changes explicitl
 npm install
 ```
 
-Dependencies across the workspace are managed with npm workspaces + Lerna. CI runs on
-Node 16.x (see `.github/workflows/pr.yaml`); `@dfx.swiss/bip322-multisig` additionally
-declares `engines.node >= 18`.
+Dependencies across the workspace are managed with npm workspaces + Lerna. PR CI and
+publishing run on Node 24.x (see `.github/workflows/pr.yaml` and `publish.yaml`); use
+Node 24 locally as well (Lerna 9 requires Node `^20.19 || ^22.12 || >=24`).
+`@dfx.swiss/bip322-multisig` additionally declares `engines.node >= 18`.
 
 ## Build & Test
 
@@ -42,7 +44,7 @@ npm run lint           # eslint src
 npm run lint:fix       # eslint src --fix
 npm run format         # prettier --write src
 npm run format:check   # prettier --check src
-npm run test           # jest (core and bip322-multisig only)
+npm run test           # jest (all packages except react-components)
 npm run clean          # remove dist/ and build info
 ```
 
@@ -64,13 +66,55 @@ under `packages/` also trigger a full run.
   ones with `_`). Rules inherited at warn level from the shared configs do not fail
   lint or CI — still, do not introduce new ESLint warnings.
 - Format and lint before committing: `npm run format` and `npm run lint:fix`.
+- `@dfx.swiss/wallet` builds with its own TypeScript 5 from its `devDependencies` (the
+  workspace root has TypeScript 4.9) and may load the Breez and WalletConnect SDKs only
+  through a dynamic `import()` in `src/spark/loader.ts` and `src/walletconnect/loader.ts`
+  (enforced by its `.eslintrc.json` and `no-static-sdk-import.test.ts`).
 
 ## Tests
 
 Tests use **Jest** with **ts-jest**. Test files live under `src/__tests__/` and match
-`*.test.ts` (see `packages/core/src/__tests__/`). Only `@dfx.swiss/core` and
-`@dfx.swiss/bip322-multisig` currently define a `test` script; add or extend tests when
-you change or add functionality in those packages.
+`*.test.ts` (see `packages/core/src/__tests__/`). Every package except
+`@dfx.swiss/react-components` defines a `test` script; add or extend tests when you change
+or add functionality in those packages. `@dfx.swiss/wallet` tests only transpile
+(`isolatedModules`); its `npm run build` does the type checking.
+
+## A38
+
+This repository requires A38 according to the canonical A38 standard in
+[DFXswiss/agent](https://github.com/DFXswiss/agent/blob/5a9c1be2c03a85e3844a48e0da57df6118915d35/docs/a38.md)
+at commit `5a9c1be2c03a85e3844a48e0da57df6118915d35`. Repo job selection:
+`.github/a38.json`. Target-branch applicability and fork workflow approval:
+`.github/pr-guard.json`. `workflow_approval.workflows` stays a required field
+there but no longer filters: after a fresh enforce pass the guard approves
+every initial held fork `pull_request` run. `dfx pr guard` is
+[wired in](https://github.com/DFXswiss/agent/blob/5a9c1be2c03a85e3844a48e0da57df6118915d35/docs/a38-guard.md#how-fork-github-actions-are-meant-to-work).
+
+This is a **public** repository. GitHub-hosted runners still execute PR CI
+(check name `Lint, build and test`). A38 does not replace that GitHub check.
+The author report runs the same four Lerna tasks that job runs at full scope,
+on Node 24, the major in `.github/workflows/pr.yaml`: `npx lerna run lint`,
+`npx lerna run format:check`, `npx lerna run build`, and `npx lerna run test`. Publish, Storybook deploy, the release bot, and the
+main-branch ancestry check are excluded.
+
+Draft pull requests run the GitHub PR CI job. GitHub holds fork runs from
+external contributors as `action_required`. Ready does not start CI. After a
+fresh A38 enforce pass on the current head, `dfx pr guard` approves those
+waiting initial runs, then sets Ready when the review rule below is met,
+required GitHub jobs are green, and the PR is mergeable.
+
+Two reviews are required before Ready. One review is enough only when the
+pull request opener is listed in one_review_authors in the trusted
+.github/pr-guard.json on the default branch. A missing file, a missing key,
+or an empty list keeps two reviews required. An entry that exists only on
+the pull request head does not count.
+
+The newest well-formed second review comment that covers the current head
+returns a Ready pull request to draft when its `blocks_merge` is true and it
+counts at least one defect; a newer well-formed second review with
+`blocks_merge` false clears that. The merger does not click Approve and run
+workflows. Do not ask a maintainer to approve workflow runs. Post the A38
+report on the current head.
 
 ## Git & pull requests
 
