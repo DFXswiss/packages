@@ -136,6 +136,9 @@ export type {
   UpdatePaymentLink,
   AssignPaymentLink,
   PaymentLinkPos,
+  PaymentLinkMerchantAsset,
+  PaymentLinkMerchantTransfer,
+  PaymentLinkMerchantInfo,
 } from './route';
 export { SellUrl } from './sell';
 export type { Eip5792Call, Eip5792Data, UnsignedTx, Sell, Beneficiary, SellPaymentInfo, ConfirmSellData } from './sell';

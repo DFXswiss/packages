@@ -91,6 +91,9 @@ export {
   PaymentLinkConfig,
   UpdatePaymentLinkConfig,
   PaymentLinkPos,
+  PaymentLinkMerchantAsset,
+  PaymentLinkMerchantTransfer,
+  PaymentLinkMerchantInfo,
   PaymentRoutesUrl,
   PaymentLinksUrl,
 } from './definitions/route';

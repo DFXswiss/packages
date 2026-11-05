@@ -219,6 +219,9 @@ export type {
   UpdatePaymentLink,
   AssignPaymentLink,
   PaymentLinkPos,
+  PaymentLinkMerchantAsset,
+  PaymentLinkMerchantTransfer,
+  PaymentLinkMerchantInfo,
   // Sell
   Eip5792Call,
   Eip5792Data,

@@ -9,6 +9,7 @@ import {
   PaymentLinkConfig,
   UpdatePaymentLinkConfig,
   PaymentLinkPos,
+  PaymentLinkMerchantInfo,
 } from '../definitions/route';
 import { CustomFile } from '../definitions/file';
 import { Utils } from '../utils';
@@ -74,5 +75,15 @@ export class PaymentLinksApi {
   async createPos(params: Record<string, string>): Promise<PaymentLinkPos> {
     const query = Utils.buildQuery(params);
     return this.http.request<PaymentLinkPos>({ url: `${PaymentLinksUrl.pos}${query}`, method: 'PUT' });
+  }
+
+  /** The public merchant info of a route, given by route id or label. Public - no session needed. */
+  async getMerchantInfo(route: string): Promise<PaymentLinkMerchantInfo> {
+    const query = Utils.buildQuery({ route });
+    return this.http.request<PaymentLinkMerchantInfo>({
+      url: `${PaymentLinksUrl.merchant}${query}`,
+      method: 'GET',
+      token: false,
+    });
   }
 }

@@ -11,6 +11,7 @@ export const PaymentLinksUrl = {
   payment: 'paymentLink/payment',
   userPaymentLinksConfig: 'paymentLink/config',
   recipient: (route: string) => `paymentLink/recipient?id=${route}`,
+  merchant: 'paymentLink/merchant',
   stickers: 'paymentLink/stickers',
   pos: 'paymentLink/pos',
 };
@@ -226,4 +227,20 @@ export interface AssignPaymentLink {
 
 export interface PaymentLinkPos {
   url: string;
+}
+
+export interface PaymentLinkMerchantAsset {
+  asset: string;
+}
+
+export interface PaymentLinkMerchantTransfer {
+  method: string;
+  assets: PaymentLinkMerchantAsset[];
+}
+
+export interface PaymentLinkMerchantInfo {
+  displayName?: string;
+  mode: PaymentLinkMode;
+  recipient?: PaymentLinkRecipient;
+  transferAmounts: PaymentLinkMerchantTransfer[];
 }

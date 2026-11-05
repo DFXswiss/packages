@@ -31,4 +31,7 @@ export type {
   UpdatePaymentLink,
   AssignPaymentLink,
   PaymentLinkPos,
+  PaymentLinkMerchantAsset,
+  PaymentLinkMerchantTransfer,
+  PaymentLinkMerchantInfo,
 } from '@dfx.swiss/core';
