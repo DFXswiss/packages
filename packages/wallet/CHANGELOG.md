@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.1-beta.4](https://github.com/DFXswiss/packages/compare/@dfx.swiss/wallet@0.1.1-beta.3...@dfx.swiss/wallet@0.1.1-beta.4) (2026-11-05)
+
+**Note:** Version bump only for package @dfx.swiss/wallet
+
 ## [0.1.1-beta.3](https://github.com/DFXswiss/packages/compare/@dfx.swiss/wallet@0.1.1-beta.2...@dfx.swiss/wallet@0.1.1-beta.3) (2026-11-04)
 
 ### Bug Fixes

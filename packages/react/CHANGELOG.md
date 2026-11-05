@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.8.6-beta.1...@dfx.swiss/react@1.9.0-beta.0) (2026-11-05)
+
+### Features
+
+- **core,react:** add the merchant info call ([#256](https://github.com/DFXswiss/packages/issues/256)) ([f922082](https://github.com/DFXswiss/packages/commit/f9220826c8a2eb13b2752beb09c712e6b3be800a))
+
 ## [1.8.6-beta.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/react@1.8.6-beta.0...@dfx.swiss/react@1.8.6-beta.1) (2026-11-04)
 
 **Note:** Version bump only for package @dfx.swiss/react
