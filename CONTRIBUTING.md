@@ -155,3 +155,18 @@ workflow) bumps the affected package versions, updates the per-package `CHANGELO
 and syncs `package-lock.json`, then publishes beta versions to npm. Pushing to `main`
 graduates them to stable. (Reference: PR #181 changed only `src/` files; the following
 `Publish` commit performed all version and changelog updates.)
+
+### When a release does not publish
+
+GitHub skips every push- and pull-request-triggered workflow when the head commit
+message contains `[skip ci]`, `[ci skip]`, `[no ci]`, `[skip actions]` or
+`[actions skip]` anywhere, body included. The `develop -> main` merge commit lists the
+messages of all commits the release PR brings in, so a single marker in one of them
+skips `Publish packages` on `main`: no stable publish and no sync back to `develop`
+(this happened with #250).
+
+- Do not put a skip marker in a commit message that lands on `develop`.
+- Before merging a release PR, check the merge commit message for skip markers and
+  delete those lines (this includes the sync commit's `[skip ci]`, if it is listed).
+- If a release did not publish, run `Publish packages` on `main` via
+  `workflow_dispatch`; `lerna publish from-package` publishes whatever is missing.
