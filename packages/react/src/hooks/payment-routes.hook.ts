@@ -7,6 +7,7 @@ import {
   CreatePaymentLinkPayment,
   PaymentLink,
   PaymentLinkConfig,
+  PaymentLinkMerchantInfo,
   PaymentLinkPos,
   PaymentLinksUrl,
   PaymentRoute,
@@ -48,6 +49,7 @@ export interface PaymentRoutesInterface {
   ) => Promise<PaymentLink>;
   deletePaymentRoute: (id: number, type: PaymentRouteType) => Promise<PaymentRoute>;
   getPaymentRecipient: (route: string) => Promise<Sell>;
+  getPaymentMerchantInfo: (route: string) => Promise<PaymentLinkMerchantInfo>;
   getPaymentStickers: (
     route: string,
     externalIds?: string,
@@ -190,6 +192,19 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
     [call],
   );
 
+  const getPaymentMerchantInfo = useCallback(
+    async (route: string): Promise<PaymentLinkMerchantInfo> => {
+      const query = Utils.buildQuery({ route });
+
+      return call<PaymentLinkMerchantInfo>({
+        url: `${PaymentLinksUrl.merchant}${query}`,
+        method: 'GET',
+        token: false,
+      });
+    },
+    [call],
+  );
+
   const getPaymentStickers = useCallback(
     async (
       route: string,
@@ -227,6 +242,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
       cancelPaymentLinkPayment,
       deletePaymentRoute,
       getPaymentRecipient,
+      getPaymentMerchantInfo,
       getPaymentStickers,
       createPosLink,
     }),
@@ -242,6 +258,7 @@ export function usePaymentRoutes(): PaymentRoutesInterface {
       cancelPaymentLinkPayment,
       deletePaymentRoute,
       getPaymentRecipient,
+      getPaymentMerchantInfo,
       getPaymentStickers,
       createPosLink,
     ],
