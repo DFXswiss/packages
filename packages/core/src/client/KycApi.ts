@@ -3,6 +3,7 @@ import {
   KycInfo,
   KycStepSession,
   KycStepBase,
+  KycStepSubmit,
   KycStepName,
   KycStepType,
   KycContactData,
@@ -75,8 +76,8 @@ export class KycApi {
     return this.kycRequest<KycStepBase>(code, { url, method: 'PUT', data });
   }
 
-  async setPersonalData(code: string, url: string, data: KycPersonalData): Promise<KycStepBase> {
-    return this.kycRequest<KycStepBase>(code, { url, method: 'PUT', data });
+  async setPersonalData(code: string, url: string, data: KycPersonalData): Promise<KycStepSubmit> {
+    return this.kycRequest<KycStepSubmit>(code, { url, method: 'PUT', data });
   }
 
   async setManualIdentData(code: string, url: string, data: KycManualIdentData): Promise<KycStepBase> {
@@ -120,8 +121,8 @@ export class KycApi {
     return this.kycRequest<KycFinancialQuestions>(code, { url: `${url}${query}`, method: 'GET' });
   }
 
-  async setFinancialData(code: string, url: string, data: KycFinancialResponses): Promise<KycStepBase> {
-    return this.kycRequest<KycStepBase>(code, { url, method: 'PUT', data });
+  async setFinancialData(code: string, url: string, data: KycFinancialResponses): Promise<KycStepSubmit> {
+    return this.kycRequest<KycStepSubmit>(code, { url, method: 'PUT', data });
   }
 
   async setPaymentData(code: string, url: string, data: PaymentData): Promise<KycStepBase> {
