@@ -16,6 +16,7 @@ export { KycApi } from './KycApi';
 export { LanguageApi } from './LanguageApi';
 export { PaymentLinksApi } from './PaymentLinksApi';
 export { PaymentRoutesApi } from './PaymentRoutesApi';
+export { RecommendationApi } from './RecommendationApi';
 export { SellApi } from './SellApi';
 export { SettingsApi } from './SettingsApi';
 export { SupportApi } from './SupportApi';
