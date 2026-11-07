@@ -14,8 +14,28 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  gate:
+    name: Skip the release sync commit
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.check.outputs.run }}
+    steps:
+      - id: check
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          first=$(printf '%s\n' "$HEAD_MESSAGE" | head -n 1)
+          if [ "$EVENT_NAME" = "push" ] && [ "$first" = "chore: sync main into develop after release" ]; then
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
   create-release-pr:
     name: Create Release PR
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

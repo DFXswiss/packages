@@ -166,7 +166,12 @@ skips `Publish packages` on `main`: no stable publish and no sync back to `devel
 (this happened with #250).
 
 - Do not put a skip marker in a commit message that lands on `develop`.
+- The release sync commit's subject is `chore: sync main into develop after release`.
+  It has no skip marker. `Publish packages` and `Auto Release PR` skip their work when a
+  push's first line is that subject, so the sync itself does not publish or open
+  another release PR. A later release merge that only quotes the subject further down
+  still publishes.
 - Before merging a release PR, check the merge commit message for skip markers and
-  delete those lines (this includes the sync commit's `[skip ci]`, if it is listed).
+  delete those lines.
 - If a release did not publish, run `Publish packages` on `main` via
   `workflow_dispatch`; `lerna publish from-package` publishes whatever is missing.
