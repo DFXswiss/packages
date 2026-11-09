@@ -1,4 +1,4 @@
-import type { DfxApiClient, PasskeyAddress, PasskeyWallet } from '@dfx.swiss/core';
+import type { PasskeyAddress, PasskeyApi, PasskeyWallet } from '@dfx.swiss/core';
 import { ApiException } from '@dfx.swiss/core';
 import type { WalletEnv } from '../config/environment';
 import { RP_IDS, SIGN_MESSAGE_PREFIX, WALLET_NETWORKS } from '../config/environment';
@@ -49,8 +49,25 @@ export interface RegisterExtras {
   specialCode?: string;
 }
 
+/** The `api.passkey` methods these flows call. A `DfxApiClient` stays assignable. */
+export interface PasskeyAuthApi {
+  passkey: Pick<
+    PasskeyApi,
+    | 'registerBegin'
+    | 'registerFinish'
+    | 'authenticateBegin'
+    | 'authenticateFinish'
+    | 'claimBegin'
+    | 'claimFinish'
+    | 'link'
+    | 'revokeBegin'
+    | 'revokeFinish'
+    | 'credentialStatus'
+  >;
+}
+
 export interface PasskeyAuthDeps {
-  api: DfxApiClient;
+  api: PasskeyAuthApi;
   ceremonies: PasskeyCeremonies;
   env: WalletEnv;
   cache?: CredentialCache;

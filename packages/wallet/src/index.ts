@@ -84,7 +84,16 @@ export type { WalletSnapshot, SnapshotAsset, SnapshotBlocklists } from './provid
 
 // Session and flows (§8, D5, X24)
 export { PasskeyAuth, PasskeyRefusedError } from './session/passkey-auth';
-export type { WalletState, AuthResult, PasskeyRefusal, RegisterExtras, PasskeyAuthDeps } from './session/passkey-auth';
+export type {
+  WalletState,
+  AuthResult,
+  PasskeyRefusal,
+  RegisterExtras,
+  PasskeyAuthDeps,
+  PasskeyAuthApi,
+} from './session/passkey-auth';
+export { createWalletClient } from './client/wallet-client';
+export type { WalletClient, WalletClientOptions } from './client/wallet-client';
 export { IdleLock } from './session/idle-lock';
 export type { IdleDelay, IdleLockOptions } from './session/idle-lock';
 export { TabLock } from './session/tab-lock';
