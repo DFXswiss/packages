@@ -27,7 +27,7 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           HEAD_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
-          first=$(printf '%s\n' "$HEAD_MESSAGE" | head -n 1)
+          first=${HEAD_MESSAGE%%$'\n'*}
           if [ "$EVENT_NAME" = "push" ] && [ "$first" = "chore: sync main into develop after release" ]; then
             echo "run=false" >> "$GITHUB_OUTPUT"
           else
@@ -90,5 +90,5 @@ jobs:
         run: |
           git fetch origin develop:develop
           git checkout develop
-          git merge main -X theirs -m "chore: sync main into develop after release"
+          git merge --no-ff -X theirs -m "chore: sync main into develop after release" main
           git push origin develop
