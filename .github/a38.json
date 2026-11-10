@@ -41,6 +41,11 @@
       "reason": "Publishes package versions to npm. Credentials and a release path, not an author-measured test."
     },
     {
+      "workflow": ".github/workflows/publish.yaml",
+      "job": "gate",
+      "reason": "Reads only the first line of the pushed commit and skips publishing for the release sync commit. No test suite and no publish."
+    },
+    {
       "workflow": ".github/workflows/storybook.yml",
       "job": "build",
       "reason": "Deploys Storybook to the CDN. Credentials path, not local author CI."
@@ -49,6 +54,11 @@
       "workflow": ".github/workflows/auto-release-pr.yaml",
       "job": "create-release-pr",
       "reason": "Housekeeping bot that opens the develop to main release pull request. Not author CI."
+    },
+    {
+      "workflow": ".github/workflows/auto-release-pr.yaml",
+      "job": "gate",
+      "reason": "The same check only skips opening the release pull request. Not author CI."
     },
     {
       "workflow": ".github/workflows/main-from-develop.yml",
