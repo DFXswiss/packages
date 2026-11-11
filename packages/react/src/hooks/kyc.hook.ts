@@ -21,6 +21,7 @@ import {
   TfaLevel,
   KycFile,
   KycStepBase,
+  KycStepSubmit,
   KycBeneficialData,
   KycOperationalData,
   PaymentData,
@@ -52,7 +53,7 @@ export interface KycInterface {
 
   // updates
   setContactData: (code: string, url: string, data: KycContactData) => Promise<KycStepBase>;
-  setPersonalData: (code: string, url: string, data: KycPersonalData) => Promise<KycStepBase>;
+  setPersonalData: (code: string, url: string, data: KycPersonalData) => Promise<KycStepSubmit>;
   setManualIdentData: (code: string, url: string, data: KycManualIdentData) => Promise<KycStepBase>;
   setLegalEntityData: (code: string, url: string, data: KycLegalEntityData) => Promise<KycStepBase>;
   setSoleProprietorshipData: (code: string, url: string, data: KycFileData) => Promise<KycStepBase>;
@@ -63,7 +64,7 @@ export interface KycInterface {
   setBeneficialData: (code: string, url: string, data: KycBeneficialData) => Promise<KycStepBase>;
   setOperationalData: (code: string, url: string, data: KycOperationalData) => Promise<KycStepBase>;
   getFinancialData: (code: string, url: string, lang?: string) => Promise<KycFinancialQuestions>;
-  setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycStepBase>;
+  setFinancialData: (code: string, url: string, data: KycFinancialResponses) => Promise<KycStepSubmit>;
   setPaymentData: (code: string, url: string, data: PaymentData) => Promise<KycStepBase>;
   setRecallData: (code: string, url: string, data: RecallData) => Promise<KycStepBase>;
   setAddressChangeData: (code: string, url: string, data: KycChangeAddressData) => Promise<KycStepBase>;
@@ -175,7 +176,7 @@ export function useKyc(): KycInterface {
   );
 
   const setPersonalData = useCallback(
-    async (code: string, url: string, data: KycPersonalData): Promise<KycStepBase> => {
+    async (code: string, url: string, data: KycPersonalData): Promise<KycStepSubmit> => {
       return call({ url, code, method: 'PUT', data });
     },
     [call],
@@ -299,7 +300,7 @@ export function useKyc(): KycInterface {
   );
 
   const setFinancialData = useCallback(
-    async (code: string, url: string, data: KycFinancialResponses): Promise<KycStepBase> => {
+    async (code: string, url: string, data: KycFinancialResponses): Promise<KycStepSubmit> => {
       return call({ url, code, method: 'PUT', data });
     },
     [call],
