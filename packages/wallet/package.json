@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "@dfx.swiss/wallet",
-  "version": "0.1.1",
+  "version": "0.1.2-beta.0",
   "description": "Self-custodial passkey seed wallet core for the DFX.swiss app (Bitcoin, EVM, Spark)",
   "license": "MIT",
   "repository": {
@@ -28,7 +28,7 @@
     "pack": "npm pack"
   },
   "dependencies": {
-    "@dfx.swiss/core": "^0.8.0",
+    "@dfx.swiss/core": "^0.9.0-beta.0",
     "@noble/curves": "~1.9.1",
     "@noble/hashes": "~1.8.0",
     "@scure/base": "~1.2.5",
