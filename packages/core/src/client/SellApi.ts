@@ -1,4 +1,5 @@
-import { Sell, SellUrl, SellPaymentInfo, ConfirmSellData } from '../definitions/sell';
+import { Blockchain } from '../definitions/blockchain';
+import { Sell, SellUrl, SellPaymentInfo, SellAddressCheck, ConfirmSellData } from '../definitions/sell';
 import { Transaction } from '../definitions/transaction';
 import { Utils } from '../utils';
 import { DfxHttpClient } from './DfxHttpClient';
@@ -22,5 +23,10 @@ export class SellApi {
       method: 'PUT',
       data,
     });
+  }
+
+  async checkAddress(blockchain: Blockchain): Promise<SellAddressCheck> {
+    const query = Utils.buildQuery({ blockchain });
+    return this.http.request<SellAddressCheck>({ url: `${SellUrl.addressCheck}${query}`, method: 'GET' });
   }
 }

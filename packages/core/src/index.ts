@@ -93,6 +93,7 @@ export {
   PaymentLinkBlockchain,
   // Sell
   SellUrl,
+  SellAddressCheckResult,
   // Settings
   SettingsUrl,
   // Support
@@ -229,6 +230,7 @@ export type {
   Sell,
   Beneficiary,
   SellPaymentInfo,
+  SellAddressCheck,
   ConfirmSellData,
   // Session
   Session,
