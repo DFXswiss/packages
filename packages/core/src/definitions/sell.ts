@@ -9,7 +9,18 @@ export const SellUrl = {
   quote: 'sell/quote',
   receive: 'sell/paymentInfos',
   confirm: (id: number) => `sell/paymentInfos/${id}/confirm`,
+  addressCheck: 'sell/address-check',
 };
+
+export enum SellAddressCheckResult {
+  OK = 'Ok',
+  LIKELY_RETURN = 'LikelyReturn',
+  UNKNOWN = 'Unknown',
+}
+
+export interface SellAddressCheck {
+  result: SellAddressCheckResult;
+}
 
 // EIP-5792 wallet_sendCalls data for gasless transactions
 export interface Eip5792Call {
