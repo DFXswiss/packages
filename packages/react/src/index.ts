@@ -175,6 +175,8 @@ export {
   Eip5792Call,
   ConfirmSellData,
   SellUrl,
+  SellAddressCheckResult,
+  SellAddressCheck,
 } from './definitions/sell';
 export { Swap, SwapPaymentInfo, ConfirmSwapData, SwapUrl } from './definitions/swap';
 export { Session } from './definitions/session';

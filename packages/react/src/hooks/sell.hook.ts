@@ -1,13 +1,15 @@
 import { useCallback, useMemo } from 'react';
 import { useFiatContext } from '../contexts/fiat.context';
+import { Blockchain } from '../definitions/blockchain';
 import { Fiat } from '../definitions/fiat';
-import { Sell, SellPaymentInfo, SellUrl, ConfirmSellData } from '../definitions/sell';
+import { Sell, SellPaymentInfo, SellAddressCheck, SellUrl, ConfirmSellData } from '../definitions/sell';
 import { Transaction } from '../definitions/transaction';
 import { useApi } from './api.hook';
 
 export interface SellInterface {
   receiveFor: (info: SellPaymentInfo, includeTx?: boolean) => Promise<Sell>;
   confirmSell: (id: number, data: ConfirmSellData) => Promise<Transaction>;
+  checkAddress: (blockchain: Blockchain) => Promise<SellAddressCheck>;
   currencies?: Fiat[];
 }
 
@@ -30,12 +32,23 @@ export function useSell(): SellInterface {
     [call],
   );
 
+  const checkAddress = useCallback(
+    async (blockchain: Blockchain): Promise<SellAddressCheck> => {
+      return call<SellAddressCheck>({
+        url: `${SellUrl.addressCheck}?blockchain=${encodeURIComponent(blockchain)}`,
+        method: 'GET',
+      });
+    },
+    [call],
+  );
+
   return useMemo(
     () => ({
       receiveFor,
       confirmSell,
+      checkAddress,
       currencies: currencies?.filter((c) => c.buyable || c.cardBuyable || c.instantBuyable),
     }),
-    [receiveFor, confirmSell, currencies],
+    [receiveFor, confirmSell, checkAddress, currencies],
   );
 }
