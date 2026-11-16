@@ -82,13 +82,13 @@ or add functionality in those packages. `@dfx.swiss/wallet` tests only transpile
 ## A38
 
 This repository requires A38 according to the canonical A38 standard in
-[DFXswiss/agent](https://github.com/DFXswiss/agent/blob/5a9c1be2c03a85e3844a48e0da57df6118915d35/docs/a38.md)
-at commit `5a9c1be2c03a85e3844a48e0da57df6118915d35`. Repo job selection:
+[DFXswiss/agent](https://github.com/DFXswiss/agent/blob/3528240c62d72e8f50f8ec5ddda0c4d213f0f04a/docs/a38.md)
+at commit `3528240c62d72e8f50f8ec5ddda0c4d213f0f04a`. Repo job selection:
 `.github/a38.json`. Target-branch applicability and fork workflow approval:
 `.github/pr-guard.json`. `workflow_approval.workflows` stays a required field
 there but no longer filters: after a fresh enforce pass the guard approves
 every initial held fork `pull_request` run. `dfx pr guard` is
-[wired in](https://github.com/DFXswiss/agent/blob/5a9c1be2c03a85e3844a48e0da57df6118915d35/docs/a38-guard.md#how-fork-github-actions-are-meant-to-work).
+[wired in](https://github.com/DFXswiss/agent/blob/3528240c62d72e8f50f8ec5ddda0c4d213f0f04a/docs/a38-guard.md#how-fork-github-actions-are-meant-to-work).
 
 This is a **public** repository. GitHub-hosted runners still execute PR CI
 (check name `Lint, build and test`). A38 does not replace that GitHub check.
