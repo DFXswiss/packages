@@ -170,4 +170,28 @@ describe('Utils', () => {
       expect(result.field).toEqual({ required: true, minLength: 3 });
     });
   });
+
+  describe('isSameOrigin', () => {
+    const base = 'https://api.dfx.swiss/v2';
+
+    it('accepts a URL on the same origin', () => {
+      expect(Utils.isSameOrigin('https://api.dfx.swiss/v2/kyc/data/personal/123', base)).toBe(true);
+      expect(Utils.isSameOrigin('https://api.dfx.swiss/anything', base)).toBe(true);
+    });
+
+    it('rejects a different host', () => {
+      expect(Utils.isSameOrigin('https://evil.example/v2/kyc', base)).toBe(false);
+      expect(Utils.isSameOrigin('https://api.dfx.swiss.evil.example/v2/kyc', base)).toBe(false);
+    });
+
+    it('rejects a different scheme or port', () => {
+      expect(Utils.isSameOrigin('http://api.dfx.swiss/v2/kyc', base)).toBe(false);
+      expect(Utils.isSameOrigin('https://api.dfx.swiss:8443/v2/kyc', base)).toBe(false);
+    });
+
+    it('fails closed on unparsable input', () => {
+      expect(Utils.isSameOrigin('not a url', base)).toBe(false);
+      expect(Utils.isSameOrigin('', base)).toBe(false);
+    });
+  });
 });
