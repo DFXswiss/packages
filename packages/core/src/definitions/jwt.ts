@@ -13,6 +13,7 @@ export enum UserRole {
   REALUNIT = 'RealUnit',
   MARKETING = 'Marketing',
   MONITORING = 'Monitoring',
+  NON_CUSTODIAL_WALLET_PARTNER = 'NonCustodialWalletPartner',
 }
 
 export interface Jwt {
