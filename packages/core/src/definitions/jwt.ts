@@ -13,6 +13,7 @@ export enum UserRole {
   REALUNIT = 'RealUnit',
   MARKETING = 'Marketing',
   MONITORING = 'Monitoring',
+  PARTNER = 'Partner',
 }
 
 export interface Jwt {
