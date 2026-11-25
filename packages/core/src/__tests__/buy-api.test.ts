@@ -3,6 +3,7 @@ import { DfxHttpClient } from '../client/DfxHttpClient';
 import { Asset } from '../definitions/asset';
 import { Buy, BuyPaymentInfo, PersonalIbanProvider, VirtualIban } from '../definitions/buy';
 import { Fiat } from '../definitions/fiat';
+import { TransactionError } from '../definitions/transaction';
 
 function createMockHttpClient(response?: any) {
   const requestMock = jest.fn().mockResolvedValue(response);
@@ -76,6 +77,19 @@ describe('BuyApi', () => {
       expect(mockHttp.request).toHaveBeenCalledTimes(1);
       expect(mockHttp.request).toHaveBeenCalledWith({ url: 'buy/paymentInfos/42/invoice', method: 'PUT' });
       expect(result).toEqual({ pdfData: 'base64' });
+    });
+  });
+
+  describe('quote', () => {
+    it('returns the LightningAddressRequired quote error as TransactionError.LIGHTNING_ADDRESS_REQUIRED', async () => {
+      const mockHttp = createMockHttpClient({ isValid: false, error: 'LightningAddressRequired' });
+      const api = new BuyApi(mockHttp);
+
+      const result = await api.quote({ currency: {} as Fiat, asset: {} as Asset, amount: 100 });
+
+      expect(mockHttp.request).toHaveBeenCalledWith(expect.objectContaining({ url: 'buy/quote', method: 'PUT' }));
+      expect(result.isValid).toBe(false);
+      expect(result.error).toBe(TransactionError.LIGHTNING_ADDRESS_REQUIRED);
     });
   });
 

@@ -47,6 +47,7 @@ export enum TransactionError {
   TRADING_NOT_ALLOWED = 'TradingNotAllowed',
   RECOMMENDATION_REQUIRED = 'RecommendationRequired',
   EMAIL_REQUIRED = 'EmailRequired',
+  LIGHTNING_ADDRESS_REQUIRED = 'LightningAddressRequired',
 }
 
 export enum TransactionType {
