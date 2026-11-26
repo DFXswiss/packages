@@ -205,6 +205,12 @@ export class KycApi {
     code: string,
     config: { url: string; method: 'GET' | 'PUT' | 'POST' | 'DELETE'; data?: any; noJson?: boolean },
   ): Promise<T> {
+    // Several setters take the target URL from a previous step response. Never send the x-kyc-code
+    // credential to anything but the configured API origin, so a tampered step URL cannot exfiltrate it.
+    if (!Utils.isSameOrigin(config.url, this.http.getBaseUrl())) {
+      throw new Error('Refusing to send KYC credentials to a non-API origin');
+    }
+
     return this.http.requestAbsolute<T>({
       ...config,
       token: false,
