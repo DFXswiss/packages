@@ -1,6 +1,6 @@
 import type { Blockchain, ChainInfo } from '@dfx.swiss/core';
 import type { BitcoinNetwork, WalletEnv } from '../config/environment';
-import { WALLET_NETWORKS } from '../config/environment';
+import { isRegtestAllowed, WALLET_NETWORKS } from '../config/environment';
 import type { WalletSnapshot } from './snapshot';
 import { WalletError } from '../util/errors';
 
@@ -45,9 +45,17 @@ export class ChainRegistry {
 
   /**
    * Bitcoin of this environment (PRD mainnet, DEV/STG/LOC testnet4), `walletSupported` checked. `network`
-   * selects another network of a separate ring, e.g. `regtest`.
+   * selects another network of a separate ring, e.g. `regtest`, which is refused where `isRegtestAllowed`
+   * refuses it (always on PRD), whatever the chain list says.
    */
-  bitcoin(env: WalletEnv, network: BitcoinNetwork = WALLET_NETWORKS[env].bitcoin): ChainInfo {
+  bitcoin(
+    env: WalletEnv,
+    network: BitcoinNetwork = WALLET_NETWORKS[env].bitcoin,
+    regtestEnvs?: readonly WalletEnv[],
+  ): ChainInfo {
+    if (network === 'regtest' && !isRegtestAllowed(env, regtestEnvs)) {
+      throw new WalletError('network-not-allowed', `Bitcoin regtest is not enabled in environment ${String(env)}`);
+    }
     const chain = this.chains.find((c) => c.blockchain === bitcoinBlockchain(network) && c.walletSupported);
     if (!chain) throw new WalletError('chain-unavailable', `Bitcoin (${network}) is not available in this environment`);
     return chain;

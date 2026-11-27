@@ -36,6 +36,10 @@ describe('EsploraClient', () => {
       () => new EsploraClient('https://e.example', { network: 'regtest', env: 'stg', regtestEnvs: ['dev'], fetch }),
     ).toThrow(/not enabled/);
     expect(() => new EsploraClient('https://e.example', { network: 'regtest', fetch })).toThrow(/not enabled/);
+    expect(() => new EsploraClient('https://e.example', { network: 'signet' as never, fetch })).toThrow(
+      /Unknown Bitcoin network/,
+    );
+    expect(() => new EsploraClient('https://e.example', undefined as never)).toThrow(WalletError);
     expect(new EsploraClient('https://e.example', { network: 'regtest', env: 'dev', fetch }).network).toBe('regtest');
   });
 
@@ -73,6 +77,32 @@ describe('EsploraClient', () => {
       init: { method: 'POST', body: '0200', headers: { 'Content-Type': 'text/plain' } },
     });
     await expect(client.broadcast('xyz')).rejects.toThrow(WalletError);
+  });
+
+  it('calls the global fetch with the global object as receiver', async () => {
+    const original = (globalThis as { fetch?: unknown }).fetch;
+    const receivers: unknown[] = [];
+    (globalThis as { fetch?: unknown }).fetch = function (this: unknown) {
+      receivers.push(this);
+      return Promise.resolve({ ok: true, status: 200, text: async () => '7' });
+    };
+    try {
+      await expect(new EsploraClient('https://e.example', { network: 'testnet4' }).tipHeight()).resolves.toBe(7);
+      expect(receivers).toEqual([globalThis]);
+    } finally {
+      (globalThis as { fetch?: unknown }).fetch = original;
+    }
+  });
+
+  it('reports a failing response body as an unreachable endpoint', async () => {
+    const fetch: FetchLike = async () => ({
+      ok: true,
+      status: 200,
+      text: () => Promise.reject(new TypeError('network error')),
+    });
+    await expect(new EsploraClient('https://e.example', { network: 'mainnet', fetch }).tipHeight()).rejects.toThrow(
+      /unreachable/,
+    );
   });
 
   it('reports endpoint errors and malformed answers', async () => {

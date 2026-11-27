@@ -123,8 +123,15 @@ export function buildBitcoinSendPsbt(keys: KeyRing, request: BitcoinSendRequest)
     throw new WalletError('insufficient-funds', 'No outputs to spend');
   }
 
+  // A payment to the own change chain would be indistinguishable from change on the confirmation screen.
+  const isP2wpkh = destination.length === 22 && destination[0] === 0x00 && destination[1] === 0x14;
+  if (isP2wpkh && findBitcoinKeyByHash(keys, destination.subarray(2), request.scan)?.chain === 1) {
+    throw new WalletError('invalid-address', 'The destination is a change address of this wallet');
+  }
+
   const fingerprint = masterFingerprint(keys);
   const change = keys.bitcoinAddress(1, request.changeIndex);
+  const outpoints = new Set<string>();
   const inputs = request.utxos.map((utxo) => {
     const key = findBitcoinKey(keys, utxo?.address, request.scan);
     if (!key) throw new WalletError('unknown-address', `${utxo?.address} is not a Bitcoin address of this wallet`);
@@ -134,6 +141,9 @@ export function buildBitcoinSendPsbt(keys: KeyRing, request: BitcoinSendRequest)
     if (!Number.isSafeInteger(utxo.vout) || utxo.vout < 0 || utxo.vout > 0xffffffff) {
       throw new WalletError('invalid-utxo', `Invalid output index: ${utxo.vout}`);
     }
+    const outpoint = `${utxo.txid.toLowerCase()}:${utxo.vout}`;
+    if (outpoints.has(outpoint)) throw new WalletError('invalid-utxo', `Output ${outpoint} is listed twice`);
+    outpoints.add(outpoint);
     return {
       txid: utxo.txid.toLowerCase(),
       index: utxo.vout,
@@ -143,13 +153,18 @@ export function buildBitcoinSendPsbt(keys: KeyRing, request: BitcoinSendRequest)
     };
   });
 
-  const selection = selectUTXO(inputs, [{ script: destination, amount }], 'default', {
-    feePerByte,
-    changeAddress: change.address,
-    network: btcNetwork,
-    createTx: true,
-    bip69: false,
-  });
+  let selection: ReturnType<typeof selectUTXO>;
+  try {
+    selection = selectUTXO(inputs, [{ script: destination, amount }], 'default', {
+      feePerByte,
+      changeAddress: change.address,
+      network: btcNetwork,
+      createTx: true,
+      bip69: false,
+    });
+  } catch (error) {
+    throw new WalletError('invalid-utxo', 'Coin selection failed', { cause: error });
+  }
   if (!selection || !selection.tx) {
     throw new WalletError('insufficient-funds', 'The outputs do not cover the amount and the fee');
   }

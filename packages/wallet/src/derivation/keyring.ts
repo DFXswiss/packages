@@ -22,7 +22,7 @@ export interface KeyRingOptions {
   bitcoinNetwork: BitcoinNetwork;
   /** Environment of the app build; required for `regtest`, which PRD never gets (see `isRegtestAllowed`). */
   env?: WalletEnv;
-  /** Environments the app build enables regtest for; default `DEFAULT_REGTEST_ENVS` (DEV, LOC). */
+  /** Environments the app build enables regtest for; default `DEFAULT_REGTEST_ENVS` (DEV, STG, LOC). */
   regtestEnvs?: readonly WalletEnv[];
 }
 

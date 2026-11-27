@@ -166,4 +166,15 @@ describe('ChainRegistry regtest', () => {
       'chain-unavailable',
     );
   });
+
+  it('refuses regtest on PRD and disabled environments even when the chain list has it', () => {
+    const chain = (blockchain: string) =>
+      ({ blockchain, family: 'Bitcoin', isTestnet: true, walletSupported: true }) as never;
+    const registry = ChainRegistry.fromApi([chain('Bitcoin'), chain('BitcoinRegtest')]);
+    expectWalletError(() => registry.bitcoin('prd', 'regtest'), 'network-not-allowed');
+    expectWalletError(() => registry.bitcoin('prd', 'regtest', ['prd']), 'network-not-allowed');
+    expectWalletError(() => registry.bitcoin('stg', 'regtest', ['dev']), 'network-not-allowed');
+    expect(registry.bitcoin('stg', 'regtest').blockchain).toBe('BitcoinRegtest');
+    expect(registry.bitcoin('prd').blockchain).toBe('Bitcoin');
+  });
 });

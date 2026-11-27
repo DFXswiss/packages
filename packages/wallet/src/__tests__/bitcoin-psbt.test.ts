@@ -143,6 +143,16 @@ describe('buildBitcoinSendPsbt', () => {
       'invalid-address',
     );
     expectWalletError(() => buildBitcoinSendPsbt(ring, { ...base, to: RECEIVE1, utxos: [] }), 'insufficient-funds');
+    expectWalletError(() => buildBitcoinSendPsbt(ring, { ...base, to: CHANGE0 }), 'invalid-address');
+    expectWalletError(
+      () =>
+        buildBitcoinSendPsbt(ring, {
+          ...base,
+          to: RECEIVE1,
+          utxos: [utxos[0], { ...utxos[0], txid: TXID_A.toUpperCase() }],
+        }),
+      'invalid-utxo',
+    );
     expectWalletError(() => buildBitcoinSendPsbt(ring, { ...base, to: RECEIVE1, amount: 100 }), 'amount-below-dust');
     expectWalletError(
       () => buildBitcoinSendPsbt(ring, { ...base, to: RECEIVE1, amount: 1_000_000 }),

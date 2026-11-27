@@ -1,5 +1,5 @@
 import type { BitcoinNetwork, WalletEnv } from '../config/environment';
-import { isRegtestAllowed } from '../config/environment';
+import { isBitcoinNetwork, isRegtestAllowed } from '../config/environment';
 import { WalletError } from '../util/errors';
 
 /**
@@ -70,13 +70,18 @@ export class EsploraClient {
   private readonly fetchFn: FetchLike;
 
   constructor(baseUrl: string, options: EsploraClientOptions) {
-    if (options?.network === 'regtest' && !isRegtestAllowed(options.env, options.regtestEnvs)) {
+    if (!isBitcoinNetwork(options?.network)) {
+      throw new WalletError('invalid-network', `Unknown Bitcoin network: ${String(options?.network)}`);
+    }
+    if (options.network === 'regtest' && !isRegtestAllowed(options.env, options.regtestEnvs)) {
       throw new WalletError(
         'network-not-allowed',
         `Bitcoin regtest is not enabled in environment ${String(options.env)}`,
       );
     }
-    const fetchFn = options?.fetch ?? (globalThis as { fetch?: FetchLike }).fetch;
+    // The global fetch must be called with the global object as receiver (browsers throw "Illegal invocation").
+    const globalFetch = (globalThis as { fetch?: FetchLike }).fetch;
+    const fetchFn = options.fetch ?? (globalFetch ? globalFetch.bind(globalThis) : undefined);
     if (!fetchFn) throw new WalletError('provider-unavailable', 'No fetch implementation');
     this.baseUrl = normalizeEsploraUrl(baseUrl);
     this.network = options.network;
@@ -140,12 +145,13 @@ export class EsploraClient {
 
   private async text(path: string, init?: Parameters<FetchLike>[1]): Promise<string> {
     let response: Awaited<ReturnType<FetchLike>>;
+    let body: string;
     try {
       response = await this.fetchFn(`${this.baseUrl}${path}`, init);
+      body = await response.text();
     } catch (error) {
       throw new WalletError('provider-unavailable', `Esplora endpoint unreachable: ${this.baseUrl}`, { cause: error });
     }
-    const body = await response.text();
     if (!response.ok) {
       throw new WalletError('provider-error', `Esplora ${response.status} for ${path}: ${body.slice(0, 200)}`);
     }
