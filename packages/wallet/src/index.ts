@@ -1,7 +1,17 @@
 // Public API. This package does not depend on the Breez or WalletConnect SDKs.
 
 // Environment
-export { WALLET_ENVS, isWalletEnv, RP_IDS, SIGN_MESSAGE_PREFIX, WALLET_NETWORKS } from './config/environment';
+export {
+  WALLET_ENVS,
+  isWalletEnv,
+  RP_IDS,
+  SIGN_MESSAGE_PREFIX,
+  WALLET_NETWORKS,
+  BITCOIN_NETWORKS,
+  isBitcoinNetwork,
+  DEFAULT_REGTEST_ENVS,
+  isRegtestAllowed,
+} from './config/environment';
 export type { WalletEnv, BitcoinNetwork, SparkNetwork, EvmNetworkKind, WalletNetworks } from './config/environment';
 
 // Errors
@@ -19,8 +29,15 @@ export type { KeyValueStore, IndexedDbKeyValueStoreOptions } from './util/kv-sto
 // Derivation v1 (§7.1, §7.2)
 export { DERIVATION_V1, PRF_OUTPUT_BYTES, prfInputV1, mnemonicFromPrfV1, normalizeMnemonicV1 } from './derivation/v1';
 export { KeyRing } from './derivation/keyring';
-export type { KeyRingOptions, BitcoinAccountInfo, BitcoinAddressInfo, SparkIdentityInfo } from './derivation/keyring';
+export type {
+  KeyRingOptions,
+  BitcoinNetworkGate,
+  BitcoinAccountInfo,
+  BitcoinAddressInfo,
+  SparkIdentityInfo,
+} from './derivation/keyring';
 export type { BitcoinChain } from './derivation/bitcoin-keys';
+export { BITCOIN_COIN_TYPE, BITCOIN_HRP } from './derivation/bitcoin-keys';
 export { seedPublicData } from './derivation/public-data';
 export type { SeedPublicData } from './derivation/public-data';
 export { encodeSparkAddress, decodeSparkAddress } from './derivation/spark-keys';
@@ -34,6 +51,22 @@ export { LoginAutoSigner, LoginMessageMismatchError, eip191MessageHash } from '.
 export { SPARK_LOGIN_TAG, sparkLoginDigestV1, verifySparkLogin } from './signing/spark-login';
 export { bitcoinMessageMagicHash, verifyBitcoinMessage } from './signing/bitcoin-message';
 export { isDfxLoginText } from './signing/login-text-guard';
+export { bip322MessageHash, signBitcoinMessageBip322, verifyBip322Simple } from './signing/bip322';
+export {
+  MAX_FEE_RATE,
+  bitcoinOutputScript,
+  buildBitcoinSendPsbt,
+  describeBitcoinPsbt,
+  signBitcoinPsbt,
+} from './signing/bitcoin-psbt';
+export type {
+  BitcoinSpendableUtxo,
+  BitcoinSendRequest,
+  BitcoinPsbtOutput,
+  BitcoinPsbtSummary,
+  BitcoinSendPsbt,
+  SignedBitcoinTransaction,
+} from './signing/bitcoin-psbt';
 
 // Passkey (§6, §8.3, §8.4, §11.4)
 export {
@@ -80,6 +113,8 @@ export type { DfxDataOptions } from './providers/dfx-data';
 export { PricePolicy, PRICE_STALE_MS } from './providers/price';
 export type { PricePolicyOptions } from './providers/price';
 export { Blocklists } from './providers/blocklist';
+export { EsploraClient, normalizeEsploraUrl } from './providers/esplora';
+export type { EsploraClientOptions, EsploraUtxo, EsploraAddressStats, FetchLike } from './providers/esplora';
 export type { WalletSnapshot, SnapshotAsset, SnapshotBlocklists } from './providers/snapshot';
 
 // Session and flows (§8, D5, X24)

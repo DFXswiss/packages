@@ -4,8 +4,15 @@ import { WALLET_NETWORKS } from '../config/environment';
 import type { WalletSnapshot } from './snapshot';
 import { WalletError } from '../util/errors';
 
+/** DFX blockchain name of each Bitcoin network (`Blockchain.BITCOIN`, `BITCOIN_TESTNET4`, `BITCOIN_REGTEST`). */
+const BITCOIN_BLOCKCHAINS: Readonly<Record<BitcoinNetwork, string>> = Object.freeze({
+  mainnet: 'Bitcoin',
+  testnet4: 'BitcoinTestnet4',
+  regtest: 'BitcoinRegtest',
+});
+
 function bitcoinBlockchain(network: BitcoinNetwork): Blockchain {
-  return network === 'mainnet' ? ('Bitcoin' as Blockchain) : ('BitcoinTestnet4' as Blockchain);
+  return BITCOIN_BLOCKCHAINS[network] as Blockchain;
 }
 
 /**
@@ -36,9 +43,11 @@ export class ChainRegistry {
     return this.chains;
   }
 
-  /** Bitcoin of this environment (PRD mainnet, DEV/LOC testnet4), `walletSupported` checked. */
-  bitcoin(env: WalletEnv): ChainInfo {
-    const network = WALLET_NETWORKS[env].bitcoin;
+  /**
+   * Bitcoin of this environment (PRD mainnet, DEV/STG/LOC testnet4), `walletSupported` checked. `network`
+   * selects another network of a separate ring, e.g. `regtest`.
+   */
+  bitcoin(env: WalletEnv, network: BitcoinNetwork = WALLET_NETWORKS[env].bitcoin): ChainInfo {
     const chain = this.chains.find((c) => c.blockchain === bitcoinBlockchain(network) && c.walletSupported);
     if (!chain) throw new WalletError('chain-unavailable', `Bitcoin (${network}) is not available in this environment`);
     return chain;
