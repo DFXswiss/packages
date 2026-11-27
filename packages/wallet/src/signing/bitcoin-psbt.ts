@@ -123,14 +123,18 @@ export function buildBitcoinSendPsbt(keys: KeyRing, request: BitcoinSendRequest)
     throw new WalletError('insufficient-funds', 'No outputs to spend');
   }
 
-  // A payment to the own change chain would be indistinguishable from change on the confirmation screen.
-  const isP2wpkh = destination.length === 22 && destination[0] === 0x00 && destination[1] === 0x14;
-  if (isP2wpkh && findBitcoinKeyByHash(keys, destination.subarray(2), request.scan)?.chain === 1) {
-    throw new WalletError('invalid-address', 'The destination is a change address of this wallet');
-  }
-
   const fingerprint = masterFingerprint(keys);
   const change = keys.bitcoinAddress(1, request.changeIndex);
+
+  // A payment to the own change chain would be indistinguishable from change on the confirmation screen: refuse
+  // this build's change address whatever its index, and every other change address inside the scan window.
+  const isP2wpkh = destination.length === 22 && destination[0] === 0x00 && destination[1] === 0x14;
+  if (
+    equalBytes(destination, p2wpkhScript(hash160(change.publicKey))) ||
+    (isP2wpkh && findBitcoinKeyByHash(keys, destination.subarray(2), request.scan)?.chain === 1)
+  ) {
+    throw new WalletError('invalid-address', 'The destination is a change address of this wallet');
+  }
   const outpoints = new Set<string>();
   const inputs = request.utxos.map((utxo) => {
     const key = findBitcoinKey(keys, utxo?.address, request.scan);

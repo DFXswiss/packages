@@ -144,6 +144,11 @@ describe('buildBitcoinSendPsbt', () => {
     );
     expectWalletError(() => buildBitcoinSendPsbt(ring, { ...base, to: RECEIVE1, utxos: [] }), 'insufficient-funds');
     expectWalletError(() => buildBitcoinSendPsbt(ring, { ...base, to: CHANGE0 }), 'invalid-address');
+    const farChange = ring.bitcoinAddress(1, 150).address;
+    expectWalletError(
+      () => buildBitcoinSendPsbt(ring, { ...base, to: farChange, changeIndex: 150 }),
+      'invalid-address',
+    );
     expectWalletError(
       () =>
         buildBitcoinSendPsbt(ring, {
