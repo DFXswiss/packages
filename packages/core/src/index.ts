@@ -311,6 +311,7 @@ export type {
   RevokePasskeyByAssertionParams,
   BitcoinAddressStats,
   BitcoinFeeEstimates,
+  EsploraBlockchain,
   EsploraFeeEstimates,
   BitcoinTransactionStatus,
   BitcoinUtxo,
