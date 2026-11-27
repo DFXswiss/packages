@@ -1,6 +1,7 @@
 import {
   BitcoinAddressStats,
   BitcoinFeeEstimates,
+  EsploraBlockchain,
   EsploraFeeEstimates,
   BitcoinTransactionStatus,
   BitcoinUtxo,
@@ -24,7 +25,7 @@ import { DfxHttpClient, ResponseType } from './DfxHttpClient';
 export class EsploraApi {
   constructor(
     private readonly http: DfxHttpClient,
-    private readonly blockchain: 'Bitcoin' | 'BitcoinTestnet4',
+    private readonly blockchain: EsploraBlockchain,
   ) {}
 
   address(address: string): Promise<BitcoinAddressStats> {
@@ -134,10 +135,13 @@ export class EsploraApi {
 export class WalletDataApi {
   readonly bitcoin: EsploraApi;
   readonly bitcoinTestnet4: EsploraApi;
+  /** Regtest data; answered only by the STG API (`walletData/esplora/BitcoinRegtest`). */
+  readonly bitcoinRegtest: EsploraApi;
 
   constructor(private readonly http: DfxHttpClient) {
     this.bitcoin = new EsploraApi(http, 'Bitcoin');
     this.bitcoinTestnet4 = new EsploraApi(http, 'BitcoinTestnet4');
+    this.bitcoinRegtest = new EsploraApi(http, 'BitcoinRegtest');
   }
 
   /** Allowlisted JSON-RPC passthrough; disallowed methods are answered by the server. */

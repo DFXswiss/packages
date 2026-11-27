@@ -207,7 +207,7 @@ describe('mnemonic handling', () => {
 
   it('refuses unknown Bitcoin networks', () => {
     expectWalletError(
-      () => KeyRing.fromMnemonic(vector.mnemonic, { bitcoinNetwork: 'regtest' as 'mainnet' }),
+      () => KeyRing.fromMnemonic(vector.mnemonic, { bitcoinNetwork: 'signet' as 'mainnet' }),
       'invalid-network',
     );
   });

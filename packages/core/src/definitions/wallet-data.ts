@@ -1,7 +1,13 @@
+/**
+ * Bitcoin networks with an Esplora-shaped forward of the DFX API. `BitcoinRegtest` is served only by the STG
+ * API (named R1 exception for STG); PRD has no regtest forward.
+ */
+export type EsploraBlockchain = 'Bitcoin' | 'BitcoinTestnet4' | 'BitcoinRegtest';
+
 /** Public wallet data capability (D8, D32, D36) — no JWT, rate-limited per IP. */
 export const WalletDataUrl = {
   chains: 'walletData/chains',
-  esplora: (blockchain: 'Bitcoin' | 'BitcoinTestnet4') => `walletData/esplora/${blockchain}`,
+  esplora: (blockchain: EsploraBlockchain) => `walletData/esplora/${blockchain}`,
   evmRpc: (chainId: number) => `walletData/evm/${chainId}/rpc`,
   evmTransfers: (chainId: number, address: string) => `walletData/evm/${chainId}/transfers/${address}`,
   evmTokens: (chainId: number, address: string) => `walletData/evm/${chainId}/tokens/${address}`,
