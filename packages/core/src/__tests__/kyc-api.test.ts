@@ -2,7 +2,7 @@ import { DfxHttpClient } from '../client/DfxHttpClient';
 import { KycApi } from '../client/KycApi';
 import { KycContactData, KycStepName, KycStepStatus } from '../definitions/kyc';
 
-function createMockHttpClient(response?: any) {
+function createMockHttpClient(response?: unknown): DfxHttpClient & { requestAbsolute: jest.Mock } {
   return {
     request: jest.fn(),
     requestAbsolute: jest.fn().mockResolvedValue(response),
