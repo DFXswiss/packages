@@ -118,8 +118,9 @@ export class WalletApiAuth {
    * Logs in: the assertion authenticates, the PRF output unlocks the seed. Without PRF the session stays
    * locked. A stored address of another seed is a hard mismatch, whatever its family and whether or not that
    * family is enabled: nothing is registered then, so an account never holds the addresses of two seeds. A
-   * disabled family is derived only to compare a stored address of it. Missing addresses of enabled families are
-   * registered.
+   * stored Bitcoin address is compared on the network its prefix names, also another network than this wallet's;
+   * an unknown prefix or a network that cannot be derived here is a mismatch too. A disabled family is derived
+   * only to compare a stored address of it. Missing addresses of enabled families are registered.
    */
   async login(credentialId?: Uint8Array): Promise<WalletApiAuthResult> {
     const familiesRequest = this.families();
@@ -332,21 +333,26 @@ export class WalletApiAuth {
   }
 
   /**
-   * A stored address that this seed would have registered but does not match: a Bitcoin address of this
-   * network that is not receive index 0, or another EVM account 0 / Spark identity. Every family is checked,
-   * whether or not `wallet/config` enables it: a disabled family's key is derived only for this comparison (and
-   * only when wallet-api holds an address of it), never registered. Each key is derived at most once.
+   * A stored address that does not belong to this seed: a Bitcoin address that is not receive index 0 of the
+   * network its prefix names (`bc1`/`tb1`/`bcrt1`, on any network, not only this wallet's), a Bitcoin address with
+   * an unknown prefix or of a network this environment may not derive (both a hard mismatch), or another EVM
+   * account 0 / Spark identity. Every family is checked, whether or not `wallet/config` enables it: a disabled
+   * family's key is derived only for this comparison (and only when wallet-api holds an address of it), never
+   * registered. Each key is derived at most once; a ring derived for another network is wiped afterwards.
    */
   private foreignAddress(stored: WalletAddress[], keys: KeyRing): WalletAddress | undefined {
-    let bitcoin: string | undefined;
+    const bitcoin = new Map<BitcoinNetwork, string | undefined>();
     let evm: string | undefined;
     let spark: string | undefined;
     return stored.find((entry) => {
       switch (entry.chain) {
-        case 'bitcoin':
-          if (!isOnNetwork(entry.address, this.bitcoinNetwork)) return false;
-          bitcoin ??= keys.bitcoinAddress(0, 0).address;
-          return entry.address !== bitcoin;
+        case 'bitcoin': {
+          const network = bitcoinNetworkOf(entry.address);
+          if (!network) return true;
+          if (!bitcoin.has(network)) bitcoin.set(network, this.bitcoinReceive0(keys, network));
+          const own = bitcoin.get(network);
+          return own === undefined || entry.address !== own;
+        }
         case 'ethereum':
           evm ??= keys.evm(0).address;
           return !seedCheck(evm, entry.address);
@@ -357,6 +363,24 @@ export class WalletApiAuth {
           return false;
       }
     });
+  }
+
+  /**
+   * Bitcoin receive index 0 of this seed on `network`: from `keys` on its own network, otherwise from a ring
+   * derived for that network (gated by env / regtestEnvs) and wiped right after. Undefined when the network
+   * cannot be derived here (e.g. `network-not-allowed` for regtest on PRD).
+   */
+  private bitcoinReceive0(keys: KeyRing, network: BitcoinNetwork): string | undefined {
+    if (network === keys.bitcoinNetwork) return keys.bitcoinAddress(0, 0).address;
+    let ring: KeyRing | undefined;
+    try {
+      ring = keys.forBitcoinNetwork(network, { env: this.deps.env, regtestEnvs: this.deps.regtestEnvs });
+      return ring.bitcoinAddress(0, 0).address;
+    } catch {
+      return undefined;
+    } finally {
+      ring?.wipe();
+    }
   }
 
   /**
@@ -457,10 +481,14 @@ function mayHaveBeenStored(error: unknown): boolean {
   return status === 409 && error.code === 'PasskeyCredentialAlreadyRegistered';
 }
 
-const BECH32_PREFIX: Readonly<Record<BitcoinNetwork, string>> = { mainnet: 'bc1', testnet4: 'tb1', regtest: 'bcrt1' };
-
-function isOnNetwork(address: string, network: BitcoinNetwork): boolean {
-  return typeof address === 'string' && address.toLowerCase().startsWith(BECH32_PREFIX[network]);
+/** The network a bech32/bech32m Bitcoin address names by its prefix; undefined for any other prefix. */
+function bitcoinNetworkOf(address: unknown): BitcoinNetwork | undefined {
+  if (typeof address !== 'string') return undefined;
+  const lower = address.toLowerCase();
+  if (lower.startsWith('bcrt1')) return 'regtest';
+  if (lower.startsWith('bc1')) return 'mainnet';
+  if (lower.startsWith('tb1')) return 'testnet4';
+  return undefined;
 }
 
 function sameAddress(stored: WalletAddress, wanted: { chain: WalletChainId; address: string }): boolean {

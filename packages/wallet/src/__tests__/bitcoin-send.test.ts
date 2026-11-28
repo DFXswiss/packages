@@ -272,11 +272,11 @@ describe('BitcoinSend', () => {
   });
 
   it('bounds the fee by the fees() rate of the chosen class', async () => {
-    // 4.5 sat/vB × 221 vB = 995 sat: within `fast` (5 sat/vB), above `normal` (2 sat/vB).
-    const api = fakeApi(serverPrepare({ fee: 995, feeRate: 4.5 }));
+    // 4 sat/vB × 221 vB = 884 sat: within `fast` (5 sat/vB), above `normal` (2 sat/vB).
+    const api = fakeApi(serverPrepare({ fee: 884, feeRate: 4 }));
     const send = sender(api);
     const prepared = await send.prepare({ ...PARAMS, feeRate: 'fast' });
-    expect(prepared.summary.fee).toBe(995n);
+    expect(prepared.summary.fee).toBe(884n);
     expect(prepared.feeRate).toEqual({ satPerVb: 5, exact: false });
     await expect(send.prepare(PARAMS)).rejects.toMatchObject({ code: 'prepare-mismatch' });
   });
@@ -472,7 +472,7 @@ describe('verifyBitcoinPrepare', () => {
     expectCode(() => verifyBitcoinPrepare(ring(), serverPrepare({ fee: 1_000 }), expected()), 'prepare-mismatch');
     // Rate raised to fit the fee: above the requested or fees() rate.
     expectCode(
-      () => verifyBitcoinPrepare(ring(), serverPrepare({ fee: 1_000, feeRate: 4.53 }), expected()),
+      () => verifyBitcoinPrepare(ring(), serverPrepare({ fee: 1_000, feeRate: 5 }), expected()),
       'prepare-mismatch',
     );
     // vsize raised to fit the fee: does not fit the PSBT.
@@ -518,10 +518,10 @@ describe('verifyBitcoinPrepare', () => {
 
   it('refuses a reported changeAddedToFee that is not contained in the fee', () => {
     // A send without change (the dust was dropped): one P2TR output, 190 vB at 2 sat/vB = 380 sat.
-    const dropped = (fee: number, changeAddedToFee: number) =>
+    const dropped = (fee: number, changeAddedToFee: number, feeRate?: number) =>
       verifyBitcoinPrepare(
         ring(),
-        serverPrepare({ max: true, fee, changeAddedToFee }),
+        serverPrepare({ max: true, fee, changeAddedToFee, feeRate }),
         expected({ amount: BigInt(TOTAL_INPUT - fee) }),
       );
     // 293 sat claimed, but the fee only pays the rate.
@@ -529,6 +529,36 @@ describe('verifyBitcoinPrepare', () => {
     expectCode(() => dropped(500, 293), 'prepare-mismatch');
     // Honest: 380 + 293 = 673 sat.
     expect(dropped(673, 293).fee).toBe(673n);
+  });
+
+  it('refuses a low or fractional reported rate that would hide a remainder not contained in the fee', () => {
+    // 380 sat = 2 sat/vB × 190 vB, with a false 293 sat remainder. A reported 0.46 sat/vB would make every bound
+    // fit (floor(0.46 × 188) + 293 = 379); wallet-api rates are whole numbers, so it is refused outright.
+    const dropped = (feeRate: number) =>
+      verifyBitcoinPrepare(
+        ring(),
+        serverPrepare({ max: true, fee: 380, changeAddedToFee: 293, feeRate }),
+        expected({ amount: BigInt(TOTAL_INPUT - 380) }),
+      );
+    expectCode(() => dropped(0.46), 'prepare-mismatch');
+    expectCode(() => dropped(1.5), 'prepare-mismatch');
+    expectCode(() => dropped(0), 'prepare-mismatch');
+    // The lowest whole rate: floor(1 × 188) + 293 = 481 sat > 380 sat.
+    expectCode(() => dropped(1), 'prepare-mismatch');
+  });
+
+  it('bounds the fee symmetrically around the reported vsize (estimate 220..221 vB, tolerance 1 vB)', () => {
+    const exact = expected({ feeRate: { satPerVb: 2, exact: true } });
+    const at = (vsize: number, fee: number) => verifyBitcoinPrepare(ring(), serverPrepare({ vsize, fee }), exact);
+    // Lower edge, reported 219 vB: 2 × 218 = 436 .. 2 × 220 = 440, and at least 2 × 219 = 438 from the estimate.
+    expect(at(219, 440).fee).toBe(440n);
+    expect(at(219, 438).fee).toBe(438n);
+    expectCode(() => at(219, 442), 'prepare-mismatch');
+    expectCode(() => at(219, 436), 'prepare-mismatch');
+    // Upper edge, reported 222 vB: at least 2 × 221 = 442, at most 2 × 221 = 442 from the estimate.
+    expect(at(222, 442).fee).toBe(442n);
+    expectCode(() => at(222, 444), 'prepare-mismatch');
+    expectCode(() => at(222, 440), 'prepare-mismatch');
   });
 
   it('refuses another rate than the explicitly requested one', () => {

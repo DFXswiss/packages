@@ -451,6 +451,66 @@ describe('WalletApiAuth.login', () => {
     expect(api.upsertAddress).not.toHaveBeenCalled();
   });
 
+  it('reports a seed mismatch for a foreign Bitcoin address of another network and registers nothing', async () => {
+    const foreignTestnet = OTHER.forBitcoinNetwork('testnet4').bitcoinAddress(0, 0).address;
+    expect(foreignTestnet.startsWith('tb1')).toBe(true);
+    const { api, credentials, cache, flow } = setup(BITCOIN_ONLY, [{ chain: 'bitcoin', address: foreignTestnet }]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('seed-mismatch');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+    expect(cache.list()).toEqual([]);
+  });
+
+  it('reports a seed mismatch for a foreign testnet4 address next to the own regtest address', async () => {
+    const foreignTestnet = OTHER.forBitcoinNetwork('testnet4').bitcoinAddress(0, 0).address;
+    const { api, credentials, flow } = setup(BITCOIN_ONLY, [
+      { chain: 'bitcoin', address: foreignTestnet },
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+    ]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('seed-mismatch');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('accepts this seed’s Bitcoin addresses of other networks', async () => {
+    const ownTestnet = OWN.forBitcoinNetwork('testnet4').bitcoinAddress(0, 0).address;
+    const ownMainnet = OWN.forBitcoinNetwork('mainnet').bitcoinAddress(0, 0).address;
+    expect(ownMainnet.startsWith('bc1')).toBe(true);
+    const { api, credentials, flow } = setup(BITCOIN_ONLY, [
+      { chain: 'bitcoin', address: ownTestnet },
+      { chain: 'bitcoin', address: ownMainnet },
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+    ]);
+    credentials.nextGet = fakeCredential(PRF);
+    const wipe = jest.spyOn(KeyRing.prototype, 'wipe');
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('unlocked');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+    // The rings derived for testnet4 and mainnet are wiped; the session ring is not.
+    expect(wipe).toHaveBeenCalledTimes(2);
+    expect(result.keys?.wiped).toBe(false);
+  });
+
+  it('reports a seed mismatch for a stored Bitcoin address with an unknown prefix', async () => {
+    const { api, credentials, flow } = setup(BITCOIN_ONLY, [
+      { chain: 'bitcoin', address: '1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2' },
+    ]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('seed-mismatch');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
   it('accepts own stored addresses of disabled families without registering them', async () => {
     const { api, credentials, cache, flow } = setup(BITCOIN_ONLY, [
       { chain: 'bitcoin', address: OWN_BITCOIN },

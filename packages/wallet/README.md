@@ -84,7 +84,10 @@ The WebAuthn options come from the server; the credential goes back with PRF res
 from the PRF output on the device. Only the families `GET /v1/wallet/config` turns on are registered (Bitcoin only
 at launch: no EVM or Spark address or proof is sent). On login, every stored address wallet-api holds is checked
 against the seed, whether or not its family is on: a stored address of another seed is a seed mismatch and
-nothing is registered, so an account never holds the addresses of two seeds. Outside PRD the Bitcoin network is regtest
+nothing is registered, so an account never holds the addresses of two seeds. A stored Bitcoin address is compared
+with this seed's receive index 0 on the network its prefix names (`bc1` mainnet, `tb1` testnet4, `bcrt1` regtest),
+also when that is not the wallet's own network; an unknown prefix, or a network this environment may not derive
+(regtest on PRD), is a seed mismatch as well. Outside PRD the Bitcoin network is regtest
 (`walletApiBitcoinNetwork`), on PRD mainnet. The wallet-api token is a wallet session, not a DFX customer session.
 
 `BitcoinSend` sends Bitcoin on-chain: `prepare` on the server, verify the PSBT against the request and the reported
@@ -93,9 +96,11 @@ inputs, outputs and fee (`verifyBitcoinPrepare`), show `prepared.summary`, sign 
 
 The device also bounds the fee: it estimates the vsize from the PSBT (P2WPKH inputs, outputs from their scripts)
 and refuses when the fee exceeds `ceil(rate × vsize) + changeAddedToFee` (a dropped change below 294 sat) or is
-below `floor(rate × (vsize − 1)) + changeAddedToFee` (1 vB tolerance, for the estimated and the reported vsize), so
-an underpaid fee or a remainder not contained in the fee is refused. `rate` is the reported `feeRate`, which must
-equal `feeRateSatPerVb` or, for `fast`/`normal`/`slow` (default `normal`), be at most the `fees()` rate of that
+below `floor(rate × (vsize − 1)) + changeAddedToFee`. The upper bound uses the largest estimated vsize and the
+reported vsize + 1, the lower bound the smallest estimated vsize − 1 and the reported vsize − 1 (the same 1 vB
+tolerance on both sides of the reported vsize, which itself may differ from the estimate by at most 1 vB), so an
+underpaid fee or a remainder not contained in the fee is refused. `rate` is the reported `feeRate`, a whole number
+of sat/vB from 1 to 1000 (as wallet-api reports rates; a fraction is refused), which must equal `feeRateSatPerVb` or, for `fast`/`normal`/`slow` (default `normal`), be at most the `fees()` rate of that
 choice. The reported `feeRate`, `vsize` and `changeAddedToFee` must fit the PSBT. `maxFee`
 adds an absolute cap. `send()` requires a `confirm` callback; show the fee there.
 

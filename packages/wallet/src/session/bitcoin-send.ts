@@ -319,10 +319,12 @@ export interface BitcoinPrepareExpectation {
  * `prepare-mismatch`, or the PSBT codes of `describeBitcoinPsbt`) when the PSBT spends anything but the listed
  * own outputs, pays anything but the destination and the own change address, when its amounts or fee differ
  * from the reported ones or from the request, when the reported `feeRate`, `vsize` or `changeAddedToFee` do not
- * fit the PSBT and the request, when the fee exceeds `ceil(rate × vsize) + changeAddedToFee` with the vsize
- * estimated on this device, or when it is below `floor(rate × (vsize − 1)) + changeAddedToFee` (tolerance
- * `FEE_VSIZE_TOLERANCE` = 1 vB, checked against the estimated and the reported vsize), so that an underpaid fee
- * or a remainder that is not in the fee is refused.
+ * fit the PSBT and the request (the reported rate must be a whole number of sat/vB, 1..1000), when the fee exceeds
+ * `ceil(rate × vsize) + changeAddedToFee` with the largest vsize estimated on this device or
+ * `ceil(rate × (reported vsize + 1)) + changeAddedToFee`, or when it is below
+ * `floor(rate × (vsize − 1)) + changeAddedToFee` with the smallest estimated and with the reported vsize (tolerance
+ * `FEE_VSIZE_TOLERANCE` = 1 vB, the same on both sides of the reported vsize), so that an underpaid fee or a
+ * remainder that is not in the fee is refused.
  */
 export function verifyBitcoinPrepare(
   keys: KeyRing,
@@ -416,8 +418,10 @@ export function verifyBitcoinPrepare(
   if (!bound || !Number.isFinite(bound.satPerVb) || bound.satPerVb <= 0) {
     fail('No fee rate to check the fee against');
   }
+  // wallet-api rates are whole sat/vB (fees() `rates`, `feeRateSatPerVb` 1..1000): a fraction or a rate below
+  // 1 sat/vB is refused, so a low reported rate cannot shrink the lower fee bound below the claimed remainder.
   const rate = prepare.feeRate;
-  if (typeof rate !== 'number' || !Number.isFinite(rate) || rate <= 0 || rate > MAX_PREPARE_FEE_RATE) {
+  if (typeof rate !== 'number' || !Number.isSafeInteger(rate) || rate < 1 || rate > MAX_PREPARE_FEE_RATE) {
     fail(`Invalid reported fee rate: ${String(rate)}`);
   }
   if (bound.exact ? rate !== bound.satPerVb : rate > bound.satPerVb) {
@@ -435,16 +439,23 @@ export function verifyBitcoinPrepare(
 
   // vsize: estimated here from the PSBT; the reported one must fit, and the fee must fit the rate.
   const vsize = estimateBitcoinVsize(summary);
-  if (!Number.isSafeInteger(prepare.vsize) || prepare.vsize < vsize.min - 1 || prepare.vsize > vsize.max + 1) {
+  if (
+    !Number.isSafeInteger(prepare.vsize) ||
+    prepare.vsize < vsize.min - FEE_VSIZE_TOLERANCE ||
+    prepare.vsize > vsize.max + FEE_VSIZE_TOLERANCE
+  ) {
     fail(`The reported vsize of ${String(prepare.vsize)} vB does not fit the PSBT (${vsize.min}..${vsize.max} vB)`);
   }
+  // Upper bound: never above the rate for the largest vsize estimated here, and never above the reported rate for
+  // the reported vsize plus FEE_VSIZE_TOLERANCE (the same tolerance as the lower bound below, symmetric around the
+  // reported vsize). The effective upper vsize is therefore min(reported + tolerance, estimated max).
   const allowedFee = BigInt(Math.ceil(rate * vsize.max)) + BigInt(added);
   if (summary.fee > allowedFee) {
     fail(
       `The fee of ${summary.fee} sat exceeds ${allowedFee} sat (${rate} sat/vB × ${vsize.max} vB + ${added} sat remainder)`,
     );
   }
-  const reportedFee = BigInt(Math.ceil(rate * (prepare.vsize + 1))) + BigInt(added);
+  const reportedFee = BigInt(Math.ceil(rate * (prepare.vsize + FEE_VSIZE_TOLERANCE))) + BigInt(added);
   if (summary.fee > reportedFee) fail('The fee does not fit the reported fee rate and vsize');
   // Lower bound, with a tolerance of FEE_VSIZE_TOLERANCE vB (the same 1 vB the reported vsize may deviate by):
   // the fee must pay the rate for the vsize and must contain the reported dust remainder.
