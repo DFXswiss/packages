@@ -238,9 +238,9 @@ describe('BitcoinSend', () => {
   it('requires a confirm callback', async () => {
     const api = fakeApi(serverPrepare());
     const send = sender(api);
-    await expect(
-      send.send(PARAMS, undefined as unknown as Parameters<BitcoinSend['send']>[1]),
-    ).rejects.toMatchObject({ code: 'confirm-required' });
+    await expect(send.send(PARAMS, undefined as unknown as Parameters<BitcoinSend['send']>[1])).rejects.toMatchObject({
+      code: 'confirm-required',
+    });
     expect(api.bitcoinPrepare).not.toHaveBeenCalled();
   });
 

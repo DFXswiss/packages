@@ -210,8 +210,7 @@ export class BitcoinSend {
         );
       } catch (error) {
         const status = error instanceof ApiException ? error.statusCode : undefined;
-        const retryable =
-          status !== undefined && (status === 0 || status === 408 || status === 429 || status >= 500);
+        const retryable = status !== undefined && (status === 0 || status === 408 || status === 429 || status >= 500);
         if (status !== undefined && !retryable) {
           // A definite refusal; after an earlier lost answer it does not prove that nothing was broadcast.
           if (!outcomeUnknown) {
