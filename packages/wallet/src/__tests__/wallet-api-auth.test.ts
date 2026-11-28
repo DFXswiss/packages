@@ -1,0 +1,856 @@
+import type { WalletAddress, WalletApi, WalletFamilies } from '@dfx.swiss/core';
+import { ApiException } from '@dfx.swiss/core';
+import fixture from './fixtures/derivation-v1.json';
+import { WALLET_API_BITCOIN_BLOCKCHAINS, walletApiBitcoinNetwork } from '../config/wallet-api';
+import { KeyRing } from '../derivation/keyring';
+import { PasskeyCeremonies } from '../passkey/ceremonies';
+import type { CeremonyCredentials, CeremonyWindow } from '../passkey/ceremonies';
+import { CredentialCache } from '../passkey/credential-cache';
+import { PasskeyRefusedError } from '../session/passkey-auth';
+import { WalletApiAuth } from '../session/wallet-api-auth';
+
+const RP_ID = 'stg.app.dfx.swiss';
+const PRF = hexToBytes(fixture.vectors[0].prfOutput);
+const OTHER_PRF = hexToBytes(fixture.vectors[1].prfOutput);
+const CREDENTIAL_ID = new Uint8Array([9, 9, 9]);
+const USER_HANDLE = 'MDAwMDAwMDAtMDAwMC00MDAwLTgwMDAtMDAwMDAwMDAwMDAw';
+
+const OWN = KeyRing.fromMnemonic(fixture.vectors[0].mnemonic, { bitcoinNetwork: 'regtest', env: 'stg' });
+const OTHER = KeyRing.fromMnemonic(fixture.vectors[1].mnemonic, { bitcoinNetwork: 'regtest', env: 'stg' });
+const OWN_BITCOIN = OWN.bitcoinAddress(0, 0).address;
+const OTHER_BITCOIN = OTHER.bitcoinAddress(0, 0).address;
+
+function hexToBytes(hex: string): Uint8Array {
+  const out = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < out.length; i++) out[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
+  return out;
+}
+
+function base64url(bytes: Uint8Array): string {
+  let binary = '';
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/u, '');
+}
+
+class FakeCredentials implements CeremonyCredentials {
+  nextCreate: PublicKeyCredential | null = null;
+  nextGet: PublicKeyCredential | null = null;
+  readonly created: CredentialCreationOptions[] = [];
+  readonly got: CredentialRequestOptions[] = [];
+
+  async create(options: CredentialCreationOptions): Promise<PublicKeyCredential | null> {
+    this.created.push(options);
+    return this.nextCreate;
+  }
+
+  async get(options: CredentialRequestOptions): Promise<PublicKeyCredential | null> {
+    this.got.push(options);
+    return this.nextGet;
+  }
+}
+
+function fakeCredential(prf: Uint8Array | undefined, id = CREDENTIAL_ID): PublicKeyCredential {
+  return {
+    id: 'test-credential',
+    rawId: id.slice().buffer,
+    type: 'public-key',
+    authenticatorAttachment: 'platform',
+    response: {
+      clientDataJSON: new Uint8Array([1]).buffer,
+      attestationObject: new Uint8Array([2]).buffer,
+      authenticatorData: new Uint8Array(37).buffer,
+      signature: new Uint8Array([3]).buffer,
+      userHandle: new Uint8Array(32).fill(1).buffer,
+      getTransports: () => ['internal'],
+    },
+    getClientExtensionResults: () => (prf ? { prf: { results: { first: prf } } } : {}),
+  } as unknown as PublicKeyCredential;
+}
+
+function fakeWindow(): CeremonyWindow & { signalUnknown: jest.Mock } {
+  const signalUnknown = jest.fn();
+  return {
+    location: { hostname: RP_ID },
+    navigator: { userAgent: 'TestBrowser/1.0', userActivation: { isActive: true } },
+    PublicKeyCredential: { signalUnknownCredential: signalUnknown },
+    signalUnknown,
+  } as CeremonyWindow & { signalUnknown: jest.Mock };
+}
+
+class MemoryStorage {
+  private readonly map = new Map<string, string>();
+  getItem(key: string): string | null {
+    return this.map.get(key) ?? null;
+  }
+  setItem(key: string, value: string): void {
+    this.map.set(key, value);
+  }
+  removeItem(key: string): void {
+    this.map.delete(key);
+  }
+}
+
+function fakeApi(families: WalletFamilies, stored: WalletAddress[] = []) {
+  return {
+    config: jest.fn(async () => ({ families })),
+    registerBegin: jest.fn(async () => ({
+      rp: { name: 'DFX', id: RP_ID },
+      user: { id: USER_HANDLE, name: USER_HANDLE, displayName: USER_HANDLE },
+      challenge: 'A'.repeat(64),
+      pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
+      authenticatorSelection: {
+        residentKey: 'required',
+        userVerification: 'required',
+        authenticatorAttachment: 'platform',
+      },
+      rpId: RP_ID,
+      rpName: 'DFX',
+      challengeId: '11111111-1111-4111-8111-111111111111',
+      userHandle: USER_HANDLE,
+    })),
+    registerFinish: jest.fn(async () => ({ token: 'register-token', accountId: 'account-1' })),
+    authenticateBegin: jest.fn(async () => ({
+      challenge: 'B'.repeat(64),
+      rpId: RP_ID,
+      challengeId: '22222222-2222-4222-8222-222222222222',
+    })),
+    authenticateFinish: jest.fn(async () => ({ token: 'login-token', accountId: 'account-1' })),
+    addresses: jest.fn(async () => stored.slice()),
+    upsertAddress: jest.fn(async (request: WalletAddress) => {
+      stored.push(request);
+      return { ...request };
+    }),
+    revokeBegin: jest.fn(async () => ({
+      challenge: 'C'.repeat(64),
+      rpId: RP_ID,
+      challengeId: '33333333-3333-4333-8333-333333333333',
+      allowCredentials: [{ id: base64url(CREDENTIAL_ID), type: 'public-key' }],
+    })),
+    revokeFinish: jest.fn(async () => ({ revokedAt: '2026-11-28T00:00:00.000Z' })),
+    credentials: jest.fn(async () => []),
+  };
+}
+
+const BITCOIN_ONLY: WalletFamilies = { bitcoin: true, spark: false, evm: false };
+const ALL: WalletFamilies = { bitcoin: true, spark: true, evm: true };
+
+function setup(families = BITCOIN_ONLY, stored: WalletAddress[] = []) {
+  const api = fakeApi(families, stored);
+  const credentials = new FakeCredentials();
+  const win = fakeWindow();
+  const cache = new CredentialCache(new MemoryStorage(), 'dfx.wallet.credentials.v1', RP_ID);
+  const flow = new WalletApiAuth({
+    api: api as unknown as WalletApi,
+    ceremonies: new PasskeyCeremonies('stg', credentials, win),
+    env: 'stg',
+    cache,
+  });
+  return { api, credentials, cache, flow, signalUnknown: win.signalUnknown };
+}
+
+afterEach(() => jest.restoreAllMocks());
+
+describe('network', () => {
+  it('uses regtest outside PRD and maps the wallet-api blockchains', () => {
+    expect(walletApiBitcoinNetwork('prd')).toBe('mainnet');
+    expect(walletApiBitcoinNetwork('stg')).toBe('regtest');
+    expect(walletApiBitcoinNetwork('dev')).toBe('regtest');
+    expect(walletApiBitcoinNetwork('stg', ['dev'])).toBe('testnet4');
+    expect(walletApiBitcoinNetwork('prd', ['prd'])).toBe('mainnet');
+    expect(WALLET_API_BITCOIN_BLOCKCHAINS).toEqual({
+      mainnet: 'Bitcoin',
+      testnet4: 'BitcoinTestnet4',
+      regtest: 'BitcoinRegtest',
+    });
+    expect(OWN_BITCOIN.startsWith('bcrt1q')).toBe(true);
+  });
+});
+
+describe('WalletApiAuth.register', () => {
+  it('registers Bitcoin only with the server options, without EVM or Spark derivation', async () => {
+    const { api, credentials, cache, flow, signalUnknown } = setup();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const evm = jest.spyOn(KeyRing.prototype, 'evm');
+    const spark = jest.spyOn(KeyRing.prototype, 'sparkIdentity');
+
+    const result = await flow.register();
+
+    expect(result.state).toBe('unlocked');
+    expect(result.token).toBe('register-token');
+    expect(result.accountId).toBe('account-1');
+    expect(result.families).toEqual(BITCOIN_ONLY);
+    expect(result.keys?.bitcoinNetwork).toBe('regtest');
+    expect(result.keys?.bitcoinAddress(0, 0).address).toBe(OWN_BITCOIN);
+
+    const created = credentials.created[0].publicKey as PublicKeyCredentialCreationOptions;
+    expect(new Uint8Array(created.challenge as ArrayBuffer)).toEqual(new Uint8Array(48));
+    expect(base64url(new Uint8Array(created.user.id as ArrayBuffer))).toBe(USER_HANDLE);
+    expect(created.rp.id).toBe(RP_ID);
+    expect(created.authenticatorSelection?.authenticatorAttachment).toBe('platform');
+
+    expect(api.registerFinish).toHaveBeenCalledWith({
+      challengeId: '11111111-1111-4111-8111-111111111111',
+      response: expect.objectContaining({ id: 'test-credential' }),
+    });
+    const sent = (api.registerFinish.mock.calls[0] as unknown[])[0] as { response: Record<string, unknown> };
+    expect(JSON.stringify(sent.response)).not.toContain('prf');
+
+    expect(api.upsertAddress).toHaveBeenCalledTimes(1);
+    expect(api.upsertAddress).toHaveBeenCalledWith({ chain: 'bitcoin', address: OWN_BITCOIN }, 'register-token');
+    expect(result.addresses).toEqual([{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+    expect(evm).not.toHaveBeenCalled();
+    expect(spark).not.toHaveBeenCalled();
+
+    expect(cache.list()).toEqual([
+      expect.objectContaining({
+        credentialId: base64url(CREDENTIAL_ID),
+        state: 'active',
+        seedCheckAddress: OWN_BITCOIN,
+      }),
+    ]);
+    expect(signalUnknown).not.toHaveBeenCalled();
+    expect(api.config).toHaveBeenCalledTimes(1);
+  });
+
+  it('registers EVM and Spark addresses only when their families are on', async () => {
+    const { api, credentials, flow } = setup(ALL);
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+
+    await flow.register();
+
+    expect(api.upsertAddress.mock.calls.map((call) => (call as unknown[])[0])).toEqual([
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+      { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
+      { chain: 'spark', address: fixture.vectors[0].spark.address },
+    ]);
+  });
+
+  it('drops the new credential when register/finish rejects it', async () => {
+    const { api, credentials, cache, flow, signalUnknown } = setup();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const failure = new ApiException(400, 'Challenge invalid', 'ChallengeInvalid');
+    api.registerFinish.mockRejectedValueOnce(failure);
+
+    await expect(flow.register()).rejects.toBe(failure);
+    expect(signalUnknown).toHaveBeenCalledWith({ credentialId: base64url(CREDENTIAL_ID), rpId: RP_ID });
+    expect(cache.list()).toEqual([]);
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('logs the new credential in once when the finish answer was lost', async () => {
+    const { api, credentials, flow, signalUnknown } = setup();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    api.registerFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
+
+    const result = await flow.register();
+
+    expect(result.state).toBe('unlocked');
+    expect(result.token).toBe('login-token');
+    expect(api.authenticateBegin).toHaveBeenCalledWith(base64url(CREDENTIAL_ID));
+    expect(api.authenticateFinish).toHaveBeenCalledWith({
+      challengeId: '22222222-2222-4222-8222-222222222222',
+      response: expect.objectContaining({ id: 'test-credential' }),
+    });
+    expect(signalUnknown).not.toHaveBeenCalled();
+  });
+
+  it('drops the credential when the lost registration was never stored', async () => {
+    const { api, credentials, flow, signalUnknown } = setup();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const lost = new ApiException(0, 'Network error');
+    api.registerFinish.mockRejectedValueOnce(lost);
+    api.authenticateFinish.mockRejectedValueOnce(new ApiException(404, 'Unknown', 'PasskeyCredentialNotFound'));
+
+    await expect(flow.register()).rejects.toBe(lost);
+    expect(signalUnknown).toHaveBeenCalled();
+  });
+
+  it('drops the credential on a definitive 409 refusal without a second ceremony', async () => {
+    const { api, credentials, cache, flow, signalUnknown } = setup();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const refusal = new ApiException(409, 'Cross-device registration', 'CrossDeviceRegistration');
+    api.registerFinish.mockRejectedValueOnce(refusal);
+
+    await expect(flow.register()).rejects.toBe(refusal);
+    expect(api.authenticateBegin).not.toHaveBeenCalled();
+    expect(api.authenticateFinish).not.toHaveBeenCalled();
+    expect(signalUnknown).toHaveBeenCalledWith({ credentialId: base64url(CREDENTIAL_ID), rpId: RP_ID });
+    expect(cache.list()).toEqual([]);
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('drops the credential on a 409 without a code', async () => {
+    const { api, credentials, flow, signalUnknown } = setup();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const refusal = new ApiException(409, 'Conflict');
+    api.registerFinish.mockRejectedValueOnce(refusal);
+
+    await expect(flow.register()).rejects.toBe(refusal);
+    expect(api.authenticateBegin).not.toHaveBeenCalled();
+    expect(signalUnknown).toHaveBeenCalled();
+  });
+
+  it.each([
+    ['a server error', new ApiException(503, 'Service unavailable')],
+    ['a timeout', new ApiException(408, 'Request timeout')],
+    ['an already stored credential', new ApiException(409, 'Already registered', 'PasskeyCredentialAlreadyRegistered')],
+  ])('logs the new credential in once after %s', async (_name, failure) => {
+    const { api, credentials, flow, signalUnknown } = setup();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    api.registerFinish.mockRejectedValueOnce(failure);
+
+    const result = await flow.register();
+
+    expect(result.state).toBe('unlocked');
+    expect(result.token).toBe('login-token');
+    expect(api.authenticateBegin).toHaveBeenCalledTimes(1);
+    expect(api.authenticateBegin).toHaveBeenCalledWith(base64url(CREDENTIAL_ID));
+    expect(signalUnknown).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['a lost answer', new ApiException(0, 'Network error')],
+    ['an already stored credential', new ApiException(409, 'Already registered', 'PasskeyCredentialAlreadyRegistered')],
+  ])('reads the stored addresses after %s and registers nothing over another seed', async (_name, failure) => {
+    const { api, credentials, cache, flow } = setup(ALL, [{ chain: 'bitcoin', address: OTHER_BITCOIN }]);
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    api.registerFinish.mockRejectedValueOnce(failure);
+
+    const result = await flow.register();
+
+    expect(result.state).toBe('seed-mismatch');
+    expect(result.token).toBe('login-token');
+    expect(result.addresses).toEqual([{ chain: 'bitcoin', address: OTHER_BITCOIN }]);
+    expect(api.addresses).toHaveBeenCalledWith('login-token');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+    expect(cache.list()).toEqual([]);
+  });
+
+  it('passes the stored addresses of a recovered registration to the sync', async () => {
+    const { api, credentials, flow } = setup(ALL, [{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    api.registerFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
+
+    const result = await flow.register();
+
+    expect(result.state).toBe('unlocked');
+    expect(api.addresses).toHaveBeenCalledWith('login-token');
+    // Bitcoin is held already: only EVM and Spark are registered.
+    expect(api.upsertAddress.mock.calls.map((call) => (call as unknown[])[0])).toEqual([
+      { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
+      { chain: 'spark', address: fixture.vectors[0].spark.address },
+    ]);
+    expect(result.addresses).toEqual([
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+      { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
+      { chain: 'spark', address: fixture.vectors[0].spark.address },
+    ]);
+  });
+
+  it('does not read the stored addresses after a successful finish', async () => {
+    const { api, credentials, flow } = setup();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+
+    await flow.register();
+
+    expect(api.addresses).not.toHaveBeenCalled();
+  });
+
+  it('caches the seed check of an enabled family and derives no disabled one', async () => {
+    const { credentials, cache, flow } = setup({ bitcoin: false, spark: false, evm: true });
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const bitcoin = jest.spyOn(KeyRing.prototype, 'bitcoinAddress');
+    const spark = jest.spyOn(KeyRing.prototype, 'sparkIdentity');
+
+    const result = await flow.register();
+
+    expect(result.addresses).toEqual([{ chain: 'ethereum', address: fixture.vectors[0].evm[0].address }]);
+    expect(cache.list()).toEqual([
+      expect.objectContaining({ state: 'active', seedCheckAddress: fixture.vectors[0].evm[0].address }),
+    ]);
+    expect(bitcoin).not.toHaveBeenCalled();
+    expect(spark).not.toHaveBeenCalled();
+
+    credentials.nextGet = fakeCredential(PRF);
+    expect((await flow.unlock()).state).toBe('unlocked');
+    credentials.nextGet = fakeCredential(OTHER_PRF);
+    expect((await flow.unlock()).state).toBe('seed-mismatch');
+  });
+
+  it('caches the Spark identity as seed check when only Spark is on', async () => {
+    const { credentials, cache, flow } = setup({ bitcoin: false, spark: true, evm: false });
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const bitcoin = jest.spyOn(KeyRing.prototype, 'bitcoinAddress');
+    const evm = jest.spyOn(KeyRing.prototype, 'evm');
+
+    await flow.register();
+
+    expect(cache.list()).toEqual([expect.objectContaining({ seedCheckAddress: fixture.vectors[0].spark.address })]);
+    expect(bitcoin).not.toHaveBeenCalled();
+    expect(evm).not.toHaveBeenCalled();
+
+    credentials.nextGet = fakeCredential(PRF);
+    expect((await flow.unlock()).state).toBe('unlocked');
+    credentials.nextGet = fakeCredential(OTHER_PRF);
+    expect((await flow.unlock()).state).toBe('seed-mismatch');
+  });
+
+  it('returns the re-read server state after a partial address registration', async () => {
+    const stored: WalletAddress[] = [];
+    const { api, credentials, flow } = setup(ALL, stored);
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const failure = new ApiException(502, 'Bad gateway');
+    api.upsertAddress
+      .mockImplementationOnce(async (request: WalletAddress) => {
+        stored.push(request);
+        return { ...request };
+      })
+      .mockRejectedValueOnce(failure);
+
+    const result = await flow.register();
+
+    expect(result.state).toBe('unlocked');
+    expect(result.addressSyncError).toBe(failure);
+    expect(api.addresses).toHaveBeenCalledWith('register-token');
+    expect(result.addresses).toEqual([{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+  });
+
+  it('returns the partial progress when the server state cannot be re-read', async () => {
+    const { api, credentials, flow } = setup(ALL);
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const failure = new ApiException(502, 'Bad gateway');
+    api.upsertAddress
+      .mockImplementationOnce(async (request: WalletAddress) => ({ ...request }))
+      .mockRejectedValueOnce(failure);
+    api.addresses.mockRejectedValueOnce(new ApiException(0, 'Network error'));
+
+    const result = await flow.register();
+
+    expect(result.addressSyncError).toBe(failure);
+    expect(result.addresses).toEqual([{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+  });
+
+  it('keeps the session when the address registration fails', async () => {
+    const { api, credentials, flow } = setup();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const failure = new ApiException(502, 'Bad gateway');
+    api.upsertAddress.mockRejectedValueOnce(failure);
+
+    const result = await flow.register();
+    expect(result.state).toBe('unlocked');
+    expect(result.addressSyncError).toBe(failure);
+    expect(result.addresses).toEqual([]);
+  });
+
+  it('refuses a server of another RP ID', async () => {
+    const { api, flow } = setup();
+    api.registerBegin.mockResolvedValueOnce({
+      ...(await fakeApi(BITCOIN_ONLY).registerBegin()),
+      rpId: 'evil.example',
+    });
+    await expect(flow.register()).rejects.toMatchObject({ code: 'wrong-origin' });
+  });
+});
+
+describe('WalletApiAuth.login', () => {
+  it('unlocks when wallet-api holds this seed’s Bitcoin address', async () => {
+    const { api, credentials, flow } = setup(BITCOIN_ONLY, [{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('unlocked');
+    expect(result.token).toBe('login-token');
+    expect(api.authenticateBegin).toHaveBeenCalledWith(undefined);
+    expect(api.addresses).toHaveBeenCalledWith('login-token');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+    const sent = (api.authenticateFinish.mock.calls[0] as unknown[])[0] as { response: Record<string, unknown> };
+    expect(JSON.stringify(sent.response)).not.toContain('prf');
+  });
+
+  it('registers a missing Bitcoin address', async () => {
+    const { api, credentials, flow } = setup();
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+    expect(result.state).toBe('unlocked');
+    expect(api.upsertAddress).toHaveBeenCalledWith({ chain: 'bitcoin', address: OWN_BITCOIN }, 'login-token');
+  });
+
+  it('reports a seed mismatch and registers nothing', async () => {
+    const { api, credentials, flow } = setup(BITCOIN_ONLY, [{ chain: 'bitcoin', address: OTHER_BITCOIN }]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+    expect(result.state).toBe('seed-mismatch');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('reports a seed mismatch for a foreign Bitcoin address of another network and registers nothing', async () => {
+    const foreignTestnet = OTHER.forBitcoinNetwork('testnet4').bitcoinAddress(0, 0).address;
+    expect(foreignTestnet.startsWith('tb1')).toBe(true);
+    const { api, credentials, cache, flow } = setup(BITCOIN_ONLY, [{ chain: 'bitcoin', address: foreignTestnet }]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('seed-mismatch');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+    expect(cache.list()).toEqual([]);
+  });
+
+  it('reports a seed mismatch for a foreign testnet4 address next to the own regtest address', async () => {
+    const foreignTestnet = OTHER.forBitcoinNetwork('testnet4').bitcoinAddress(0, 0).address;
+    const { api, credentials, flow } = setup(BITCOIN_ONLY, [
+      { chain: 'bitcoin', address: foreignTestnet },
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+    ]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('seed-mismatch');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('accepts this seed’s Bitcoin addresses of other networks', async () => {
+    const ownTestnet = OWN.forBitcoinNetwork('testnet4').bitcoinAddress(0, 0).address;
+    const ownMainnet = OWN.forBitcoinNetwork('mainnet').bitcoinAddress(0, 0).address;
+    expect(ownMainnet.startsWith('bc1')).toBe(true);
+    const { api, credentials, flow } = setup(BITCOIN_ONLY, [
+      { chain: 'bitcoin', address: ownTestnet },
+      { chain: 'bitcoin', address: ownMainnet },
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+    ]);
+    credentials.nextGet = fakeCredential(PRF);
+    const wipe = jest.spyOn(KeyRing.prototype, 'wipe');
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('unlocked');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+    // The rings derived for testnet4 and mainnet are wiped; the session ring is not.
+    expect(wipe).toHaveBeenCalledTimes(2);
+    expect(result.keys?.wiped).toBe(false);
+  });
+
+  it('reports a seed mismatch for a stored Bitcoin address with an unknown prefix', async () => {
+    const { api, credentials, flow } = setup(BITCOIN_ONLY, [
+      { chain: 'bitcoin', address: '1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2' },
+    ]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('seed-mismatch');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('accepts own stored addresses of disabled families without registering them', async () => {
+    const { api, credentials, cache, flow } = setup(BITCOIN_ONLY, [
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+      { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
+      { chain: 'spark', address: fixture.vectors[0].spark.address },
+    ]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('unlocked');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+    expect(cache.list()).toEqual([expect.objectContaining({ seedCheckAddress: OWN_BITCOIN })]);
+  });
+
+  it('derives no disabled family when wallet-api holds no address of it', async () => {
+    const { credentials, flow } = setup(BITCOIN_ONLY, [{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+    credentials.nextGet = fakeCredential(PRF);
+    const evm = jest.spyOn(KeyRing.prototype, 'evm');
+    const spark = jest.spyOn(KeyRing.prototype, 'sparkIdentity');
+
+    expect((await flow.login()).state).toBe('unlocked');
+    expect(evm).not.toHaveBeenCalled();
+    expect(spark).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['EVM', { chain: 'ethereum', address: fixture.vectors[1].evm[0].address }],
+    ['Spark', { chain: 'spark', address: fixture.vectors[1].spark.address }],
+  ] as [string, WalletAddress][])(
+    'reports a seed mismatch for a foreign %s address of a disabled family',
+    async (_name, foreign) => {
+      const { api, credentials, cache, flow } = setup(BITCOIN_ONLY, [
+        { chain: 'bitcoin', address: OWN_BITCOIN },
+        foreign,
+      ]);
+      credentials.nextGet = fakeCredential(PRF);
+
+      const result = await flow.login();
+
+      expect(result.state).toBe('seed-mismatch');
+      expect(api.upsertAddress).not.toHaveBeenCalled();
+      expect(cache.list()).toEqual([]);
+    },
+  );
+
+  it('never attaches a second seed: a foreign Bitcoin address blocks the EVM registration when Bitcoin is off', async () => {
+    const { api, credentials, cache, flow } = setup({ bitcoin: false, spark: false, evm: true }, [
+      { chain: 'bitcoin', address: OTHER_BITCOIN },
+    ]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('seed-mismatch');
+    expect(result.addresses).toEqual([{ chain: 'bitcoin', address: OTHER_BITCOIN }]);
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+    expect(cache.list()).toEqual([]);
+  });
+
+  it('registers the enabled family when the stored address of a disabled one is this seed’s', async () => {
+    const { api, credentials, cache, flow } = setup({ bitcoin: false, spark: false, evm: true }, [
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+    ]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('unlocked');
+    expect(api.upsertAddress).toHaveBeenCalledTimes(1);
+    expect(api.upsertAddress).toHaveBeenCalledWith(
+      { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
+      'login-token',
+    );
+    expect(cache.list()).toEqual([expect.objectContaining({ seedCheckAddress: fixture.vectors[0].evm[0].address })]);
+  });
+
+  it('reports a seed mismatch for a foreign address of an enabled family', async () => {
+    const { api, credentials, flow } = setup(ALL, [
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+      { chain: 'ethereum', address: fixture.vectors[1].evm[0].address },
+    ]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+    expect(result.state).toBe('seed-mismatch');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('stays locked without PRF output', async () => {
+    const { api, credentials, flow } = setup();
+    credentials.nextGet = fakeCredential(undefined);
+
+    const result = await flow.login();
+    expect(result.state).toBe('locked');
+    expect(result.keys).toBeUndefined();
+    expect(api.addresses).not.toHaveBeenCalled();
+  });
+
+  it('surfaces a revoked credential as a typed refusal and marks it revoked', async () => {
+    const { api, credentials, cache, flow } = setup();
+    cache.put({ credentialId: base64url(CREDENTIAL_ID), rpId: RP_ID, state: 'active', createdAt: 1 });
+    credentials.nextGet = fakeCredential(PRF);
+    api.authenticateFinish.mockRejectedValueOnce(new ApiException(401, 'Revoked', 'PasskeyCredentialRevoked'));
+
+    await expect(flow.login()).rejects.toBeInstanceOf(PasskeyRefusedError);
+    expect(cache.list()[0].state).toBe('revoked');
+  });
+
+  it('unlocks against the cached Bitcoin seed check address', async () => {
+    const { credentials, cache, flow } = setup();
+    cache.put({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: RP_ID,
+      state: 'active',
+      seedCheckAddress: OWN_BITCOIN,
+      createdAt: 1,
+    });
+    credentials.nextGet = fakeCredential(PRF);
+    expect((await flow.unlock()).state).toBe('unlocked');
+
+    credentials.nextGet = fakeCredential(OTHER_PRF);
+    expect((await flow.unlock()).state).toBe('seed-mismatch');
+  });
+
+  it.each([
+    ['testnet4', 'tb1'],
+    ['mainnet', 'bc1'],
+  ] as const)(
+    'unlocks a regtest ring against a cached %s seed check address on its own network',
+    async (network, prefix) => {
+      const own = OWN.forBitcoinNetwork(network).bitcoinAddress(0, 0).address;
+      const other = OTHER.forBitcoinNetwork(network).bitcoinAddress(0, 0).address;
+      expect(own.startsWith(prefix)).toBe(true);
+      const { credentials, cache, flow } = setup();
+      const cached = (seedCheckAddress: string) =>
+        cache.put({
+          credentialId: base64url(CREDENTIAL_ID),
+          rpId: RP_ID,
+          state: 'active',
+          seedCheckAddress,
+          createdAt: 1,
+        });
+
+      cached(own);
+      credentials.nextGet = fakeCredential(PRF);
+      const unlocked = await flow.unlock();
+      expect(unlocked.state).toBe('unlocked');
+      expect(unlocked.keys?.bitcoinNetwork).toBe('regtest');
+      expect(unlocked.keys?.wiped).toBe(false);
+
+      credentials.nextGet = fakeCredential(OTHER_PRF);
+      expect((await flow.unlock()).state).toBe('seed-mismatch');
+
+      cached(other);
+      credentials.nextGet = fakeCredential(PRF);
+      expect((await flow.unlock()).state).toBe('seed-mismatch');
+    },
+  );
+
+  it('reports a seed mismatch for a cached Bitcoin seed check address with an unknown prefix', async () => {
+    const { credentials, cache, flow } = setup();
+    cache.put({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: RP_ID,
+      state: 'active',
+      seedCheckAddress: '1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2',
+      createdAt: 1,
+    });
+    credentials.nextGet = fakeCredential(PRF);
+    expect((await flow.unlock()).state).toBe('seed-mismatch');
+  });
+});
+
+describe('WalletApiAuth.syncAddresses', () => {
+  it('refuses with seed-mismatch and registers nothing when wallet-api holds another seed’s Bitcoin address', async () => {
+    const { api, flow } = setup(ALL, [{ chain: 'bitcoin', address: OTHER_BITCOIN }]);
+
+    await expect(flow.syncAddresses('wallet-token', OWN)).rejects.toMatchObject({ code: 'seed-mismatch' });
+    expect(api.addresses).toHaveBeenCalledWith('wallet-token');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('refuses a foreign Bitcoin address of another network', async () => {
+    const foreignTestnet = OTHER.forBitcoinNetwork('testnet4').bitcoinAddress(0, 0).address;
+    const { api, flow } = setup(ALL, [{ chain: 'bitcoin', address: foreignTestnet }]);
+
+    await expect(flow.syncAddresses('wallet-token', OWN, ALL)).rejects.toMatchObject({ code: 'seed-mismatch' });
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('refuses a foreign address of a disabled family', async () => {
+    const { api, flow } = setup(BITCOIN_ONLY, [{ chain: 'ethereum', address: fixture.vectors[1].evm[0].address }]);
+
+    await expect(flow.syncAddresses('wallet-token', OWN)).rejects.toMatchObject({ code: 'seed-mismatch' });
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('registers the missing addresses of this seed after reading the server state', async () => {
+    const { api, flow } = setup(ALL, [{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+
+    const result = await flow.syncAddresses('wallet-token', OWN);
+
+    expect(api.addresses).toHaveBeenCalledWith('wallet-token');
+    expect(api.upsertAddress.mock.calls.map((call) => (call as unknown[])[0])).toEqual([
+      { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
+      { chain: 'spark', address: fixture.vectors[0].spark.address },
+    ]);
+    expect(result).toEqual([
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+      { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
+      { chain: 'spark', address: fixture.vectors[0].spark.address },
+    ]);
+  });
+
+  it('never registers a family wallet/config turns off, even when the caller asks for it', async () => {
+    const { api, flow } = setup(BITCOIN_ONLY);
+
+    const result = await flow.syncAddresses('wallet-token', OWN, ALL);
+
+    expect(api.upsertAddress).toHaveBeenCalledTimes(1);
+    expect(api.upsertAddress).toHaveBeenCalledWith({ chain: 'bitcoin', address: OWN_BITCOIN }, 'wallet-token');
+    expect(result).toEqual([{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+  });
+});
+
+describe('WalletApiAuth.exportMnemonic', () => {
+  it('exports against a cached seed check address of another network than the ring', async () => {
+    const { credentials, cache, flow } = setup();
+    cache.put({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: RP_ID,
+      state: 'active',
+      seedCheckAddress: OWN.forBitcoinNetwork('testnet4').bitcoinAddress(0, 0).address,
+      createdAt: 1,
+    });
+    credentials.nextGet = fakeCredential(PRF);
+    expect((await flow.exportMnemonic()).join(' ')).toBe(fixture.vectors[0].mnemonic);
+
+    cache.put({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: RP_ID,
+      state: 'active',
+      seedCheckAddress: OTHER.forBitcoinNetwork('mainnet').bitcoinAddress(0, 0).address,
+      createdAt: 1,
+    });
+    credentials.nextGet = fakeCredential(PRF);
+    await expect(flow.exportMnemonic()).rejects.toMatchObject({ code: 'seed-mismatch' });
+  });
+});
+
+describe('WalletApiAuth.revoke', () => {
+  it('pins the only allowed credential and revokes with the wallet session', async () => {
+    const { api, credentials, cache, flow } = setup();
+    cache.put({ credentialId: base64url(CREDENTIAL_ID), rpId: RP_ID, state: 'active', createdAt: 1 });
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.revoke('wallet-token');
+
+    expect(result.revokedAt).toBe('2026-11-28T00:00:00.000Z');
+    expect(api.revokeBegin).toHaveBeenCalledWith('wallet-token');
+    expect(api.revokeFinish).toHaveBeenCalledWith(
+      {
+        challengeId: '33333333-3333-4333-8333-333333333333',
+        response: expect.objectContaining({ id: 'test-credential' }),
+      },
+      'wallet-token',
+    );
+    const options = credentials.got[0].publicKey as PublicKeyCredentialRequestOptions;
+    const allowedId = options.allowCredentials?.[0]?.id;
+    expect(allowedId).toBeDefined();
+    expect(new Uint8Array(allowedId as ArrayBuffer)).toEqual(CREDENTIAL_ID);
+    expect(cache.list()[0].state).toBe('revoked');
+  });
+
+  it('refuses a passkey the account does not list', async () => {
+    const { api, credentials, flow } = setup();
+    credentials.nextGet = fakeCredential(PRF, new Uint8Array([1, 2, 3]));
+    api.revokeBegin.mockResolvedValueOnce({
+      challenge: 'C'.repeat(64),
+      rpId: RP_ID,
+      challengeId: '33333333-3333-4333-8333-333333333333',
+      allowCredentials: [
+        { id: base64url(CREDENTIAL_ID), type: 'public-key' },
+        { id: base64url(new Uint8Array([4])), type: 'public-key' },
+      ],
+    });
+
+    await expect(flow.revoke('wallet-token')).rejects.toMatchObject({ code: 'credential-mismatch' });
+    expect(api.revokeFinish).not.toHaveBeenCalled();
+  });
+});

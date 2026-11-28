@@ -10,6 +10,8 @@ export interface SellInterface {
   receiveFor: (info: SellPaymentInfo, includeTx?: boolean) => Promise<Sell>;
   confirmSell: (id: number, data: ConfirmSellData) => Promise<Transaction>;
   checkAddress: (blockchain: Blockchain) => Promise<SellAddressCheck>;
+  /** Books the released payouts of a sell route at the bank (`PUT sell/:id/simulatePayout`; DEV, LOC, STG only). */
+  simulatePayoutFor: (sellRouteId: number) => Promise<void>;
   currencies?: Fiat[];
 }
 
@@ -42,13 +44,21 @@ export function useSell(): SellInterface {
     [call],
   );
 
+  const simulatePayoutFor = useCallback(
+    async (sellRouteId: number): Promise<void> => {
+      return call<void>({ url: SellUrl.simulatePayout(sellRouteId), method: 'PUT' });
+    },
+    [call],
+  );
+
   return useMemo(
     () => ({
       receiveFor,
       confirmSell,
       checkAddress,
+      simulatePayoutFor,
       currencies: currencies?.filter((c) => c.buyable || c.cardBuyable || c.instantBuyable),
     }),
-    [receiveFor, confirmSell, checkAddress, currencies],
+    [receiveFor, confirmSell, checkAddress, simulatePayoutFor, currencies],
   );
 }

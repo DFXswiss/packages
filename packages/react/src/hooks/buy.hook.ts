@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useFiatContext } from '../contexts/fiat.context';
-import { Buy, BuyUrl, BuyPaymentInfo, PdfDocument, VirtualIban } from '../definitions/buy';
+import { Buy, BuyUrl, BuyPaymentInfo, PdfDocument, SimulateBankPayment, VirtualIban } from '../definitions/buy';
 import { Fiat } from '../definitions/fiat';
 import { useApi } from './api.hook';
 
@@ -9,6 +9,8 @@ export interface BuyInterface {
   getPersonalIbans: () => Promise<VirtualIban[]>;
   invoiceFor: (txId: number, collectionAccount?: boolean) => Promise<PdfDocument>;
   confirmFor: (txId: number) => Promise<void>;
+  /** Simulates an incoming bank payment for a buy route (`PUT buy/:id/simulatePayment`; DEV, LOC, STG only). */
+  simulatePaymentFor: (buyRouteId: number, payment: SimulateBankPayment) => Promise<void>;
   currencies?: Fiat[];
 }
 
@@ -43,14 +45,22 @@ export function useBuy(): BuyInterface {
     [call],
   );
 
+  const simulatePaymentFor = useCallback(
+    async (buyRouteId: number, payment: SimulateBankPayment): Promise<void> => {
+      return call<void>({ url: BuyUrl.simulatePayment(buyRouteId), method: 'PUT', data: payment });
+    },
+    [call],
+  );
+
   return useMemo(
     () => ({
       receiveFor,
       getPersonalIbans,
       invoiceFor,
       confirmFor,
+      simulatePaymentFor,
       currencies: currencies?.filter((c) => c.sellable || c.cardSellable || c.instantSellable),
     }),
-    [receiveFor, getPersonalIbans, invoiceFor, confirmFor, currencies],
+    [receiveFor, getPersonalIbans, invoiceFor, confirmFor, simulatePaymentFor, currencies],
   );
 }

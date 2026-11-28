@@ -21,6 +21,17 @@ describe('ChainApi', () => {
 });
 
 describe('WalletDataApi', () => {
+  it('exposes the STG Bitcoin regtest forward Esplora-shaped', async () => {
+    const mock = createMockHttpClient('101');
+    const api = new WalletDataApi(mock);
+
+    await expect(api.bitcoinRegtest.tipHeight()).resolves.toBe(101);
+    expect(lastCall(mock)).toMatchObject({ url: 'walletData/esplora/BitcoinRegtest/blocks/tip/height', token: false });
+
+    await api.bitcoinRegtest.broadcast('0200');
+    expect(lastCall(mock)).toMatchObject({ url: 'walletData/esplora/BitcoinRegtest/tx', method: 'POST', data: '0200' });
+  });
+
   it('exposes both Bitcoin networks Esplora-shaped', async () => {
     const mock = createMockHttpClient('840000');
     const api = new WalletDataApi(mock);

@@ -10,6 +10,8 @@ export const SellUrl = {
   receive: 'sell/paymentInfos',
   confirm: (id: number) => `sell/paymentInfos/${id}/confirm`,
   addressCheck: 'sell/address-check',
+  /** Books the released payouts of a sell route at the bank; DEV, LOC and STG only. No body. */
+  simulatePayout: (sellRouteId: number) => `sell/${sellRouteId}/simulatePayout`,
 };
 
 export enum SellAddressCheckResult {

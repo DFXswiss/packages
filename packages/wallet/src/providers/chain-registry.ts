@@ -1,11 +1,18 @@
 import type { Blockchain, ChainInfo } from '@dfx.swiss/core';
 import type { BitcoinNetwork, WalletEnv } from '../config/environment';
-import { WALLET_NETWORKS } from '../config/environment';
+import { isRegtestAllowed, WALLET_NETWORKS } from '../config/environment';
 import type { WalletSnapshot } from './snapshot';
 import { WalletError } from '../util/errors';
 
+/** DFX blockchain name of each Bitcoin network (`Blockchain.BITCOIN`, `BITCOIN_TESTNET4`, `BITCOIN_REGTEST`). */
+const BITCOIN_BLOCKCHAINS: Readonly<Record<BitcoinNetwork, string>> = Object.freeze({
+  mainnet: 'Bitcoin',
+  testnet4: 'BitcoinTestnet4',
+  regtest: 'BitcoinRegtest',
+});
+
 function bitcoinBlockchain(network: BitcoinNetwork): Blockchain {
-  return network === 'mainnet' ? ('Bitcoin' as Blockchain) : ('BitcoinTestnet4' as Blockchain);
+  return BITCOIN_BLOCKCHAINS[network] as Blockchain;
 }
 
 /**
@@ -36,9 +43,19 @@ export class ChainRegistry {
     return this.chains;
   }
 
-  /** Bitcoin of this environment (PRD mainnet, DEV/LOC testnet4), `walletSupported` checked. */
-  bitcoin(env: WalletEnv): ChainInfo {
-    const network = WALLET_NETWORKS[env].bitcoin;
+  /**
+   * Bitcoin of this environment (PRD mainnet, DEV/STG/LOC testnet4), `walletSupported` checked. `network`
+   * selects another network of a separate ring, e.g. `regtest`, which is refused where `isRegtestAllowed`
+   * refuses it (always on PRD), whatever the chain list says.
+   */
+  bitcoin(
+    env: WalletEnv,
+    network: BitcoinNetwork = WALLET_NETWORKS[env].bitcoin,
+    regtestEnvs?: readonly WalletEnv[],
+  ): ChainInfo {
+    if (network === 'regtest' && !isRegtestAllowed(env, regtestEnvs)) {
+      throw new WalletError('network-not-allowed', `Bitcoin regtest is not enabled in environment ${String(env)}`);
+    }
     const chain = this.chains.find((c) => c.blockchain === bitcoinBlockchain(network) && c.walletSupported);
     if (!chain) throw new WalletError('chain-unavailable', `Bitcoin (${network}) is not available in this environment`);
     return chain;

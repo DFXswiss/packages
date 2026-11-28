@@ -23,7 +23,7 @@ export { BankAccountUrl } from './bank-account';
 export type { BankAccount } from './bank-account';
 export { Blockchain } from './blockchain';
 export { BuyUrl, PersonalIbanProvider, VirtualIbanStatus } from './buy';
-export type { Buy, BuyPaymentInfo, PdfDocument, VirtualIban } from './buy';
+export type { Buy, BuyPaymentInfo, PdfDocument, SimulateBankPayment, VirtualIban } from './buy';
 export { CountryUrl } from './country';
 export type { Country } from './country';
 export { ApiException } from './error';
@@ -247,6 +247,7 @@ export { WalletDataUrl } from './wallet-data';
 export type {
   BitcoinAddressStats,
   BitcoinFeeEstimates,
+  EsploraBlockchain,
   EsploraFeeEstimates,
   BitcoinTransactionStatus,
   BitcoinUtxo,
@@ -265,3 +266,46 @@ export type {
   WalletDataListId,
   WalletPrice,
 } from './wallet-data';
+export { WalletApiUrl } from './wallet-api';
+export type {
+  WalletAddress,
+  WalletApiErrorCode,
+  WalletAuthenticateBeginRequest,
+  WalletAuthenticateBeginResponse,
+  WalletAuthenticateFinishRequest,
+  WalletAuthenticatorTransport,
+  WalletBitcoinAccount,
+  WalletBitcoinAccountRequest,
+  WalletBitcoinAccountUtxo,
+  WalletBitcoinAddressSummary,
+  WalletBitcoinBalance,
+  WalletBitcoinBlockchain,
+  WalletBitcoinDirection,
+  WalletBitcoinFeeRateChoice,
+  WalletBitcoinFees,
+  WalletBitcoinHistoryEntry,
+  WalletBitcoinPrepare,
+  WalletBitcoinPrepareInput,
+  WalletBitcoinPrepareOutput,
+  WalletBitcoinPrepareRequest,
+  WalletBitcoinSubmitRequest,
+  WalletBitcoinSubmitResponse,
+  WalletChainId,
+  WalletConfig,
+  WalletCreationOptionsJSON,
+  WalletCredential,
+  WalletCredentialDescriptorJSON,
+  WalletDiagnostic,
+  WalletDiagnosticResponse,
+  WalletEvmRpcRequest,
+  WalletFamilies,
+  WalletRegisterBeginResponse,
+  WalletRegisterFinishRequest,
+  WalletRequestOptionsJSON,
+  WalletRevokeBeginResponse,
+  WalletRevokeFinishRequest,
+  WalletRevokeFinishResponse,
+  WalletSessionResponse,
+  WalletUpsertAddressRequest,
+  WalletWebAuthnResponseJSON,
+} from './wallet-api';

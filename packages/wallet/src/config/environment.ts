@@ -37,7 +37,32 @@ export const SIGN_MESSAGE_PREFIX: Readonly<Record<WalletEnv, string>> = Object.f
   loc: '[loc]_',
 });
 
-export type BitcoinNetwork = 'mainnet' | 'testnet4';
+/**
+ * Bitcoin network of a key ring. `regtest` is a local test chain (HRP `bcrt`, coin type 1'); no environment
+ * selects it in {@link WALLET_NETWORKS}. A regtest ring exists only in an environment that
+ * {@link isRegtestAllowed} admits, never in a PRD build.
+ */
+export type BitcoinNetwork = 'mainnet' | 'testnet4' | 'regtest';
+
+export const BITCOIN_NETWORKS: readonly BitcoinNetwork[] = Object.freeze(['mainnet', 'testnet4', 'regtest'] as const);
+
+export function isBitcoinNetwork(value: unknown): value is BitcoinNetwork {
+  return typeof value === 'string' && (BITCOIN_NETWORKS as readonly string[]).includes(value);
+}
+
+/**
+ * Environments in which a regtest ring may be derived unless the app build passes its own list. Test networks
+ * are allowed on DEV and STG (and on local LOC builds), never in a production build (D28).
+ */
+export const DEFAULT_REGTEST_ENVS: readonly WalletEnv[] = Object.freeze(['dev', 'stg', 'loc'] as const);
+
+/**
+ * Whether `env` may use Bitcoin regtest. PRD is refused whatever `enabledEnvs` says, so a production build
+ * can never derive or sign for a regtest ring; every other environment must be listed in `enabledEnvs`.
+ */
+export function isRegtestAllowed(env: unknown, enabledEnvs: readonly WalletEnv[] = DEFAULT_REGTEST_ENVS): boolean {
+  return isWalletEnv(env) && env !== 'prd' && Array.isArray(enabledEnvs) && enabledEnvs.includes(env);
+}
 
 /** Spark runs on mainnet in every DFX environment. */
 export type SparkNetwork = 'mainnet';
@@ -45,7 +70,7 @@ export type SparkNetwork = 'mainnet';
 export type EvmNetworkKind = 'mainnet' | 'testnet';
 
 export interface WalletNetworks {
-  /** Bitcoin network of the BIP-84 account (mainnet coin type 0', testnet4 coin type 1'). */
+  /** Bitcoin network of the BIP-84 account (mainnet coin type 0', testnet4 and regtest coin type 1'). */
   bitcoin: BitcoinNetwork;
   /** Spark network of the Breez SDK. */
   spark: SparkNetwork;

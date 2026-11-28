@@ -72,6 +72,9 @@ function bitcoinLoginRing(keys: KeyRing): { ring: KeyRing; release: () => void }
 }
 
 /**
+ * @deprecated Runs against the backend passkey routes (`auth/passkey/*`), which are being removed. Use
+ * `WalletApiAuth` (wallet-api, `/v1/wallet/*`).
+ *
  * The passkey account flows (§8): register, login, unlock, claim, link, revoke and the seed export. The
  * account token never leaves memory; the seed is derived only from a PRF output of a ceremony of this
  * device and only accepted after the seed check against the server value (§6.3).

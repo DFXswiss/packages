@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.9.1-beta.0...@dfx.swiss/core@0.10.0-beta.0) (2026-11-23)
+
+
+### Features
+
+* **core:** add Partner user role ([#266](https://github.com/DFXswiss/packages/issues/266)) ([446d2d6](https://github.com/DFXswiss/packages/commit/446d2d657185f6cbab80d935fc7da59f3eab5b22))
+
+
+
+
+
+## [0.9.1-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.9.0...@dfx.swiss/core@0.9.1-beta.0) (2026-11-17)
+
+**Note:** Version bump only for package @dfx.swiss/core
+
 # [0.9.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.9.0-beta.0...@dfx.swiss/core@0.9.0) (2026-11-11)
 
 **Note:** Version bump only for package @dfx.swiss/core

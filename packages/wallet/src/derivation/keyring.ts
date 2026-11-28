@@ -1,6 +1,7 @@
 import { HDKey } from '@scure/bip32';
-import type { BitcoinNetwork } from '../config/environment';
-import { wipeBytes } from '../util/bytes';
+import type { BitcoinNetwork, WalletEnv } from '../config/environment';
+import { isBitcoinNetwork, isRegtestAllowed } from '../config/environment';
+import { equalBytes, wipeBytes } from '../util/bytes';
 import { WalletError } from '../util/errors';
 import {
   BITCOIN_BIP32_VERSIONS,
@@ -9,7 +10,9 @@ import {
   bitcoinAddressPath,
   checkChain,
   checkIndex,
+  hash160,
   p2wpkhAddress,
+  p2wpkhKeyHash,
 } from './bitcoin-keys';
 import { EvmAddress, evmAddressFromPublicKey, evmAddressPath } from './evm-keys';
 import { encodeSparkAddress, SPARK_IDENTITY_PATH } from './spark-keys';
@@ -17,11 +20,17 @@ import { normalizeMnemonicV1, seedFromMnemonic } from './v1';
 
 export interface KeyRingOptions {
   bitcoinNetwork: BitcoinNetwork;
+  /** Environment of the app build; required for `regtest`, which PRD never gets (see `isRegtestAllowed`). */
+  env?: WalletEnv;
+  /** Environments the app build enables regtest for; default `DEFAULT_REGTEST_ENVS` (DEV, STG, LOC). */
+  regtestEnvs?: readonly WalletEnv[];
 }
+
+export type BitcoinNetworkGate = Omit<KeyRingOptions, 'bitcoinNetwork'>;
 
 export interface BitcoinAccountInfo {
   path: string;
-  /** Account extended public key (xpub on mainnet, tpub on testnet4). */
+  /** Account extended public key (xpub on mainnet, tpub on testnet4 and regtest). */
   xpub: string;
   /** Master key fingerprint, 8 lowercase hex characters. */
   fingerprint: string;
@@ -84,14 +93,25 @@ export class KeyRing {
   }
 
   static fromMnemonic(mnemonic: string, options: KeyRingOptions): KeyRing {
-    const network = options?.bitcoinNetwork;
-    if (!network || !BITCOIN_BIP32_VERSIONS[network]) {
-      throw new WalletError('invalid-network', `Unknown Bitcoin network: ${network}`);
-    }
+    const network = checkNetwork(options?.bitcoinNetwork, options);
     const normalized = normalizeMnemonicV1(mnemonic);
     const seed = seedFromMnemonic(normalized);
     const master = HDKey.fromMasterSeed(seed, BITCOIN_BIP32_VERSIONS[network]);
     return new KeyRing({ mnemonic: normalized, seed, master }, network);
+  }
+
+  /**
+   * A separate ring of the same seed whose Bitcoin account lives on `network`, e.g. the regtest ring
+   * (`m/84'/1'/0'`, `bcrt1q…`) next to the testnet4 ring of a DEV build. EVM and Spark keys are the same. The
+   * new ring owns its own copy of the key material: wipe it when it is no longer needed; wiping either ring
+   * leaves the other intact. `regtest` needs `gate.env` of an enabled non-PRD environment.
+   */
+  forBitcoinNetwork(network: BitcoinNetwork, gate?: BitcoinNetworkGate): KeyRing {
+    const checked = checkNetwork(network, gate);
+    const secret = this.secret();
+    const seed = secret.seed.slice();
+    const master = HDKey.fromMasterSeed(seed, BITCOIN_BIP32_VERSIONS[checked]);
+    return new KeyRing({ mnemonic: secret.mnemonic, seed, master }, checked);
   }
 
   get wiped(): boolean {
@@ -201,6 +221,55 @@ function keyPathString(network: BitcoinNetwork, path: KeyPath): string {
     default:
       throw new WalletError('invalid-derivation-path', 'Unknown key family');
   }
+}
+
+/** Default number of receive and change indexes searched for an own Bitcoin address. */
+export const BITCOIN_ADDRESS_SCAN = 100;
+
+/**
+ * The BIP-84 key path of one of the ring's own P2WPKH addresses: receive and change indexes `0..scan-1` are
+ * searched, receive first. `undefined` when the address is not the ring's (another network included).
+ */
+export function findBitcoinKey(
+  keys: KeyRing,
+  address: string,
+  scan: number = BITCOIN_ADDRESS_SCAN,
+): OwnBitcoinKey | undefined {
+  const keyHash = p2wpkhKeyHash(address, keys.bitcoinNetwork);
+  return keyHash ? findBitcoinKeyByHash(keys, keyHash, scan) : undefined;
+}
+
+export interface OwnBitcoinKey {
+  chain: BitcoinChain;
+  index: number;
+  publicKey: Uint8Array;
+}
+
+/** Same as {@link findBitcoinKey} for the 20-byte key hash of a P2WPKH script. */
+export function findBitcoinKeyByHash(
+  keys: KeyRing,
+  keyHash: Uint8Array,
+  scan: number = BITCOIN_ADDRESS_SCAN,
+): OwnBitcoinKey | undefined {
+  if (!Number.isSafeInteger(scan) || scan < 1 || scan > 10_000) {
+    throw new WalletError('invalid-derivation-path', `Invalid address scan: ${scan}`);
+  }
+  if (keyHash.length !== 20) return undefined;
+  for (const chain of [0, 1] as const) {
+    for (let index = 0; index < scan; index++) {
+      const { publicKey } = keys.bitcoinAddress(chain, index);
+      if (equalBytes(hash160(publicKey), keyHash)) return { chain, index, publicKey };
+    }
+  }
+  return undefined;
+}
+
+function checkNetwork(network: unknown, gate?: BitcoinNetworkGate): BitcoinNetwork {
+  if (!isBitcoinNetwork(network)) throw new WalletError('invalid-network', `Unknown Bitcoin network: ${network}`);
+  if (network === 'regtest' && !isRegtestAllowed(gate?.env, gate?.regtestEnvs)) {
+    throw new WalletError('network-not-allowed', `Bitcoin regtest is not enabled in environment ${String(gate?.env)}`);
+  }
+  return network;
 }
 
 function neutered(node: HDKey): HDKey {
