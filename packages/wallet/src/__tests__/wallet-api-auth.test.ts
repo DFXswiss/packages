@@ -270,6 +270,122 @@ describe('WalletApiAuth.register', () => {
     expect(signalUnknown).toHaveBeenCalled();
   });
 
+  it('drops the credential on a definitive 409 refusal without a second ceremony', async () => {
+    const { api, credentials, cache, flow, signalUnknown } = setup();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const refusal = new ApiException(409, 'Cross-device registration', 'CrossDeviceRegistration');
+    api.registerFinish.mockRejectedValueOnce(refusal);
+
+    await expect(flow.register()).rejects.toBe(refusal);
+    expect(api.authenticateBegin).not.toHaveBeenCalled();
+    expect(api.authenticateFinish).not.toHaveBeenCalled();
+    expect(signalUnknown).toHaveBeenCalledWith({ credentialId: base64url(CREDENTIAL_ID), rpId: RP_ID });
+    expect(cache.list()).toEqual([]);
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('drops the credential on a 409 without a code', async () => {
+    const { api, credentials, flow, signalUnknown } = setup();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const refusal = new ApiException(409, 'Conflict');
+    api.registerFinish.mockRejectedValueOnce(refusal);
+
+    await expect(flow.register()).rejects.toBe(refusal);
+    expect(api.authenticateBegin).not.toHaveBeenCalled();
+    expect(signalUnknown).toHaveBeenCalled();
+  });
+
+  it.each([
+    ['a server error', new ApiException(503, 'Service unavailable')],
+    ['a timeout', new ApiException(408, 'Request timeout')],
+    ['an already stored credential', new ApiException(409, 'Already registered', 'PasskeyCredentialAlreadyRegistered')],
+  ])('logs the new credential in once after %s', async (_name, failure) => {
+    const { api, credentials, flow, signalUnknown } = setup();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    api.registerFinish.mockRejectedValueOnce(failure);
+
+    const result = await flow.register();
+
+    expect(result.state).toBe('unlocked');
+    expect(result.token).toBe('login-token');
+    expect(api.authenticateBegin).toHaveBeenCalledTimes(1);
+    expect(api.authenticateBegin).toHaveBeenCalledWith(base64url(CREDENTIAL_ID));
+    expect(signalUnknown).not.toHaveBeenCalled();
+  });
+
+  it('caches the seed check of an enabled family and derives no disabled one', async () => {
+    const { credentials, cache, flow } = setup({ bitcoin: false, spark: false, evm: true });
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const bitcoin = jest.spyOn(KeyRing.prototype, 'bitcoinAddress');
+    const spark = jest.spyOn(KeyRing.prototype, 'sparkIdentity');
+
+    const result = await flow.register();
+
+    expect(result.addresses).toEqual([{ chain: 'ethereum', address: fixture.vectors[0].evm[0].address }]);
+    expect(cache.list()).toEqual([
+      expect.objectContaining({ state: 'active', seedCheckAddress: fixture.vectors[0].evm[0].address }),
+    ]);
+    expect(bitcoin).not.toHaveBeenCalled();
+    expect(spark).not.toHaveBeenCalled();
+
+    credentials.nextGet = fakeCredential(PRF);
+    expect((await flow.unlock()).state).toBe('unlocked');
+    credentials.nextGet = fakeCredential(OTHER_PRF);
+    expect((await flow.unlock()).state).toBe('seed-mismatch');
+  });
+
+  it('caches the Spark identity as seed check when only Spark is on', async () => {
+    const { credentials, cache, flow } = setup({ bitcoin: false, spark: true, evm: false });
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const bitcoin = jest.spyOn(KeyRing.prototype, 'bitcoinAddress');
+    const evm = jest.spyOn(KeyRing.prototype, 'evm');
+
+    await flow.register();
+
+    expect(cache.list()).toEqual([expect.objectContaining({ seedCheckAddress: fixture.vectors[0].spark.address })]);
+    expect(bitcoin).not.toHaveBeenCalled();
+    expect(evm).not.toHaveBeenCalled();
+
+    credentials.nextGet = fakeCredential(PRF);
+    expect((await flow.unlock()).state).toBe('unlocked');
+    credentials.nextGet = fakeCredential(OTHER_PRF);
+    expect((await flow.unlock()).state).toBe('seed-mismatch');
+  });
+
+  it('returns the re-read server state after a partial address registration', async () => {
+    const { api, credentials, flow } = setup(ALL);
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const failure = new ApiException(502, 'Bad gateway');
+    api.upsertAddress.mockImplementationOnce(api.upsertAddress.getMockImplementation()!).mockRejectedValueOnce(failure);
+
+    const result = await flow.register();
+
+    expect(result.state).toBe('unlocked');
+    expect(result.addressSyncError).toBe(failure);
+    expect(api.addresses).toHaveBeenCalledWith('register-token');
+    expect(result.addresses).toEqual([{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+  });
+
+  it('returns the partial progress when the server state cannot be re-read', async () => {
+    const { api, credentials, flow } = setup(ALL);
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    const failure = new ApiException(502, 'Bad gateway');
+    api.upsertAddress.mockImplementationOnce(api.upsertAddress.getMockImplementation()!).mockRejectedValueOnce(failure);
+    api.addresses.mockRejectedValueOnce(new ApiException(0, 'Network error'));
+
+    const result = await flow.register();
+
+    expect(result.addressSyncError).toBe(failure);
+    expect(result.addresses).toEqual([{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+  });
+
   it('keeps the session when the address registration fails', async () => {
     const { api, credentials, flow } = setup();
     credentials.nextCreate = fakeCredential(PRF);
@@ -320,6 +436,37 @@ describe('WalletApiAuth.login', () => {
 
   it('reports a seed mismatch and registers nothing', async () => {
     const { api, credentials, flow } = setup(BITCOIN_ONLY, [{ chain: 'bitcoin', address: OTHER_BITCOIN }]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+    expect(result.state).toBe('seed-mismatch');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('ignores stored addresses of disabled families and never derives them', async () => {
+    const { api, credentials, cache, flow } = setup(BITCOIN_ONLY, [
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+      { chain: 'ethereum', address: fixture.vectors[1].evm[0].address },
+      { chain: 'spark', address: fixture.vectors[1].spark.address },
+    ]);
+    credentials.nextGet = fakeCredential(PRF);
+    const evm = jest.spyOn(KeyRing.prototype, 'evm');
+    const spark = jest.spyOn(KeyRing.prototype, 'sparkIdentity');
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('unlocked');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+    expect(evm).not.toHaveBeenCalled();
+    expect(spark).not.toHaveBeenCalled();
+    expect(cache.list()).toEqual([expect.objectContaining({ seedCheckAddress: OWN_BITCOIN })]);
+  });
+
+  it('reports a seed mismatch for a foreign address of an enabled family', async () => {
+    const { api, credentials, flow } = setup(ALL, [
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+      { chain: 'ethereum', address: fixture.vectors[1].evm[0].address },
+    ]);
     credentials.nextGet = fakeCredential(PRF);
 
     const result = await flow.login();

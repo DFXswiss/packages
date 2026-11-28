@@ -110,7 +110,7 @@ export class WalletApiAuth {
 
     const keys = this.keysFromPrf(created.prfOutput);
     const sync = await this.trySync(session.token, keys, families, []);
-    this.cacheCredential(created.credentialId, keys);
+    this.cacheCredential(created.credentialId, keys, families);
     return { ...session, families, keys, state: 'unlocked', ...sync };
   }
 
@@ -128,11 +128,11 @@ export class WalletApiAuth {
 
     const keys = this.keysFromPrf(assertion.prfOutput);
     const stored = await this.deps.api.addresses(session.token);
-    if (this.foreignAddress(stored, keys)) {
+    if (this.foreignAddress(stored, keys, families)) {
       return { ...session, families, keys, state: 'seed-mismatch', addresses: stored };
     }
     const sync = await this.trySync(session.token, keys, families, stored);
-    this.cacheCredential(assertion.credentialId, keys, assertion.backupEligible);
+    this.cacheCredential(assertion.credentialId, keys, families, assertion.backupEligible);
     return { ...session, families, keys, state: 'unlocked', ...sync };
   }
 
@@ -162,17 +162,7 @@ export class WalletApiAuth {
     const enabled = families ?? (await this.families());
     const current = stored ?? (await this.deps.api.addresses(token));
     const result = [...current];
-    for (const wanted of this.localAddresses(keys, enabled)) {
-      if (result.some((entry) => sameAddress(entry, wanted))) continue;
-      const saved = await this.deps.api.upsertAddress(wanted, token);
-      const index = result.findIndex((entry) => entry.chain === wanted.chain);
-      const record: WalletAddress =
-        saved && typeof saved === 'object' && typeof saved.address === 'string'
-          ? saved
-          : { chain: wanted.chain, address: wanted.address };
-      if (index >= 0) result[index] = record;
-      else result.push(record);
-    }
+    await this.upsertMissing(token, keys, enabled, result);
     return result;
   }
 
@@ -261,17 +251,18 @@ export class WalletApiAuth {
   }
 
   /**
-   * register/finish failed. A 4xx other than 409 means nothing was stored: the new credential is dropped. A lost
-   * answer (network, 5xx) or 409 may mean it was stored: the new credential logs in once. If wallet-api does not
-   * know it, it is dropped and the original error stands.
+   * register/finish failed. Only a lost answer (network error / status 0, timeout 408, 5xx) or a 409
+   * `PasskeyCredentialAlreadyRegistered` may mean the finish was stored: then the new credential logs in once.
+   * Every other answer is a definitive refusal (e.g. 409 `CrossDeviceRegistration`): the new credential is
+   * dropped and the error stands. If the login retry finds the credential unknown, it is dropped as well and the
+   * original error stands.
    */
   private async recoverRegistration(
     error: unknown,
     created: CreatedSeedPasskey,
     pending: PendingSeedPasskey,
   ): Promise<WalletSessionResponse> {
-    const status = error instanceof ApiException ? error.statusCode : 0;
-    if (status >= 400 && status < 500 && status !== 409) {
+    if (!mayHaveBeenStored(error)) {
       await pending.abort();
       throw error;
     }
@@ -294,10 +285,39 @@ export class WalletApiAuth {
     families: WalletFamilies,
     stored: WalletAddress[],
   ): Promise<{ addresses: WalletAddress[]; addressSyncError?: unknown }> {
+    const progress = [...stored];
     try {
-      return { addresses: await this.syncAddresses(token, keys, families, stored) };
+      await this.upsertMissing(token, keys, families, progress);
+      return { addresses: progress };
     } catch (addressSyncError) {
-      return { addresses: stored, addressSyncError };
+      // A failed upsert may still have been stored (lost answer): re-read the server state. If that fails too,
+      // the list holds every upsert that was confirmed before the failure.
+      try {
+        const current = await this.deps.api.addresses(token);
+        return { addresses: Array.isArray(current) ? current : progress, addressSyncError };
+      } catch {
+        return { addresses: progress, addressSyncError };
+      }
+    }
+  }
+
+  /** Upserts the missing addresses into `result` one by one, so a failure leaves the progress made so far. */
+  private async upsertMissing(
+    token: string,
+    keys: KeyRing,
+    enabled: WalletFamilies,
+    result: WalletAddress[],
+  ): Promise<void> {
+    for (const wanted of this.localAddresses(keys, enabled)) {
+      if (result.some((entry) => sameAddress(entry, wanted))) continue;
+      const saved = await this.deps.api.upsertAddress(wanted, token);
+      const index = result.findIndex((entry) => entry.chain === wanted.chain);
+      const record: WalletAddress =
+        saved && typeof saved === 'object' && typeof saved.address === 'string'
+          ? saved
+          : { chain: wanted.chain, address: wanted.address };
+      if (index >= 0) result[index] = record;
+      else result.push(record);
     }
   }
 
@@ -311,26 +331,52 @@ export class WalletApiAuth {
 
   /**
    * A stored address that this seed would have registered but does not match: a Bitcoin address of this
-   * network that is not receive index 0, or another EVM account 0 / Spark identity. Only derives what it checks.
+   * network that is not receive index 0, or another EVM account 0 / Spark identity. Only families enabled by
+   * `wallet/config` are checked; stored addresses of disabled families are ignored and never derived. Each key
+   * is derived at most once.
    */
-  private foreignAddress(stored: WalletAddress[], keys: KeyRing): WalletAddress | undefined {
+  private foreignAddress(stored: WalletAddress[], keys: KeyRing, families: WalletFamilies): WalletAddress | undefined {
+    let bitcoin: string | undefined;
+    let evm: string | undefined;
+    let spark: string | undefined;
     return stored.find((entry) => {
       switch (entry.chain) {
         case 'bitcoin':
-          return isOnNetwork(entry.address, this.bitcoinNetwork) && entry.address !== keys.bitcoinAddress(0, 0).address;
+          if (!families.bitcoin || !isOnNetwork(entry.address, this.bitcoinNetwork)) return false;
+          bitcoin ??= keys.bitcoinAddress(0, 0).address;
+          return entry.address !== bitcoin;
         case 'ethereum':
-          return !seedCheck(keys.evm(0).address, entry.address);
+          if (!families.evm) return false;
+          evm ??= keys.evm(0).address;
+          return !seedCheck(evm, entry.address);
         case 'spark':
-          return entry.address !== keys.sparkIdentity().address;
+          if (!families.spark) return false;
+          spark ??= keys.sparkIdentity().address;
+          return entry.address !== spark;
         default:
           return false;
       }
     });
   }
 
-  /** The cache holds Bitcoin receive index 0 for wallet-api wallets and EVM account 0 for older entries. */
+  /**
+   * The seed check address of an enabled family, preferring Bitcoin receive index 0, then EVM account 0, then the
+   * Spark identity. Undefined when no family is enabled; nothing is derived then.
+   */
+  private seedCheckAddress(keys: KeyRing, families: WalletFamilies): string | undefined {
+    if (families.bitcoin) return keys.bitcoinAddress(0, 0).address;
+    if (families.evm) return keys.evm(0).address;
+    if (families.spark) return keys.sparkIdentity().address;
+    return undefined;
+  }
+
+  /**
+   * The cache holds Bitcoin receive index 0, EVM account 0 (`0x…`, also older entries) or the Spark identity
+   * (`spark1…`), whichever family was enabled first; only that family is derived.
+   */
   private matchesSeedCheck(keys: KeyRing, expected: string): boolean {
     if (/^0x/i.test(expected)) return seedCheck(keys.evm(0).address, expected);
+    if (/^spark1/i.test(expected)) return expected === keys.sparkIdentity().address;
     return expected === keys.bitcoinAddress(0, 0).address;
   }
 
@@ -357,14 +403,20 @@ export class WalletApiAuth {
     });
   }
 
-  private cacheCredential(credentialId: Uint8Array, keys: KeyRing, backupEligible?: boolean): void {
+  private cacheCredential(
+    credentialId: Uint8Array,
+    keys: KeyRing,
+    families: WalletFamilies,
+    backupEligible?: boolean,
+  ): void {
+    if (!this.deps.cache) return;
     const id = base64UrlEncode(credentialId);
-    const existing = this.deps.cache?.list().find((entry) => entry.credentialId === id);
-    this.deps.cache?.put({
+    const existing = this.deps.cache.list().find((entry) => entry.credentialId === id);
+    this.deps.cache.put({
       credentialId: id,
       rpId: RP_IDS[this.deps.env],
       state: 'active',
-      seedCheckAddress: keys.bitcoinAddress(0, 0).address,
+      seedCheckAddress: this.seedCheckAddress(keys, families) ?? existing?.seedCheckAddress,
       backupEligible: backupEligible ?? existing?.backupEligible,
       createdAt: existing?.createdAt ?? Date.now(),
     });
@@ -393,7 +445,19 @@ function normalizeFamilies(families: Partial<WalletFamilies> | undefined): Walle
   return { bitcoin: families?.bitcoin === true, spark: families?.spark === true, evm: families?.evm === true };
 }
 
-const BECH32_PREFIX: Readonly<Record<BitcoinNetwork, string>> = { mainnet: 'bc1', testnet4: 'tb1', regtest: 'bcrt1' };
+/**
+ * Whether a failed register/finish may still have been stored: no answer at all (network error, status 0), a
+ * timeout (408), a server error (5xx), or 409 `PasskeyCredentialAlreadyRegistered`. Any other answer, including
+ * 409 `CrossDeviceRegistration`, is a definitive refusal.
+ */
+function mayHaveBeenStored(error: unknown): boolean {
+  if (!(error instanceof ApiException)) return true;
+  const status = error.statusCode;
+  if (status === 0 || status === 408 || status >= 500) return true;
+  return status === 409 && error.code === 'PasskeyCredentialAlreadyRegistered';
+}
+
+const BECH32_PREFIX:Readonly<Record<BitcoinNetwork, string>> = { mainnet: 'bc1', testnet4: 'tb1', regtest: 'bcrt1' };
 
 function isOnNetwork(address: string, network: BitcoinNetwork): boolean {
   return typeof address === 'string' && address.toLowerCase().startsWith(BECH32_PREFIX[network]);
