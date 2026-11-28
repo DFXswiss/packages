@@ -525,9 +525,7 @@ describe('WalletApiAuth.login', () => {
       { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
       'login-token',
     );
-    expect(cache.list()).toEqual([
-      expect.objectContaining({ seedCheckAddress: fixture.vectors[0].evm[0].address }),
-    ]);
+    expect(cache.list()).toEqual([expect.objectContaining({ seedCheckAddress: fixture.vectors[0].evm[0].address })]);
   });
 
   it('reports a seed mismatch for a foreign address of an enabled family', async () => {
