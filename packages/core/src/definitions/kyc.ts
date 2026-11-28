@@ -77,7 +77,7 @@ export interface UserName {
   lastName: string;
 }
 
-export type UserData = KycContactData & KycPersonalData;
+export type UserData = Omit<KycContactData, 'token'> & KycPersonalData;
 
 // --- NEW --- //
 
@@ -215,6 +215,7 @@ export interface KycStepSession extends KycStepBase {
 // personal data
 export interface KycContactData {
   mail: string;
+  token?: string;
 }
 
 export interface KycAddress {
