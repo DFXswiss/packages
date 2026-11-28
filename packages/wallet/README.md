@@ -92,9 +92,11 @@ inputs, outputs and fee (`verifyBitcoinPrepare`), show `prepared.summary`, sign 
 `inputs[i].address` (`signBitcoinPsbt`), then `submit`. The signed txid must equal the prepared txid.
 
 The device also bounds the fee: it estimates the vsize from the PSBT (P2WPKH inputs, outputs from their scripts)
-and refuses when the fee exceeds `ceil(rate × vsize) + changeAddedToFee` (a dropped change below 294 sat). `rate`
-is `feeRateSatPerVb` (the reported `feeRate` must equal it) or, for `fast`/`normal`/`slow` (default `normal`), the
-`fees()` rate of that choice. The reported `feeRate`, `vsize` and `changeAddedToFee` must fit the PSBT. `maxFee`
+and refuses when the fee exceeds `ceil(rate × vsize) + changeAddedToFee` (a dropped change below 294 sat) or is
+below `floor(rate × (vsize − 1)) + changeAddedToFee` (1 vB tolerance, for the estimated and the reported vsize), so
+an underpaid fee or a remainder not contained in the fee is refused. `rate` is the reported `feeRate`, which must
+equal `feeRateSatPerVb` or, for `fast`/`normal`/`slow` (default `normal`), be at most the `fees()` rate of that
+choice. The reported `feeRate`, `vsize` and `changeAddedToFee` must fit the PSBT. `maxFee`
 adds an absolute cap. `send()` requires a `confirm` callback; show the fee there.
 
 A failed `send()` must not be repeated: a new prepare spends other UTXOs and can pay twice. `submit` retries the

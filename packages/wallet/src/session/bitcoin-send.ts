@@ -68,6 +68,12 @@ export interface BitcoinVsizeEstimate {
 /** Remainder that wallet-api may add to the fee instead of creating change (below the 294 sat P2WPKH dust limit). */
 export const MAX_CHANGE_ADDED_TO_FEE = 293;
 
+/**
+ * vB by which the lower fee bound may undercut the vsize (estimated here, or reported): the fee must be at least
+ * `floor(rate × (vsize − 1)) + changeAddedToFee`. 1 vB is the deviation the reported vsize is allowed as well.
+ */
+export const FEE_VSIZE_TOLERANCE = 1;
+
 /** Highest fee rate wallet-api accepts, in sat/vB. */
 export const MAX_PREPARE_FEE_RATE = 1000;
 
@@ -313,8 +319,10 @@ export interface BitcoinPrepareExpectation {
  * `prepare-mismatch`, or the PSBT codes of `describeBitcoinPsbt`) when the PSBT spends anything but the listed
  * own outputs, pays anything but the destination and the own change address, when its amounts or fee differ
  * from the reported ones or from the request, when the reported `feeRate`, `vsize` or `changeAddedToFee` do not
- * fit the PSBT and the request, or when the fee exceeds `ceil(rate × vsize) + changeAddedToFee` with the vsize
- * estimated on this device.
+ * fit the PSBT and the request, when the fee exceeds `ceil(rate × vsize) + changeAddedToFee` with the vsize
+ * estimated on this device, or when it is below `floor(rate × (vsize − 1)) + changeAddedToFee` (tolerance
+ * `FEE_VSIZE_TOLERANCE` = 1 vB, checked against the estimated and the reported vsize), so that an underpaid fee
+ * or a remainder that is not in the fee is refused.
  */
 export function verifyBitcoinPrepare(
   keys: KeyRing,
@@ -438,6 +446,17 @@ export function verifyBitcoinPrepare(
   }
   const reportedFee = BigInt(Math.ceil(rate * (prepare.vsize + 1))) + BigInt(added);
   if (summary.fee > reportedFee) fail('The fee does not fit the reported fee rate and vsize');
+  // Lower bound, with a tolerance of FEE_VSIZE_TOLERANCE vB (the same 1 vB the reported vsize may deviate by):
+  // the fee must pay the rate for the vsize and must contain the reported dust remainder.
+  const minimumFee = BigInt(Math.floor(rate * Math.max(0, vsize.min - FEE_VSIZE_TOLERANCE))) + BigInt(added);
+  if (summary.fee < minimumFee) {
+    fail(
+      `The fee of ${summary.fee} sat is below ${minimumFee} sat (${rate} sat/vB × ${vsize.min - FEE_VSIZE_TOLERANCE} vB + ${added} sat remainder)`,
+    );
+  }
+  const reportedMinimumFee =
+    BigInt(Math.floor(rate * Math.max(0, prepare.vsize - FEE_VSIZE_TOLERANCE))) + BigInt(added);
+  if (summary.fee < reportedMinimumFee) fail('The fee does not pay the reported fee rate, vsize and remainder');
 
   if (expected.maxFee !== undefined && summary.fee > expected.maxFee) {
     fail(`The fee of ${summary.fee} sat exceeds the limit of ${expected.maxFee} sat`);

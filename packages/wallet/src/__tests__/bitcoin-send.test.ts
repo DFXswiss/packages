@@ -503,6 +503,34 @@ describe('verifyBitcoinPrepare', () => {
     );
   });
 
+  it('refuses a fee below the rate × vsize, e.g. 0 sat at 1000 sat/vB', () => {
+    const exact = (satPerVb: number) => expected({ feeRate: { satPerVb, exact: true } });
+    expectCode(
+      () => verifyBitcoinPrepare(ring(), serverPrepare({ fee: 0, feeRate: 1_000 }), exact(1_000)),
+      'prepare-mismatch',
+    );
+    // 2 sat/vB × 221 vB = 442 sat; 400 sat underpays even with the 1 vB tolerance.
+    expectCode(() => verifyBitcoinPrepare(ring(), serverPrepare({ fee: 400 }), expected()), 'prepare-mismatch');
+    expectCode(() => verifyBitcoinPrepare(ring(), serverPrepare({ fee: 400 }), exact(2)), 'prepare-mismatch');
+    // Within the tolerance of 1 vB: floor(2 × (221 − 1)) = 440 sat.
+    expect(verifyBitcoinPrepare(ring(), serverPrepare({ fee: 440 }), exact(2)).fee).toBe(440n);
+  });
+
+  it('refuses a reported changeAddedToFee that is not contained in the fee', () => {
+    // A send without change (the dust was dropped): one P2TR output, 190 vB at 2 sat/vB = 380 sat.
+    const dropped = (fee: number, changeAddedToFee: number) =>
+      verifyBitcoinPrepare(
+        ring(),
+        serverPrepare({ max: true, fee, changeAddedToFee }),
+        expected({ amount: BigInt(TOTAL_INPUT - fee) }),
+      );
+    // 293 sat claimed, but the fee only pays the rate.
+    expectCode(() => dropped(380, 293), 'prepare-mismatch');
+    expectCode(() => dropped(500, 293), 'prepare-mismatch');
+    // Honest: 380 + 293 = 673 sat.
+    expect(dropped(673, 293).fee).toBe(673n);
+  });
+
   it('refuses another rate than the explicitly requested one', () => {
     expectCode(
       () => verifyBitcoinPrepare(ring(), serverPrepare(), expected({ feeRate: { satPerVb: 3, exact: true } })),
