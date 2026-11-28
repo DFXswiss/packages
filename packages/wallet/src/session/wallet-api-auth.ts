@@ -53,8 +53,8 @@ export interface WalletApiAuthResult extends WalletSessionResponse {
  * The passkey flows against wallet-api (`/v1/wallet/*`): register, login, unlock, revoke, credentials and the
  * address registration. The WebAuthn options come from the server, the credential goes back to it with PRF
  * results stripped; the seed is derived from the PRF output on this device only and never leaves it. Only the
- * families `GET /wallet/config` turns on are derived and registered: with Bitcoin only, neither an EVM nor a
- * Spark address or proof is produced.
+ * families `GET /wallet/config` turns on are registered: with Bitcoin only, neither an EVM nor a Spark address or
+ * proof is sent. A disabled family is derived only on login, to check a stored address of it against the seed.
  */
 export class WalletApiAuth {
   private familiesRequest?: Promise<WalletFamilies>;
@@ -116,7 +116,9 @@ export class WalletApiAuth {
 
   /**
    * Logs in: the assertion authenticates, the PRF output unlocks the seed. Without PRF the session stays
-   * locked. A stored address of another seed is a hard mismatch; missing addresses of enabled families are
+   * locked. A stored address of another seed is a hard mismatch, whatever its family and whether or not that
+   * family is enabled: nothing is registered then, so an account never holds the addresses of two seeds. A
+   * disabled family is derived only to compare a stored address of it. Missing addresses of enabled families are
    * registered.
    */
   async login(credentialId?: Uint8Array): Promise<WalletApiAuthResult> {
@@ -128,7 +130,7 @@ export class WalletApiAuth {
 
     const keys = this.keysFromPrf(assertion.prfOutput);
     const stored = await this.deps.api.addresses(session.token);
-    if (this.foreignAddress(stored, keys, families)) {
+    if (this.foreignAddress(stored, keys)) {
       return { ...session, families, keys, state: 'seed-mismatch', addresses: stored };
     }
     const sync = await this.trySync(session.token, keys, families, stored);
@@ -331,26 +333,24 @@ export class WalletApiAuth {
 
   /**
    * A stored address that this seed would have registered but does not match: a Bitcoin address of this
-   * network that is not receive index 0, or another EVM account 0 / Spark identity. Only families enabled by
-   * `wallet/config` are checked; stored addresses of disabled families are ignored and never derived. Each key
-   * is derived at most once.
+   * network that is not receive index 0, or another EVM account 0 / Spark identity. Every family is checked,
+   * whether or not `wallet/config` enables it: a disabled family's key is derived only for this comparison (and
+   * only when wallet-api holds an address of it), never registered. Each key is derived at most once.
    */
-  private foreignAddress(stored: WalletAddress[], keys: KeyRing, families: WalletFamilies): WalletAddress | undefined {
+  private foreignAddress(stored: WalletAddress[], keys: KeyRing): WalletAddress | undefined {
     let bitcoin: string | undefined;
     let evm: string | undefined;
     let spark: string | undefined;
     return stored.find((entry) => {
       switch (entry.chain) {
         case 'bitcoin':
-          if (!families.bitcoin || !isOnNetwork(entry.address, this.bitcoinNetwork)) return false;
+          if (!isOnNetwork(entry.address, this.bitcoinNetwork)) return false;
           bitcoin ??= keys.bitcoinAddress(0, 0).address;
           return entry.address !== bitcoin;
         case 'ethereum':
-          if (!families.evm) return false;
           evm ??= keys.evm(0).address;
           return !seedCheck(evm, entry.address);
         case 'spark':
-          if (!families.spark) return false;
           spark ??= keys.sparkIdentity().address;
           return entry.address !== spark;
         default:

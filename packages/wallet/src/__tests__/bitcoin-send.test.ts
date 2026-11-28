@@ -363,6 +363,57 @@ describe('BitcoinSend', () => {
     expect(unknownApi.bitcoinSubmit).toHaveBeenCalledTimes(2);
   });
 
+  it('reports a 4xx on a resume after submit-unknown as unknown, not refused', async () => {
+    const prepare = serverPrepare();
+    const api = fakeApi(prepare);
+    api.bitcoinSubmit.mockRejectedValue(new ApiException(502, 'Bad gateway'));
+    const send = sender(api, { submitAttempts: 2 });
+    const first = await submitError(send.send(PARAMS, CONFIRM));
+    expect(first.code).toBe('submit-unknown');
+
+    api.bitcoinSubmit.mockReset();
+    api.bitcoinSubmit.mockRejectedValueOnce(new ApiException(410, 'Prepare expired', 'PrepareExpired'));
+    const expired = await submitError(send.submit(first.prepared, first.signed));
+    expect(expired.code).toBe('submit-unknown');
+    expect(api.bitcoinSubmit).toHaveBeenCalledTimes(1);
+
+    api.bitcoinSubmit.mockRejectedValueOnce(new ApiException(404, 'Prepare not found', 'PrepareNotFound'));
+    const notFound = await submitError(send.submit(first.prepared, first.signed));
+    expect(notFound.code).toBe('submit-unknown');
+    expect(api.bitcoinPrepare).toHaveBeenCalledTimes(1);
+  });
+
+  it('reports a 4xx on a resume after another txid as unknown', async () => {
+    const prepare = serverPrepare();
+    const api = fakeApi(prepare);
+    api.bitcoinSubmit
+      .mockResolvedValueOnce({ txid: 'ee'.repeat(32), prepareId: prepare.prepareId, alreadySubmitted: false })
+      .mockRejectedValueOnce(new ApiException(410, 'Prepare expired', 'PrepareExpired'));
+    const send = sender(api);
+    const first = await submitError(send.send(PARAMS, CONFIRM));
+    expect(first.code).toBe('submit-unknown');
+    const resumed = await submitError(send.submit(first.prepared, first.signed));
+    expect(resumed.code).toBe('submit-unknown');
+  });
+
+  it('reports a 4xx on a resume as unknown in a new instance when the caller marks the outcome unknown', async () => {
+    const prepare = serverPrepare();
+    const api = fakeApi(prepare);
+    api.bitcoinSubmit.mockRejectedValue(new ApiException(0, 'Network error'));
+    const first = await submitError(sender(api, { submitAttempts: 1 }).send(PARAMS, CONFIRM));
+    expect(first.code).toBe('submit-unknown');
+
+    api.bitcoinSubmit.mockReset();
+    api.bitcoinSubmit.mockRejectedValue(new ApiException(410, 'Prepare expired', 'PrepareExpired'));
+    const fresh = sender(api);
+    const marked = await submitError(fresh.submit(first.prepared, first.signed, { outcomeUnknown: true }));
+    expect(marked.code).toBe('submit-unknown');
+
+    // Without the mark a new instance knows of no lost answer: a plain 4xx stays a refusal.
+    const unmarked = await submitError(sender(api).submit(first.prepared, first.signed));
+    expect(unmarked.code).toBe('submit-refused');
+  });
+
   it('keeps prepared and signed when the server answers the submit with another txid', async () => {
     const prepare = serverPrepare();
     const api = fakeApi(prepare);

@@ -358,11 +358,17 @@ describe('WalletApiAuth.register', () => {
   });
 
   it('returns the re-read server state after a partial address registration', async () => {
-    const { api, credentials, flow } = setup(ALL);
+    const stored: WalletAddress[] = [];
+    const { api, credentials, flow } = setup(ALL, stored);
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
     const failure = new ApiException(502, 'Bad gateway');
-    api.upsertAddress.mockImplementationOnce(api.upsertAddress.getMockImplementation()!).mockRejectedValueOnce(failure);
+    api.upsertAddress
+      .mockImplementationOnce(async (request: WalletAddress) => {
+        stored.push(request);
+        return { ...request };
+      })
+      .mockRejectedValueOnce(failure);
 
     const result = await flow.register();
 
@@ -377,7 +383,9 @@ describe('WalletApiAuth.register', () => {
     credentials.nextCreate = fakeCredential(PRF);
     credentials.nextGet = fakeCredential(PRF);
     const failure = new ApiException(502, 'Bad gateway');
-    api.upsertAddress.mockImplementationOnce(api.upsertAddress.getMockImplementation()!).mockRejectedValueOnce(failure);
+    api.upsertAddress
+      .mockImplementationOnce(async (request: WalletAddress) => ({ ...request }))
+      .mockRejectedValueOnce(failure);
     api.addresses.mockRejectedValueOnce(new ApiException(0, 'Network error'));
 
     const result = await flow.register();
@@ -443,23 +451,83 @@ describe('WalletApiAuth.login', () => {
     expect(api.upsertAddress).not.toHaveBeenCalled();
   });
 
-  it('ignores stored addresses of disabled families and never derives them', async () => {
+  it('accepts own stored addresses of disabled families without registering them', async () => {
     const { api, credentials, cache, flow } = setup(BITCOIN_ONLY, [
       { chain: 'bitcoin', address: OWN_BITCOIN },
-      { chain: 'ethereum', address: fixture.vectors[1].evm[0].address },
-      { chain: 'spark', address: fixture.vectors[1].spark.address },
+      { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
+      { chain: 'spark', address: fixture.vectors[0].spark.address },
     ]);
     credentials.nextGet = fakeCredential(PRF);
-    const evm = jest.spyOn(KeyRing.prototype, 'evm');
-    const spark = jest.spyOn(KeyRing.prototype, 'sparkIdentity');
 
     const result = await flow.login();
 
     expect(result.state).toBe('unlocked');
     expect(api.upsertAddress).not.toHaveBeenCalled();
+    expect(cache.list()).toEqual([expect.objectContaining({ seedCheckAddress: OWN_BITCOIN })]);
+  });
+
+  it('derives no disabled family when wallet-api holds no address of it', async () => {
+    const { credentials, flow } = setup(BITCOIN_ONLY, [{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+    credentials.nextGet = fakeCredential(PRF);
+    const evm = jest.spyOn(KeyRing.prototype, 'evm');
+    const spark = jest.spyOn(KeyRing.prototype, 'sparkIdentity');
+
+    expect((await flow.login()).state).toBe('unlocked');
     expect(evm).not.toHaveBeenCalled();
     expect(spark).not.toHaveBeenCalled();
-    expect(cache.list()).toEqual([expect.objectContaining({ seedCheckAddress: OWN_BITCOIN })]);
+  });
+
+  it.each([
+    ['EVM', { chain: 'ethereum', address: fixture.vectors[1].evm[0].address }],
+    ['Spark', { chain: 'spark', address: fixture.vectors[1].spark.address }],
+  ] as [string, WalletAddress][])(
+    'reports a seed mismatch for a foreign %s address of a disabled family',
+    async (_name, foreign) => {
+      const { api, credentials, cache, flow } = setup(BITCOIN_ONLY, [
+        { chain: 'bitcoin', address: OWN_BITCOIN },
+        foreign,
+      ]);
+      credentials.nextGet = fakeCredential(PRF);
+
+      const result = await flow.login();
+
+      expect(result.state).toBe('seed-mismatch');
+      expect(api.upsertAddress).not.toHaveBeenCalled();
+      expect(cache.list()).toEqual([]);
+    },
+  );
+
+  it('never attaches a second seed: a foreign Bitcoin address blocks the EVM registration when Bitcoin is off', async () => {
+    const { api, credentials, cache, flow } = setup({ bitcoin: false, spark: false, evm: true }, [
+      { chain: 'bitcoin', address: OTHER_BITCOIN },
+    ]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('seed-mismatch');
+    expect(result.addresses).toEqual([{ chain: 'bitcoin', address: OTHER_BITCOIN }]);
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+    expect(cache.list()).toEqual([]);
+  });
+
+  it('registers the enabled family when the stored address of a disabled one is this seed’s', async () => {
+    const { api, credentials, cache, flow } = setup({ bitcoin: false, spark: false, evm: true }, [
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+    ]);
+    credentials.nextGet = fakeCredential(PRF);
+
+    const result = await flow.login();
+
+    expect(result.state).toBe('unlocked');
+    expect(api.upsertAddress).toHaveBeenCalledTimes(1);
+    expect(api.upsertAddress).toHaveBeenCalledWith(
+      { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
+      'login-token',
+    );
+    expect(cache.list()).toEqual([
+      expect.objectContaining({ seedCheckAddress: fixture.vectors[0].evm[0].address }),
+    ]);
   });
 
   it('reports a seed mismatch for a foreign address of an enabled family', async () => {
@@ -529,7 +597,9 @@ describe('WalletApiAuth.revoke', () => {
       'wallet-token',
     );
     const options = credentials.got[0].publicKey as PublicKeyCredentialRequestOptions;
-    expect(new Uint8Array(options.allowCredentials![0].id as ArrayBuffer)).toEqual(CREDENTIAL_ID);
+    const allowedId = options.allowCredentials?.[0]?.id;
+    expect(allowedId).toBeDefined();
+    expect(new Uint8Array(allowedId as ArrayBuffer)).toEqual(CREDENTIAL_ID);
     expect(cache.list()[0].state).toBe('revoked');
   });
 

@@ -81,8 +81,10 @@ prepare and submit (broadcast) go through wallet-api (`/v1/wallet/bitcoin/:block
 
 `WalletApiAuth` runs register, login, unlock and revoke against wallet-api (`/v1/wallet/*` on the DFX API host).
 The WebAuthn options come from the server; the credential goes back with PRF results stripped; the seed is derived
-from the PRF output on the device. Only the families `GET /v1/wallet/config` turns on are derived and registered
-(Bitcoin only at launch: no EVM or Spark address or proof). Outside PRD the Bitcoin network is regtest
+from the PRF output on the device. Only the families `GET /v1/wallet/config` turns on are registered (Bitcoin only
+at launch: no EVM or Spark address or proof is sent). On login, every stored address wallet-api holds is checked
+against the seed, whether or not its family is on: a stored address of another seed is a seed mismatch and
+nothing is registered, so an account never holds the addresses of two seeds. Outside PRD the Bitcoin network is regtest
 (`walletApiBitcoinNetwork`), on PRD mainnet. The wallet-api token is a wallet session, not a DFX customer session.
 
 `BitcoinSend` sends Bitcoin on-chain: `prepare` on the server, verify the PSBT against the request and the reported
@@ -98,9 +100,12 @@ adds an absolute cap. `send()` requires a `confirm` callback; show the fee there
 A failed `send()` must not be repeated: a new prepare spends other UTXOs and can pay twice. `submit` retries the
 same `prepareId` on network errors, 408, 429 and 5xx (bounded, with backoff, until the prepare expires); wallet-api
 answers a repeat with `alreadySubmitted: true`. When the outcome stays unknown, or the server answers with another
-txid, it throws `BitcoinSubmitError` with code `submit-unknown` (`submit-refused` for a 4xx on the first attempt),
-carrying `prepared` and `signed`. Call `send.submit(error.prepared, error.signed)` again, or look for
-`error.signed.txid` on chain.
+txid, it throws `BitcoinSubmitError` with code `submit-unknown`, carrying `prepared` and `signed`. Call
+`send.submit(error.prepared, error.signed)` again on the same `BitcoinSend`, or look for `error.signed.txid` on
+chain. `submit-refused` (a 4xx, nothing broadcast) is only reported while no attempt for that `prepareId` had an
+unknown outcome; the `BitcoinSend` remembers lost answers per `prepareId`, so a 4xx on a resume (e.g. 410
+`PrepareExpired`) stays `submit-unknown`. When resuming from a new instance, pass
+`send.submit(prepared, signed, { outcomeUnknown: true })`.
 
 ```typescript
 import { DfxApiClient } from '@dfx.swiss/core';

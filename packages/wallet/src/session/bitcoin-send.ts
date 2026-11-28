@@ -78,7 +78,10 @@ export const MAX_PREPARE_FEE_RATE = 1000;
  *
  * - `submit-unknown`: the outcome is unknown (network error, 5xx, or the server answered with another txid);
  *   the transaction may have been broadcast. Resubmit, or look for `signed.txid` on chain.
- * - `submit-refused`: wallet-api refused the first attempt with a 4xx; nothing was broadcast by that request.
+ * - `submit-refused`: wallet-api refused with a 4xx, and no earlier attempt for this `prepareId` (in this
+ *   `BitcoinSend`, or marked with `{ outcomeUnknown: true }`) had an unknown outcome; nothing was broadcast.
+ *   After any lost answer for the same `prepareId`, a 4xx (e.g. 410 `PrepareExpired`, 404 `PrepareNotFound`)
+ *   is reported as `submit-unknown`, because the earlier attempt may have broadcast the transaction.
  */
 export class BitcoinSubmitError extends WalletError {
   /** The submit answer, when the server answered with another txid. */
@@ -131,6 +134,8 @@ export interface BitcoinSendOptions {
  */
 export class BitcoinSend {
   readonly blockchain: WalletBitcoinBlockchain;
+  /** `prepareId`s with an attempt whose outcome is unknown: a later 4xx for them proves nothing. */
+  private readonly unknownOutcomes = new Set<string>();
 
   constructor(private readonly options: BitcoinSendOptions) {
     this.blockchain = WALLET_API_BITCOIN_BLOCKCHAINS[options.keys.bitcoinNetwork];
@@ -190,29 +195,40 @@ export class BitcoinSend {
    * Submits the signed transaction (raw hex) under the same `prepareId`; wallet-api answers a repeat with
    * `alreadySubmitted: true` and broadcasts at most once. Retries network errors (status 0), 408, 429 and 5xx with
    * backoff, at most `submitAttempts` times and only while the prepare is valid. Throws {@link BitcoinSubmitError}:
-   * `submit-refused` for a 4xx on the first attempt, `submit-unknown` when the outcome stays unknown or the server
-   * answers with another txid. On either, call `submit(error.prepared, error.signed)` again, never `send()`.
+   * `submit-refused` for a 4xx when no attempt for this `prepareId` had an unknown outcome before, `submit-unknown`
+   * when the outcome stays unknown, the server answers with another txid, or a 4xx follows an unknown outcome.
+   * On either, call `submit(error.prepared, error.signed)` again, never `send()`.
+   *
+   * Unknown outcomes are remembered per `prepareId` in this instance. When resuming with a new instance (e.g.
+   * after a reload), pass `{ outcomeUnknown: true }` if an earlier attempt ended in `submit-unknown`.
    */
-  async submit(prepared: PreparedBitcoinSend, signed: SignedBitcoinTransaction): Promise<WalletBitcoinSubmitResponse> {
+  async submit(
+    prepared: PreparedBitcoinSend,
+    signed: SignedBitcoinTransaction,
+    submitOptions?: { outcomeUnknown?: boolean },
+  ): Promise<WalletBitcoinSubmitResponse> {
     const attempts = Math.max(1, Math.floor(this.options.submitAttempts ?? 6));
     const backoff = this.options.submitBackoffMs ?? ((attempt: number) => Math.min(500 * 2 ** attempt, 8000));
     const now = this.options.now ?? Date.now;
     const expiresAt = Date.parse(prepared.prepare.expiresAt);
-    let outcomeUnknown = false;
+    const prepareId = prepared.prepare.prepareId;
+    if (submitOptions?.outcomeUnknown === true) this.unknownOutcomes.add(prepareId);
+    let outcomeUnknown = this.unknownOutcomes.has(prepareId);
 
     for (let attempt = 0; ; attempt++) {
       let result: WalletBitcoinSubmitResponse;
       try {
         result = await this.options.api.bitcoinSubmit(
           prepared.blockchain,
-          { prepareId: prepared.prepare.prepareId, transactionHex: signed.hex },
+          { prepareId, transactionHex: signed.hex },
           this.options.token,
         );
       } catch (error) {
         const status = error instanceof ApiException ? error.statusCode : undefined;
         const retryable = status !== undefined && (status === 0 || status === 408 || status === 429 || status >= 500);
         if (status !== undefined && !retryable) {
-          // A definite refusal; after an earlier lost answer it does not prove that nothing was broadcast.
+          // A definite refusal; after an earlier lost answer for this prepareId (this call or an earlier one) it
+          // does not prove that nothing was broadcast.
           if (!outcomeUnknown) {
             throw new BitcoinSubmitError('submit-refused', 'wallet-api refused the transaction', prepared, signed, {
               cause: error,
@@ -228,6 +244,7 @@ export class BitcoinSend {
         }
         // Network error, 5xx or anything that is not an API answer: the server may have broadcast it.
         outcomeUnknown = true;
+        this.unknownOutcomes.add(prepareId);
         const wait = Math.max(0, backoff(attempt));
         const expired = !Number.isFinite(expiresAt) || now() + wait >= expiresAt;
         if (!retryable || attempt + 1 >= attempts || expired) {
@@ -243,6 +260,7 @@ export class BitcoinSend {
         continue;
       }
       if (typeof result?.txid !== 'string' || result.txid.toLowerCase() !== signed.txid) {
+        this.unknownOutcomes.add(prepareId);
         throw new BitcoinSubmitError(
           'submit-unknown',
           `wallet-api accepted the submit but reported another transaction id; look for ${signed.txid} on chain`,
@@ -251,6 +269,7 @@ export class BitcoinSend {
           { response: result },
         );
       }
+      this.unknownOutcomes.delete(prepareId);
       return result;
     }
   }
