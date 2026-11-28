@@ -18,6 +18,9 @@ import { Utils } from '../utils';
 import { DfxHttpClient } from './DfxHttpClient';
 
 /**
+ * @deprecated The backend passkey routes (`auth/passkey/*`, `passkey/*`) are being removed. Use
+ * {@link WalletApi} (`DfxApiClient.wallet`, wallet-api under `/v1/wallet/*`).
+ *
  * Passkey seed wallet API. Every passkey call carries its token explicitly (`token` parameter or
  * `http.setToken`); none of them retries on 401/409 — the wallet decides what a failed ceremony means.
  */

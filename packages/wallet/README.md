@@ -46,12 +46,16 @@ A non-production build can use a local Bitcoin regtest chain next to its testnet
 are allowed on DEV and STG, never in a production build, so regtest is gated per environment: PRD is always
 refused; DEV, STG and LOC are enabled by default, and an app build may narrow that list with `regtestEnvs`.
 
+The example below is the deprecated direct route (`EsploraClient` / `walletData`, local PSBT build). New code sends
+through `BitcoinSend` on wallet-api, see [Passkey wallet on wallet-api](#passkey-wallet-on-wallet-api).
+
 ```typescript
 import { DfxApiClient } from '@dfx.swiss/core';
 import { EsploraClient, buildBitcoinSendPsbt, signBitcoinMessageBip322, signBitcoinPsbt } from '@dfx.swiss/wallet';
 
 const regtest = keys.forBitcoinNetwork('regtest', { env }); // throws 'network-not-allowed' on PRD
-// STG: the DFX API forward walletData/esplora/BitcoinRegtest; DEV/LOC: a configured Esplora endpoint.
+// Deprecated route. STG: the backend forward walletData/esplora/BitcoinRegtest (deprecated, being removed);
+// DEV/LOC: a configured Esplora endpoint.
 const esplora =
   env === 'stg'
     ? new DfxApiClient({ apiUrl }).walletData.bitcoinRegtest
@@ -66,10 +70,81 @@ await esplora.broadcast(hex);
 regtest.wipe();
 ```
 
-On STG the regtest balance, history and broadcast go through the DFX API Esplora forward
-(`walletData/esplora/BitcoinRegtest`), a named R1 exception for STG only. Everywhere else the wallet uses third-party
-or user-configured endpoints; `EsploraClient` calls such an endpoint directly from the browser (HTTPS with CORS;
-plain HTTP only on `localhost`). PRD has no regtest at all.
+This applies only to the deprecated `EsploraClient` / `walletData` route: on STG it reads regtest balance and
+history and broadcasts through the backend Esplora forward (`walletData/esplora/BitcoinRegtest`, deprecated), on
+DEV/LOC through a user-configured endpoint that `EsploraClient` calls directly from the browser (HTTPS with CORS;
+plain HTTP only on `localhost`). `BitcoinSend` does not use that route: account (balance, UTXOs, history), fees,
+prepare and submit (broadcast) go through wallet-api (`/v1/wallet/bitcoin/:blockchain/*`) in every environment —
+`Bitcoin` on PRD, `BitcoinRegtest` on DEV, STG and LOC. PRD has no regtest at all.
+
+## Passkey wallet on wallet-api
+
+`WalletApiAuth` runs register, login, unlock and revoke against wallet-api (`/v1/wallet/*` on the DFX API host).
+The WebAuthn options come from the server; the credential goes back with PRF results stripped; the seed is derived
+from the PRF output on the device. Only the families `GET /v1/wallet/config` turns on are registered (Bitcoin only
+at launch: no EVM or Spark address or proof is sent). On login, every stored address wallet-api holds is checked
+against the seed, whether or not its family is on: a stored address of another seed is a seed mismatch and
+nothing is registered, so an account never holds the addresses of two seeds. A stored Bitcoin address is compared
+with this seed's receive index 0 on the network its prefix names (`bc1` mainnet, `tb1` testnet4, `bcrt1` regtest),
+also when that is not the wallet's own network; an unknown prefix, or a network this environment may not derive
+(regtest on PRD), is a seed mismatch as well. The same rule applies to the cached seed check address of `unlock()`
+and `exportMnemonic()`. When `register()` recovers a finish whose answer was lost (or a 409
+`PasskeyCredentialAlreadyRegistered`) by logging in, it reads the account's stored addresses first and returns
+`seed-mismatch` without registering anything when one belongs to another seed. Outside PRD the Bitcoin network is regtest
+(`walletApiBitcoinNetwork`), on PRD mainnet. The wallet-api token is a wallet session, not a DFX customer session.
+
+`BitcoinSend` sends Bitcoin on-chain: `prepare` on the server, verify the PSBT against the request and the reported
+inputs, outputs and fee (`verifyBitcoinPrepare`), show `prepared.summary`, sign input `i` with the key of
+`inputs[i].address` (`signBitcoinPsbt`), then `submit`. The signed txid must equal the prepared txid.
+
+The device also bounds the fee: it estimates the vsize from the PSBT (P2WPKH inputs, outputs from their scripts;
+`ceil(weight / 4)` for both the smallest and the largest signature size) and refuses when the fee exceeds `ceil(rate × vsize) + changeAddedToFee` (a dropped change below 294 sat) or is
+below `floor(rate × (vsize − 1)) + changeAddedToFee`. The upper bound uses the largest estimated vsize and the
+reported vsize + 1, the lower bound the smallest estimated vsize − 1 and the reported vsize − 1 (the same 1 vB
+tolerance on both sides of the reported vsize, which itself may differ from the estimate by at most 1 vB), so an
+underpaid fee or a remainder not contained in the fee is refused. `rate` is the reported `feeRate`, a whole number
+of sat/vB of at least 1 (as wallet-api reports rates; a fraction is refused), which must equal `feeRateSatPerVb` or,
+for `fast`/`normal`/`slow` (default `normal`), be at most the `fees()` rate of that choice. Only the explicit
+`feeRateSatPerVb` is limited to 1..1000 (refused before the server is called); a `fees()` class rate is a whole
+number of at least 1 without that cap, so a class above 1000 sat/vB is the bound itself and only a prepare above
+it is refused. The reported `feeRate`, `vsize` and `changeAddedToFee` must fit the PSBT. `maxFee`
+adds an absolute cap. `send()` requires a `confirm` callback; show the fee there.
+
+A failed `send()` must not be repeated: a new prepare spends other UTXOs and can pay twice. `submit` retries the
+same `prepareId` on network errors, 408, 429 and 5xx (bounded, with backoff, until the prepare expires); wallet-api
+answers a repeat with `alreadySubmitted: true`. When the outcome stays unknown, or the server answers with another
+txid, it throws `BitcoinSubmitError` with code `submit-unknown`, carrying `prepared` and `signed`. Call
+`send.submit(error.prepared, error.signed)` again on the same `BitcoinSend`, or look for `error.signed.txid` on
+chain. `submit-refused` (a 4xx, nothing broadcast) is only reported while no attempt for that `prepareId` had an
+unknown outcome; the `BitcoinSend` remembers lost answers per `prepareId`, so a 4xx on a resume (e.g. 410
+`PrepareExpired`) stays `submit-unknown`. When resuming from a new instance, pass
+`send.submit(prepared, signed, { outcomeUnknown: true })`.
+
+```typescript
+import { DfxApiClient } from '@dfx.swiss/core';
+import { BitcoinSend, BitcoinSubmitError, PasskeyCeremonies, WalletApiAuth } from '@dfx.swiss/wallet';
+
+const api = new DfxApiClient({ apiUrl: 'https://stg.api.dfx.swiss/v1' });
+const auth = new WalletApiAuth({ api: api.wallet, ceremonies: new PasskeyCeremonies('stg'), env: 'stg' });
+const { token, keys, state } = await auth.login(); // or auth.register()
+if (state !== 'unlocked' || !keys) throw new Error(state);
+
+const send = new BitcoinSend({ api: api.wallet, keys, token }); // BitcoinRegtest on STG
+const own = [keys.bitcoinAddress(0, 0).address];
+try {
+  const { txid } = await send.send(
+    { addresses: own, changeAddress: keys.bitcoinAddress(1, 0).address, destination, amount: 10_000, feeRate: 'normal' },
+    (prepared) => confirmOnScreen(prepared.summary), // shows destination, amount and summary.fee
+  );
+} catch (error) {
+  // Signed already: keep error.prepared / error.signed and resubmit later, never call send() again.
+  if (error instanceof BitcoinSubmitError) await send.submit(error.prepared, error.signed);
+  else throw error;
+}
+```
+
+`PasskeyAuth`, `DfxApiClient.passkey` and `DfxApiClient.walletData` still work against the backend routes, which are
+being removed; they are deprecated.
 
 ## Local storage
 

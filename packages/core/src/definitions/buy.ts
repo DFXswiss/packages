@@ -10,7 +10,22 @@ export const BuyUrl = {
   personalIban: 'buy/personalIban',
   invoice: (txId: number) => `buy/paymentInfos/${txId}/invoice`,
   confirm: (txId: number) => `buy/paymentInfos/${txId}/confirm`,
+  /** DEV, LOC and STG only. */
+  simulatePayment: (buyRouteId: number) => `buy/${buyRouteId}/simulatePayment`,
 };
+
+/**
+ * Body of `PUT buy/:id/simulatePayment` (backend `SimulateBankPaymentDto`: `amount`, `currency`,
+ * `idempotencyKey`). Simulates an incoming bank payment for a buy route; DEV, LOC and STG only.
+ */
+export interface SimulateBankPayment {
+  /** Fiat amount of the simulated bank payment. */
+  amount: number;
+  /** Fiat currency name, e.g. `EUR` or `CHF`. */
+  currency: string;
+  /** Makes a repeated simulation of the same payment a no-op. */
+  idempotencyKey?: string;
+}
 
 export enum PersonalIbanProvider {
   FRICK = 'Frick',

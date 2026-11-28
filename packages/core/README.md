@@ -35,8 +35,9 @@ const user = await client.user.get();
 |----------|-------------|
 | `auth` | Authentication (wallet, email, LNURL) |
 | `chain` | Chain classification |
-| `passkey` | Passkey wallet ceremonies and account links |
-| `walletData` | Public wallet data (balances, prices, lookups) |
+| `wallet` | wallet-api (`/v1/wallet/*`): passkey sessions, addresses, config (families), Bitcoin account, fees, prepare, submit; own wallet session token (`setSessionToken`) |
+| `passkey` | Deprecated: backend passkey routes (being removed), use `wallet` |
+| `walletData` | Deprecated: backend `walletData/*` routes (being removed), use `wallet` |
 | `asset` | Asset listing and filtering |
 | `bank` | Bank operations |
 | `bankAccount` | Bank account management |

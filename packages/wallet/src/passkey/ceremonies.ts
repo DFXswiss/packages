@@ -140,19 +140,28 @@ export class PasskeyCeremonies {
   async createCredential(input: {
     challenge: Uint8Array;
     excludeCredentialIds?: Uint8Array[];
+    /** User handle chosen by the server (wallet-api `user.id`); a random 32-byte handle when omitted. */
+    userId?: Uint8Array;
+    /** Restricts the authenticator, e.g. `platform` as wallet-api requires; unrestricted when omitted. */
+    authenticatorAttachment?: AuthenticatorAttachment;
   }): Promise<PendingSeedPasskey> {
     this.requireTopLevelOrigin();
     this.requireActivation();
 
     const label = userHandleLabel();
-    const userId = source(randomBytes(32));
+    const userId = source(input.userId && input.userId.length > 0 ? input.userId : randomBytes(32));
     const options: CredentialCreationOptions = {
       publicKey: {
         challenge: source(input.challenge),
         rp: { id: RP_IDS[this.env], name: 'DFX' },
         user: { id: userId, name: label, displayName: label },
         pubKeyCredParams: CRED_PARAMS,
-        authenticatorSelection: { residentKey: 'required', requireResidentKey: true, userVerification: 'required' },
+        authenticatorSelection: {
+          residentKey: 'required',
+          requireResidentKey: true,
+          userVerification: 'required',
+          ...(input.authenticatorAttachment ? { authenticatorAttachment: input.authenticatorAttachment } : {}),
+        },
         attestation: 'none',
         timeout: TIMEOUT_MS,
         excludeCredentials: (input.excludeCredentialIds ?? []).map((id) => ({

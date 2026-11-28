@@ -25,3 +25,4 @@ export { UserApi } from './UserApi';
 export { ChainApi } from './ChainApi';
 export { PasskeyApi } from './PasskeyApi';
 export { WalletDataApi, EsploraApi } from './WalletDataApi';
+export { WalletApi } from './WalletApi';
