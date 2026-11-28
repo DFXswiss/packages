@@ -54,7 +54,8 @@ export interface WalletApiAuthResult extends WalletSessionResponse {
  * address registration. The WebAuthn options come from the server, the credential goes back to it with PRF
  * results stripped; the seed is derived from the PRF output on this device only and never leaves it. Only the
  * families `GET /wallet/config` turns on are registered: with Bitcoin only, neither an EVM nor a Spark address or
- * proof is sent. A disabled family is derived only on login, to check a stored address of it against the seed.
+ * proof is sent. A disabled family is derived only to check a stored address of it against the seed: on login,
+ * on a recovered registration and in `syncAddresses`, and only when wallet-api holds an address of that family.
  */
 export class WalletApiAuth {
   private familiesRequest?: Promise<WalletFamilies>;
@@ -169,16 +170,24 @@ export class WalletApiAuth {
 
   /**
    * Registers the addresses of the enabled families that wallet-api does not hold yet: Bitcoin receive index 0
-   * of {@link bitcoinNetwork}, EVM account 0 and the Spark identity. Families that are off are never derived.
+   * of {@link bitcoinNetwork}, EVM account 0 and the Spark identity. `families` can only narrow what
+   * `GET /wallet/config` enables, never turn a family on. The account's addresses are always read from wallet-api
+   * first and, as in {@link login}, a stored address of another seed (any family, any Bitcoin network) throws a
+   * `seed-mismatch` `WalletError` before anything is registered. A disabled family is derived only for that check.
    */
-  async syncAddresses(
-    token: string,
-    keys: KeyRing,
-    families?: WalletFamilies,
-    stored?: WalletAddress[],
-  ): Promise<WalletAddress[]> {
-    const enabled = families ?? (await this.families());
-    const current = stored ?? (await this.deps.api.addresses(token));
+  async syncAddresses(token: string, keys: KeyRing, families?: WalletFamilies): Promise<WalletAddress[]> {
+    const configured = await this.families();
+    const enabled: WalletFamilies = families
+      ? {
+          bitcoin: configured.bitcoin && families.bitcoin === true,
+          spark: configured.spark && families.spark === true,
+          evm: configured.evm && families.evm === true,
+        }
+      : configured;
+    const current = await this.deps.api.addresses(token);
+    if (this.foreignAddress(current, keys)) {
+      throw new WalletError('seed-mismatch', 'wallet-api holds an address of another seed for this account');
+    }
     const result = [...current];
     await this.upsertMissing(token, keys, enabled, result);
     return result;

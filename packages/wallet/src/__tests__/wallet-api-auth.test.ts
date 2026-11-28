@@ -736,6 +736,58 @@ describe('WalletApiAuth.login', () => {
   });
 });
 
+describe('WalletApiAuth.syncAddresses', () => {
+  it('refuses with seed-mismatch and registers nothing when wallet-api holds another seed’s Bitcoin address', async () => {
+    const { api, flow } = setup(ALL, [{ chain: 'bitcoin', address: OTHER_BITCOIN }]);
+
+    await expect(flow.syncAddresses('wallet-token', OWN)).rejects.toMatchObject({ code: 'seed-mismatch' });
+    expect(api.addresses).toHaveBeenCalledWith('wallet-token');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('refuses a foreign Bitcoin address of another network', async () => {
+    const foreignTestnet = OTHER.forBitcoinNetwork('testnet4').bitcoinAddress(0, 0).address;
+    const { api, flow } = setup(ALL, [{ chain: 'bitcoin', address: foreignTestnet }]);
+
+    await expect(flow.syncAddresses('wallet-token', OWN, ALL)).rejects.toMatchObject({ code: 'seed-mismatch' });
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('refuses a foreign address of a disabled family', async () => {
+    const { api, flow } = setup(BITCOIN_ONLY, [{ chain: 'ethereum', address: fixture.vectors[1].evm[0].address }]);
+
+    await expect(flow.syncAddresses('wallet-token', OWN)).rejects.toMatchObject({ code: 'seed-mismatch' });
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+  });
+
+  it('registers the missing addresses of this seed after reading the server state', async () => {
+    const { api, flow } = setup(ALL, [{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+
+    const result = await flow.syncAddresses('wallet-token', OWN);
+
+    expect(api.addresses).toHaveBeenCalledWith('wallet-token');
+    expect(api.upsertAddress.mock.calls.map((call) => (call as unknown[])[0])).toEqual([
+      { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
+      { chain: 'spark', address: fixture.vectors[0].spark.address },
+    ]);
+    expect(result).toEqual([
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+      { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
+      { chain: 'spark', address: fixture.vectors[0].spark.address },
+    ]);
+  });
+
+  it('never registers a family wallet/config turns off, even when the caller asks for it', async () => {
+    const { api, flow } = setup(BITCOIN_ONLY);
+
+    const result = await flow.syncAddresses('wallet-token', OWN, ALL);
+
+    expect(api.upsertAddress).toHaveBeenCalledTimes(1);
+    expect(api.upsertAddress).toHaveBeenCalledWith({ chain: 'bitcoin', address: OWN_BITCOIN }, 'wallet-token');
+    expect(result).toEqual([{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+  });
+});
+
 describe('WalletApiAuth.exportMnemonic', () => {
   it('exports against a cached seed check address of another network than the ring', async () => {
     const { credentials, cache, flow } = setup();
