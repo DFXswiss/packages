@@ -9,6 +9,7 @@ export interface PasskeyInterface {
   revoke: (id: number, reason: PasskeyRevocationReason, token: string) => Promise<PasskeyWallet>;
 }
 
+/** @deprecated Uses the backend `passkey/wallets` routes, which are being removed; use `useWalletApi`. */
 export function usePasskey(): PasskeyInterface {
   const { call } = useApi();
 

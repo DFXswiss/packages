@@ -1,0 +1,27 @@
+export { WalletApiUrl } from '@dfx.swiss/core';
+
+export type {
+  WalletAddress,
+  WalletApiErrorCode,
+  WalletBitcoinAccount,
+  WalletBitcoinAccountRequest,
+  WalletBitcoinAccountUtxo,
+  WalletBitcoinAddressSummary,
+  WalletBitcoinBalance,
+  WalletBitcoinBlockchain,
+  WalletBitcoinDirection,
+  WalletBitcoinFeeRateChoice,
+  WalletBitcoinFees,
+  WalletBitcoinHistoryEntry,
+  WalletBitcoinPrepare,
+  WalletBitcoinPrepareInput,
+  WalletBitcoinPrepareOutput,
+  WalletBitcoinPrepareRequest,
+  WalletBitcoinSubmitRequest,
+  WalletBitcoinSubmitResponse,
+  WalletChainId,
+  WalletConfig,
+  WalletCredential,
+  WalletFamilies,
+  WalletUpsertAddressRequest,
+} from '@dfx.swiss/core';

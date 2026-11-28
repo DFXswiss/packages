@@ -131,7 +131,12 @@ export class EsploraApi {
   }
 }
 
-/** Public wallet data capability (D8, D32, D36): Bitcoin, EVM, prices, lookups, blocklists. */
+/**
+ * @deprecated The backend `walletData/*` routes are being removed. Use {@link WalletApi} (wallet-api under
+ * `/v1/wallet/*`, e.g. `bitcoinAccount`, `bitcoinFees`, `prices`, `esplora`).
+ *
+ * Public wallet data capability (D8, D32, D36): Bitcoin, EVM, prices, lookups, blocklists.
+ */
 export class WalletDataApi {
   readonly bitcoin: EsploraApi;
   readonly bitcoinTestnet4: EsploraApi;

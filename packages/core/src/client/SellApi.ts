@@ -25,6 +25,11 @@ export class SellApi {
     });
   }
 
+  /** Books the released payouts of sell route `sellRouteId` (DFX customer session; DEV, LOC, STG only). */
+  async simulatePayout(sellRouteId: number): Promise<void> {
+    return this.http.request<void>({ url: SellUrl.simulatePayout(sellRouteId), method: 'PUT' });
+  }
+
   async checkAddress(blockchain: Blockchain): Promise<SellAddressCheck> {
     const query = Utils.buildQuery({ blockchain });
     return this.http.request<SellAddressCheck>({ url: `${SellUrl.addressCheck}${query}`, method: 'GET' });

@@ -3,6 +3,7 @@ import { AuthApi } from './AuthApi';
 import { ChainApi } from './ChainApi';
 import { PasskeyApi } from './PasskeyApi';
 import { WalletDataApi } from './WalletDataApi';
+import { WalletApi } from './WalletApi';
 import { AssetApi } from './AssetApi';
 import { BankApi } from './BankApi';
 import { BankAccountApi } from './BankAccountApi';
@@ -32,8 +33,12 @@ export class DfxApiClient {
 
   readonly auth: AuthApi;
   readonly chain: ChainApi;
+  /** @deprecated Backend passkey routes (`auth/passkey/*`, `passkey/*`) are being removed; use {@link wallet}. */
   readonly passkey: PasskeyApi;
+  /** @deprecated Backend `walletData/*` routes are being removed; use {@link wallet}. */
   readonly walletData: WalletDataApi;
+  /** wallet-api (`/v1/wallet/*`) with its own wallet session token, separate from {@link setToken}. */
+  readonly wallet: WalletApi;
   readonly asset: AssetApi;
   readonly bank: BankApi;
   readonly bankAccount: BankAccountApi;
@@ -61,6 +66,7 @@ export class DfxApiClient {
     this.chain = new ChainApi(this.http);
     this.passkey = new PasskeyApi(this.http);
     this.walletData = new WalletDataApi(this.http);
+    this.wallet = new WalletApi(this.http);
     this.asset = new AssetApi(this.http);
     this.bank = new BankApi(this.http);
     this.bankAccount = new BankAccountApi(this.http);

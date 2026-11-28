@@ -13,6 +13,7 @@ export {
   isRegtestAllowed,
 } from './config/environment';
 export type { WalletEnv, BitcoinNetwork, SparkNetwork, EvmNetworkKind, WalletNetworks } from './config/environment';
+export { WALLET_API_BITCOIN_BLOCKCHAINS, walletApiBitcoinNetwork } from './config/wallet-api';
 
 // Errors
 export { WalletError, isWalletError } from './util/errors';
@@ -120,6 +121,16 @@ export type { WalletSnapshot, SnapshotAsset, SnapshotBlocklists } from './provid
 // Session and flows (§8, D5, X24)
 export { PasskeyAuth, PasskeyRefusedError } from './session/passkey-auth';
 export type { WalletState, AuthResult, PasskeyRefusal, RegisterExtras, PasskeyAuthDeps } from './session/passkey-auth';
+export { WalletApiAuth } from './session/wallet-api-auth';
+export type { WalletApiAuthDeps, WalletApiAuthResult } from './session/wallet-api-auth';
+export { BitcoinSend, verifyBitcoinPrepare } from './session/bitcoin-send';
+export type {
+  BitcoinSendOptions,
+  BitcoinSendParams,
+  BitcoinSendResult,
+  BitcoinPrepareExpectation,
+  PreparedBitcoinSend,
+} from './session/bitcoin-send';
 export { IdleLock } from './session/idle-lock';
 export type { IdleDelay, IdleLockOptions } from './session/idle-lock';
 export { TabLock } from './session/tab-lock';

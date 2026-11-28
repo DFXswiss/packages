@@ -33,6 +33,8 @@ export { useUser } from './hooks/user.hook';
 export { useSwap } from './hooks/swap.hook';
 export { usePasskey } from './hooks/passkey.hook';
 export type { PasskeyInterface } from './hooks/passkey.hook';
+export { useWalletApi } from './hooks/wallet-api.hook';
+export type { WalletApiInterface } from './hooks/wallet-api.hook';
 export { useChain } from './hooks/chain.hook';
 export { useSupportChat } from './hooks/support.hook';
 export { useAccountAccess } from './hooks/account-access.hook';
@@ -55,7 +57,7 @@ export { Asset, AssetType, AssetCategory, AssetUrl } from './definitions/asset';
 export { BankAccount, BankAccountUrl } from './definitions/bank-account';
 export { Bank, BankUrl, ReceiveIbanCheck, ReceiveIbanStatus } from './definitions/bank';
 export { Blockchain } from './definitions/blockchain';
-export { Buy, BuyPaymentInfo, PdfDocument, BuyUrl } from './definitions/buy';
+export { Buy, BuyPaymentInfo, PdfDocument, BuyUrl, SimulateBankPayment } from './definitions/buy';
 /** Personal IBAN provider values accepted by buy payment-info requests. */
 export { PersonalIbanProvider } from './definitions/buy';
 export { VirtualIbanStatus, VirtualIban } from './definitions/buy';
@@ -206,6 +208,32 @@ export type {
   PasskeyRevocationReason,
   PasskeyWallet,
 } from './definitions/passkey';
+export { WalletApiUrl } from './definitions/wallet-api';
+export type {
+  WalletAddress,
+  WalletApiErrorCode,
+  WalletBitcoinAccount,
+  WalletBitcoinAccountRequest,
+  WalletBitcoinAccountUtxo,
+  WalletBitcoinAddressSummary,
+  WalletBitcoinBalance,
+  WalletBitcoinBlockchain,
+  WalletBitcoinDirection,
+  WalletBitcoinFeeRateChoice,
+  WalletBitcoinFees,
+  WalletBitcoinHistoryEntry,
+  WalletBitcoinPrepare,
+  WalletBitcoinPrepareInput,
+  WalletBitcoinPrepareOutput,
+  WalletBitcoinPrepareRequest,
+  WalletBitcoinSubmitRequest,
+  WalletBitcoinSubmitResponse,
+  WalletChainId,
+  WalletConfig,
+  WalletCredential,
+  WalletFamilies,
+  WalletUpsertAddressRequest,
+} from './definitions/wallet-api';
 export { ChainUrl } from './definitions/chain';
 export type { ChainCapabilities, ChainFamily, ChainInfo, EvmFeeModel, NativeAssetInfo } from './definitions/chain';
 export {

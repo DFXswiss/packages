@@ -71,6 +71,38 @@ On STG the regtest balance, history and broadcast go through the DFX API Esplora
 or user-configured endpoints; `EsploraClient` calls such an endpoint directly from the browser (HTTPS with CORS;
 plain HTTP only on `localhost`). PRD has no regtest at all.
 
+## Passkey wallet on wallet-api
+
+`WalletApiAuth` runs register, login, unlock and revoke against wallet-api (`/v1/wallet/*` on the DFX API host).
+The WebAuthn options come from the server; the credential goes back with PRF results stripped; the seed is derived
+from the PRF output on the device. Only the families `GET /v1/wallet/config` turns on are derived and registered
+(Bitcoin only at launch: no EVM or Spark address or proof). Outside PRD the Bitcoin network is regtest
+(`walletApiBitcoinNetwork`), on PRD mainnet. The wallet-api token is a wallet session, not a DFX customer session.
+
+`BitcoinSend` sends Bitcoin on-chain: `prepare` on the server, verify the PSBT against the request and the reported
+inputs, outputs and fee (`verifyBitcoinPrepare`), show `prepared.summary`, sign input `i` with the key of
+`inputs[i].address` (`signBitcoinPsbt`), then `submit`. The signed txid must equal the prepared txid.
+
+```typescript
+import { DfxApiClient } from '@dfx.swiss/core';
+import { BitcoinSend, PasskeyCeremonies, WalletApiAuth } from '@dfx.swiss/wallet';
+
+const api = new DfxApiClient({ apiUrl: 'https://stg.api.dfx.swiss/v1' });
+const auth = new WalletApiAuth({ api: api.wallet, ceremonies: new PasskeyCeremonies('stg'), env: 'stg' });
+const { token, keys, state } = await auth.login(); // or auth.register()
+if (state !== 'unlocked' || !keys) throw new Error(state);
+
+const send = new BitcoinSend({ api: api.wallet, keys, token }); // BitcoinRegtest on STG
+const own = [keys.bitcoinAddress(0, 0).address];
+const { txid } = await send.send(
+  { addresses: own, changeAddress: keys.bitcoinAddress(1, 0).address, destination, amount: 10_000, feeRate: 'normal' },
+  (prepared) => confirmOnScreen(prepared.summary),
+);
+```
+
+`PasskeyAuth`, `DfxApiClient.passkey` and `DfxApiClient.walletData` still work against the backend routes, which are
+being removed; they are deprecated.
+
 ## Local storage
 
 Local wallet data (never secrets) is kept in IndexedDB (`dfx-wallet`) through the `KeyValueStore` interface;
