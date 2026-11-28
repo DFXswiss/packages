@@ -91,6 +91,60 @@ function serverPrepare(options: ServerPrepareOptions = {}): WalletBitcoinPrepare
   };
 }
 
+/**
+ * A max payment with 1 P2WPKH input (RECEIVE0) and 1 P2WPKH output (RECEIVE1): weight 437..438 WU, so the vsize is
+ * 110 vB for both signature lengths (ceil(437 / 4) = ceil(438 / 4) = 110).
+ */
+interface SinglePrepareOptions {
+  fee: number;
+  feeRate: number;
+  vsize?: number;
+  input?: number;
+}
+
+function singlePrepare(options: SinglePrepareOptions): WalletBitcoinPrepare {
+  const network = btcSignerNetwork('regtest');
+  const input = options.input ?? 40_000;
+  const amount = input - options.fee;
+  const tx = new Transaction();
+  tx.addInput({
+    txid: TXID_A,
+    index: 1,
+    sequence: 0xfffffffd,
+    witnessUtxo: { script: bitcoinOutputScript(RECEIVE0, 'regtest'), amount: BigInt(input) },
+  });
+  tx.addOutputAddress(RECEIVE1, BigInt(amount), network);
+  const psbt = base64.encode(tx.toPSBT(0));
+  return {
+    prepareId: '55555555-5555-4555-8555-555555555555',
+    expiresAt: '2026-11-28T00:10:00.000Z',
+    blockchain: 'BitcoinRegtest',
+    psbt,
+    txid: signBitcoinPsbt(ring(), psbt).txid,
+    destination: RECEIVE1,
+    amount,
+    fee: options.fee,
+    feeRate: options.feeRate,
+    change: 0,
+    changeAddress: null,
+    changeAddedToFee: 0,
+    vsize: options.vsize ?? 110,
+    rbf: true,
+    totalInput: input,
+    uneconomicalUtxos: 0,
+    inputs: [{ txid: TXID_A, vout: 1, value: input, address: RECEIVE0 }],
+    outputs: [{ address: RECEIVE1, value: amount, kind: 'destination' }],
+  };
+}
+
+const SINGLE_PARAMS = {
+  addresses: [RECEIVE0],
+  changeAddress: CHANGE0,
+  destination: RECEIVE1,
+  amount: 'max' as const,
+  allowOwnDestination: true,
+};
+
 function fakeApi(prepare: WalletBitcoinPrepare) {
   return {
     bitcoinPrepare: jest.fn(async () => prepare),
@@ -288,6 +342,47 @@ describe('BitcoinSend', () => {
       source: 'esplora',
       unit: 'sat/vB',
       rates: {} as never,
+    });
+    await expect(sender(api).prepare(PARAMS)).rejects.toMatchObject({ code: 'invalid-fee-rate' });
+  });
+
+  it('accepts a fees() class rate above 1000 sat/vB and bounds the fee by it, not by 1000', async () => {
+    // fast = 1200 sat/vB: 1200 × 110 vB = 132000 sat. Only the explicit feeRateSatPerVb is limited to 1..1000.
+    const highFees = (api: ReturnType<typeof fakeApi>) =>
+      api.bitcoinFees.mockResolvedValue({
+        blockchain: 'BitcoinRegtest',
+        source: 'esplora',
+        unit: 'sat/vB',
+        rates: { fast: 1200, normal: 2, slow: 1 },
+      });
+
+    const honest = fakeApi(singlePrepare({ fee: 132_000, feeRate: 1200, input: 1_000_000 }));
+    highFees(honest);
+    const prepared = await sender(honest).prepare({ ...SINGLE_PARAMS, feeRate: 'fast' });
+    expect(prepared.feeRate).toEqual({ satPerVb: 1200, exact: false });
+    expect(prepared.summary.fee).toBe(132_000n);
+
+    // A rate above the fees() class is still refused.
+    const above = fakeApi(singlePrepare({ fee: 132_110, feeRate: 1201, input: 1_000_000 }));
+    highFees(above);
+    await expect(sender(above).prepare({ ...SINGLE_PARAMS, feeRate: 'fast' })).rejects.toMatchObject({
+      code: 'prepare-mismatch',
+    });
+
+    // The explicit request rate stays limited to 1..1000, before the server is called.
+    const explicit = fakeApi(singlePrepare({ fee: 132_000, feeRate: 1200, input: 1_000_000 }));
+    const tooHigh = sender(explicit).prepare({ ...SINGLE_PARAMS, feeRateSatPerVb: 1001 });
+    await expect(tooHigh).rejects.toMatchObject({ code: 'invalid-fee-rate' });
+    expect(explicit.bitcoinPrepare).not.toHaveBeenCalled();
+  });
+
+  it('refuses a fractional fees() class rate', async () => {
+    const api = fakeApi(serverPrepare());
+    api.bitcoinFees.mockResolvedValueOnce({
+      blockchain: 'BitcoinRegtest',
+      source: 'esplora',
+      unit: 'sat/vB',
+      rates: { fast: 5, normal: 2.5, slow: 1 },
     });
     await expect(sender(api).prepare(PARAMS)).rejects.toMatchObject({ code: 'invalid-fee-rate' });
   });
@@ -561,6 +656,45 @@ describe('verifyBitcoinPrepare', () => {
     expectCode(() => at(222, 440), 'prepare-mismatch');
   });
 
+  it('bounds the fee by ceil(weight / 4) when the weight is not divisible by 4 (1 input, 1 output, 110 vB)', () => {
+    const single = (fee: number, vsize = 110) =>
+      verifyBitcoinPrepare(
+        ring(),
+        singlePrepare({ fee, feeRate: 2, vsize }),
+        expected({
+          addresses: [RECEIVE0],
+          destination: RECEIVE1,
+          amount: 'max',
+          feeRate: { satPerVb: 2, exact: true },
+        }),
+      );
+    // Lower bound 2 × (110 − 1) = 218 sat; with floor(437 / 4) = 109 it would have been 2 × 108 = 216.
+    expect(single(218).fee).toBe(218n);
+    expect(single(220).fee).toBe(220n);
+    expectCode(() => single(217), 'prepare-mismatch');
+    expectCode(() => single(216), 'prepare-mismatch');
+    // The reported vsize may deviate by 1 vB from 110, not by 2.
+    expect(single(218, 109).fee).toBe(218n);
+    expectCode(() => single(218, 108), 'prepare-mismatch');
+  });
+
+  it('accepts a reported rate above 1000 sat/vB when the fees() class allows it', () => {
+    const high = (feeRate: number, bound: number) =>
+      verifyBitcoinPrepare(
+        ring(),
+        singlePrepare({ fee: feeRate * 110, feeRate, input: 1_000_000 }),
+        expected({
+          addresses: [RECEIVE0],
+          destination: RECEIVE1,
+          amount: 'max',
+          feeRate: { satPerVb: bound, exact: false },
+        }),
+      );
+    expect(high(1200, 1200).fee).toBe(132_000n);
+    expect(high(1100, 1200).fee).toBe(121_000n);
+    expectCode(() => high(1200, 1100), 'prepare-mismatch');
+  });
+
   it('refuses another rate than the explicitly requested one', () => {
     expectCode(
       () => verifyBitcoinPrepare(ring(), serverPrepare(), expected({ feeRate: { satPerVb: 3, exact: true } })),
@@ -627,8 +761,10 @@ describe('estimateBitcoinVsize', () => {
     const p2wpkh = { script: `0014${'00'.repeat(20)}` };
     const p2tr = { script: `5120${'00'.repeat(32)}` };
     const input = { txid: TXID_A, vout: 0, amount: 1n, path: '' };
-    // 10.5 + 68 + 31 = 109.5 vB with 72-byte signatures.
-    expect(estimateBitcoinVsize({ inputs: [input], outputs: [p2wpkh] as never })).toEqual({ min: 109, max: 110 });
+    // 437 WU (71-byte signature) and 438 WU (72-byte): vsize = ceil(weight / 4) = 110 for both, never 109.
+    expect(estimateBitcoinVsize({ inputs: [input], outputs: [p2wpkh] as never })).toEqual({ min: 110, max: 110 });
+    // P2TR output: 485 / 486 WU, ceil → 122 for both.
+    expect(estimateBitcoinVsize({ inputs: [input], outputs: [p2tr] as never })).toEqual({ min: 122, max: 122 });
     // 10.5 + 2 × 68 + 43 + 31 = 220.5 vB.
     expect(estimateBitcoinVsize({ inputs: [input, input], outputs: [p2tr, p2wpkh] as never })).toEqual({
       min: 220,

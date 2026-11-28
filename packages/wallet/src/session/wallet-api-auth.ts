@@ -78,7 +78,11 @@ export class WalletApiAuth {
     return this.familiesRequest;
   }
 
-  /** Registers a new passkey wallet: options from wallet-api, the 2-tap ceremony, finish, then the addresses. */
+  /**
+   * Registers a new passkey wallet: options from wallet-api, the 2-tap ceremony, finish, then the addresses. When
+   * the finish is recovered by a login, the account's stored addresses are read first; an address of another seed
+   * is a `seed-mismatch` and nothing is registered.
+   */
   async register(): Promise<WalletApiAuthResult> {
     // In parallel: the WebAuthn call must still run inside the user gesture's activation window.
     const [families, options] = await Promise.all([this.families(), this.deps.api.registerBegin()]);
@@ -99,6 +103,7 @@ export class WalletApiAuth {
     const created = await this.confirmOrAbort(pending);
 
     let session: WalletSessionResponse;
+    let recovered = false;
     try {
       session = await this.deps.api.registerFinish({
         challengeId: options.challengeId,
@@ -106,10 +111,20 @@ export class WalletApiAuth {
       });
     } catch (error) {
       session = await this.recoverRegistration(error, created, pending);
+      recovered = true;
     }
 
     const keys = this.keysFromPrf(created.prfOutput);
-    const sync = await this.trySync(session.token, keys, families, []);
+    // A recovered registration may be a session of an existing account: read what it holds first and, as in
+    // login(), refuse to register anything when it holds an address of another seed.
+    let stored: WalletAddress[] = [];
+    if (recovered) {
+      stored = await this.deps.api.addresses(session.token);
+      if (this.foreignAddress(stored, keys)) {
+        return { ...session, families, keys, state: 'seed-mismatch', addresses: stored };
+      }
+    }
+    const sync = await this.trySync(session.token, keys, families, stored);
     this.cacheCredential(created.credentialId, keys, families);
     return { ...session, families, keys, state: 'unlocked', ...sync };
   }
@@ -396,12 +411,17 @@ export class WalletApiAuth {
 
   /**
    * The cache holds Bitcoin receive index 0, EVM account 0 (`0x…`, also older entries) or the Spark identity
-   * (`spark1…`), whichever family was enabled first; only that family is derived.
+   * (`spark1…`), whichever family was enabled first; only that family is derived. A cached Bitcoin address is
+   * compared on the network its prefix names (as in {@link foreignAddress}), also when that is not the wallet's
+   * own network; an unknown prefix or a network that cannot be derived here does not match.
    */
   private matchesSeedCheck(keys: KeyRing, expected: string): boolean {
     if (/^0x/i.test(expected)) return seedCheck(keys.evm(0).address, expected);
     if (/^spark1/i.test(expected)) return expected === keys.sparkIdentity().address;
-    return expected === keys.bitcoinAddress(0, 0).address;
+    const network = bitcoinNetworkOf(expected);
+    if (!network) return false;
+    const own = this.bitcoinReceive0(keys, network);
+    return own !== undefined && expected === own;
   }
 
   private refusal(error: unknown, credentialId: Uint8Array): unknown {

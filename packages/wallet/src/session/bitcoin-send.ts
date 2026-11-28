@@ -74,7 +74,10 @@ export const MAX_CHANGE_ADDED_TO_FEE = 293;
  */
 export const FEE_VSIZE_TOLERANCE = 1;
 
-/** Highest fee rate wallet-api accepts, in sat/vB. */
+/**
+ * Highest explicit `feeRateSatPerVb` wallet-api accepts in a prepare request, in sat/vB. Only the request
+ * parameter is limited: the `fees()` class rates and a prepared rate derived from them may be higher.
+ */
 export const MAX_PREPARE_FEE_RATE = 1000;
 
 /**
@@ -319,7 +322,7 @@ export interface BitcoinPrepareExpectation {
  * `prepare-mismatch`, or the PSBT codes of `describeBitcoinPsbt`) when the PSBT spends anything but the listed
  * own outputs, pays anything but the destination and the own change address, when its amounts or fee differ
  * from the reported ones or from the request, when the reported `feeRate`, `vsize` or `changeAddedToFee` do not
- * fit the PSBT and the request (the reported rate must be a whole number of sat/vB, 1..1000), when the fee exceeds
+ * fit the PSBT and the request (the reported rate must be a whole number of sat/vB, at least 1), when the fee exceeds
  * `ceil(rate × vsize) + changeAddedToFee` with the largest vsize estimated on this device or
  * `ceil(rate × (reported vsize + 1)) + changeAddedToFee`, or when it is below
  * `floor(rate × (vsize − 1)) + changeAddedToFee` with the smallest estimated and with the reported vsize (tolerance
@@ -418,10 +421,12 @@ export function verifyBitcoinPrepare(
   if (!bound || !Number.isFinite(bound.satPerVb) || bound.satPerVb <= 0) {
     fail('No fee rate to check the fee against');
   }
-  // wallet-api rates are whole sat/vB (fees() `rates`, `feeRateSatPerVb` 1..1000): a fraction or a rate below
-  // 1 sat/vB is refused, so a low reported rate cannot shrink the lower fee bound below the claimed remainder.
+  // wallet-api rates are whole sat/vB: a fraction or a rate below 1 sat/vB is refused, so a low reported rate
+  // cannot shrink the lower fee bound below the claimed remainder. There is no upper cap here: only the request's
+  // `feeRateSatPerVb` is limited to 1..1000, a fees() class rate (and the prepared rate) may be higher and is
+  // bounded by the fees() value below.
   const rate = prepare.feeRate;
-  if (typeof rate !== 'number' || !Number.isSafeInteger(rate) || rate < 1 || rate > MAX_PREPARE_FEE_RATE) {
+  if (typeof rate !== 'number' || !Number.isSafeInteger(rate) || rate < 1) {
     fail(`Invalid reported fee rate: ${String(rate)}`);
   }
   if (bound.exact ? rate !== bound.satPerVb : rate > bound.satPerVb) {
@@ -490,7 +495,8 @@ export function estimateBitcoinVsize(summary: Pick<BitcoinPsbtSummary, 'inputs' 
   // Witness per input: item count, signature (length + DER + sighash byte), public key (length + 33).
   const witness = (signature: number) => 2 + inputs * (1 + 1 + signature + 1 + 33);
   return {
-    min: Math.floor((baseBytes * 4 + witness(71)) / 4),
+    // vsize is always ceil(weight / 4), for the smallest weight as well.
+    min: Math.ceil((baseBytes * 4 + witness(71)) / 4),
     max: Math.ceil((baseBytes * 4 + witness(72)) / 4),
   };
 }
@@ -501,10 +507,12 @@ function varIntSize(n: number): number {
 
 function feeRateOfChoice(fees: WalletBitcoinFees | undefined, choice: WalletBitcoinFeeRateChoice): number {
   const rate = fees?.rates?.[choice];
-  if (typeof rate !== 'number' || !Number.isFinite(rate) || rate <= 0) {
-    throw new WalletError('invalid-fee-rate', `wallet-api reported no ${choice} fee rate`);
+  // A whole sat/vB of at least 1, as wallet-api reports rates; not capped at 1000 (that limit is the request's
+  // `feeRateSatPerVb` only), so a high fees() class is the bound the prepared rate is checked against.
+  if (typeof rate !== 'number' || !Number.isSafeInteger(rate) || rate < 1) {
+    throw new WalletError('invalid-fee-rate', `wallet-api reported no valid ${choice} fee rate: ${String(rate)}`);
   }
-  return Math.min(rate, MAX_PREPARE_FEE_RATE);
+  return rate;
 }
 
 function prepareRequest(params: BitcoinSendParams): WalletBitcoinPrepareRequest {
@@ -519,7 +527,7 @@ function prepareRequest(params: BitcoinSendParams): WalletBitcoinPrepareRequest 
   };
   if (params.feeRateSatPerVb !== undefined) {
     const rate = params.feeRateSatPerVb;
-    if (!Number.isSafeInteger(rate) || rate < 1 || rate > 1000) {
+    if (!Number.isSafeInteger(rate) || rate < 1 || rate > MAX_PREPARE_FEE_RATE) {
       throw new WalletError('invalid-fee-rate', `Invalid fee rate: ${String(rate)}`);
     }
     return { ...base, feeRateSatPerVb: rate };

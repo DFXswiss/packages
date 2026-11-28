@@ -316,6 +316,57 @@ describe('WalletApiAuth.register', () => {
     expect(signalUnknown).not.toHaveBeenCalled();
   });
 
+  it.each([
+    ['a lost answer', new ApiException(0, 'Network error')],
+    ['an already stored credential', new ApiException(409, 'Already registered', 'PasskeyCredentialAlreadyRegistered')],
+  ])('reads the stored addresses after %s and registers nothing over another seed', async (_name, failure) => {
+    const { api, credentials, cache, flow } = setup(ALL, [{ chain: 'bitcoin', address: OTHER_BITCOIN }]);
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    api.registerFinish.mockRejectedValueOnce(failure);
+
+    const result = await flow.register();
+
+    expect(result.state).toBe('seed-mismatch');
+    expect(result.token).toBe('login-token');
+    expect(result.addresses).toEqual([{ chain: 'bitcoin', address: OTHER_BITCOIN }]);
+    expect(api.addresses).toHaveBeenCalledWith('login-token');
+    expect(api.upsertAddress).not.toHaveBeenCalled();
+    expect(cache.list()).toEqual([]);
+  });
+
+  it('passes the stored addresses of a recovered registration to the sync', async () => {
+    const { api, credentials, flow } = setup(ALL, [{ chain: 'bitcoin', address: OWN_BITCOIN }]);
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+    api.registerFinish.mockRejectedValueOnce(new ApiException(0, 'Network error'));
+
+    const result = await flow.register();
+
+    expect(result.state).toBe('unlocked');
+    expect(api.addresses).toHaveBeenCalledWith('login-token');
+    // Bitcoin is held already: only EVM and Spark are registered.
+    expect(api.upsertAddress.mock.calls.map((call) => (call as unknown[])[0])).toEqual([
+      { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
+      { chain: 'spark', address: fixture.vectors[0].spark.address },
+    ]);
+    expect(result.addresses).toEqual([
+      { chain: 'bitcoin', address: OWN_BITCOIN },
+      { chain: 'ethereum', address: fixture.vectors[0].evm[0].address },
+      { chain: 'spark', address: fixture.vectors[0].spark.address },
+    ]);
+  });
+
+  it('does not read the stored addresses after a successful finish', async () => {
+    const { api, credentials, flow } = setup();
+    credentials.nextCreate = fakeCredential(PRF);
+    credentials.nextGet = fakeCredential(PRF);
+
+    await flow.register();
+
+    expect(api.addresses).not.toHaveBeenCalled();
+  });
+
   it('caches the seed check of an enabled family and derives no disabled one', async () => {
     const { credentials, cache, flow } = setup({ bitcoin: false, spark: false, evm: true });
     credentials.nextCreate = fakeCredential(PRF);
@@ -634,6 +685,79 @@ describe('WalletApiAuth.login', () => {
 
     credentials.nextGet = fakeCredential(OTHER_PRF);
     expect((await flow.unlock()).state).toBe('seed-mismatch');
+  });
+
+  it.each([
+    ['testnet4', 'tb1'],
+    ['mainnet', 'bc1'],
+  ] as const)(
+    'unlocks a regtest ring against a cached %s seed check address on its own network',
+    async (network, prefix) => {
+      const own = OWN.forBitcoinNetwork(network).bitcoinAddress(0, 0).address;
+      const other = OTHER.forBitcoinNetwork(network).bitcoinAddress(0, 0).address;
+      expect(own.startsWith(prefix)).toBe(true);
+      const { credentials, cache, flow } = setup();
+      const cached = (seedCheckAddress: string) =>
+        cache.put({
+          credentialId: base64url(CREDENTIAL_ID),
+          rpId: RP_ID,
+          state: 'active',
+          seedCheckAddress,
+          createdAt: 1,
+        });
+
+      cached(own);
+      credentials.nextGet = fakeCredential(PRF);
+      const unlocked = await flow.unlock();
+      expect(unlocked.state).toBe('unlocked');
+      expect(unlocked.keys?.bitcoinNetwork).toBe('regtest');
+      expect(unlocked.keys?.wiped).toBe(false);
+
+      credentials.nextGet = fakeCredential(OTHER_PRF);
+      expect((await flow.unlock()).state).toBe('seed-mismatch');
+
+      cached(other);
+      credentials.nextGet = fakeCredential(PRF);
+      expect((await flow.unlock()).state).toBe('seed-mismatch');
+    },
+  );
+
+  it('reports a seed mismatch for a cached Bitcoin seed check address with an unknown prefix', async () => {
+    const { credentials, cache, flow } = setup();
+    cache.put({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: RP_ID,
+      state: 'active',
+      seedCheckAddress: '1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2',
+      createdAt: 1,
+    });
+    credentials.nextGet = fakeCredential(PRF);
+    expect((await flow.unlock()).state).toBe('seed-mismatch');
+  });
+});
+
+describe('WalletApiAuth.exportMnemonic', () => {
+  it('exports against a cached seed check address of another network than the ring', async () => {
+    const { credentials, cache, flow } = setup();
+    cache.put({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: RP_ID,
+      state: 'active',
+      seedCheckAddress: OWN.forBitcoinNetwork('testnet4').bitcoinAddress(0, 0).address,
+      createdAt: 1,
+    });
+    credentials.nextGet = fakeCredential(PRF);
+    expect((await flow.exportMnemonic()).join(' ')).toBe(fixture.vectors[0].mnemonic);
+
+    cache.put({
+      credentialId: base64url(CREDENTIAL_ID),
+      rpId: RP_ID,
+      state: 'active',
+      seedCheckAddress: OTHER.forBitcoinNetwork('mainnet').bitcoinAddress(0, 0).address,
+      createdAt: 1,
+    });
+    credentials.nextGet = fakeCredential(PRF);
+    await expect(flow.exportMnemonic()).rejects.toMatchObject({ code: 'seed-mismatch' });
   });
 });
 

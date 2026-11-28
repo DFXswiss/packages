@@ -87,21 +87,27 @@ against the seed, whether or not its family is on: a stored address of another s
 nothing is registered, so an account never holds the addresses of two seeds. A stored Bitcoin address is compared
 with this seed's receive index 0 on the network its prefix names (`bc1` mainnet, `tb1` testnet4, `bcrt1` regtest),
 also when that is not the wallet's own network; an unknown prefix, or a network this environment may not derive
-(regtest on PRD), is a seed mismatch as well. Outside PRD the Bitcoin network is regtest
+(regtest on PRD), is a seed mismatch as well. The same rule applies to the cached seed check address of `unlock()`
+and `exportMnemonic()`. When `register()` recovers a finish whose answer was lost (or a 409
+`PasskeyCredentialAlreadyRegistered`) by logging in, it reads the account's stored addresses first and returns
+`seed-mismatch` without registering anything when one belongs to another seed. Outside PRD the Bitcoin network is regtest
 (`walletApiBitcoinNetwork`), on PRD mainnet. The wallet-api token is a wallet session, not a DFX customer session.
 
 `BitcoinSend` sends Bitcoin on-chain: `prepare` on the server, verify the PSBT against the request and the reported
 inputs, outputs and fee (`verifyBitcoinPrepare`), show `prepared.summary`, sign input `i` with the key of
 `inputs[i].address` (`signBitcoinPsbt`), then `submit`. The signed txid must equal the prepared txid.
 
-The device also bounds the fee: it estimates the vsize from the PSBT (P2WPKH inputs, outputs from their scripts)
-and refuses when the fee exceeds `ceil(rate × vsize) + changeAddedToFee` (a dropped change below 294 sat) or is
+The device also bounds the fee: it estimates the vsize from the PSBT (P2WPKH inputs, outputs from their scripts;
+`ceil(weight / 4)` for both the smallest and the largest signature size) and refuses when the fee exceeds `ceil(rate × vsize) + changeAddedToFee` (a dropped change below 294 sat) or is
 below `floor(rate × (vsize − 1)) + changeAddedToFee`. The upper bound uses the largest estimated vsize and the
 reported vsize + 1, the lower bound the smallest estimated vsize − 1 and the reported vsize − 1 (the same 1 vB
 tolerance on both sides of the reported vsize, which itself may differ from the estimate by at most 1 vB), so an
 underpaid fee or a remainder not contained in the fee is refused. `rate` is the reported `feeRate`, a whole number
-of sat/vB from 1 to 1000 (as wallet-api reports rates; a fraction is refused), which must equal `feeRateSatPerVb` or, for `fast`/`normal`/`slow` (default `normal`), be at most the `fees()` rate of that
-choice. The reported `feeRate`, `vsize` and `changeAddedToFee` must fit the PSBT. `maxFee`
+of sat/vB of at least 1 (as wallet-api reports rates; a fraction is refused), which must equal `feeRateSatPerVb` or,
+for `fast`/`normal`/`slow` (default `normal`), be at most the `fees()` rate of that choice. Only the explicit
+`feeRateSatPerVb` is limited to 1..1000 (refused before the server is called); a `fees()` class rate is a whole
+number of at least 1 without that cap, so a class above 1000 sat/vB is the bound itself and only a prepare above
+it is refused. The reported `feeRate`, `vsize` and `changeAddedToFee` must fit the PSBT. `maxFee`
 adds an absolute cap. `send()` requires a `confirm` callback; show the fee there.
 
 A failed `send()` must not be repeated: a new prepare spends other UTXOs and can pay twice. `submit` retries the
