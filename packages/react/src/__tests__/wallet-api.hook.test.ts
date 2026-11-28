@@ -67,7 +67,13 @@ describe('useWalletApi', () => {
     await api.getBitcoinFees('BitcoinRegtest');
     expect(lastCall()[0]).toMatch(/\/v1\/wallet\/bitcoin\/BitcoinRegtest\/fees$/);
 
-    const prepare = { addresses: ['a'], changeAddress: 'c', destination: 'd', amount: '1000', feeRate: 'slow' as const };
+    const prepare = {
+      addresses: ['a'],
+      changeAddress: 'c',
+      destination: 'd',
+      amount: '1000',
+      feeRate: 'slow' as const,
+    };
     await api.prepareBitcoinSend('BitcoinRegtest', prepare);
     expect(lastCall()[0]).toMatch(/\/v1\/wallet\/bitcoin\/BitcoinRegtest\/prepare$/);
     expect(JSON.parse(lastCall()[1].body as string)).toEqual(prepare);

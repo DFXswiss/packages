@@ -317,9 +317,7 @@ export class WalletApiAuth {
     return stored.find((entry) => {
       switch (entry.chain) {
         case 'bitcoin':
-          return (
-            isOnNetwork(entry.address, this.bitcoinNetwork) && entry.address !== keys.bitcoinAddress(0, 0).address
-          );
+          return isOnNetwork(entry.address, this.bitcoinNetwork) && entry.address !== keys.bitcoinAddress(0, 0).address;
         case 'ethereum':
           return !seedCheck(keys.evm(0).address, entry.address);
         case 'spark':

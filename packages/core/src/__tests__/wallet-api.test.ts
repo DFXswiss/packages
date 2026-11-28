@@ -172,7 +172,9 @@ describe('WalletApi Bitcoin', () => {
 
 describe('WalletApi through DfxApiClient', () => {
   it('reaches /v1/wallet/* on the API host and never sends the customer token', async () => {
-    const fetchFn = jest.fn().mockResolvedValue(jsonResponse({ families: { bitcoin: true, spark: false, evm: false } }));
+    const fetchFn = jest
+      .fn()
+      .mockResolvedValue(jsonResponse({ families: { bitcoin: true, spark: false, evm: false } }));
     const client = new DfxApiClient({ apiUrl: 'https://stg.api.dfx.swiss/v1', fetchFn });
     client.setToken('customer-token');
 

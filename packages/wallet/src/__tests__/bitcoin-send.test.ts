@@ -199,7 +199,10 @@ describe('verifyBitcoinPrepare', () => {
   });
 
   it('refuses a PSBT that pays the change somewhere else than reported', () => {
-    expectCode(() => verifyBitcoinPrepare(ring(), serverPrepare({ changeTo: RECEIVE1 }), expected()), 'prepare-mismatch');
+    expectCode(
+      () => verifyBitcoinPrepare(ring(), serverPrepare({ changeTo: RECEIVE1 }), expected()),
+      'prepare-mismatch',
+    );
   });
 
   it('refuses an honestly reported output to a foreign address', () => {

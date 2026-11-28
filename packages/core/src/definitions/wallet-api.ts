@@ -321,10 +321,7 @@ interface WalletBitcoinPrepareBase {
 
 /** `POST /wallet/bitcoin/:blockchain/prepare` (bearer): `feeRate` XOR `feeRateSatPerVb`. */
 export type WalletBitcoinPrepareRequest = WalletBitcoinPrepareBase &
-  (
-    | { feeRate?: WalletBitcoinFeeRateChoice; feeRateSatPerVb?: never }
-    | { feeRateSatPerVb: number; feeRate?: never }
-  );
+  ({ feeRate?: WalletBitcoinFeeRateChoice; feeRateSatPerVb?: never } | { feeRateSatPerVb: number; feeRate?: never });
 
 export interface WalletBitcoinPrepareInput {
   txid: string;
