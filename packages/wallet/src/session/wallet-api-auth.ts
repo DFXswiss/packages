@@ -457,7 +457,7 @@ function mayHaveBeenStored(error: unknown): boolean {
   return status === 409 && error.code === 'PasskeyCredentialAlreadyRegistered';
 }
 
-const BECH32_PREFIX:Readonly<Record<BitcoinNetwork, string>> = { mainnet: 'bc1', testnet4: 'tb1', regtest: 'bcrt1' };
+const BECH32_PREFIX: Readonly<Record<BitcoinNetwork, string>> = { mainnet: 'bc1', testnet4: 'tb1', regtest: 'bcrt1' };
 
 function isOnNetwork(address: string, network: BitcoinNetwork): boolean {
   return typeof address === 'string' && address.toLowerCase().startsWith(BECH32_PREFIX[network]);
