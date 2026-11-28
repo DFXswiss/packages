@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0-beta.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.9.1-beta.0...@dfx.swiss/core@0.10.0-beta.1) (2026-11-28)
+
+
+### Features
+
+* **core,wallet,react:** add the wallet-api client and Bitcoin send ([#271](https://github.com/DFXswiss/packages/issues/271)) ([ed8d403](https://github.com/DFXswiss/packages/commit/ed8d4039ab639b73e3ba6a2bbe00c7eb16e7187f))
+* **core,wallet:** add Bitcoin regtest support ([#270](https://github.com/DFXswiss/packages/issues/270)) ([058826a](https://github.com/DFXswiss/packages/commit/058826a68888cf177ee1e5ddcbe547463ddbe96b))
+* **core:** add Partner user role ([#266](https://github.com/DFXswiss/packages/issues/266)) ([446d2d6](https://github.com/DFXswiss/packages/commit/446d2d657185f6cbab80d935fc7da59f3eab5b22))
+* **core:** add the LightningAddressRequired transaction error ([#267](https://github.com/DFXswiss/packages/issues/267)) ([b30f5a9](https://github.com/DFXswiss/packages/commit/b30f5a9287119a855b8c02f705dad7a5543486b8))
+
+
+
+
+
 # [0.10.0-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/core@0.9.1-beta.0...@dfx.swiss/core@0.10.0-beta.0) (2026-11-23)
 
 

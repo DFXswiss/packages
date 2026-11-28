@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0-beta.0](https://github.com/DFXswiss/packages/compare/@dfx.swiss/wallet@0.1.3-beta.0...@dfx.swiss/wallet@0.2.0-beta.0) (2026-11-28)
+
+
+### Features
+
+* **core,wallet,react:** add the wallet-api client and Bitcoin send ([#271](https://github.com/DFXswiss/packages/issues/271)) ([ed8d403](https://github.com/DFXswiss/packages/commit/ed8d4039ab639b73e3ba6a2bbe00c7eb16e7187f))
+* **core,wallet:** add Bitcoin regtest support ([#270](https://github.com/DFXswiss/packages/issues/270)) ([058826a](https://github.com/DFXswiss/packages/commit/058826a68888cf177ee1e5ddcbe547463ddbe96b))
+
+
+
+
+
 ## [0.1.3-beta.1](https://github.com/DFXswiss/packages/compare/@dfx.swiss/wallet@0.1.3-beta.0...@dfx.swiss/wallet@0.1.3-beta.1) (2026-11-23)
 
 **Note:** Version bump only for package @dfx.swiss/wallet
