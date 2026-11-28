@@ -123,12 +123,21 @@ export { PasskeyAuth, PasskeyRefusedError } from './session/passkey-auth';
 export type { WalletState, AuthResult, PasskeyRefusal, RegisterExtras, PasskeyAuthDeps } from './session/passkey-auth';
 export { WalletApiAuth } from './session/wallet-api-auth';
 export type { WalletApiAuthDeps, WalletApiAuthResult } from './session/wallet-api-auth';
-export { BitcoinSend, verifyBitcoinPrepare } from './session/bitcoin-send';
+export {
+  BitcoinSend,
+  BitcoinSubmitError,
+  estimateBitcoinVsize,
+  MAX_CHANGE_ADDED_TO_FEE,
+  MAX_PREPARE_FEE_RATE,
+  verifyBitcoinPrepare,
+} from './session/bitcoin-send';
 export type {
+  BitcoinFeeRateBound,
   BitcoinSendOptions,
   BitcoinSendParams,
   BitcoinSendResult,
   BitcoinPrepareExpectation,
+  BitcoinVsizeEstimate,
   PreparedBitcoinSend,
 } from './session/bitcoin-send';
 export { IdleLock } from './session/idle-lock';

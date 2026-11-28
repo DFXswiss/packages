@@ -8,6 +8,7 @@ import type {
   WalletBitcoinPrepareRequest,
   WalletBitcoinSubmitResponse,
 } from '@dfx.swiss/core';
+import { ApiException } from '@dfx.swiss/core';
 import { WALLET_API_BITCOIN_BLOCKCHAINS } from '../config/wallet-api';
 import { BITCOIN_ADDRESS_SCAN, findBitcoinKey, KeyRing } from '../derivation/keyring';
 import type { BitcoinPsbtSummary, SignedBitcoinTransaction } from '../signing/bitcoin-psbt';
@@ -24,9 +25,12 @@ export interface BitcoinSendParams {
   destination: string;
   /** Satoshis, or `max` to send everything spendable without change. */
   amount: number | bigint | 'max';
-  /** `fast`, `normal` or `slow`; ignored when `feeRateSatPerVb` is set. */
+  /**
+   * `fast`, `normal` or `slow` (default `normal`, always sent explicitly); ignored when `feeRateSatPerVb` is set.
+   * The fee is bounded on this device by the rate `fees()` reports for the choice.
+   */
   feeRate?: WalletBitcoinFeeRateChoice;
-  /** Explicit fee rate, 1..1000 sat/vB. */
+  /** Explicit fee rate, 1..1000 sat/vB; the prepared transaction must use exactly this rate. */
   feeRateSatPerVb?: number;
   rbf?: boolean;
   includeUnconfirmed?: boolean;
@@ -42,6 +46,54 @@ export interface PreparedBitcoinSend {
   prepare: WalletBitcoinPrepare;
   /** Decoded from the PSBT on this device; this is what the confirmation screen shows. */
   summary: BitcoinPsbtSummary;
+  /** The fee rate bound the fee was checked against: the requested rate (`exact`) or the `fees()` rate. */
+  feeRate: BitcoinFeeRateBound;
+  /** Virtual size of the signed transaction, estimated on this device from the PSBT. */
+  vsize: BitcoinVsizeEstimate;
+}
+
+export interface BitcoinFeeRateBound {
+  /** sat/vB */
+  satPerVb: number;
+  /** `true`: the prepared rate must equal `satPerVb`; `false`: it must not exceed it. */
+  exact: boolean;
+}
+
+/** vsize range of a transaction whose inputs are all P2WPKH: `max` with 72-byte, `min` with 71-byte signatures. */
+export interface BitcoinVsizeEstimate {
+  min: number;
+  max: number;
+}
+
+/** Remainder that wallet-api may add to the fee instead of creating change (below the 294 sat P2WPKH dust limit). */
+export const MAX_CHANGE_ADDED_TO_FEE = 293;
+
+/** Highest fee rate wallet-api accepts, in sat/vB. */
+export const MAX_PREPARE_FEE_RATE = 1000;
+
+/**
+ * Submitting failed after the transaction was signed. `prepared` and `signed` are kept so the app can call
+ * `BitcoinSend.submit(error.prepared, error.signed)` again (same `prepareId`, idempotent on wallet-api); it must
+ * never start a new `send()` or `prepare()` for the same payment, which would spend other UTXOs and pay twice.
+ *
+ * - `submit-unknown`: the outcome is unknown (network error, 5xx, or the server answered with another txid);
+ *   the transaction may have been broadcast. Resubmit, or look for `signed.txid` on chain.
+ * - `submit-refused`: wallet-api refused the first attempt with a 4xx; nothing was broadcast by that request.
+ */
+export class BitcoinSubmitError extends WalletError {
+  /** The submit answer, when the server answered with another txid. */
+  readonly response?: WalletBitcoinSubmitResponse;
+
+  constructor(
+    code: 'submit-unknown' | 'submit-refused',
+    message: string,
+    readonly prepared: PreparedBitcoinSend,
+    readonly signed: SignedBitcoinTransaction,
+    options?: { cause?: unknown; response?: WalletBitcoinSubmitResponse },
+  ) {
+    super(code, message, options?.cause !== undefined ? { cause: options.cause } : undefined);
+    this.response = options?.response;
+  }
 }
 
 export interface BitcoinSendResult extends WalletBitcoinSubmitResponse {
@@ -58,12 +110,24 @@ export interface BitcoinSendOptions {
   token?: string;
   /** How many receive and change indexes are searched for own addresses (default 100). */
   scan?: number;
+  /** Submit attempts on network errors, 408, 429 and 5xx, within the prepare lifetime (default 6). */
+  submitAttempts?: number;
+  /** Wait before retry `attempt + 1` of a submit (default 500 ms doubling, at most 8 s). */
+  submitBackoffMs?: (attempt: number) => number;
+  /** Clock for the prepare expiry (default `Date.now`). */
+  now?: () => number;
 }
 
 /**
  * Bitcoin on-chain send over wallet-api: `prepare` on the server, verify and describe the PSBT on this device,
  * sign input `i` with the key of `inputs[i].address`, then `submit`. The server never sees a key; the device
- * never signs a PSBT whose inputs, outputs, fee or txid differ from what the server reported and the user asked.
+ * never signs a PSBT whose inputs, outputs or txid differ from what the server reported and the user asked, or
+ * whose fee is above the requested rate (or the `fees()` rate of the chosen `fast`/`normal`/`slow`) times the
+ * vsize estimated on this device, plus a reported dust remainder below 294 sat.
+ *
+ * A failed submit is never answered with a new prepare: `submit` retries the same `prepareId`, and when the
+ * outcome stays unknown it throws {@link BitcoinSubmitError} with `prepared` and `signed`, so the app calls
+ * `submit()` again instead of `send()`.
  */
 export class BitcoinSend {
   readonly blockchain: WalletBitcoinBlockchain;
@@ -85,20 +149,32 @@ export class BitcoinSend {
     return this.options.api.bitcoinFees(this.blockchain, this.options.token);
   }
 
-  /** Prepares the payment on the server and verifies the answer on this device. */
+  /**
+   * Prepares the payment on the server and verifies the answer on this device. For `fast`/`normal`/`slow` the
+   * current `fees()` rate of that choice is fetched alongside and bounds the fee.
+   */
   async prepare(params: BitcoinSendParams): Promise<PreparedBitcoinSend> {
     const request = prepareRequest(params);
-    const prepare = await this.options.api.bitcoinPrepare(this.blockchain, request, this.options.token);
+    const choice = request.feeRateSatPerVb === undefined ? request.feeRate : undefined;
+    const [fees, prepare] = await Promise.all([
+      choice !== undefined ? this.fees() : Promise.resolve(undefined),
+      this.options.api.bitcoinPrepare(this.blockchain, request, this.options.token),
+    ]);
+    const feeRate: BitcoinFeeRateBound =
+      choice !== undefined
+        ? { satPerVb: feeRateOfChoice(fees, choice), exact: false }
+        : { satPerVb: request.feeRateSatPerVb as number, exact: true };
     const summary = verifyBitcoinPrepare(this.options.keys, prepare, {
       blockchain: this.blockchain,
       addresses: params.addresses,
       changeAddress: params.changeAddress,
       destination: params.destination,
       amount: params.amount === 'max' ? 'max' : toSats(params.amount, 'amount'),
+      feeRate,
       maxFee: params.maxFee === undefined ? undefined : toSats(params.maxFee, 'maxFee'),
       scan: this.options.scan,
     });
-    return { blockchain: this.blockchain, request, prepare, summary };
+    return { blockchain: this.blockchain, request, prepare, summary, feeRate, vsize: estimateBitcoinVsize(summary) };
   }
 
   /** Signs the verified PSBT locally; the signed transaction must have the prepared txid. */
@@ -110,30 +186,94 @@ export class BitcoinSend {
     return signed;
   }
 
-  /** Submits the signed transaction (raw hex). A repeat answers `alreadySubmitted: true`. */
-  submit(prepared: PreparedBitcoinSend, signed: SignedBitcoinTransaction): Promise<WalletBitcoinSubmitResponse> {
-    return this.options.api.bitcoinSubmit(
-      prepared.blockchain,
-      { prepareId: prepared.prepare.prepareId, transactionHex: signed.hex },
-      this.options.token,
-    );
+  /**
+   * Submits the signed transaction (raw hex) under the same `prepareId`; wallet-api answers a repeat with
+   * `alreadySubmitted: true` and broadcasts at most once. Retries network errors (status 0), 408, 429 and 5xx with
+   * backoff, at most `submitAttempts` times and only while the prepare is valid. Throws {@link BitcoinSubmitError}:
+   * `submit-refused` for a 4xx on the first attempt, `submit-unknown` when the outcome stays unknown or the server
+   * answers with another txid. On either, call `submit(error.prepared, error.signed)` again, never `send()`.
+   */
+  async submit(prepared: PreparedBitcoinSend, signed: SignedBitcoinTransaction): Promise<WalletBitcoinSubmitResponse> {
+    const attempts = Math.max(1, Math.floor(this.options.submitAttempts ?? 6));
+    const backoff = this.options.submitBackoffMs ?? ((attempt: number) => Math.min(500 * 2 ** attempt, 8000));
+    const now = this.options.now ?? Date.now;
+    const expiresAt = Date.parse(prepared.prepare.expiresAt);
+    let outcomeUnknown = false;
+
+    for (let attempt = 0; ; attempt++) {
+      let result: WalletBitcoinSubmitResponse;
+      try {
+        result = await this.options.api.bitcoinSubmit(
+          prepared.blockchain,
+          { prepareId: prepared.prepare.prepareId, transactionHex: signed.hex },
+          this.options.token,
+        );
+      } catch (error) {
+        const status = error instanceof ApiException ? error.statusCode : undefined;
+        const retryable =
+          status !== undefined && (status === 0 || status === 408 || status === 429 || status >= 500);
+        if (status !== undefined && !retryable) {
+          // A definite refusal; after an earlier lost answer it does not prove that nothing was broadcast.
+          if (!outcomeUnknown) {
+            throw new BitcoinSubmitError('submit-refused', 'wallet-api refused the transaction', prepared, signed, {
+              cause: error,
+            });
+          }
+          throw new BitcoinSubmitError(
+            'submit-unknown',
+            'The transaction may have been broadcast; submit it again, do not prepare a new one',
+            prepared,
+            signed,
+            { cause: error },
+          );
+        }
+        // Network error, 5xx or anything that is not an API answer: the server may have broadcast it.
+        outcomeUnknown = true;
+        const wait = Math.max(0, backoff(attempt));
+        const expired = !Number.isFinite(expiresAt) || now() + wait >= expiresAt;
+        if (!retryable || attempt + 1 >= attempts || expired) {
+          throw new BitcoinSubmitError(
+            'submit-unknown',
+            'The transaction may have been broadcast; submit it again, do not prepare a new one',
+            prepared,
+            signed,
+            { cause: error },
+          );
+        }
+        if (wait > 0) await new Promise((resolve) => setTimeout(resolve, wait));
+        continue;
+      }
+      if (typeof result?.txid !== 'string' || result.txid.toLowerCase() !== signed.txid) {
+        throw new BitcoinSubmitError(
+          'submit-unknown',
+          `wallet-api accepted the submit but reported another transaction id; look for ${signed.txid} on chain`,
+          prepared,
+          signed,
+          { response: result },
+        );
+      }
+      return result;
+    }
   }
 
   /**
-   * prepare → verify → `confirm` (the app shows `prepared.summary`; `false` cancels) → sign → submit.
-   * Throws `WalletError('send-cancelled')` when the user declines.
+   * prepare → verify → `confirm` (the app shows `prepared.summary`, including the fee; `false` cancels) → sign →
+   * submit. `confirm` is required: nothing is signed without the user seeing the fee. Throws
+   * `WalletError('send-cancelled')` when the user declines. Once signed, a failure is a {@link BitcoinSubmitError}
+   * carrying `prepared` and `signed`: the app must then call `submit()` with them and must not repeat `send()`,
+   * because a new prepare spends other UTXOs and can pay a second time.
    */
   async send(
     params: BitcoinSendParams,
-    confirm: (prepared: PreparedBitcoinSend) => boolean | Promise<boolean> = () => true,
+    confirm: (prepared: PreparedBitcoinSend) => boolean | Promise<boolean>,
   ): Promise<BitcoinSendResult> {
+    if (typeof confirm !== 'function') {
+      throw new WalletError('confirm-required', 'send() needs a confirm callback that shows the payment');
+    }
     const prepared = await this.prepare(params);
-    if (!(await confirm(prepared))) throw new WalletError('send-cancelled', 'The payment was not confirmed');
+    if ((await confirm(prepared)) !== true) throw new WalletError('send-cancelled', 'The payment was not confirmed');
     const signed = this.sign(prepared);
     const result = await this.submit(prepared, signed);
-    if (result.txid.toLowerCase() !== signed.txid) {
-      throw new WalletError('txid-mismatch', 'The server reported another transaction id');
-    }
     return { ...result, prepared, signed };
   }
 }
@@ -144,6 +284,8 @@ export interface BitcoinPrepareExpectation {
   changeAddress: string;
   destination: string;
   amount: bigint | 'max';
+  /** The requested rate (`exact`), or the `fees()` rate of the chosen `fast`/`normal`/`slow`. */
+  feeRate: BitcoinFeeRateBound;
   maxFee?: bigint;
   scan?: number;
 }
@@ -151,8 +293,10 @@ export interface BitcoinPrepareExpectation {
 /**
  * Checks a wallet-api prepare answer before anything is signed and returns the PSBT summary. Refuses (code
  * `prepare-mismatch`, or the PSBT codes of `describeBitcoinPsbt`) when the PSBT spends anything but the listed
- * own outputs, pays anything but the destination and the own change address, or when its amounts or fee differ
- * from the reported ones or from the request.
+ * own outputs, pays anything but the destination and the own change address, when its amounts or fee differ
+ * from the reported ones or from the request, when the reported `feeRate`, `vsize` or `changeAddedToFee` do not
+ * fit the PSBT and the request, or when the fee exceeds `ceil(rate × vsize) + changeAddedToFee` with the vsize
+ * estimated on this device.
  */
 export function verifyBitcoinPrepare(
   keys: KeyRing,
@@ -235,15 +379,84 @@ export function verifyBitcoinPrepare(
     fail('The destination amount differs from the requested amount');
   }
   if (expected.amount === 'max' && changeCount > 0) fail('A max payment must not have change');
-  if (changeAmount !== (changeCount ? toSats(prepare.change, 'change') : 0n)) {
+  if (changeAmount !== toSats(prepare.change, 'change', true)) {
     fail('The change amount differs from the reported');
   }
 
   if (summary.fee !== toSats(prepare.fee, 'fee', true)) fail('The fee differs from the reported fee');
+
+  // Fee rate: the reported rate must be the requested one, or at most the fees() rate of the chosen class.
+  const bound = expected.feeRate;
+  if (!bound || !Number.isFinite(bound.satPerVb) || bound.satPerVb <= 0) {
+    fail('No fee rate to check the fee against');
+  }
+  const rate = prepare.feeRate;
+  if (typeof rate !== 'number' || !Number.isFinite(rate) || rate <= 0 || rate > MAX_PREPARE_FEE_RATE) {
+    fail(`Invalid reported fee rate: ${String(rate)}`);
+  }
+  if (bound.exact ? rate !== bound.satPerVb : rate > bound.satPerVb) {
+    fail(`The fee rate of ${rate} sat/vB is not the requested ${bound.satPerVb} sat/vB`);
+  }
+
+  // Dust remainder: only when the change was dropped, never for max, never 294 sat or more.
+  const added = prepare.changeAddedToFee;
+  if (!Number.isSafeInteger(added) || added < 0 || added > MAX_CHANGE_ADDED_TO_FEE) {
+    fail(`Invalid changeAddedToFee: ${String(added)}`);
+  }
+  if (added > 0 && (changeCount > 0 || expected.amount === 'max')) {
+    fail('A remainder went into the fee although there is no dropped change');
+  }
+
+  // vsize: estimated here from the PSBT; the reported one must fit, and the fee must fit the rate.
+  const vsize = estimateBitcoinVsize(summary);
+  if (!Number.isSafeInteger(prepare.vsize) || prepare.vsize < vsize.min - 1 || prepare.vsize > vsize.max + 1) {
+    fail(`The reported vsize of ${String(prepare.vsize)} vB does not fit the PSBT (${vsize.min}..${vsize.max} vB)`);
+  }
+  const allowedFee = BigInt(Math.ceil(rate * vsize.max)) + BigInt(added);
+  if (summary.fee > allowedFee) {
+    fail(
+      `The fee of ${summary.fee} sat exceeds ${allowedFee} sat (${rate} sat/vB × ${vsize.max} vB + ${added} sat remainder)`,
+    );
+  }
+  const reportedFee = BigInt(Math.ceil(rate * (prepare.vsize + 1))) + BigInt(added);
+  if (summary.fee > reportedFee) fail('The fee does not fit the reported fee rate and vsize');
+
   if (expected.maxFee !== undefined && summary.fee > expected.maxFee) {
     fail(`The fee of ${summary.fee} sat exceeds the limit of ${expected.maxFee} sat`);
   }
   return summary;
+}
+
+/**
+ * vsize of the signed transaction of a PSBT whose inputs are all P2WPKH (which `describeBitcoinPsbt` enforces):
+ * 41 bytes plus a 108 (or 107) weight-unit witness per input, every output from its script, version, locktime,
+ * counts and the segwit marker. `max` assumes 72-byte signatures, `min` 71-byte ones.
+ */
+export function estimateBitcoinVsize(summary: Pick<BitcoinPsbtSummary, 'inputs' | 'outputs'>): BitcoinVsizeEstimate {
+  const inputs = summary.inputs.length;
+  const outputBytes = summary.outputs.reduce((sum, output) => {
+    const length = output.script.length / 2;
+    return sum + 8 + varIntSize(length) + length;
+  }, 0);
+  const baseBytes = 4 + varIntSize(inputs) + 41 * inputs + varIntSize(summary.outputs.length) + outputBytes + 4;
+  // Witness per input: item count, signature (length + DER + sighash byte), public key (length + 33).
+  const witness = (signature: number) => 2 + inputs * (1 + 1 + signature + 1 + 33);
+  return {
+    min: Math.floor((baseBytes * 4 + witness(71)) / 4),
+    max: Math.ceil((baseBytes * 4 + witness(72)) / 4),
+  };
+}
+
+function varIntSize(n: number): number {
+  return n < 0xfd ? 1 : n <= 0xffff ? 3 : 5;
+}
+
+function feeRateOfChoice(fees: WalletBitcoinFees | undefined, choice: WalletBitcoinFeeRateChoice): number {
+  const rate = fees?.rates?.[choice];
+  if (typeof rate !== 'number' || !Number.isFinite(rate) || rate <= 0) {
+    throw new WalletError('invalid-fee-rate', `wallet-api reported no ${choice} fee rate`);
+  }
+  return Math.min(rate, MAX_PREPARE_FEE_RATE);
 }
 
 function prepareRequest(params: BitcoinSendParams): WalletBitcoinPrepareRequest {
@@ -263,7 +476,12 @@ function prepareRequest(params: BitcoinSendParams): WalletBitcoinPrepareRequest 
     }
     return { ...base, feeRateSatPerVb: rate };
   }
-  return params.feeRate !== undefined ? { ...base, feeRate: params.feeRate } : base;
+  // Always explicit, so the device bounds the fee by the same class the server uses.
+  const choice = params.feeRate ?? 'normal';
+  if (choice !== 'fast' && choice !== 'normal' && choice !== 'slow') {
+    throw new WalletError('invalid-fee-rate', `Invalid fee rate choice: ${String(choice)}`);
+  }
+  return { ...base, feeRate: choice };
 }
 
 function toSats(value: unknown, label: string, allowZero = false): bigint {

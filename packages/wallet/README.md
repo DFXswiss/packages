@@ -46,12 +46,16 @@ A non-production build can use a local Bitcoin regtest chain next to its testnet
 are allowed on DEV and STG, never in a production build, so regtest is gated per environment: PRD is always
 refused; DEV, STG and LOC are enabled by default, and an app build may narrow that list with `regtestEnvs`.
 
+The example below is the deprecated direct route (`EsploraClient` / `walletData`, local PSBT build). New code sends
+through `BitcoinSend` on wallet-api, see [Passkey wallet on wallet-api](#passkey-wallet-on-wallet-api).
+
 ```typescript
 import { DfxApiClient } from '@dfx.swiss/core';
 import { EsploraClient, buildBitcoinSendPsbt, signBitcoinMessageBip322, signBitcoinPsbt } from '@dfx.swiss/wallet';
 
 const regtest = keys.forBitcoinNetwork('regtest', { env }); // throws 'network-not-allowed' on PRD
-// STG: the DFX API forward walletData/esplora/BitcoinRegtest; DEV/LOC: a configured Esplora endpoint.
+// Deprecated route. STG: the backend forward walletData/esplora/BitcoinRegtest (deprecated, being removed);
+// DEV/LOC: a configured Esplora endpoint.
 const esplora =
   env === 'stg'
     ? new DfxApiClient({ apiUrl }).walletData.bitcoinRegtest
@@ -66,10 +70,12 @@ await esplora.broadcast(hex);
 regtest.wipe();
 ```
 
-On STG the regtest balance, history and broadcast go through the DFX API Esplora forward
-(`walletData/esplora/BitcoinRegtest`), a named R1 exception for STG only. Everywhere else the wallet uses third-party
-or user-configured endpoints; `EsploraClient` calls such an endpoint directly from the browser (HTTPS with CORS;
-plain HTTP only on `localhost`). PRD has no regtest at all.
+This applies only to the deprecated `EsploraClient` / `walletData` route: on STG it reads regtest balance and
+history and broadcasts through the backend Esplora forward (`walletData/esplora/BitcoinRegtest`, deprecated), on
+DEV/LOC through a user-configured endpoint that `EsploraClient` calls directly from the browser (HTTPS with CORS;
+plain HTTP only on `localhost`). `BitcoinSend` does not use that route: account (balance, UTXOs, history), fees,
+prepare and submit (broadcast) go through wallet-api (`/v1/wallet/bitcoin/:blockchain/*`) in every environment —
+`Bitcoin` on PRD, `BitcoinRegtest` on DEV, STG and LOC. PRD has no regtest at all.
 
 ## Passkey wallet on wallet-api
 
@@ -83,9 +89,22 @@ from the PRF output on the device. Only the families `GET /v1/wallet/config` tur
 inputs, outputs and fee (`verifyBitcoinPrepare`), show `prepared.summary`, sign input `i` with the key of
 `inputs[i].address` (`signBitcoinPsbt`), then `submit`. The signed txid must equal the prepared txid.
 
+The device also bounds the fee: it estimates the vsize from the PSBT (P2WPKH inputs, outputs from their scripts)
+and refuses when the fee exceeds `ceil(rate × vsize) + changeAddedToFee` (a dropped change below 294 sat). `rate`
+is `feeRateSatPerVb` (the reported `feeRate` must equal it) or, for `fast`/`normal`/`slow` (default `normal`), the
+`fees()` rate of that choice. The reported `feeRate`, `vsize` and `changeAddedToFee` must fit the PSBT. `maxFee`
+adds an absolute cap. `send()` requires a `confirm` callback; show the fee there.
+
+A failed `send()` must not be repeated: a new prepare spends other UTXOs and can pay twice. `submit` retries the
+same `prepareId` on network errors, 408, 429 and 5xx (bounded, with backoff, until the prepare expires); wallet-api
+answers a repeat with `alreadySubmitted: true`. When the outcome stays unknown, or the server answers with another
+txid, it throws `BitcoinSubmitError` with code `submit-unknown` (`submit-refused` for a 4xx on the first attempt),
+carrying `prepared` and `signed`. Call `send.submit(error.prepared, error.signed)` again, or look for
+`error.signed.txid` on chain.
+
 ```typescript
 import { DfxApiClient } from '@dfx.swiss/core';
-import { BitcoinSend, PasskeyCeremonies, WalletApiAuth } from '@dfx.swiss/wallet';
+import { BitcoinSend, BitcoinSubmitError, PasskeyCeremonies, WalletApiAuth } from '@dfx.swiss/wallet';
 
 const api = new DfxApiClient({ apiUrl: 'https://stg.api.dfx.swiss/v1' });
 const auth = new WalletApiAuth({ api: api.wallet, ceremonies: new PasskeyCeremonies('stg'), env: 'stg' });
@@ -94,10 +113,16 @@ if (state !== 'unlocked' || !keys) throw new Error(state);
 
 const send = new BitcoinSend({ api: api.wallet, keys, token }); // BitcoinRegtest on STG
 const own = [keys.bitcoinAddress(0, 0).address];
-const { txid } = await send.send(
-  { addresses: own, changeAddress: keys.bitcoinAddress(1, 0).address, destination, amount: 10_000, feeRate: 'normal' },
-  (prepared) => confirmOnScreen(prepared.summary),
-);
+try {
+  const { txid } = await send.send(
+    { addresses: own, changeAddress: keys.bitcoinAddress(1, 0).address, destination, amount: 10_000, feeRate: 'normal' },
+    (prepared) => confirmOnScreen(prepared.summary), // shows destination, amount and summary.fee
+  );
+} catch (error) {
+  // Signed already: keep error.prepared / error.signed and resubmit later, never call send() again.
+  if (error instanceof BitcoinSubmitError) await send.submit(error.prepared, error.signed);
+  else throw error;
+}
 ```
 
 `PasskeyAuth`, `DfxApiClient.passkey` and `DfxApiClient.walletData` still work against the backend routes, which are
